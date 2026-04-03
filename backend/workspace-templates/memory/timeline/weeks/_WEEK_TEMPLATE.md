@@ -1,0 +1,16 @@
+# Week Note Template — YYYY-Wxx
+
+> 建议每周至少更新一次，用于阶段汇报自动汇总。
+
+- `week_range`: YYYY-MM-DD ~ YYYY-MM-DD
+- `phase`: P0x
+- `topline_goal`: …
+- `key_results`:
+  - …
+- `blockers`:
+  - …
+- `next_week_plan`:
+  - …
+- `artifact_paths`:
+  - assets/...
+

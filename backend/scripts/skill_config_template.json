@@ -1,0 +1,37 @@
+{
+  "skill_id": "my_custom_skill",
+  "skill_name": "我的自定义技能",
+  "category": "experiment",
+  "when_to_use": "用户需要执行某个特定的科研工作流时",
+  "inputs_required": [
+    "输入项 1",
+    "输入项 2"
+  ],
+  "outputs": [
+    "输出项 1",
+    "输出项 2"
+  ],
+  "reads": [
+    "memory/identity/project.md",
+    "memory/tasks/TASK_*.md"
+  ],
+  "writes": [
+    "memory/tasks/TASK_<type>_*.md",
+    "memory/timeline/days/<today>.md"
+  ],
+  "triggers": [
+    "触发词1",
+    "触发词2",
+    "触发词3"
+  ],
+  "execution_steps": [
+    "第一步：做什么",
+    "第二步：做什么",
+    "第三步：做什么"
+  ],
+  "preferred_routes": [
+    "experiment",
+    "mechanism_closure"
+  ],
+  "prompt_snippet_extra": "可选：额外的提示词说明"
+}

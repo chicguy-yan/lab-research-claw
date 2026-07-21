@@ -1,0 +1,114 @@
+{
+  "version": "0.5.0",
+  "skills": [
+    {
+      "id": "docx",
+      "name": "Word 文档创建/编辑/分析（.docx）",
+      "category": "word",
+      "entry": "skills/docx/SKILL.md",
+      "triggers": ["Word 文档", "docx", "word doc", "生成报告", "论文排版", "文档格式"],
+      "use_cases": "创建、读取、编辑或操作 Word 文档（.docx），包括格式化表格、目录、页眉页脚、图片插入等",
+      "preferred_routes": ["writing_closure", "stage_progress"]
+    },
+    {
+      "id": "figure_claim_anchoring",
+      "name": "图-论断锚定（哪张图支撑哪句话）",
+      "category": "analysis",
+      "entry": "skills/figure_claim_anchoring/SKILL.md",
+      "triggers": ["图句锚定", "哪张图支撑", "claim 锚点", "图中观察", "论断过界"],
+      "use_cases": "将图、原始数据与文字论断一一锚定，审计支撑强度与过度论断",
+      "preferred_routes": ["writing_closure", "mechanism_closure"]
+    },
+    {
+      "id": "literature_review",
+      "name": "系统性文献综述（多数据库检索+引用验证+PDF生成）",
+      "category": "literature",
+      "entry": "skills/literature-review/SKILL.md",
+      "triggers": ["文献综述", "literature review", "系统性综述", "文献检索", "多数据库检索", "PRISMA", "meta分析"],
+      "use_cases": "进行系统性文献综述，支持多数据库检索（PubMed/arXiv/bioRxiv/Semantic Scholar），引用验证，生成专业格式的文献综述文档",
+      "preferred_routes": ["mechanism_closure"]
+    },
+    {
+      "id": "mechanism_mapping",
+      "name": "机理分支图谱搭建（结构→位点→过程→结果）",
+      "category": "analysis",
+      "entry": "skills/mechanism_mapping/SKILL.md",
+      "triggers": ["机理分支", "机理图谱", "结构变化影响位点", "先搭图谱再补证据", "候选机理"],
+      "use_cases": "把零散文献、表征和实验现象组织成候选机理分支图谱，区分证据与推断",
+      "preferred_routes": ["mechanism_closure"]
+    },
+    {
+      "id": "multi_evidence_mechanism_judgment",
+      "name": "多源证据综合机制判断（会聚/张力/排序/上限）",
+      "category": "analysis",
+      "entry": "skills/multi_evidence_mechanism_judgment/SKILL.md",
+      "triggers": ["综合判断", "多源证据", "当前最稳机制", "证据会聚", "能说到哪一层"],
+      "use_cases": "综合多类证据判断当前最稳机制解释、并存分支与结论上限",
+      "preferred_routes": ["mechanism_closure"]
+    },
+    {
+      "id": "oxidant_route_comparison",
+      "name": "反应路径比较（位点要求/基元步骤/可迁移性/边界）",
+      "category": "analysis",
+      "entry": "skills/oxidant_route_comparison/SKILL.md",
+      "triggers": ["路径比较", "氧化剂比较", "可迁移性", "外部先例", "能不能借"],
+      "use_cases": "比较两类氧化剂或两条反应路径的机制差异与证据可迁移性",
+      "preferred_routes": ["mechanism_closure"]
+    },
+    {
+      "id": "pdf",
+      "name": "PDF 处理（读取/合并/拆分/创建/表单填写）",
+      "category": "foundation",
+      "entry": "skills/pdf/SKILL.md",
+      "triggers": ["PDF", "pdf 合并", "pdf 拆分", "pdf 提取", "pdf 表单", "pdf 水印", "pdf 加密"],
+      "use_cases": "读取、合并、拆分、旋转、加水印、创建 PDF，填写 PDF 表单，OCR 扫描件",
+      "preferred_routes": ["writing_closure", "mechanism_closure"]
+    },
+    {
+      "id": "pptx",
+      "name": "PPT 演示文稿创建/编辑/分析（.pptx）",
+      "category": "ppt",
+      "entry": "skills/pptx/SKILL.md",
+      "triggers": ["PPT", "pptx", "slides", "演示文稿", "slide deck", "幻灯片"],
+      "use_cases": "创建、读取、编辑 PowerPoint 演示文稿（.pptx），包括从模板编辑和从零创建",
+      "preferred_routes": ["stage_progress", "writing_closure"]
+    },
+    {
+      "id": "reactive_species_evidence_matrix",
+      "name": "活性物种证据矩阵（探针/淬灭/EPR→证据等级）",
+      "category": "analysis",
+      "entry": "skills/reactive_species_evidence_matrix/SKILL.md",
+      "triggers": ["探针证据", "淬灭证据", "活性物种矩阵", "证据等级", "能证明什么"],
+      "use_cases": "整理活性物种相关证据，输出结构化的证据等级矩阵与区分性判断",
+      "preferred_routes": ["mechanism_closure"]
+    },
+    {
+      "id": "results_to_report_structuring",
+      "name": "结果到汇报/写作结构组织（北极星→分段→图策略→缺口）",
+      "category": "word",
+      "entry": "skills/results_to_report_structuring/SKILL.md",
+      "triggers": ["汇报结构", "组会结构", "先证明什么", "每页主claim", "图放主线还是补充"],
+      "use_cases": "把已有结果组织成阶段汇报、PPT 或论文写作结构",
+      "preferred_routes": ["stage_progress", "writing_closure"]
+    },
+    {
+      "id": "skill_creator",
+      "name": "Skill 创建/优化/评估工具",
+      "category": "meta",
+      "entry": "skills/skill-creator/SKILL.md",
+      "triggers": ["创建 skill", "优化 skill", "skill eval", "skill benchmark", "技能评估", "skill 性能"],
+      "use_cases": "创建新 skill、迭代优化现有 skill、运行 eval 测试、基准性能分析、优化 skill 触发描述",
+      "preferred_routes": ["mechanism_closure", "experiment", "stage_progress", "writing_closure"]
+    },
+    {
+      "id": "spectroscopy_joint_interpretation",
+      "name": "谱图联合判读（峰位/边位/壳层→归属→支持范围）",
+      "category": "analysis",
+      "entry": "skills/spectroscopy_joint_interpretation/SKILL.md",
+      "triggers": ["谱图判读", "XANES", "EXAFS", "XPS", "EPR", "Raman", "峰位", "边位", "读图"],
+      "use_cases": "对一张或一组谱图做联合判读，输出结构化读图笔记与谨慎结论",
+      "preferred_routes": ["mechanism_closure", "experiment"]
+    }
+  ],
+  "last_updated": "2026-03-15"
+}

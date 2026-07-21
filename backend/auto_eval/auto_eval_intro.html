@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>auto_eval 框架介绍</title>
+  <style>
+    :root {
+      --bg: #f6f1e8;
+      --panel: rgba(255, 252, 246, 0.9);
+      --panel-strong: #fffaf1;
+      --ink: #1d2a2f;
+      --muted: #5e6b70;
+      --line: rgba(29, 42, 47, 0.14);
+      --accent: #b6522d;
+      --accent-soft: #f4d7bf;
+      --accent-deep: #7e3418;
+      --green: #2d6b57;
+      --shadow: 0 20px 50px rgba(50, 41, 28, 0.12);
+      --mono: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+      --sans: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      --serif: "STSong", "Songti SC", "Noto Serif SC", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(182, 82, 45, 0.16), transparent 32%),
+        radial-gradient(circle at 85% 18%, rgba(45, 107, 87, 0.14), transparent 24%),
+        linear-gradient(180deg, #f9f4eb 0%, #f4efe6 48%, #efe7da 100%);
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 40px 20px 64px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background:
+        linear-gradient(135deg, rgba(255, 248, 238, 0.96), rgba(247, 239, 226, 0.94)),
+        var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -120px -120px auto;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(182, 82, 45, 0.18), transparent 68%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      background: var(--accent-soft);
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+    }
+
+    h1 {
+      margin-top: 18px;
+      max-width: 760px;
+      font-family: var(--serif);
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 18px 0 0;
+      font-size: 17px;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.9fr;
+      gap: 22px;
+      margin-top: 26px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--panel-strong);
+      box-shadow: 0 12px 28px rgba(50, 41, 28, 0.08);
+    }
+
+    .panel.pad {
+      padding: 22px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(244, 215, 191, 0.35);
+      border: 1px solid rgba(182, 82, 45, 0.12);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 28px;
+      line-height: 1;
+      margin-bottom: 8px;
+      color: var(--accent-deep);
+    }
+
+    .section {
+      margin-top: 24px;
+      padding: 26px;
+    }
+
+    .section h2 {
+      font-size: 26px;
+      margin-bottom: 16px;
+    }
+
+    .lead {
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(249,243,235,0.92));
+    }
+
+    .card h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .card p,
+    .card li,
+    .timeline li,
+    .table li {
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 15px;
+    }
+
+    .card ul,
+    .timeline,
+    .table,
+    .bullets {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .flow-step {
+      position: relative;
+      padding: 16px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+      min-height: 120px;
+    }
+
+    .flow-step span {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent);
+    }
+
+    .flow-step strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .flow-step p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .code-block {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 18px;
+      background: #1f272b;
+      color: #f6f3ee;
+      overflow: auto;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .table {
+      list-style: none;
+      padding: 0;
+    }
+
+    .table li {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .table li:last-child {
+      border-bottom: 0;
+    }
+
+    .table code,
+    .inline-code {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--accent-deep);
+      background: rgba(182, 82, 45, 0.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    .timeline li {
+      margin-bottom: 12px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .badge {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      border: 1px solid var(--line);
+      background: rgba(45, 107, 87, 0.08);
+      color: var(--green);
+    }
+
+    .badge-link {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 250, 241, 0.92);
+      color: var(--accent-deep);
+      font-size: 13px;
+    }
+
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .footer {
+      margin-top: 24px;
+      padding: 22px 24px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255, 250, 241, 0.82);
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    @media (max-width: 960px) {
+      .hero-grid,
+      .cards,
+      .split,
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      .table li {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">ResearchAgent / backend / auto_eval</div>
+      <h1>auto_eval 是一层“真实运行 + 自动评分 + 报告归档”的评测编排框架</h1>
+      <p>
+        它不是一个通用第三方库，而是项目内部自建的 benchmark/evaluator 系统。核心思路是：
+        通过 HTTP 真正驱动 backend 的 workspace、session、chat、files、assets、trace，
+        然后对每个 turn 做规则检查、trace 检查、artifact 检查和 judge 评分，最后把结果保存到本地 run 目录，并可回写到 workspace 的 <span class="inline-code">memory/packs</span>。
+      </p>
+
+      <div class="hero-grid">
+        <div class="panel pad">
+          <h2>一句话定位</h2>
+          <p class="lead">
+            如果把主系统看成“科研智能体运行时”，那 <span class="inline-code">auto_eval</span> 就是它外面的测试跑台：
+            负责喂场景、跑对话、抓痕迹、验产物、算分数、产报告。
+          </p>
+          <div class="badge-row">
+            <div class="badge">HTTP 优先</div>
+            <div class="badge">低侵入</div>
+            <div class="badge">Scenario 插件化</div>
+            <div class="badge">断点恢复</div>
+            <div class="badge">报告回写 workspace</div>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <strong>B / C / D / E</strong>
+            <span>内置四类 benchmark 场景</span>
+          </div>
+          <div class="stat">
+            <strong>Turn 级</strong>
+            <span>逐轮执行、逐轮打分、逐轮 checkpoint</span>
+          </div>
+          <div class="stat">
+            <strong>SSE + Trace</strong>
+            <span>不仅看最终回答，也看中间工具行为</span>
+          </div>
+          <div class="stat">
+            <strong>Local + Workspace</strong>
+            <span>本地存档，同时把总结写回真实工作区</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="link-row">
+        <a class="badge-link" href="auto_eval_metrics_intro.html">指标写法详解</a>
+        <a class="badge-link" href="auto_eval_metrics_brief.html">汇报简洁版</a>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <h2>它解决的核心问题</h2>
+      <p class="lead">
+        过去只能人工翻最终回答，看不到 agent 在长流程里到底有没有读对材料、有没有生成对的文件、有没有在不该外推的地方乱讲。
+        <span class="inline-code">auto_eval</span> 就是把这些能力结构化、可重复、可批量地跑起来。
+      </p>
+      <div class="cards">
+        <article class="card">
+          <h3>真实链路评测</h3>
+          <ul>
+            <li>真实创建 workspace</li>
+            <li>真实上传附件</li>
+            <li>真实调用 <span class="inline-code">/api/chat</span></li>
+            <li>真实读取 history / files / trace</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>不只看回答文本</h3>
+          <ul>
+            <li>检查关键术语和危险表述</li>
+            <li>检查工具调用与 trace 行为</li>
+            <li>检查目标 artifact 是否真的落盘</li>
+            <li>检查 hallucination 子指标</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>适合长时 benchmark</h3>
+          <ul>
+            <li>终端实时打印进度和流式事件</li>
+            <li>按 turn 落 checkpoint</li>
+            <li>支持 resume</li>
+            <li>最终产出 markdown / json / html 报告</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <h2>整体架构</h2>
+      <p class="lead">
+        主流程可以概括为 <span class="inline-code">CLI → Scenario Loader → Runner → Backend HTTP → Evaluate → Report</span>。
+      </p>
+      <div class="flow">
+        <div class="flow-step">
+          <span>01</span>
+          <strong>CLI</strong>
+          <p>接收 <span class="inline-code">--scenario</span>、<span class="inline-code">--source-root</span>、<span class="inline-code">--resume</span> 等参数，组装运行配置。</p>
+        </div>
+        <div class="flow-step">
+          <span>02</span>
+          <strong>Scenario Loader</strong>
+          <p>加载某个场景目录里的问题集 JSON 和 runbook Python 模块。</p>
+        </div>
+        <div class="flow-step">
+          <span>03</span>
+          <strong>Runner</strong>
+          <p>创建 workspace/session，按 session 和 turn 顺序编排整场评测。</p>
+        </div>
+        <div class="flow-step">
+          <span>04</span>
+          <strong>HTTP Backend</strong>
+          <p>通过现有 API 调 workspace、chat、files、assets、history、trace。</p>
+        </div>
+        <div class="flow-step">
+          <span>05</span>
+          <strong>Turn Evaluation</strong>
+          <p>对回答内容、trace、artifact、judge 结果和临时目录进行检查。</p>
+        </div>
+        <div class="flow-step">
+          <span>06</span>
+          <strong>Report & Store</strong>
+          <p>把 turn 结果、summary、console replay、scoreboard 写入本地并镜像到 workspace。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <h2>目录里的关键文件</h2>
+      <div class="split">
+        <div class="card">
+          <ul class="table">
+            <li><code>cli.py</code><span>入口。解析命令行参数，构造 <span class="inline-code">EvalConfig</span>，启动 <span class="inline-code">EvalRunner</span>。</span></li>
+            <li><code>runner.py</code><span>核心编排器。负责 turn 执行、SSE 消费、trace 拉取、打分、checkpoint、summary 生成。</span></li>
+            <li><code>http_backend.py</code><span>后端 API 客户端封装，统一处理 <span class="inline-code">workspaces / sessions / chat / files / assets</span>。</span></li>
+            <li><code>scenario_loader.py</code><span>按目录动态发现并加载 scenario package。</span></li>
+            <li><code>run_store.py</code><span>本地结果存储层，保存 <span class="inline-code">events.jsonl</span>、turn 结果、checkpoint、终端回放。</span></li>
+            <li><code>judge.py</code><span>当前的 judge 占位实现，暂时是启发式评分，不是独立大模型裁判服务。</span></li>
+            <li><code>markdown_reporter.py</code><span>生成场景 summary 和总体 scoreboard 的 Markdown。</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Scenario 目录怎么理解</h3>
+          <ul class="timeline">
+            <li><span class="inline-code">B_questions_and_eval_methods</span>：文献与 Concept 闭环</li>
+            <li><span class="inline-code">C_questions_and_eval_methods</span>：另一类闭环场景</li>
+            <li><span class="inline-code">D_questions_and_eval_methods</span>：另一类闭环场景</li>
+            <li><span class="inline-code">E_questions_and_eval_methods</span>：另一类闭环场景</li>
+          </ul>
+          <p class="lead" style="margin-top:14px;">
+            每个场景目录通常包含：
+            问题集 JSON、runbook、content checks、trace checks、artifact checks、hallucination checks、llm judge prompt 生成逻辑。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <h2>Scenario Package 的工作方式</h2>
+      <p class="lead">
+        这套系统的可扩展性主要就靠 scenario package。你给它一个目录，它就能把“要问什么、要传什么、期待什么、怎么评分”整包加载进来。
+      </p>
+      <div class="cards">
+        <article class="card">
+          <h3>问题定义</h3>
+          <p>在 <span class="inline-code">*_scenario_questions.json</span> 里定义 scenario 元信息、sessions、dialogue turns、用户上传文件、预期 artifact、关键术语、禁词和场景 focus。</p>
+        </article>
+        <article class="card">
+          <h3>评分注册</h3>
+          <p>在 registry 里把每个 turn 展开成多条 criterion，通常至少包含 content、trace 或 artifact、以及 llm judge 三类评分点。</p>
+        </article>
+        <article class="card">
+          <h3>运行蓝图</h3>
+          <p>在 runbook 里定义 <span class="inline-code">evaluate_turn</span> 和 <span class="inline-code">summarize_scenario</span>，决定一个 turn 最终如何汇总成可落盘结果。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <h2>评测指标怎么写</h2>
+      <p class="lead">
+        指标不是单独一张 Excel 表，而是三层拼起来的：场景 JSON 先声明 turn 要考什么，registry 把它拆成 criterion，场景 Python 模块再实现具体扣分，最后 runner 把分数汇总成 turn 级结果。
+      </p>
+      <div class="cards">
+        <article class="card">
+          <h3>声明层</h3>
+          <p>
+            在 <span class="inline-code">*_scenario_questions.json</span> 里写
+            <span class="inline-code">key_terms</span>、
+            <span class="inline-code">forbidden_terms</span>、
+            <span class="inline-code">expected_artifacts</span>、
+            <span class="inline-code">binary_grounding_required</span>、
+            <span class="inline-code">requires_workspace_memory_from_prior_sessions</span>。
+          </p>
+        </article>
+        <article class="card">
+          <h3>规则层</h3>
+          <p>
+            在场景自己的 <span class="inline-code">content_checks.py</span>、
+            <span class="inline-code">trace_checks.py</span>、
+            <span class="inline-code">artifact_checks.py</span>、
+            <span class="inline-code">hallucination_checks.py</span> 里写扣分逻辑。
+          </p>
+        </article>
+        <article class="card">
+          <h3>汇总层</h3>
+          <p>
+            在 <span class="inline-code">runbook.py</span> 里拼出
+            <span class="inline-code">content_result</span>、
+            <span class="inline-code">trace_result</span>、
+            <span class="inline-code">artifact_result</span>、
+            <span class="inline-code">llm_job</span>，再由 runner 合成
+            <span class="inline-code">final_turn_score</span>。
+          </p>
+        </article>
+      </div>
+      <div class="flow">
+        <div class="flow-step">
+          <span>01</span>
+          <strong>Scenario JSON</strong>
+          <p>声明关键术语、禁词、预期文件、binary grounding、memory 依赖等。</p>
+        </div>
+        <div class="flow-step">
+          <span>02</span>
+          <strong>Registry</strong>
+          <p>把 turn 展开成 content、trace/artifact、judge 三类 criterion。</p>
+        </div>
+        <div class="flow-step">
+          <span>03</span>
+          <strong>Runner</strong>
+          <p>真实执行 turn，抓 SSE、history、trace、artifact probe。</p>
+        </div>
+        <div class="flow-step">
+          <span>04</span>
+          <strong>Checks</strong>
+          <p>调用 content/trace/artifact/hallucination 规则模块。</p>
+        </div>
+        <div class="flow-step">
+          <span>05</span>
+          <strong>Judge</strong>
+          <p>当前用启发式 judge 给出第三路评分。</p>
+        </div>
+        <div class="flow-step">
+          <span>06</span>
+          <strong>Final Score</strong>
+          <p>合并各路分数，写入 turn 结果和 scenario summary。</p>
+        </div>
+      </div>
+      <div class="link-row">
+        <a class="badge-link" href="auto_eval_metrics_intro.html">打开指标详细版</a>
+        <a class="badge-link" href="auto_eval_metrics_brief.html">打开汇报简洁版</a>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <h2>一次 turn 内部发生了什么</h2>
+      <div class="split">
+        <div class="card">
+          <ol class="bullets">
+            <li>根据 <span class="inline-code">user_upload</span> 找到文件并上传，支持同 workspace 内缓存复用。</li>
+            <li>调用 <span class="inline-code">/api/chat</span>，用 SSE 消费 token、tool_start、tool_end、done、error。</li>
+            <li>取回 session history，得到最终 assistant 文本。</li>
+            <li>读取 <span class="inline-code">context_trace/&lt;session_id&gt;.json</span> 的增量 trace。</li>
+            <li>把 expected artifact 和 temporary_dir 快照抓到本地 probe 目录。</li>
+            <li>调用 scenario 的 <span class="inline-code">evaluate_turn</span> 产出 content/trace/artifact/llm_job。</li>
+            <li>再叠加 heuristic judge，算出 final score。</li>
+            <li>把 turn 结果落到本地，并写 checkpoint。</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>为什么它比“只看回答”更强</h3>
+          <ul>
+            <li>能判断模型有没有真的读文件，而不是只凭文件名胡猜。</li>
+            <li>能判断文件有没有真正写到 <span class="inline-code">memory/</span>。</li>
+            <li>能判断跨 session 时有没有复用 workspace memory。</li>
+            <li>能为 binary grounding、source honesty、unsafe transfer 这类问题留证据。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <h2>产出结果长什么样</h2>
+      <div class="split">
+        <div class="card">
+          <h3>本地 run 目录</h3>
+          <ul>
+            <li><span class="inline-code">run_manifest.json</span></li>
+            <li><span class="inline-code">events.jsonl</span></li>
+            <li><span class="inline-code">scenarios/&lt;scenario&gt;/*.json</span></li>
+            <li><span class="inline-code">scenarios/&lt;scenario&gt;/summary.md</span></li>
+            <li><span class="inline-code">reports/overall_summary.json</span></li>
+            <li><span class="inline-code">reports/report.md</span></li>
+            <li><span class="inline-code">reports/terminal_replay.html</span></li>
+            <li><span class="inline-code">checkpoints/completed_turns.json</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>真实 workspace 回写</h3>
+          <ul>
+            <li><span class="inline-code">memory/packs/EVAL_RUN_..._INDEX.md</span></li>
+            <li><span class="inline-code">memory/packs/EVAL_RUN_..._SCOREBOARD.md</span></li>
+            <li><span class="inline-code">memory/packs/EVAL_RUN_..._B_SUMMARY.md</span> 等场景摘要</li>
+          </ul>
+          <p class="lead" style="margin-top:14px;">
+            这意味着评测不是只存在本地脚本里，之后也能在前端像普通 workspace 一样回看。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <h2>快速运行示意</h2>
+      <p class="lead">
+        先启动 backend，再在 backend 目录里运行 <span class="inline-code">python -m auto_eval.cli</span>。
+      </p>
+      <div class="code-block">python -m auto_eval.cli \
+  --backend-url http://127.0.0.1:8002 \
+  --scenario B \
+  --source-root &lt;你的真实资料根目录&gt;</div>
+      <div class="badge-row">
+        <div class="badge">--session-limit 只跑前几个 session</div>
+        <div class="badge">--turn-limit 只跑前几个 turn</div>
+        <div class="badge">--resume 从 checkpoint 恢复</div>
+        <div class="badge">--judge-mode off 先测链路</div>
+      </div>
+    </section>
+
+    <section class="footer">
+      <strong>结论：</strong>
+      <span class="inline-code">auto_eval</span> 的本质不是“问答页面”或“规则文件集合”，而是一套围绕科研智能体后端搭建的自动 benchmark 编排层。
+      它把真实运行、过程证据、结果评分和事后复盘连成了一套闭环。
+      评测指标的详细写法可继续看 <span class="inline-code">auto_eval_metrics_intro.html</span>，汇报版可看 <span class="inline-code">auto_eval_metrics_brief.html</span>。
+    </section>
+  </main>
+</body>
+</html>

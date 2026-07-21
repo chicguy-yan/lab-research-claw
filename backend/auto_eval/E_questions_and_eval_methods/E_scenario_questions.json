@@ -1,0 +1,1049 @@
+[
+  {
+    "scenario_id": "scenario_E",
+    "scenario_name": "跨闭环桥接评测",
+    "scenario_description": "围绕 closure mapping、package architecture、ecosystem map、三类 test cases 与跨层代表文件构造的 bridge/eval benchmark，重点评测 read-order 设计、scenario schema 审计、benchmark prioritization、cross-closure failure modes 与 evaluator prompt contract。",
+    "benchmark_focus": [
+      "bridge 层 read-order 与 selective drill-down",
+      "literature / experiment / writing 三类 closure 选型",
+      "schema 审计与 prompt contract",
+      "cross-closure 断链/误迁移模式",
+      "可交给 Codex 的 handoff 与 evaluator 自身 anti-hallucination"
+    ],
+    "source_package_root": "E_跨闭环桥接",
+    "session_reset_semantics": "每个新 session 代表清空对话上下文，但沿用同一个 workspace，因此同 workspace 下的 memory/concepts/tasks/packs 仍可被后续 session 读取和复用。",
+    "workspace_init": {
+      "workspace_display_name_template": "[EVAL][E] bridge_eval benchmark {run_id}",
+      "workspace_description": "围绕 closure mapping、package architecture、ecosystem map、三类 test cases 与跨层代表文件构造的 bridge/eval benchmark，重点评测 read-order 设计、scenario schema 审计、benchmark prioritization、cross-closure failure modes 与 evaluator prompt contract。",
+      "workspace_kind": "bridge_eval",
+      "bootstrap_required": true,
+      "bootstrap_route": "bootstrap",
+      "bootstrap_session_id": "__bootstrap__",
+      "create_agent_semantics": "通过 bootstrap session 完成 workspace 初始化与 seed pack 写入；不要求修改后端 create_agent 逻辑。",
+      "recommended_artifact_namespace": {
+        "concepts": "memory/concepts",
+        "tasks": "memory/tasks",
+        "packs": "memory/packs"
+      }
+    },
+    "file_coverage_assertion": {
+      "must_upload_all_files_at_least_once": true,
+      "all_source_files": [
+        "outputs/closure_mapping.json",
+        "outputs/closure_mapping.md",
+        "outputs/pro_dataset_expanded_20260317/PRO_PROMPT_PACKAGE_ARCHITECTURE.md",
+        "outputs/research_os_ecosystem_map.md",
+        "outputs/test_cases_experiment.md",
+        "outputs/test_cases_literature.md",
+        "outputs/test_cases_writing.md",
+        "科研obsidian/0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/高价钴框架/【PACK】高价钴氧物种生成机理链.md",
+        "科研obsidian/0-毕业论文安排20251230/Ce掺杂Co3O4亚氯酸盐高级氧化.pptx",
+        "科研obsidian/0-毕业论文安排20251230/【毕业论文】工作文档0305.md",
+        "科研obsidian/0-毕业论文安排20251230/选择性氧化框架/0327大组会-颜雍颀.pptx",
+        "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第六阶段0305/【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md",
+        "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第四阶段/【第四阶段实验脉络】Ce-Co3O4机理主线搭建.md",
+        "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/1-主逻辑/【亚氯酸盐AOPs】.md",
+        "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/20260305大组会-颜雍颀-v5_最终交付.pptx",
+        "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/【20260305大组会】工作文档.md"
+      ]
+    },
+    "sessions": [
+      {
+        "session_id": "scenario_E_session_001_bootstrap",
+        "session_title": "[EVAL][E] bootstrap bridge workspace",
+        "session_type": "bootstrap",
+        "offset_hours": 0,
+        "route": "bootstrap",
+        "notes": "该 session 必须复用 __bootstrap__。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "先做一个 bootstrap 目标澄清。我的当前目标是把这个 workspace 搭成一个服务 benchmark / eval system 的 bridge/eval 容器，而不是普通研究 workspace。背景信息是：后面我会继续推进 package architecture、closure mapping、各类 test cases、以及 prompt contract，所以这里必须先把桥接层职责、读取边界和后续 handoff 入口定清楚。你先根据这些目标和背景，复述你理解的 workspace 职责、优先承接的桥接对象，以及你准备怎么避免把它做成泛泛系统设计或普通研究总结。",
+            "user_upload": [],
+            "key_terms": [
+              "当前目标",
+              "背景信息",
+              "bridge/eval 容器",
+              "benchmark / eval system",
+              "不是普通研究 workspace"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须先接住用户给出的目标、背景信息和 workspace 边界，明确这是 bridge/eval 容器，而不是普通研究 workspace。",
+            "trace_focus": "这一轮重点是 bootstrap scope alignment，可以先做 bridge 职责与读取边界澄清，不要求立即展开大量原始材料读取。",
+            "llm_focus": "判断模型是否先理解 bridge/eval 容器的职责，再进入后续具体 benchmark 与 contract 问题。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "bootstrap",
+            "eval_tags": [
+              "bootstrap_goal_alignment",
+              "bridge_scope_seed"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "这个 workspace 我想定义成 `跨闭环桥接容器`，主要是把文献、实验、写作三条线桥起来，给 benchmark / eval system 用。你先根据我上传的 3 份桥接文件判断：它更应该从 `package architecture`、`closure mapping`，还是 `ecosystem map` 这个入口起手。",
+            "user_upload": [
+              "outputs/pro_dataset_expanded_20260317/PRO_PROMPT_PACKAGE_ARCHITECTURE.md",
+              "outputs/research_os_ecosystem_map.md",
+              "outputs/closure_mapping.json"
+            ],
+            "key_terms": [
+              "跨闭环桥接容器",
+              "benchmark",
+              "eval system",
+              "package architecture",
+              "closure mapping",
+              "ecosystem map"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 workspace 定义成 bridge/eval 容器，明确 primary object 是 bridge pack 而不是原始实验或文献容器。",
+            "trace_focus": "bootstrap 阶段至少应读取 md/json 文件，并避免默认生成实验/写作内容。",
+            "llm_focus": "判断 scope 是否真正围绕 bridge/eval 任务，而不是把它误当成普通研究 workspace。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "bootstrap_scope_alignment",
+              "bridge_seed"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "补一个限制：这个容器的职责不是重新读完所有原始材料，而是先用 bridge 文件决定 `该读什么`、`暂时不该读什么`。如果要生成 seed，也应该是一个 bridge/handoff，而不是 concept/task/pack 的任意模板堆砌。",
+            "user_upload": [],
+            "key_terms": [
+              "不是重新读完所有原始材料",
+              "该读什么",
+              "暂时不该读什么",
+              "bridge/handoff"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 generation plan 收紧到 selective reading 和 bridge handoff，而非全面 ingest。",
+            "trace_focus": "本轮应体现 skip-by-design：不默认创建大量概念/任务文件。",
+            "llm_focus": "判断是否真正理解 bridge 容器的职责：先决策阅读路径，再进入具体对象。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "bootstrap_minimal_generation",
+              "selective_reading"
+            ]
+          },
+          {
+            "turn_id": 4,
+            "user_input": "可以，确认初始化。完成后请确保 seed pack 至少能回答三件事：`这个包测什么`、`它为什么不等于原始全集`、`下一步先读哪一组文件`。请存到 `memory/packs/PACK_bootstrap_kickoff.md`。",
+            "user_upload": [],
+            "key_terms": [
+              "确认初始化",
+              "这个包测什么",
+              "不等于原始全集",
+              "下一步先读哪一组文件",
+              "PACK_bootstrap_kickoff"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "完成 bootstrap 并生成 bridge seed pack，强调 package purpose 和 read-order。",
+            "trace_focus": "应完成 bootstrap 生命周期并写入 pack 文件。",
+            "llm_focus": "判断 seed pack 是否真正服务 bridge/eval，而不是泛泛数据集说明。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/PACK_bootstrap_kickoff.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "这个包测什么",
+                  "它为什么不等于原始全集",
+                  "下一步先读哪一组文件"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "bootstrap_completion",
+              "artifact_generation"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_E_session_002_package_read_order",
+        "session_title": "[EVAL][E] package architecture and read order",
+        "session_type": "normal",
+        "offset_hours": 12,
+        "route": "default",
+        "notes": "主测 bridge 层的 read-order 设计。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我现在要开始真正构 benchmark 了。请你结合 closure_mapping.md、literature test cases、experiment test cases，给我排一个`读取顺序`：先读哪层索引、再读哪类 closure、什么时候才值得下钻原始文件。我要的是 evaluator 视角，不是 researcher 视角。",
+            "user_upload": [
+              "outputs/closure_mapping.md",
+              "outputs/test_cases_literature.md",
+              "outputs/test_cases_experiment.md"
+            ],
+            "key_terms": [
+              "读取顺序",
+              "哪层索引",
+              "哪类 closure",
+              "什么时候下钻原始文件",
+              "evaluator 视角"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须从 evaluator 视角设计 package read order，而不是按研究内容平铺。",
+            "trace_focus": "应读取 mapping 与 test cases，并体现‘先索引后下钻’的读取策略。",
+            "llm_focus": "判断 read order 是否真的服务 benchmark 构建。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "package_read_order",
+              "evaluator_first"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再补一个`停止下钻条件`：什么时候说明某个 closure 已经足够清晰，不需要再继续翻更多原始资产；什么时候又必须回源文件，不能只停留在 bridge 层。",
+            "user_upload": [],
+            "key_terms": [
+              "停止下钻条件",
+              "closure 已经足够清晰",
+              "必须回源文件",
+              "不能只停留在 bridge 层"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须定义 stop rules 与 fallback-to-source rules。",
+            "trace_focus": "应复用 mapping/test-cases 结果，不应给泛泛的‘看情况’。",
+            "llm_focus": "判断 stop rules 是否具体、可执行。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "stop_rules",
+              "source_return_conditions"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮存成 `memory/packs/E_package_read_order.md`，至少包含：`建议读取顺序`、`每一步要确认的对象`、`停止下钻条件` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "建议读取顺序",
+              "每一步要确认的对象",
+              "停止下钻条件",
+              "E_package_read_order"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 bridge 读取顺序固定成 pack。",
+            "trace_focus": "应写入 memory/packs/E_package_read_order.md。",
+            "llm_focus": "判断 pack 是否能直接指导 benchmark engineer 的首轮阅读。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/E_package_read_order.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "建议读取顺序",
+                  "每一步要确认的对象",
+                  "停止下钻条件"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "read_order_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_E_session_003_literature_priority",
+        "session_title": "[EVAL][E] literature closure priority",
+        "session_type": "normal",
+        "offset_hours": 24,
+        "route": "default",
+        "notes": "主测 bridge 系统对 literature_closure 的筛选与评分意识。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "如果只先做 literature_closure 这一类 benchmark，你会怎么排优先级？请结合 literature test cases、closure mapping，以及高价钴 pack，比较‘基线 chlorite 机制’、‘Ce-Co3O4/电子结构迁移’、‘high-valent metal-oxo / selective oxidation bridge’三类 closure：哪些最核心、哪些最容易评出模型幻觉、哪些更适合作为进阶题。",
+            "user_upload": [
+              "outputs/test_cases_literature.md",
+              "科研obsidian/0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/高价钴框架/【PACK】高价钴氧物种生成机理链.md",
+              "outputs/closure_mapping.md"
+            ],
+            "key_terms": [
+              "literature_closure",
+              "优先级",
+              "基线 chlorite 机制",
+              "Ce-Co3O4/电子结构迁移",
+              "high-valent metal-oxo / selective oxidation bridge",
+              "模型幻觉",
+              "进阶题"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须对 literature closures 做 benchmark 优先级划分，并考虑 hallucination 区分度。",
+            "trace_focus": "应读取 test cases + mapping + hvco pack，不应只从难易度主观排序。",
+            "llm_focus": "判断优先级判断是否真正服务 benchmark 价值，而非 researcher 兴趣。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "literature_priority",
+              "hallucination_value"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再给我定义每一类 literature closure 的`成功信号`和`失败信号`。我尤其想看你怎么区分：模型只是会复述文件名，还是已经真正抓到 source layer、边界和迁移关系。",
+            "user_upload": [],
+            "key_terms": [
+              "成功信号",
+              "失败信号",
+              "source layer",
+              "边界",
+              "迁移关系"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 literature closure 的成功/失败信号操作化。",
+            "trace_focus": "应复用 prior mapping/read order 结果，明确哪些信号来自 trace、哪些来自回答质量。",
+            "llm_focus": "判断成功/失败信号是否具有可评分性。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "success_failure_signals",
+              "scorable_signals"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮整理成 `memory/packs/E_literature_priority.md`，至少包含：`优先级`、`为什么`、`评价信号` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "优先级",
+              "为什么",
+              "评价信号",
+              "E_literature_priority"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 literature priority 结果沉淀为 pack。",
+            "trace_focus": "应写入 memory/packs/E_literature_priority.md。",
+            "llm_focus": "判断 pack 是否足以指导 scenario 选型与评分设计。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/E_literature_priority.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "优先级",
+                  "为什么",
+                  "评价信号"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "literature_priority_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_E_session_004_experiment_priority",
+        "session_title": "[EVAL][E] experiment closure priority",
+        "session_type": "normal",
+        "offset_hours": 36,
+        "route": "default",
+        "notes": "主测 experiment_closure 的 benchmark 区分度与 trace 特征。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "如果只先做 experiment_closure 这一类 benchmark，请你结合 experiment test cases、第六阶段主线、第四阶段 Ce 主线、以及亚氯酸盐主线文档，比较‘筛选矩阵’、‘最小机理闭环’、‘Ce 线证据链’三类 closure：哪类最能测出任务落地能力，哪类最能测出模型乱编实验条件。",
+            "user_upload": [
+              "outputs/test_cases_experiment.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第六阶段0305/【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第四阶段/【第四阶段实验脉络】Ce-Co3O4机理主线搭建.md",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/1-主逻辑/【亚氯酸盐AOPs】.md"
+            ],
+            "key_terms": [
+              "experiment_closure",
+              "筛选矩阵",
+              "最小机理闭环",
+              "Ce 线证据链",
+              "任务落地能力",
+              "乱编实验条件"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须对 experiment closures 做 benchmark 优先级排序，并强调 task-landing 与 condition-hallucination 风险。",
+            "trace_focus": "应读取 test cases 与三条实验主线，不应仅按主观难度排序。",
+            "llm_focus": "判断排序是否真正服务 task closure benchmark 的区分力。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "experiment_priority",
+              "condition_hallucination"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "顺便再帮我定义一下：一个模型如果真的理解了 experiment closure，它的 trace 里通常会出现什么？比如什么时候应该去读 SOP、什么时候应该写 task、什么时候反而应该先承认信息不够。",
+            "user_upload": [],
+            "key_terms": [
+              "真的理解了 experiment closure",
+              "trace 里通常会出现什么",
+              "读 SOP",
+              "写 task",
+              "承认信息不够"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 experiment closure 的 trace 特征说清楚。",
+            "trace_focus": "本轮的输出本身就是 trace-spec 设计，应区分 read/parse/write/abstain 四类行为。",
+            "llm_focus": "判断是否把 experiment closure 的真实行为学特征抽出来了。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "trace_signature",
+              "abstain_when_needed"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把它保存成 `memory/packs/E_experiment_priority.md`，至少包含：`优先级`、`关键trace`、`高风险 hallucination 点` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "优先级",
+              "关键trace",
+              "高风险 hallucination 点",
+              "E_experiment_priority"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 experiment priority 结果固定成 pack。",
+            "trace_focus": "应写入 memory/packs/E_experiment_priority.md。",
+            "llm_focus": "判断 pack 是否可以直接服务 experiment benchmark 的选型与评测。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/E_experiment_priority.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "优先级",
+                  "关键trace",
+                  "高风险 hallucination 点"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "experiment_priority_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_E_session_005_writing_priority",
+        "session_title": "[EVAL][E] writing closure priority",
+        "session_type": "normal",
+        "offset_hours": 48,
+        "route": "default",
+        "notes": "主测 writing_closure 的区分度、binary grounding 与 pack-quality 设计。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "如果只先做 writing_closure 这一类 benchmark，请你结合 writing test cases、Ce 掺杂 Co3O4 PPT、毕业论文工作文档、0327 大组会 PPT、0305 最终交付 PPT、以及 0305 工作文档，比较‘组会 pack 复盘’、‘thesis reverse engineering’、‘旁支桥接写作’三类 case：哪类最能测出 pack-quality，哪类最能测出模型读二进制时的幻觉。",
+            "user_upload": [
+              "outputs/test_cases_writing.md",
+              "科研obsidian/0-毕业论文安排20251230/Ce掺杂Co3O4亚氯酸盐高级氧化.pptx",
+              "科研obsidian/0-毕业论文安排20251230/【毕业论文】工作文档0305.md",
+              "科研obsidian/0-毕业论文安排20251230/选择性氧化框架/0327大组会-颜雍颀.pptx",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/20260305大组会-颜雍颀-v5_最终交付.pptx",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/【20260305大组会】工作文档.md"
+            ],
+            "key_terms": [
+              "writing_closure",
+              "组会 pack 复盘",
+              "thesis reverse engineering",
+              "旁支桥接写作",
+              "pack-quality",
+              "读二进制时的幻觉"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须对 writing closures 做 benchmark 优先级排序，并突出 pack-quality 与 binary hallucination。",
+            "trace_focus": "涉及多个 pptx + md，若提出 pack-quality 标准应体现对二进制理解边界的谨慎。",
+            "llm_focus": "判断优先级是否真正反映 writing closure 的评测价值。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "writing_priority",
+              "binary_pack_hallucination"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "我还想让你给出一个`pack 质量标准`：什么叫真正的 pack，什么只是普通摘要。再补一个`最容易造假的点`，尤其是 PPT / 工作文档 / 最终稿之间最容易混的地方。",
+            "user_upload": [],
+            "key_terms": [
+              "pack 质量标准",
+              "真正的 pack",
+              "普通摘要",
+              "最容易造假的点",
+              "PPT / 工作文档 / 最终稿之间最容易混的地方"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须定义 pack-quality，并指出 writing closure 中最易造假的源头。",
+            "trace_focus": "应复用 prior pack replay / storyline thinking，不要给空泛标准。",
+            "llm_focus": "判断质量标准是否足够具体，能区分一般总结与高质量 pack。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "pack_quality_standard",
+              "version_confusion_risk"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "请把结论存成 `memory/packs/E_writing_priority.md`，至少包含：`优先级`、`pack质量标准`、`最容易造假的点` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "优先级",
+              "pack质量标准",
+              "最容易造假的点",
+              "E_writing_priority"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 writing priority 结果固定成 pack。",
+            "trace_focus": "应写入 memory/packs/E_writing_priority.md。",
+            "llm_focus": "判断 pack 是否足以指导 writing benchmark 的首批选型。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/E_writing_priority.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "优先级",
+                  "pack质量标准",
+                  "最容易造假的点"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "writing_priority_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_E_session_006_mapping_schema_audit",
+        "session_title": "[EVAL][E] closure mapping schema audit",
+        "session_type": "normal",
+        "offset_hours": 60,
+        "route": "default",
+        "notes": "主测桥接层 schema 审计与运行时字段抽象。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我准备把 closure_mapping 直接喂给 evaluator loader。请你结合 closure_mapping.json、closure_mapping.md、以及 ecosystem map，审一遍 schema：哪些字段是运行时必须有的，哪些是 analyst 看的注释，哪些字段现在还不够，会导致 scenario loader 或 scorer 落不下来。",
+            "user_upload": [
+              "outputs/closure_mapping.json",
+              "outputs/closure_mapping.md",
+              "outputs/research_os_ecosystem_map.md"
+            ],
+            "key_terms": [
+              "closure_mapping",
+              "evaluator loader",
+              "运行时必须有的字段",
+              "analyst 注释",
+              "schema 不够"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须站在 evaluator loader 视角审 schema，而不是只解释 mapping 内容。",
+            "trace_focus": "应同时读取 json 与 md，并注意两者的一致性/冗余。",
+            "llm_focus": "判断 schema 审计是否可直接指导实现，而非高层建议。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "schema_audit",
+              "loader_readiness"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "你再帮我把这些字段分成三层：`scenario级必须字段`、`turn级必须字段`、`仅供分析但不影响运行的字段`。如果你觉得还缺字段，也请明确说缺什么、为什么缺。",
+            "user_upload": [],
+            "key_terms": [
+              "scenario级必须字段",
+              "turn级必须字段",
+              "仅供分析但不影响运行的字段",
+              "还缺字段"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 schema 缺口具体化到 scenario/turn/runtime 层级。",
+            "trace_focus": "应承接上轮 schema audit，不应只给抽象字段名。",
+            "llm_focus": "判断字段分层是否与评测系统实现真实对齐。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "field_layering",
+              "runtime_vs_analysis"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮保存成 `memory/concepts/E_mapping_schema_audit.md`，至少包含：`必须字段`、`可选字段`、`schema缺口` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "必须字段",
+              "可选字段",
+              "schema缺口",
+              "E_mapping_schema_audit"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 schema 审计沉淀为概念卡。",
+            "trace_focus": "应写入 memory/concepts/E_mapping_schema_audit.md。",
+            "llm_focus": "判断 concept 是否真正能被 codex/工程实现直接消费。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "concept",
+                "path": "memory/concepts/E_mapping_schema_audit.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "必须字段",
+                  "可选字段",
+                  "schema缺口"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "schema_concept"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_E_session_007_cross_closure_failure_modes",
+        "session_title": "[EVAL][E] cross-closure chain and failure modes",
+        "session_type": "normal",
+        "offset_hours": 72,
+        "route": "default",
+        "notes": "主测 cross-closure 断链与 hallucination 模式抽象。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "如果我把文献、实验、写作三条线真的串起来，最容易在哪些地方断链？请你结合高价钴 pack、第四阶段 Ce 主线、毕业论文工作文档、以及亚氯酸盐主线文档，列一个`跨闭环断链表`：哪些地方是 literature -> experiment 断，哪些地方是 experiment -> writing 断，哪些地方是 source layer 自己就混了。",
+            "user_upload": [
+              "科研obsidian/0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/高价钴框架/【PACK】高价钴氧物种生成机理链.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第四阶段/【第四阶段实验脉络】Ce-Co3O4机理主线搭建.md",
+              "科研obsidian/0-毕业论文安排20251230/【毕业论文】工作文档0305.md",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/1-主逻辑/【亚氯酸盐AOPs】.md"
+            ],
+            "key_terms": [
+              "跨闭环断链表",
+              "literature -> experiment",
+              "experiment -> writing",
+              "source layer 自己就混了"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须识别三条线衔接中的断链点与 source-layer 混乱点。",
+            "trace_focus": "应读取四个跨层来源，并尝试结合已建立的 mapping/priority 结果。",
+            "llm_focus": "判断 failure mode 分析是否真正抓住 cross-closure benchmark 的难点。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "cross_closure_failure_modes",
+              "source_layer_confusion"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再补一个`误迁移模式`清单：哪些情况下模型很容易把文献里的启发直接说成实验结论，或者把工作文档里的写作草稿直接说成稳定结果。我要能拿它去设计 hallucination 指标。",
+            "user_upload": [],
+            "key_terms": [
+              "误迁移模式",
+              "文献里的启发直接说成实验结论",
+              "写作草稿直接说成稳定结果",
+              "hallucination 指标"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 cross-closure 误迁移模式抽象成可评测的 hallucination 类型。",
+            "trace_focus": "应承接 failure mode 分析，并转换成 evaluator 可用指标。",
+            "llm_focus": "判断是否真正把 failure mode 翻译成评测项，而不是泛泛风险提醒。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "mis_transfer_modes",
+              "hallucination_metric_design"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "请把这轮整理成 `memory/concepts/E_cross_closure_failure_modes.md`，至少有：`断链点`、`误迁移模式`、`防呆规则` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "断链点",
+              "误迁移模式",
+              "防呆规则",
+              "E_cross_closure_failure_modes"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 cross-closure failure modes 固化为概念卡。",
+            "trace_focus": "应写入 memory/concepts/E_cross_closure_failure_modes.md。",
+            "llm_focus": "判断 concept 是否能直接支撑后续 hallucination 指标设计。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "concept",
+                "path": "memory/concepts/E_cross_closure_failure_modes.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "断链点",
+                  "误迁移模式",
+                  "防呆规则"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "failure_mode_concept"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_E_session_008_benchmark_prioritization",
+        "session_title": "[EVAL][E] benchmark prioritization",
+        "session_type": "normal",
+        "offset_hours": 84,
+        "route": "default",
+        "notes": "主测首版 benchmark 的范围收敛。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "如果我只能先做一版精简 benchmark，你帮我从 literature / experiment / writing 三类 test cases 里挑出 8-12 个最代表性的 session 类型。要求必须覆盖 bootstrap、binary 解析、artifact 写入、跨 session memory、以及 hallucination guardrails 这五类能力。",
+            "user_upload": [
+              "outputs/test_cases_literature.md",
+              "outputs/test_cases_experiment.md",
+              "outputs/test_cases_writing.md",
+              "outputs/pro_dataset_expanded_20260317/PRO_PROMPT_PACKAGE_ARCHITECTURE.md"
+            ],
+            "key_terms": [
+              "精简 benchmark",
+              "8-12 个最代表性的 session 类型",
+              "bootstrap",
+              "binary 解析",
+              "artifact 写入",
+              "跨 session memory",
+              "hallucination guardrails"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须给出首版 benchmark 的 representative set，并保证能力覆盖。",
+            "trace_focus": "应读取三类 test_cases 与 package architecture，不可只凭直觉挑题。",
+            "llm_focus": "判断 prioritization 是否兼顾覆盖度与实现成本。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "benchmark_prioritization",
+              "coverage_design"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再补一列：为什么有些 case 现在先不做？我希望看到的是‘暂缓理由’，比如信息重复、边界不清、太依赖人工判读，或者对第一版 benchmark 的增益不够高。",
+            "user_upload": [],
+            "key_terms": [
+              "为什么有些 case 现在先不做",
+              "暂缓理由",
+              "信息重复",
+              "边界不清",
+              "太依赖人工判读",
+              "增益不够高"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须给出 benchmark 暂缓项及其具体理由。",
+            "trace_focus": "应承接上轮 prioritization 结果，体现覆盖/成本/可评测性的平衡。",
+            "llm_focus": "判断暂缓理由是否具有工程上的说服力。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "deferred_cases",
+              "engineering_tradeoff"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把结果存成 `memory/packs/E_benchmark_prioritization.md`，至少包含：`入选 benchmark`、`覆盖理由`、`暂缓项` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "入选 benchmark",
+              "覆盖理由",
+              "暂缓项",
+              "E_benchmark_prioritization"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把首版 benchmark 选型结果沉淀为 pack。",
+            "trace_focus": "应写入 memory/packs/E_benchmark_prioritization.md。",
+            "llm_focus": "判断 pack 是否可以直接用于第一版 benchmark 范围冻结。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/E_benchmark_prioritization.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "入选 benchmark",
+                  "覆盖理由",
+                  "暂缓项"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "benchmark_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_E_session_009_prompt_contract",
+        "session_title": "[EVAL][E] prompt contract for bridge evaluator",
+        "session_type": "normal",
+        "offset_hours": 96,
+        "route": "default",
+        "notes": "主测 bridge 层字段契约与 guardrail 的工程化。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我准备开始写 scenario json 和 scorer 了。请你结合 package architecture、closure_mapping.json、closure_mapping.md，给我拟一个`bridge evaluator 的 prompt contract`：scenario 级、session 级、turn 级分别至少要带哪些字段，才能让 loader、runner、judge 三个环节自动化。",
+            "user_upload": [
+              "outputs/pro_dataset_expanded_20260317/PRO_PROMPT_PACKAGE_ARCHITECTURE.md",
+              "outputs/closure_mapping.json",
+              "outputs/closure_mapping.md"
+            ],
+            "key_terms": [
+              "bridge evaluator 的 prompt contract",
+              "scenario 级",
+              "session 级",
+              "turn 级",
+              "loader",
+              "runner",
+              "judge"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 prompt contract 具体化到 scenario/session/turn 三个层级。",
+            "trace_focus": "应结合 architecture 与 mapping，不应停留在抽象 schema 建议。",
+            "llm_focus": "判断字段设计是否足够支撑自动化运行和评分。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "prompt_contract",
+              "automation_fields"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "另外我很在意两类 guardrail：`binary_grounding_required` 和 `source-layer honesty`。请你把这两个 guardrail 也纳入 contract：分别需要哪些字段、怎样在 runner / scorer 里落地。",
+            "user_upload": [],
+            "key_terms": [
+              "binary_grounding_required",
+              "source-layer honesty",
+              "需要哪些字段",
+              "runner / scorer 里落地"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 binary grounding 与 source-layer honesty 转成可运行的 contract 字段和执行逻辑。",
+            "trace_focus": "应承接上轮 contract 设计，明确 loader/runner/scorer 各自消费哪些字段。",
+            "llm_focus": "判断 guardrails 是否已从原则落成可实现接口。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "guardrail_contract",
+              "implementation_mapping"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把它保存成 `memory/packs/E_prompt_contract.md`，至少包含：`scenario级字段`、`turn级字段`、`评分级字段` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "scenario级字段",
+              "turn级字段",
+              "评分级字段",
+              "E_prompt_contract"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 prompt contract 固化成 pack。",
+            "trace_focus": "应写入 memory/packs/E_prompt_contract.md。",
+            "llm_focus": "判断 pack 是否可直接交给 Codex 作为实现输入。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/E_prompt_contract.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "scenario级字段",
+                  "turn级字段",
+                  "评分级字段"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "contract_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_E_session_010_handoff",
+        "session_title": "[EVAL][E] bridge eval handoff",
+        "session_type": "normal",
+        "offset_hours": 108,
+        "route": "default",
+        "notes": "最终 handoff session，评测 bridge/eval 体系能否被工程化交接。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "最后请你站在‘我要把这套 bridge/eval 设计交给 Codex 落代码’的角度，做一个 handoff：基于 closure_mapping、0305 工作文档、stage6 主线、以及 writing test cases，告诉我第一优先要实现什么、哪些部分最适合模板化、哪些地方先别过度工程化。",
+            "user_upload": [
+              "outputs/closure_mapping.md",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/【20260305大组会】工作文档.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第六阶段0305/【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md",
+              "outputs/test_cases_writing.md"
+            ],
+            "key_terms": [
+              "交给 Codex 落代码",
+              "第一优先要实现什么",
+              "最适合模板化",
+              "先别过度工程化"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须以实现 handoff 的视角给出 build-first / template-first / avoid-overengineering 的建议。",
+            "trace_focus": "应结合 bridge documents 与 representative downstream assets，不应只给泛泛工程建议。",
+            "llm_focus": "判断 handoff 是否真的能让实现者快速开工。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "codex_handoff",
+              "implementation_priority"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再给我一个`bridge evaluator anti-hallucination 规则清单`：以后无论是 loader、runner、llm-judge 还是报告器，哪些地方最容易自我欺骗，应该提前在系统层埋什么护栏。",
+            "user_upload": [],
+            "key_terms": [
+              "bridge evaluator anti-hallucination 规则清单",
+              "loader",
+              "runner",
+              "llm-judge",
+              "报告器",
+              "系统层护栏"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须抽象出 evaluator 自身的 anti-hallucination 规则，并映射到系统组件。",
+            "trace_focus": "应综合前序 failure modes / prompt contract / priority 结果，形成系统级 guardrails。",
+            "llm_focus": "判断规则清单是否覆盖 evaluator 自身最容易出错的环节。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "system_guardrails",
+              "self_eval_hallucination"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把最后的 handoff 存成 `memory/packs/E_handoff.md`，至少包含：`先实现什么`、`可模板化部分`、`不要做错的事情` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "先实现什么",
+              "可模板化部分",
+              "不要做错的事情",
+              "E_handoff"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要将 bridge/eval 设计的最终 handoff 固化成 pack。",
+            "trace_focus": "应写入 memory/packs/E_handoff.md。",
+            "llm_focus": "判断 handoff 是否足够清晰，能直接支持 Codex 开始实现。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/E_handoff.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "先实现什么",
+                  "可模板化部分",
+                  "不要做错的事情"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "final_handoff"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

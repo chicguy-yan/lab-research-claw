@@ -1,0 +1,14 @@
+{
+  "run_id": "one_click_B_20260322_171434",
+  "backend_url": "http://127.0.0.1:8002",
+  "scenario_paths": [
+    "D:\\ai_software\\yyq_project\\backend\\auto_eval\\B_questions_and_eval_methods"
+  ],
+  "source_root": "D:\\ai_software\\yyq_project\\给GPT5PRO提示词\\闭环测试集\\测试集上传的文件\\B_文献与Concept",
+  "judge_mode": "heuristic",
+  "session_limit": null,
+  "turn_limit": null,
+  "request_timeout_seconds": 900,
+  "max_turn_attempts": 3,
+  "retry_backoff_seconds": 2.0
+}

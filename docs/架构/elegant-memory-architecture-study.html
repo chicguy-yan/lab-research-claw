@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>更优雅的 Memory 与溯源架构学习页</title>
+<style>
+  :root {
+    --bg: #f6f0e6;
+    --paper: rgba(255, 252, 246, 0.95);
+    --paper-2: rgba(255, 248, 240, 0.92);
+    --ink: #1f2933;
+    --ink-soft: #5b6976;
+    --line: rgba(31, 41, 51, 0.10);
+    --teal: #1f6f78;
+    --teal-soft: rgba(31, 111, 120, 0.10);
+    --orange: #c66d2d;
+    --orange-soft: rgba(198, 109, 45, 0.11);
+    --olive: #667431;
+    --olive-soft: rgba(102, 116, 49, 0.12);
+    --wine: #8e3a34;
+    --wine-soft: rgba(142, 58, 52, 0.11);
+    --blue: #375a7f;
+    --blue-soft: rgba(55, 90, 127, 0.10);
+    --shadow: 0 18px 48px rgba(69, 55, 36, 0.10);
+    --radius: 22px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at top left, rgba(198, 109, 45, 0.12), transparent 28%),
+      radial-gradient(circle at top right, rgba(31, 111, 120, 0.14), transparent 25%),
+      linear-gradient(180deg, #fbf7f0 0%, var(--bg) 42%, #efe4d3 100%);
+  }
+
+  a { color: inherit; }
+
+  .page {
+    width: min(1240px, calc(100vw - 32px));
+    margin: 0 auto;
+    padding: 28px 0 56px;
+  }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 38px;
+    border-radius: 32px;
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    background: linear-gradient(135deg, rgba(255, 250, 244, 0.96), rgba(245, 235, 220, 0.90));
+    box-shadow: var(--shadow);
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    right: -90px;
+    top: -70px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(31, 111, 120, 0.18), rgba(31, 111, 120, 0));
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    background: rgba(31, 41, 51, 0.05);
+    border-radius: 999px;
+    padding: 8px 12px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  h1 {
+    margin: 16px 0 12px;
+    font-size: clamp(34px, 5vw, 58px);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    max-width: 10ch;
+  }
+
+  .hero p {
+    max-width: 820px;
+    margin: 0 0 20px;
+    font-size: 17px;
+    line-height: 1.78;
+    color: var(--ink-soft);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 22px;
+    align-items: start;
+  }
+
+  .mini-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .mini-card {
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    border-radius: 18px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.70);
+    backdrop-filter: blur(10px);
+  }
+
+  .mini-card strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 15px;
+  }
+
+  .mini-card span {
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .nav {
+    position: sticky;
+    top: 12px;
+    z-index: 3;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0 24px;
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    background: rgba(255, 250, 243, 0.82);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 28px rgba(72, 56, 35, 0.08);
+  }
+
+  .nav a {
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(31, 41, 51, 0.05);
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  section {
+    margin-top: 34px;
+    padding: 28px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    background: var(--paper);
+    box-shadow: var(--shadow);
+  }
+
+  .section-title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(25px, 3vw, 36px);
+    letter-spacing: -0.03em;
+  }
+
+  h3 {
+    margin: 22px 0 12px;
+    font-size: 20px;
+  }
+
+  .section-title p,
+  .muted {
+    margin: 0;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    display: grid;
+    gap: 16px;
+  }
+
+  .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+  .card {
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.68);
+  }
+
+  .card strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+
+  .card p,
+  .card li {
+    margin: 0;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+
+  .tone-teal { background: var(--teal-soft); }
+  .tone-orange { background: var(--orange-soft); }
+  .tone-olive { background: var(--olive-soft); }
+  .tone-wine { background: var(--wine-soft); }
+  .tone-blue { background: var(--blue-soft); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.68);
+  }
+
+  th, td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+
+  th {
+    background: rgba(31, 41, 51, 0.05);
+    font-size: 14px;
+  }
+
+  td {
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  .checklist {
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .check-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.68);
+    border: 1px solid var(--line);
+  }
+
+  .mark {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .m-good { background: var(--olive); }
+  .m-risk { background: var(--wine); }
+  .m-note { background: var(--orange); }
+
+  code, pre {
+    font-family: "SFMono-Regular", "Menlo", "Consolas", monospace;
+  }
+
+  code {
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: rgba(31, 41, 51, 0.06);
+    color: var(--ink);
+  }
+
+  pre {
+    margin: 14px 0 0;
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 18px;
+    background: #1f2933;
+    color: #f8fafc;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .banner {
+    margin-top: 16px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    background: linear-gradient(135deg, rgba(31, 111, 120, 0.12), rgba(198, 109, 45, 0.10));
+  }
+
+  .banner strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+
+  .banner p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .arch {
+    display: grid;
+    gap: 18px;
+  }
+
+  .arch-row {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+    align-items: center;
+  }
+
+  .arch-box {
+    position: relative;
+    min-height: 112px;
+    padding: 16px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.70);
+  }
+
+  .arch-box strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 15px;
+  }
+
+  .arch-box span {
+    display: block;
+    color: var(--ink-soft);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .arch-arrow {
+    text-align: center;
+    font-size: 26px;
+    color: var(--ink-soft);
+  }
+
+  .swimlane {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 14px;
+    margin-top: 14px;
+  }
+
+  .lane-title {
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: rgba(31, 41, 51, 0.04);
+    font-weight: 700;
+  }
+
+  .lane-content {
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.70);
+    color: var(--ink-soft);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .bad,
+  .good {
+    padding: 18px;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+  }
+
+  .bad {
+    background: linear-gradient(135deg, rgba(142, 58, 52, 0.10), rgba(255, 255, 255, 0.74));
+  }
+
+  .good {
+    background: linear-gradient(135deg, rgba(102, 116, 49, 0.12), rgba(255, 255, 255, 0.74));
+  }
+
+  .bad strong,
+  .good strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 17px;
+  }
+
+  .bad p,
+  .good p,
+  .bad li,
+  .good li {
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .heuristic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .heuristic {
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.70);
+  }
+
+  .heuristic .tag {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    margin-bottom: 10px;
+    background: rgba(31, 41, 51, 0.06);
+    color: var(--ink-soft);
+  }
+
+  .heuristic strong {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .heuristic p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 1024px) {
+    .hero-grid,
+    .mini-grid,
+    .grid-2,
+    .grid-3,
+    .grid-4,
+    .compare,
+    .heuristic-grid,
+    .arch-row,
+    .swimlane {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="eyebrow">
+        <span class="dot" style="background: var(--teal);"></span>
+        架构图 + 反例 + 设计直觉训练
+      </div>
+      <div class="hero-grid">
+        <div>
+          <h1>更优雅的 Memory 与溯源架构学习页</h1>
+          <p>这份页面不是在教你“修 3 个 bug”，而是在训练一种更稳定的架构直觉：当你面对模板过滤、推荐失真、溯源断裂这类问题时，应该优先想到“统一数据模型层”，而不是继续往单点逻辑里塞补丁。</p>
+          <p>核心结论是：比在 <code>context_orchestrator.py</code>、推荐逻辑、<code>write_file_tool.py</code> 各修一刀更优雅的方式，是引入 <strong>Workspace Index + Typed Frontmatter + Provenance Contract</strong>。</p>
+        </div>
+        <div class="mini-grid">
+          <div class="mini-card">
+            <strong>你想解决的 3 个问题</strong>
+            <span>模板文件污染、推荐误指模板、溯源只靠 prompt 而非程序约束。</span>
+          </div>
+          <div class="mini-card">
+            <strong>更好的统一解法</strong>
+            <span>把目录扫描、推荐、写入校验统一收敛到“结构化内容层”，而不是靠分散 if 维持。</span>
+          </div>
+          <div class="mini-card">
+            <strong>为什么优雅</strong>
+            <span>一份 index 驱动多个能力，一份 schema 约束多个入口，一份 provenance contract 打通 assets 与 memory。</span>
+          </div>
+          <div class="mini-card">
+            <strong>你会形成的直觉</strong>
+            <span>以后遇到类似问题，先想“缺不缺模型层”，再想“要不要补 if”。</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="nav">
+      <a href="#problem">问题本质</a>
+      <a href="#bad">坏架构反例</a>
+      <a href="#good">优雅架构</a>
+      <a href="#diagram">架构图</a>
+      <a href="#logic">核心逻辑</a>
+      <a href="#anti">反例对照</a>
+      <a href="#intuition">设计直觉</a>
+      <a href="#checklist">设计检查表</a>
+    </nav>
+
+    <section id="problem">
+      <div class="section-title">
+        <h2>1. 这 3 个问题的本质其实是 1 个问题</h2>
+        <p>它们表面不同，根上都指向“系统缺了结构化事实层”。</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>表面问题</th>
+            <th>你现在看到的现象</th>
+            <th>根因</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>模板过滤失败</td>
+            <td><code>_DAY_TEMPLATE.md</code>、<code>_WEEK_TEMPLATE.md</code> 被当真实记录</td>
+            <td>系统只知道“这是个 md 文件”，不知道“这是 template”</td>
+          </tr>
+          <tr>
+            <td>推荐误指模板</td>
+            <td>“最新阶段汇报”可能指向 <code>_STAGE_REPORT_TEMPLATE.md</code></td>
+            <td>推荐逻辑基于文件名排序猜测语义，而不是基于结构化元信息</td>
+          </tr>
+          <tr>
+            <td>溯源机制失真</td>
+            <td>写 memory 只靠 prompt 约束，不带 source assets 也能写成功</td>
+            <td>写入系统不知道“什么叫有效 memory entry”，缺少写入契约与校验层</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="banner">
+        <strong>一句话抽象</strong>
+        <p>你当前系统把“文件名”和“文本内容”当作唯一事实来源，但你的业务其实已经需要“文档类型、状态、来源、是否模板、是否有效”这类更高阶的结构化事实。</p>
+      </div>
+    </section>
+
+    <section id="bad">
+      <div class="section-title">
+        <h2>2. 不优雅的修法是什么样</h2>
+        <p>这些修法不是完全没用，而是会把系统慢慢拖向不可维护。</p>
+      </div>
+      <div class="compare">
+        <div class="bad">
+          <strong>坏方案：分散补丁式修复</strong>
+          <div class="checklist">
+            <div class="check-item">
+              <div class="mark m-risk">1</div>
+              <span>在扫描函数里加 <code>if name.startswith("_")</code>。</span>
+            </div>
+            <div class="check-item">
+              <div class="mark m-risk">2</div>
+              <span>在推荐函数里单独写 <code>if "TEMPLATE" not in name</code>。</span>
+            </div>
+            <div class="check-item">
+              <div class="mark m-risk">3</div>
+              <span>在 prompt 里再强调一次“写入时请带 source assets”。</span>
+            </div>
+          </div>
+          <h3>为什么不优雅</h3>
+          <p>规则散落在多个位置。每多一个入口，就要复制一遍规则。以后 phase5/skills、API、前端编辑器接进来，还得继续复制。</p>
+        </div>
+        <div class="good">
+          <strong>好方案：统一数据模型层</strong>
+          <div class="checklist">
+            <div class="check-item">
+              <div class="mark m-good">1</div>
+              <span>先定义 <code>MemoryEntry</code> 的结构和类型字段。</span>
+            </div>
+            <div class="check-item">
+              <div class="mark m-good">2</div>
+              <span>用 <code>WorkspaceIndexer</code> 统一生成 catalog。</span>
+            </div>
+            <div class="check-item">
+              <div class="mark m-good">3</div>
+              <span>推荐、扫描、写入、校验都围绕 catalog 和 schema 运行。</span>
+            </div>
+          </div>
+          <h3>为什么优雅</h3>
+          <p>你不是在“修 3 个 bug”，而是在补一个架构层。这个层一旦建立，多个问题会同时消失，而且后续能力还能复用它。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="good">
+      <div class="section-title">
+        <h2>3. 更优雅的统一架构</h2>
+        <p>名字可以变，但核心结构建议保留。</p>
+      </div>
+      <div class="grid-4">
+        <div class="card tone-blue">
+          <strong>Workspace Index</strong>
+          <p>负责扫描 workspace，把“原始文件系统”提升成“结构化 catalog”。它输出的不是文件列表，而是已分类、可过滤、可推荐的内容索引。</p>
+        </div>
+        <div class="card tone-teal">
+          <strong>Typed Frontmatter</strong>
+          <p>每个 memory 文件携带明确类型和状态：<code>kind</code>、<code>template</code>、<code>status</code>、<code>date</code>、<code>report_id</code>、<code>source_assets</code>。</p>
+        </div>
+        <div class="card tone-olive">
+          <strong>Provenance Contract</strong>
+          <p>memory 写入必须满足最小溯源契约。没有合格的 <code>source_assets</code>，就不算有效知识沉淀。</p>
+        </div>
+        <div class="card tone-orange">
+          <strong>Query-Based Recommendation</strong>
+          <p>推荐不靠文件名猜测，而靠 catalog 查询：<code>kind=stage_report AND template=false</code> 这类结构化条件。</p>
+        </div>
+      </div>
+
+      <h3>最小 frontmatter 例子</h3>
+      <pre>---
+kind: stage_report
+template: false
+status: active
+report_id: R03
+date: 2026-03-10
+source_assets:
+  - assets/data/exp_005_kobs.csv
+  - assets/figures/exp_005_kobs_fit.png
+---
+
+# R03 阶段汇报
+...</pre>
+
+      <div class="banner">
+        <strong>关键设计观念</strong>
+        <p>“模板”不是命名习惯，而是内容类型；“阶段汇报”不是文件前缀，而是业务实体；“已溯源”不是模型自觉，而是系统强制通过的契约。</p>
+      </div>
+    </section>
+
+    <section id="diagram">
+      <div class="section-title">
+        <h2>4. 架构图怎么画才抓住重点</h2>
+        <p>这类系统最适合画“分层图 + 数据流图 + 责任归属图”。</p>
+      </div>
+
+      <h3>4.1 总体分层图</h3>
+      <div class="arch">
+        <div class="arch-row">
+          <div class="arch-box tone-blue">
+            <strong>用户 / 前端</strong>
+            <span>提问、上传 assets、请求汇报、请求分析</span>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-box tone-teal">
+            <strong>Agent / API 层</strong>
+            <span>chat、assets upload、tool 调用、prompt 构建</span>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-box tone-orange">
+            <strong>Content Intelligence 层</strong>
+            <span>WorkspaceIndexer + Recommendation + Validation</span>
+          </div>
+        </div>
+        <div class="arch-row">
+          <div class="arch-box tone-olive">
+            <strong>Memory Schema 层</strong>
+            <span>Typed Frontmatter / MemoryEntry / Query Rules</span>
+          </div>
+          <div class="arch-arrow">↔</div>
+          <div class="arch-box tone-wine">
+            <strong>Provenance 层</strong>
+            <span>AssetRegistry + Provenance Contract + Write Gate</span>
+          </div>
+          <div class="arch-arrow">↔</div>
+          <div class="arch-box tone-blue">
+            <strong>Workspace 实体层</strong>
+            <span>memory/*.md / assets/* / context_trace/*.json</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>4.2 数据流图</h3>
+      <div class="swimlane">
+        <div class="lane-title">上传资产</div>
+        <div class="lane-content">用户上传文件 → Assets API 保存文件 → AssetRegistry 记录路径 / hash / type → catalog 可见</div>
+        <div class="lane-title">生成 Memory Map</div>
+        <div class="lane-content">ContextOrchestrator 不再直接扫目录 → 读取 Workspace Index → 只展示 template=false 的有效条目</div>
+        <div class="lane-title">推荐文件</div>
+        <div class="lane-content">根据用户意图查询 catalog，例如 stage_report / task / concept，而不是对裸文件名排序</div>
+        <div class="lane-title">写入 Memory</div>
+        <div class="lane-content">write_file 先解析 frontmatter → 校验 kind 与 source_assets → 通过后写入 → 触发 index 更新</div>
+      </div>
+
+      <h3>4.3 责任归属图</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>职责</th>
+            <th>应该由谁负责</th>
+            <th>不应该由谁负责</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>判断是不是模板</td>
+            <td>Schema / Indexer</td>
+            <td>推荐函数临时猜测</td>
+          </tr>
+          <tr>
+            <td>判断是否可推荐</td>
+            <td>Catalog 查询规则</td>
+            <td>按文件名逆序排序</td>
+          </tr>
+          <tr>
+            <td>判断是否已溯源</td>
+            <td>Write Gate / Provenance Validator</td>
+            <td>PromptBuilder 文本提醒</td>
+          </tr>
+          <tr>
+            <td>决定 memory 文件类型</td>
+            <td>Frontmatter kind</td>
+            <td>路径名和文件名约定</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="logic">
+      <div class="section-title">
+        <h2>5. 每个核心逻辑的优雅点在哪里</h2>
+        <p>优雅不是“看起来高级”，而是规则收敛、职责清晰、扩展自然。</p>
+      </div>
+
+      <h3>5.1 Workspace Index</h3>
+      <div class="grid-2">
+        <div class="card tone-blue">
+          <strong>它解决什么</strong>
+          <p>把文件系统从“裸文件集合”提升为“可查询内容集合”。以后 Memory Map、推荐、搜索摘要、统计都可以读这一个 index。</p>
+        </div>
+        <div class="card tone-wine">
+          <strong>反例</strong>
+          <p>如果每个模块都自己 <code>glob("*.md")</code>，那模板过滤、排序规则、可见性规则会在 4 个地方各写一次，迟早漂移。</p>
+        </div>
+      </div>
+
+      <h3>5.2 Typed Frontmatter</h3>
+      <div class="grid-2">
+        <div class="card tone-teal">
+          <strong>它解决什么</strong>
+          <p>把业务语义写进文件本身。系统不再靠 <code>R03_</code>、<code>_TEMPLATE</code> 这种命名暗号理解内容。</p>
+        </div>
+        <div class="card tone-wine">
+          <strong>反例</strong>
+          <p>“看到文件名有 TEMPLATE 就跳过”只是一条脆弱约定。以后有人新建 <code>stage_report_template_v2.md</code> 或中文名模板，就会再次漏掉。</p>
+        </div>
+      </div>
+
+      <h3>5.3 Provenance Contract</h3>
+      <div class="grid-2">
+        <div class="card tone-olive">
+          <strong>它解决什么</strong>
+          <p>把“已溯源”定义成程序可验证的状态，而不是模型口头承诺。没有合格来源，写入直接失败或标为 draft。</p>
+        </div>
+        <div class="card tone-wine">
+          <strong>反例</strong>
+          <p>如果你只在 prompt 里写“必须包含 assets 路径”，那系统其实无法区分“真正已溯源”和“模型忘写了但依然写成功”。</p>
+        </div>
+      </div>
+
+      <h3>5.4 Query-Based Recommendation</h3>
+      <div class="grid-2">
+        <div class="card tone-orange">
+          <strong>它解决什么</strong>
+          <p>推荐逻辑基于“内容是什么”，而不是“文件名长什么样”。这是从 heuristic 走向可解释查询的关键一步。</p>
+        </div>
+        <div class="card tone-wine">
+          <strong>反例</strong>
+          <p>裸排序最常见的问题是：模板排前面、旧文件误判成最新、README 被当正文、示例文件影响推荐。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="anti">
+      <div class="section-title">
+        <h2>6. 反例对照：为什么这套架构更优雅</h2>
+        <p>这里用具体“错误设计”训练你的反直觉能力。</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card tone-wine">
+          <strong>反例 1：把模板当文件名问题</strong>
+          <p>错误直觉：模板文件误入推荐，只要在推荐函数排除一下就好。</p>
+          <p>真正问题：系统从头到尾都不知道“模板是一个业务属性”。</p>
+        </div>
+        <div class="card tone-wine">
+          <strong>反例 2：把溯源当写作规范</strong>
+          <p>错误直觉：只要 prompt 写得更狠一点，模型就会记得带 source assets。</p>
+          <p>真正问题：没有写入校验，系统无法拒绝不合格知识。</p>
+        </div>
+        <div class="card tone-wine">
+          <strong>反例 3：把推荐当字符串游戏</strong>
+          <p>错误直觉：只要正则再精细一点，文件名就能表达业务语义。</p>
+          <p>真正问题：文件名永远只是弱信号，不能承载完整状态。</p>
+        </div>
+      </div>
+
+      <h3>三组“坏直觉 → 好直觉”</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>坏直觉</th>
+            <th>好直觉</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>看到 bug 就加 if</td>
+            <td>先判断是不是缺模型层、缺约束层、缺统一索引层</td>
+          </tr>
+          <tr>
+            <td>文件名可以代表类型</td>
+            <td>类型应该进入 schema，文件名最多是人类可读标签</td>
+          </tr>
+          <tr>
+            <td>prompt 能约束一切</td>
+            <td>关键业务约束必须由程序验证，prompt 只负责引导，不负责保底</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="intuition">
+      <div class="section-title">
+        <h2>7. 下次设计时你该形成的直觉</h2>
+        <p>这是最值得带走的部分。</p>
+      </div>
+
+      <div class="heuristic-grid">
+        <div class="heuristic">
+          <div class="tag">直觉 1</div>
+          <strong>一个规则被写第二次时，就该想统一层</strong>
+          <p>如果模板过滤同时出现在扫描、推荐、搜索里，就不要继续复制。该抽出 shared index 或 schema 了。</p>
+        </div>
+        <div class="heuristic">
+          <div class="tag">直觉 2</div>
+          <strong>业务实体不要只靠路径表达</strong>
+          <p><code>memory/timeline/stage_reports/R03.md</code> 是存储位置，不是完整业务定义。业务定义应该在 frontmatter 里。</p>
+        </div>
+        <div class="heuristic">
+          <div class="tag">直觉 3</div>
+          <strong>“有效写入”必须有程序门槛</strong>
+          <p>如果系统无法拒绝不合格写入，那就还没有真正定义这个业务对象。</p>
+        </div>
+        <div class="heuristic">
+          <div class="tag">直觉 4</div>
+          <strong>推荐本质是查询，不是排序技巧</strong>
+          <p>一旦推荐逻辑开始依赖文件名特征、目录顺序、特殊前缀，你就该警觉它会漂。</p>
+        </div>
+        <div class="heuristic">
+          <div class="tag">直觉 5</div>
+          <strong>先设计“失败条件”，再设计 happy path</strong>
+          <p>比如：模板不应可见；无 source assets 不应落盘；非法 kind 不应进入 index。这些失败条件比正向流程更能保护架构。</p>
+        </div>
+        <div class="heuristic">
+          <div class="tag">直觉 6</div>
+          <strong>优雅 = 规则少、复用高、语义清</strong>
+          <p>不是抽象层越多越好，而是让一条规则能在多个能力上复用，而不需要重复描述。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="checklist">
+      <div class="section-title">
+        <h2>8. 以后你设计类似系统时的检查表</h2>
+        <p>这张表可以直接拿来审自己的方案。</p>
+      </div>
+      <div class="checklist">
+        <div class="check-item">
+          <div class="mark m-note">1</div>
+          <span>我是不是把“类型、状态、来源”这些业务语义只藏在文件名里了？</span>
+        </div>
+        <div class="check-item">
+          <div class="mark m-note">2</div>
+          <span>同一条过滤规则是否已经在两个以上模块重复出现？如果是，该抽统一层了。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark m-note">3</div>
+          <span>关键业务约束是否只是 prompt 要求，而不是程序硬校验？</span>
+        </div>
+        <div class="check-item">
+          <div class="mark m-note">4</div>
+          <span>推荐逻辑是在“按语义查询”，还是在“按文件名猜测”？</span>
+        </div>
+        <div class="check-item">
+          <div class="mark m-note">5</div>
+          <span>我的架构图是否单独画出了“索引层”“校验层”“存储层”的责任边界？</span>
+        </div>
+        <div class="check-item">
+          <div class="mark m-note">6</div>
+          <span>我有没有明确列出反向验收：模板不可见、无溯源不可写、错误 kind 不可推荐？</span>
+        </div>
+      </div>
+      <div class="banner">
+        <strong>最终记忆点</strong>
+        <p>当一个系统开始出现“模板误入、推荐误判、约束失效”这类问题时，通常不是你缺一个更聪明的 if，而是你缺一个把语义收拢起来的结构层。优雅架构最核心的价值，就是把语义放到系统能真正理解和校验的位置上。</p>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

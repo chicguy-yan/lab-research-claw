@@ -1,0 +1,105 @@
+{
+  "scenario_id": "scenario_B",
+  "session_id": "scenario_B_session_005_proof_methods",
+  "turn_id": 2,
+  "workspace_id": "eval-scenario_b-260320_2325",
+  "backend_session_id": "eb4e2964d238",
+  "assistant_text": "**Context Trace（公开版）**  \n本轮实际调用了工具：\n- `read_file`\n  - `assets/uploads/454ae4c8_（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md`（重复核对 EST 笔记）\n  - `assets/uploads/44a9f338_2024-SACs&taloring D band-high-valent metal-oxo species - 文献笔记.md`\n  - `skills/_system/reactive_species_evidence_matrix/SKILL.md`\n- 本轮**未调用** `write_file`\n\n---\n\n## Rationale（公开版）\n我这次排序按两个原则：\n1. **7 天最小闭环**优先做“最快筛出 OAT 信号、再用主证升级、再做排除法”的路径；\n2. 依据 EST/review 的逻辑：  \n   - `PMSO`：适合快速筛查，但**不能单独当终证**  \n   - `18O 同位素`：在 chlorite 体系里最接近**主证升级**  \n   - `EPR`：主要是**排除自由基解释**，不是直接证明 Co(IV)  \n   - `反应选择性`、`XPS/DFT/pH`：主要是**会聚支持**\n\n所以我会把**执行顺序**和**证据权重**分开说。\n\n---\n\n# Deliverable\n\n## 先给结论\n\n### 一、如果是“7 天内怎么排实验顺序”\n我建议：\n\n**PMSO → 同位素 → EPR → 反应选择性 → 其他支持证据**\n\n### 二、如果是“最后写文章时谁更像主证”\n我建议证据权重是：\n\n**同位素 > PMSO > EPR ≈ 反应选择性 > 其他支持证据**\n\n也就是说：\n\n> **执行上先 PMSO，证明力上同位素更高。**\n\n---\n\n## 7 天“最小证明闭环”推荐排法\n\n## Step 0｜先做半天基线，不单独算一层，但必须有\n> 这一步不在你列的 5 项里，但 chlorite 体系里必须穿插做。\n\n### 要回答的问句\n**“我后面看到的氧化现象，到底有多少是 Co 催化带来的，而不是 chlorite / ClO2 自己就能解释？”**\n\n### 最少要有的对照\n- chlorite alone\n- catalyst alone\n- catalyst + chlorite\n- 有/无目标探针或目标底物\n- 最好同步监测 **ClO2**\n\n### 为什么这一步必须先做\n因为在 chlorite 体系里，**ClO2 是最大干扰项**。  \n如果这一步没立住，后面 PMSO、选择性、甚至部分 EPR 解读都会被污染。\n\n---\n\n## Step 1｜PMSO：先做“值不值得往下做”的快速筛查\n> 执行优先级：**第 1 位**\n\n### 要回答的问句\n**“这个体系里有没有明显的 OAT 型氧化行为，值得我继续花成本做同位素？”**\n\n### 你真正要看什么\n不是只看 PMSO 消耗，而是看：\n- 是否形成 **PMSO2**\n- 是否具有**催化依赖性**\n- blank 里是否也明显生成 PMSO2\n- 产物分布是否可重复\n\n### 这一步能回答什么\n- 能回答：**体系是否存在‘像高价金属氧’的 OAT 信号**\n- 不能单独回答：**这就是 Co(IV)**\n\n### 为什么把它排第 1\n- 快\n- 成本低\n- 能帮你确定同位素实验条件窗口\n- 还能提前暴露 chlorite / ClO2 背景氧化问题\n\n### 这一关的“继续做”标准\n只有当你看到：\n- `catalyst + chlorite` 明显高于各 blank\n- PMSO2 产物可稳定检出\n- 条件窗口清楚\n\n才值得进入同位素。\n\n---\n\n## Step 2｜同位素：用最像“主证”的手段升级\n> 执行优先级：**第 2 位**  \n> 证明权重：**第 1 位**\n\n### 要回答的问句\n**“PMSO2 里的氧，是否来自可交换的水/oxo 池，而不是普通共存氧化剂随便氧化出来的？”**\n\n### 关键读出\n- 用 `H2^18O`\n- 看是否出现 **^18O 标记的 PMSO 氧化产物**（如 EST 里的那类 OAE 指纹）\n\n### 这一步能回答什么\n- 能把“像 OAT”推进到：  \n  **“存在与高价 Co-oxo / 氧交换过程一致的特异化学指纹”**\n- 在 chlorite 体系里，这就是**最像主证**的一步\n\n### 为什么它排第 2 而不是第 1\n不是因为它不重要，而是因为：\n- 它更贵\n- 更依赖前面 PMSO 方法已跑顺\n- 你需要先确认有稳定产物窗口再上同位素\n\n### 这一关的判断标准\n如果出现：\n- 标记产物只在活性体系里出现\n- blank 很低\n- 与 PMSO 结果同方向\n\n那你就已经有了“最小闭环”的**中心主证**。\n\n---\n\n## Step 3｜EPR：不是拿来“证明 Co(IV)”，而是拿来“堵替代解释”\n> 执行优先级：**第 3 位**\n\n### 要回答的问句\n**“自由基路径是否足以解释我在 PMSO / 同位素里看到的现象？”**\n\n### 正确定位\nEPR 在这里主要做两件事：\n- 看有没有强烈自由基信号\n- 配合淬灭/对照判断：**自由基是否主导**\n\n### 这一步能回答什么\n- 能回答：  \n  **“·OH / O2·− / 其他典型自由基路径不足以独立解释主现象”**\n- 不能回答：  \n  **“因此就已经证明是 Co(IV)”**\n\n### 为什么排第 3\n因为：\n- EPR 阴性不等于 Co(IV) 阳性\n- 它是**排除证据**，不是主证\n- 7 天窗口里，EPR 应该服务于主证，不应喧宾夺主\n\n### 这一关最容易犯的错\n不要写成：\n- “没看到自由基，所以证明了 Co(IV)”\n\n只能写成：\n- “自由基主导解释受到削弱，非自由基高价物种路径更可疑/更一致”\n\n---\n\n## Step 4｜反应选择性：看体系行为像不像“高价钴主导”\n> 执行优先级：**第 4 位**\n\n### 要回答的问句\n**“这个体系的底物偏好，更像高价钴/OAT-亲电路径，还是更像 ClO2 或非选择性自由基氧化？”**\n\n### 为什么这一步放在 EPR 后面\n因为选择性本身非常容易被“讲故事化”。  \n它需要建立在前面已经有：\n- OAT 信号\n- 同位素升级\n- 自由基排除\n\n之后，才有解释价值。\n\n### 这一步更适合怎么用\n拿它做**模式识别**，而不是身份认证。\n比如比较：\n- 电子丰富 vs 电子贫乏底物\n- 易 OAT 响应底物 vs 不易 OAT 底物\n- 同时和 **ClO2-only control** 对比\n\n### 这一步能回答什么\n- 能回答：  \n  **“体系表现出与高价钴路径一致的选择性特征”**\n- 不能单独回答：  \n  **“因此已经证明 Co(IV)”**\n\n### chlorite 体系里的特别提醒\n因为 **ClO2 本身也有选择性**，所以这里最重要的不是“看到选择性”，  \n而是问：\n\n> **“这个选择性是否超出了 ClO2-alone 能解释的范围？”**\n\n---\n\n## Step 5｜其他支持证据：只做会聚，不做主结论\n> 执行优先级：**第 5 位**\n\n### 要回答的问句\n**“前面主证 + 排除证据得到的结论，是否还能被条件依赖、结构信息、理论计算进一步收敛支持？”**\n\n### 这里面我会再排一个小优先级\n在 chlorite 体系里，其他支持证据优先顺序建议是：\n\n1. **ClO2 独立监测 / 贡献拆分**\n2. **pH 依赖**\n3. **淬灭与活性变化的一致性**\n4. **催化剂前后变化 / 稳定性 / leaching**\n5. **XPS**\n6. **DFT**\n\n### 为什么 XPS/DFT 排这么后\n因为 7 天窗口里：\n- 它们最容易被写成“看起来很完整”\n- 但对“最小证明闭环”的增益，低于同位素和排除法\n\n### 正确定位\n这些证据适合支持：\n- 为什么能形成高价钴\n- 在什么条件下更有利\n- 哪些路径更合理\n\n不适合充当“已经证明 Co(IV)”的主句。\n\n---\n\n## 我会这样安排 7 天\n\n| 天数 | 主要动作 | 核心问句 | 产出 |\n|---|---|---|---|\n| Day 1 | 空白对照 + ClO2 监测 + PMSO 方法建立 | 现象是否真是催化依赖的？ | 可用条件窗口 |\n| Day 2 | PMSO 正式跑条件矩阵 | 是否有稳定 OAT 信号？ | PMSO/PMSO2 数据 |\n| Day 3-4 | H2^18O 同位素实验 | 氧是否进入可交换 oxo 池？ | ^18O 标记产物证据 |\n| Day 5 | EPR/淬灭联合 | 自由基能否解释主现象？ | 排除性证据 |\n| Day 6 | 反应选择性对比 + ClO2-only 对照 | 行为模式更像谁？ | 底物谱支持 |\n| Day 7 | pH / 结构支持 / 汇总 | 证据是否会聚？ | 最小证明包 |\n\n---\n\n## 如果时间/仪器再紧一点，我会怎么砍\n\n### 绝对不建议砍掉\n- **PMSO**\n- **同位素**\n\n### 可以降级处理\n- **EPR**：可从完整谱学降成“简单排除性检查”\n- **反应选择性**：做一组最小底物对比即可\n- **XPS/DFT**：没有就先不做，不影响“最小闭环”成立\n\n### 一句话决策\n> **如果只能保住两件事，就保住 PMSO + 同位素。**  \n> **如果还能保第三件，就加 EPR/淬灭排除法。**\n\n---\n\n## 最后给你一个“每步问句模板”\n你做实验或写 PPT 时，建议直接按这 5 句走：\n\n1. **PMSO：**  \n   “体系里是否存在催化依赖的 OAT 型氧化信号？”\n\n2. **同位素：**  \n   “这个 OAT 氧是否来自可交换的 Co-oxo / 水氧池，从而把‘像 Co(IV)’升级为主证？”\n\n3. **EPR：**  \n   “自由基路径是否足以单独解释前两步观察到的现象？”\n\n4. **反应选择性：**  \n   “底物偏好更像高价钴主导，还是更像 ClO2 / 自由基主导？”\n\n5. **其他支持证据：**  \n   “条件依赖、结构与理论是否与上述判断会聚，而不是彼此打架？”\n\n---\n\n## 一句话版排序理由\n> **先用 PMSO 找到 OAT 信号窗口，再用同位素把“像 Co(IV)”升级成“最像主证”，然后用 EPR 堵住自由基解释，最后用反应选择性和其他证据做会聚支持。**\n\n---\n\n## Memory Patch\n本轮**未实际写入**任何 `memory/` 文件。  \n如果你要，我下一步可以继续给你两种版本之一：\n\n1. **实验执行版**：把这 7 天排成每天的 SOP、样品数、对照表  \n2. **汇报版**：整理成“一页 PPT 的 proof ladder（证据梯子）”  \n   \n你如果愿意，我下一条直接给你出 **“7 天 proof package 清单表”**。",
+  "attachments_used": [],
+  "trace_events": [
+    {
+      "tool_call_id": "call_M32qNhkjPN3KzvqdKjoZcWGt",
+      "tool": "read_file",
+      "args": {
+        "cwd": ".",
+        "path": "assets/uploads/454ae4c8_（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md"
+      },
+      "timestamp": "2026-03-20T23:57:23.219252",
+      "status": "completed",
+      "result": "---\ntype: paper\ntitle: \"Revealing the Generation of High-Valent Cobalt Species and Chlorine Dioxide in the Co3O4‑Activated Chlorite Process: Insight into the Proton Enhancement Effect\"\nauthors: Qian Li\nyear: \"2023\"\ndoi:\npdf: \"[[（相关度高）2025-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf]]\"\ntags:\n  - 高氯酸盐AOPs\nreading_state: 待读\nimportance: C\n---\n本文开发了一种基于Co₃O₄活化亚氯酸盐的氧化工艺，可同时生成高价钴物种[Co(IV)]和二氧化氯（ClO₂）用于高效去除有机污染物。\n通过实验和理论计算揭示了Co(IV)和ClO₂的生成机制，明确了质子增强效应。\n研究还探讨了pH对Co(IV)和ClO₂去除污染物贡献的影响，以及亚氯酸盐活化过程中阴离子的作用，最后验证了该工艺在实际废水中的应用潜力。\n\n\n\n\n## 三句话总结\n- OAT过程[[2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2]]是相似的。、\n\n\n# INTRO\n\n高价金属的选择性氧化——hydrogen-/oxygen-atom transfer, electron transfer, and electrophilic addition.\n\n## 机理\n## 亚氯酸盐高级氧化产生二氧化氯的由来与原理：亚氯酸盐氧化酶\n- 酶促亚氯酸盐歧化\n- 首先通过OAT，形成高价铁\n- 高价铁→亚氯酸盐 2e- 生成二氧化氯\ncatalyzed by chlorite dismutase (Cld), a heme iron [Fe(II)] porphyrin.\n**Enzymatic chlorite dismutation** involves an initial o**xygen atom transfer (OAT) proces**s to form ==**high-valent ferryl-oxo (Fe(IV)) species** ==and **==a subsequent twoelectron transfer from Fe(IV) to chlorite==** to produce chlorine dioxide (ClO2),15,16 the desired oxidizing intermediate.\n\n\n### 活性物种：ClO2\n\n- ClO2消毒的优点\n\t-  an aterernative to chlorine氯的替代品\n\t- 【二氧化氯氧化】ClO2 oxidation ：电子转移electron transfer 而非 【氯消毒】氯原子替代chlorine substitution\n\t\t- generates less halogenated disinfection byproducts (DBPs)卤化消毒副产物\n\n- ClO2 的选择性攻击\n\t- 供电子有机基团（如苯酚、苯胺和叔胺）表现出高选择性20，\n\t- 并且具有较低的水基质反应性。\n\n### 活性物种：高价金属氧物种\n\n- long half-lives and high selectivity toward organics.对有机物的半衰期长、高选择性\n- \n\n### 目前的难点：\n\nCo（IV）——更高的氧化性\n- stringer oxidant than its counterpart due to the lower enthalpy of Co(iv) species\n- 比起其他的【高价金属氧物种】，氧化还原反应的焓更低\n\t- 丰富的d电子，是枷锁也是馈赠\n\t\t- 馈赠：高氧化性、反应活性更强\n\t\t- 枷锁：高价股与【富电子的氧物种-氧配体】存在强烈的电子排斥，导致很容易使得高价钴和O断掉\n\t\t\t- ==【表征】难度高，只能依靠【通过PMSO探针】和【18O同位素】标记等间接方法检测，\n==\n## 体系+目的 \n\n【材料：（一笔带过，说的比较简单）】Co3O4：低成本、高温定型和地球丰富性\n【污染物（一笔带过）】：头孢氨苄（CPX）因其在"
+    },
+    {
+      "tool_call_id": "call_f07spR9BjEHYrr7GBPAHzC0q",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-20T23:57:23.232169",
+      "status": "completed_unmatched",
+      "result": "---\ntype: paper\ntitle: \"Revealing the Generation of High-Valent Cobalt Species and Chlorine Dioxide in the Co3O4‑Activated Chlorite Process: Insight into the Proton Enhancement Effect\"\nauthors: Qian Li\nyear: \"2023\"\ndoi:\npdf: \"[[（相关度高）2025-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf]]\"\ntags:\n  - 高氯酸盐AOPs\nreading_state: 待读\nimportance: C\n---\n本文开发了一种基于Co₃O₄活化亚氯酸盐的氧化工艺，可同时生成高价钴物种[Co(IV)]和二氧化氯（ClO₂）用于高效去除有机污染物。\n通过实验和理论计算揭示了Co(IV)和ClO₂的生成机制，明确了质子增强效应。\n研究还探讨了pH对Co(IV)和ClO₂去除污染物贡献的影响，以及亚氯酸盐活化过程中阴离子的作用，最后验证了该工艺在实际废水中的应用潜力。\n\n\n\n\n## 三句话总结\n- OAT过程[[2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2]]是相似的。、\n\n\n# INTRO\n\n高价金属的选择性氧化——hydrogen-/oxygen-atom transfer, electron transfer, and electrophilic addition.\n\n## 机理\n## 亚氯酸盐高级氧化产生二氧化氯的由来与原理：亚氯酸盐氧化酶\n- 酶促亚氯酸盐歧化\n- 首先通过OAT，形成高价铁\n- 高价铁→亚氯酸盐 2e- 生成二氧化氯\ncatalyzed by chlorite dismutase (Cld), a heme iron [Fe(II)] porphyrin.\n**Enzymatic chlorite dismutation** involves an initial o**xygen atom transfer (OAT) proces**s to form ==**high-valent ferryl-oxo (Fe(IV)) species** ==and **==a subsequent twoelectron transfer from Fe(IV) to chlorite==** to produce chlorine dioxide (ClO2),15,16 the desired oxidizing intermediate.\n\n\n### 活性物种：ClO2\n\n- ClO2消毒的优点\n\t-  an aterernative to chlorine氯的替代品\n\t- 【二氧化氯氧化】ClO2 oxidation ：电子转移electron transfer 而非 【氯消毒】氯原子替代chlorine substitution\n\t\t- generates less halogenated disinfection byproducts (DBPs)卤化消毒副产物\n\n- ClO2 的选择性攻击\n\t- 供电子有机基团（如苯酚、苯胺和叔胺）表现出高选择性20，\n\t- 并且具有较低的水基质反应性。\n\n### 活性物种：高价金属氧物种\n\n- long half-lives and high selectivity toward organics.对有机物的半衰期长、高选择性\n- \n\n### 目前的难点：\n\nCo（IV）——更高的氧化性\n- stringer oxidant than its counterpart due to the lower enthalpy of Co(iv) species\n- 比起其他的【高价金属氧物种】，氧化还原反应的焓更低\n\t- 丰富的d电子，是枷锁也是馈赠\n\t\t- 馈赠：高氧化性、反应活性更强\n\t\t- 枷锁：高价股与【富电子的氧物种-氧配体】存在强烈的电子排斥，导致很容易使得高价钴和O断掉\n\t\t\t- ==【表征】难度高，只能依靠【通过PMSO探针】和【18O同位素】标记等间接方法检测，\n==\n## 体系+目的 \n\n【材料：（一笔带过，说的比较简单）】Co3O4：低成本、高温定型和地球丰富性\n【污染物（一笔带过）】：头孢氨苄（CPX）因其在"
+    },
+    {
+      "tool_call_id": "call_8uDpQ7FfWLHuw5lcJdyXXPcc",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-20T23:57:23.232169",
+      "status": "completed_unmatched",
+      "result": "---\ntype: paper\ntitle: Tailoring d-band center of high-valent metal-oxo species for pollutant removal via complete polymerization\nyear: 2024\npdf: ./2024-SACs&taloring D band-high-valent metal-oxo species.pdf\ntags: [paper, 意群/ ]\nreading_state: 待读\nimportance: C\n---\n\n# Tailoring d-band center of high-valent metal-oxo species for pollutant removal via complete polymerization\n## 三句话总结\n- Article https://doi.org/10.1038/s41467-024-46739-1\nTailoring d-band center of high-valent metal-\noxo species for pollutant removal viacomplete polymerization\nHong-Zhi Liu1,4,X i a o - X u a nS h u1,4, Mingjie Huang1,2,B i n g - B i n gW u3,\nJie-Jie Chen1,X i - S h e n gW a n g3,H u i - L i nL i1&H a n - Q i n gY u1\nPolymerization-driven removal of poll utants in advanced oxidation processes\n(AOPs) offers a sustainable way for th e simultaneous achievement of con-\ntamination abatement and resource re covery, supportin g a low-carbon water\npuriﬁcation approach.\n- However, regulat ing such a process remains a great\nchallenge due to the insuf ﬁcient microscopic understanding of electronic\nstructure-dependent reaction mechanisms.\n- Herein, this work probes the originof catalytic pollutant polymeriz\n## 方法 / 材料\n- andFig.1a) 29. Inductively coupled plasma atomic emission spectroscopy (ICP-AES) analysis indicates that the metal loading was 9.46, 7.02, 7.71,and 7.32 wt% for Cu, Ni, Co, and Fe, respectively (Supplementary Fig. 1a). The absence of characteristic crystal peaks of metals in the powder X-ray diffraction (XRD) patterns of the TM-SA/PN-g-C 3N4samples (Supplementary Fig. 1b) excluded the presence of large crys-talline particles 30,31. Likewise, high-resolution transmission electron microscopy (HR-TEM) did not detect any visible nanoparticles (Fig. 1b and Supplementary Fig. 2). Scanning electron m\n## 关键数据\n- \n\n## 与意群的连接\n- [[MOCs/意群-XXX]]\n\n## Highlights\n>\n![[Pasted image 20250904101744.png]]"
+    },
+    {
+      "tool_call_id": "call_8uDpQ7FfWLHuw5lcJdyXXPcc",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-20T23:57:23.232169",
+      "status": "completed_unmatched",
+      "result": "---\nname: reactive_species_evidence_matrix\ndescription: 用于整理活性物种相关证据，比较探针、淬灭剂、谱学信号和活性结果分别能证明什么、不能证明什么，并输出结构化的证据等级矩阵。\nallowed-tools: Read Write Edit Bash\nlicense: Internal\n---\n\n# Reactive Species Evidence Matrix\n\n## Overview\n\n这个 skill 用于处理**活性物种证据整理与分级**任务。\n\n它适用于这样的问题：用户手里有一组与活性物种相关的实验结果，例如探针反应、淬灭实验、EPR 信号、活性变化、对照实验或文献先例，希望判断：\n\n- 每一种证据分别支持什么\n- 哪些证据只是排除法\n- 哪些证据可以视为较强支持\n- 哪些证据并不具区分性\n- 多种证据组合起来后，最多能把结论推进到哪一层\n\n这个 skill 的重点不是罗列“某种探针常用于检测什么”，而是输出一个**可审查的证据矩阵**，帮助后续机制判断、写作和补实验设计。\n\n---\n\n## When to Use This Skill\n\n当满足以下任一情况时使用本 skill：\n\n- 需要判断某个探针、淬灭剂或谱学信号到底能证明什么\n- 需要区分正证据、旁证、排除性证据和非区分性证据\n- 需要把多种活性物种相关实验整理成统一证据框架\n- 需要回答“这些结果能支持到哪一层，不能支持到哪一层”\n- 需要比较不同活性物种假设在当前证据下各自的支持强弱\n- 需要决定下一步做什么实验最能提升证据区分度\n- 需要把活性物种相关结果转换成后续机理分析或证据链聚合可复用的中间结果\n\n---\n\n## When NOT to Use This Skill\n\n以下情况不要使用本 skill：\n\n- 只是解释单一实验结果，没有活性物种证据比较需求\n- 主要任务是对一张或一组谱图做具体峰位判读\n  - 这类问题更适合交给图谱联合判读类 skill\n- 主要任务是搭建单一体系的完整机理分支图谱\n  - 这类问题更适合交给机理分析类 skill\n- 主要任务是比较两条反应路径或两类氧化剂的整体机制差异\n  - 这类问题更适合交给路径比较类 skill\n- 主要任务是把多个实验、文献和推理聚合成正式证据链交付物\n  - 这类问题更适合交给证据链聚合类 skill\n- 主要任务是汇报结构整理、图页映射或写作提纲组织\n\n---\n\n## Required Inputs\n\n### Minimum Inputs\n\n至少需要以下输入之一的组合：\n\n- 一组探针或淬灭实验结果\n- 一组 EPR 或其他活性物种相关信号\n- 一组活性变化结果，用于比较不同处理条件\n- 一组关于活性物种的候选假设\n- 一组文献 claim 或参考归属，等待审计其证据等级\n\n### Optional Inputs\n\n以下输入会显著提升结果质量：\n\n- 每个探针或淬灭剂的具体实验现象\n- 不同条件下的活性变化幅度\n- 对照实验结果\n- 文献中对这些探针/淬灭剂/信号的常见解释\n- 用户当前最关注的物种假设\n- 用户已经写过的一版机制论述\n- 用户希望区分的几种 competing explanations\n\n### Supported Material Types\n\n- pdf\n- figure screenshots\n- spectra images\n- md notes\n- experiment notes\n- interpretation drafts\n- literature claim tables\n- activity summaries\n\n---\n\n## Expected Outputs\n\n本 skill 应输出以下类型的结构化结果：\n\n- `evidence_question`\n  - 本轮活性物种证据整理真正要回答的问题\n- `candidate_species_or_pathways`\n  - 当前待比较的活性物种或路径假设\n- `evidence_items`\n  - 当前纳入分析的证据条目\n- `evidence_classification`\n  - 每条证据属于正证据、旁证、排除性证据、非区分性证据中的哪一类\n- `support_matrix`\n  - 证据条目与候选物种/路径之间的支持关系矩阵\n- `what_each_can_prove`\n  - 每种证据最多能证明什么\n- `what_each_cannot_prove`\n  - 每种证据不能单独证明什么\n- `non_discriminating_evidence`\n  - 看似有信息量、但不足以区分候选解释的证据\n- `evidence_ga"
+    }
+  ],
+  "created_paths": [],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/eb4e2964d238",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "B-S005-T02-C1",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中 6 个，达到阈值。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "B-S005-T02-C2",
+    "score": 85.0,
+    "verdict": "pass",
+    "reasons": [
+      "该 turn 依赖 prior workspace memory，但 trace 中缺少明显 memory 读取痕迹。"
+    ]
+  },
+  "artifact_result": null,
+  "judge_result": {
+    "criterion_id": "B-S005-T02-C3",
+    "score": 86.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 6 个关键术语",
+      "检测到工具使用: read_file"
+    ],
+    "risks": [
+      "缺失关键术语: ['7天窗口', '先后顺序']"
+    ],
+    "missing": [
+      "7天窗口",
+      "先后顺序"
+    ],
+    "raw_text": "你是一名长期从事环境催化、亚氯酸盐活化、高价金属氧物种机理研究的评审专家。请只依据【用户问题】【上传文件列表】【assistant 回复】【trace 摘要】【预期 focus】进行评分，不要凭领域常识替模型补答案。你要重点检查五件事：第一，回答是否严格区分论文原文、个人笔记、以及从旁支体系借来的启发；第二，是否真正抓住 Co3O4/chlorite 基线机制的 OAT、PCET、ClO2/Co(IV)=O 双物种与 pH/质子增强等关键关系；第三，是否把 selective oxidation、PMS/Fenton-like、Ce 电子结构论文的迁移边界说清楚；第四，是否在证据不足时主动保留限定词；第五，是否围绕用户要求的对象（概念卡、对照表、handoff）组织内容。请输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_B_session_005_proof_methods\",\n  \"turn_id\": 2,\n  \"user_input\": \"如果只给你 7 天窗口做一个“最小证明闭环”，你会怎么排：PMSO / 同位素 / EPR / 反应选择性 / 其他支持证据？请给一个先后顺序，并说清楚每一步要回答的问句是什么。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace（公开版）**  \\n本轮实际调用了工具：\\n- `read_file`\\n  - `assets/uploads/454ae4c8_（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md`（重复核对 EST 笔记）\\n  - `assets/uploads/44a9f338_2024-SACs&taloring D band-high-valent metal-oxo species - 文献笔记.md`\\n  - `ski"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [
+      "已经证明"
+    ],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [],
+  "temporary_expectations": null,
+  "provisional_turn_score": 90.0,
+  "final_turn_score": 90.33
+}

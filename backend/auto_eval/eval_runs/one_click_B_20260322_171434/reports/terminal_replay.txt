@@ -1,0 +1,35 @@
+[20:24:07] [PROGRESS][START] [########################] 100.00% (31/31)
+[20:24:07] [SCENARIO][START] scenario_B 文献与Concept闭环评测
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_001_bootstrap/turn_1
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_001_bootstrap/turn_2
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_001_bootstrap/turn_3
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_001_bootstrap/turn_4
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_002_baseline_compare/turn_1
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_002_baseline_compare/turn_2
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_002_baseline_compare/turn_3
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_003_dband_bridge/turn_1
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_003_dband_bridge/turn_2
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_003_dband_bridge/turn_3
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_004_ce_transferability/turn_1
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_004_ce_transferability/turn_2
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_004_ce_transferability/turn_3
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_005_proof_methods/turn_1
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_005_proof_methods/turn_2
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_005_proof_methods/turn_3
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_006_ce_sentence_safety/turn_1
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_006_ce_sentence_safety/turn_2
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_006_ce_sentence_safety/turn_3
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_007_reading_queue/turn_1
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_007_reading_queue/turn_2
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_007_reading_queue/turn_3
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_008_false_analogy_redflags/turn_1
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_008_false_analogy_redflags/turn_2
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_008_false_analogy_redflags/turn_3
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_009_master_outline/turn_1
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_009_master_outline/turn_2
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_009_master_outline/turn_3
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_010_handoff/turn_1
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_010_handoff/turn_2
+[20:24:07] [TURN][SKIP] scenario_B/scenario_B_session_010_handoff/turn_3
+[20:24:07] [SCENARIO][DONE] scenario_B avg_score=96.11
+[20:24:08] [RUN][DONE] run_id=one_click_B_20260322_171434 overall_score=96.11

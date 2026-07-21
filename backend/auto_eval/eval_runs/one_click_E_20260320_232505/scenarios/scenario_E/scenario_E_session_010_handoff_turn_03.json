@@ -1,0 +1,105 @@
+{
+  "scenario_id": "scenario_E",
+  "session_id": "scenario_E_session_010_handoff",
+  "turn_id": 3,
+  "workspace_id": "eval-scenario_e-260320_2325",
+  "backend_session_id": "8d0afe04fd7c",
+  "assistant_text": "**Context Trace**\n\n本轮实际调用了 `write_file`，将 handoff 写入：  \n- `memory/packs/E_handoff.md`\n\n写入时附带了来源素材：  \n- `assets/uploads/ced68974_closure_mapping.md`\n- `assets/uploads/5c66efd3_【20260305大组会】工作文档.md`\n- `assets/uploads/192d5149_【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md`\n- `assets/uploads/45307a7c_test_cases_writing.md`\n\n---\n\n**Rationale**\n\n你要求把“最后的 handoff”落盘到固定路径，并至少包含三节：\n- `先实现什么`\n- `可模板化部分`\n- `不要做错的事情`\n\n我已按这个最低结构写入，并保留了前面讨论出的 v1 落地优先级、模板化对象和 anti-overengineering / anti-hallucination 方向的约束。\n\n---\n\n**Deliverable**\n\n已落盘文件：  \n- `memory/packs/E_handoff.md`\n\n文件包含三大节：\n1. **先实现什么**\n2. **可模板化部分**\n3. **不要做错的事情**\n\n并附了一句总 handoff，方便直接交给 Codex 作为开发入口。\n\n如果你愿意，下一步我可以继续做两件事里的任意一个：\n\n- **A.** 再补一个 `memory/packs/E_anti_hallucination_rules.md`\n- **B.** 直接把 `E_handoff.md` 进一步整理成 **Codex 可直接开工的 YAML/JSON schema + TODO 列表**\n\n---\n\n**Memory Patch**\n\n已完成写入：\n- `memory/packs/E_handoff.md`\n\n如果要继续沉淀，建议后续新增但**尚未写入**：\n- `memory/packs/E_anti_hallucination_rules.md`\n- `temporary_dir/scenario_E_session_010_handoff/bridge_eval_v1_schema.yaml`",
+  "attachments_used": [],
+  "trace_events": [
+    {
+      "tool_call_id": "call_UmmRJY4EDACsGTL801HmQMCx",
+      "tool": "write_file",
+      "args": {
+        "content": "# E_handoff\n\n## 先实现什么\n\n### P0：先做写作闭环 bridge 的最小内核\n先不要追求全类型通用 research OS，而是先打通这条最短且最有价值的链：\n\n`closure candidate / work doc / stage note -> canonical pack/task object -> eval`\n\n第一版最小输入：\n- `closure_mapping`：提供对象优先级、状态、适配测试类型\n- `0305 工作文档`：提供稳定的写作组织方式与 page-spec 约束\n- `stage6 主线`：提供 mixed object 的真实样例\n- `writing test cases`：提供最值得优先验证的 W1/W2 case\n\n第一版最小输出：\n1. `PackSpec`\n2. `TaskSpec`\n3. `GapAudit`\n\n### v1 建议只做 3 个模块\n\n#### 1) Bridge IR\n定义统一 schema，先稳定对象落点，再谈复杂 agent。\n\n建议核心字段：\n- `id`\n- `closure_type`\n- `research_line`\n- `object_hint`\n- `source_files[]`\n- `status`\n- `uncertainty_tags[]`\n- `suitable_tests[]`\n- `derived_work_object`\n\n建议拆出两个子对象：\n- `PackSpec`\n- `TaskSpec`\n\n#### 2) Bridge Rules\n先用规则 + 少量 LLM 提取，不要一开始就重度智能化。\n\n优先规则：\n- 写作导向输入优先落 `pack`\n- 实验推进导向输入优先落 `task`\n- 若同时包含章节组织与实验推进，允许落 `mixed`\n- 未观测字段保留 `unknown/to_verify`，不要补齐\n- 每个 section/page 必须带 source refs 或明确标待核对\n\n#### 3) Eval Runner\n第一版只做 3 个 eval：\n- `object_landing_test`\n- `writing_organization_test`\n- `gap_audit_test`\n\n### 第一批 test cases 优先级\n\n#### Case 1：W1 - 0305 大组会 Pack\n目标：验证能否稳定抽出 PackSpec 和 page-spec。\n\n#### Case 2：W2 - 毕业论文章节反推\n目标：验证能否识别“做了但还没写进去”的断裂，并输出 gap audit。\n\n#### Case 3：stage6 mixed object\n目标：验证能否同时生成 TaskSpec 与 PackSpec，而不是硬塞单一类型。\n\n### 暂缓项\n- W3 开题报告版本演化\n- 复杂 trace replay\n- 通用全类型 bridge\n- PPT 深层自动排版与图像处理\n\n---\n\n## 可模板化部分\n\n### 1. Page Spec 模板\n这是最稳定、最适合直接编码的部分。\n\n建议固定字段：\n- `page_no`\n- `title`\n- `page_goal`\n- `source_scope`\n- `layout`\n- `bullets`\n- `quant_results`\n- `footnotes`\n- `transition_hint`\n- `material_ops`\n- `verification_status`\n\n### 2. Gap Audit 模板\n建议固定成 4 类 gap：\n- `missing_source`\n- `missing_condition`\n- `missing_data`\n- `missing_connection_to_chapter`\n\n每个 gap 至少包含：\n- `gap_type`\n- `object_scope`\n- `missing_field`\n- `why_it_blocks`\n- `source_anchor`\n\n### 3. Closure Candidate -> Work Object 映射模板\n`closure_mapping` 已经接近半结构化输入，适合直接转 fixture。\n\n建议保留字段：\n- `research_line`\n- `object_hint`\n- `suitable_tests`\n- `status`\n- `uncertainty_tags`\n- `source_files`\n\n### 4. 结论边界检查模板\n适合写成 deterministic validator，而不是仅靠 prompt：\n- 不得编造作者/图号/条件/数据/机理\n- 不确定就标 `待核对`\n- 主图必须可追溯 source\n- 背景/综述图必须标来源\n- 无 source 的 supported claim 直接 fail\n\n### 5. Judge Rubric 模板\n评分建议拆开，不要只有总分：\n- `landing_correctness`\n- `source_coverage`\n- `gap_recall`\n- `no_fabrication_compliance`\n- `output_completeness`\n- `uncertainty_honesty`\n\n---\n\n## 不要做错的事情\n\n### 1. 不要一开始做“全类型通用 bridge”\n第一版先把 `writing closure + mixed stage object` 做扎实，不要同时铺开 literature / experiment / version replay / thesis pack / daily timeline。\n\n### 2. 不要把 candidate 静默升级为 confirmed\n上游提取结果只能是候选对象。没有明确证据时，最多到 `draft`，不要直接写成 `confirmed`。\n\n### 3. 不要为了结构完整偷偷补字段\n缺 `page_no / fig_no / section / 实验条件 / source` 时，必须保留 `unknown / to_verify`，不要“合理补全”。\n\n### 4. 不要奖励“写得像真的”\njudge 不能因为文本流畅、自洽、像专家口吻就给高分。证据锚点应高于表达质量。\n\n### 5. 不要把 instruction/template_text 当作项目事实\n像 0305 工作文档中很多内容是写作要求、页面模板、示例约束，不是研究事实。loader 必须先分层：\n- `instruction`\n- `template_text`\n- `plan`\n- `fact`\n- `evidence`\n\n### 6. 不要把 gap 消灭成“看起来闭环”\nbridge/eval 的价值之一就是发现缺口。缺口不是失败，伪闭环才是失败。\n\n### 7. 不要把 source 当备注\n每个 supported claim、section、page-spec 都应挂 source。source 缺失不是小问题，而是红线。\n\n### 8. 不要把复杂 trace graph / graph DB 作为 v1 前提\n先用 `source_files[] + page_specs[] + gap_items[] + transformation_log[]` 就够。别在 v1 上复杂基础设施。\n\n### 9. 不要先做 PPT 深层自动化\n0305 暴露的核心问题不是版式自动化，而是：\n- source 对不对\n- 逻辑链顺不顺\n- 缺口有没有被识别\n\n### 10. 不要只靠 prompt 做防幻觉\n优先把这些写成代码级 validator：\n- unknown-preserving schema\n- source 必填约束\n- candidate/draft/confirmed 生命周期\n- hard fail 规则\n- 报告标题不得高于正文证据等级\n\n---\n\n## 一句话 handoff\n\n先实现一个“能把 stage6 + 0305 这类半计划、半写作、强 source 约束对象，稳定落成 Pack/Task 并输出 gap audit”的 bridge/eval 内核；先追求可验证，不追求全能。",
+        "cwd": ".",
+        "path": "memory/packs/E_handoff.md",
+        "source_assets": [
+          "assets/uploads/ced68974_closure_mapping.md",
+          "assets/uploads/5c66efd3_【20260305大组会】工作文档.md",
+          "assets/uploads/192d5149_【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md",
+          "assets/uploads/45307a7c_test_cases_writing.md"
+        ]
+      },
+      "timestamp": "2026-03-21T18:15:43.112791",
+      "status": "completed",
+      "result": "File written successfully: memory/packs/E_handoff.md"
+    },
+    {
+      "tool_call_id": "call_UmmRJY4EDACsGTL801HmQMCx",
+      "tool": "write_file",
+      "args": null,
+      "timestamp": "2026-03-21T18:15:43.134586",
+      "status": "completed_unmatched",
+      "result": "File written successfully: memory/packs/E_handoff.md"
+    }
+  ],
+  "created_paths": [
+    "memory/packs/E_handoff.md"
+  ],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/8d0afe04fd7c",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "E-S010-T03-C1",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中 4 个，达到阈值。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "E-S010-T03-C2",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "artifact_result": {
+    "criterion_id": "E-S010-T03-C2A",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "judge_result": {
+    "criterion_id": "E-S010-T03-C3",
+    "score": 100.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 4 个关键术语",
+      "检测到工具使用: write_file"
+    ],
+    "risks": [],
+    "missing": [],
+    "raw_text": "你是一名擅长把复杂 benchmark 设计收束成可实现协议的系统架构师。请判断这条回答能否作为 bridge/eval closure 的稳定对象：它是否真正形成了 read-order、priority、schema、prompt contract、failure mode 或 handoff 这类可执行对象；是否区分了 scenario/session/turn/criterion 层级；是否兼顾实现成本、覆盖度与可评分性；是否能够被 Codex 直接消费为实现输入。不要用自己的经验替模型补上尚未写出的系统约束，只按现有回答评分。输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_E_session_010_handoff\",\n  \"turn_id\": 3,\n  \"user_input\": \"把最后的 handoff 存成 `memory/packs/E_handoff.md`，至少包含：`先实现什么`、`可模板化部分`、`不要做错的事情` 三节。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace**\\n\\n本轮实际调用了 `write_file`，将 handoff 写入：  \\n- `memory/packs/E_handoff.md`\\n\\n写入时附带了来源素材：  \\n- `assets/uploads/ced68974_closure_mapping.md`\\n- `assets/uploads/5c66efd3_【20260305大组会】工作文档.md`\\n- `assets/uploads/192d5149_【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md`\\n- `assets/uploads/45307a7c_test_cases_writing.md`\\n\\n---\\n\\n**Rationale**\\n\\n你要求把“最后的 handoff”落盘到固定路径，并至少包含三节：\\n- `先实现什么`\\n- `可模板化"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [
+    {
+      "artifact_type": "pack",
+      "path": "memory/packs/E_handoff.md",
+      "must_exist_after_turn": true,
+      "required_sections": [
+        "先实现什么",
+        "可模板化部分",
+        "不要做错的事情"
+      ]
+    }
+  ],
+  "temporary_expectations": null,
+  "provisional_turn_score": 100.0,
+  "final_turn_score": 100.0
+}

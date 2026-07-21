@@ -1,0 +1,104 @@
+{
+  "scenario_id": "scenario_E",
+  "session_id": "scenario_E_session_009_prompt_contract",
+  "turn_id": 3,
+  "workspace_id": "eval-scenario_e-260322_1714",
+  "backend_session_id": "1ee835b224ff",
+  "assistant_text": "**Context Trace（公开版）**  \n- 已写 `memory/packs/E_prompt_contract.md`  \n- 写入依据资产：  \n  - `assets/uploads/35e2103c_PRO_PROMPT_PACKAGE_ARCHITECTURE.md`  \n  - `assets/data/53be2d7c_closure_mapping.json`  \n  - `assets/uploads/ced68974_closure_mapping.md`\n\n**Rationale（公开版）**  \n- 按你的要求，文档至少包含三节：`scenario级字段`、`turn级字段`、`评分级字段`。  \n- 同时把两类 guardrail 纳入了 contract：  \n  - `binary_grounding_required`  \n  - `source-layer honesty`  \n- 文档还补了最小必需字段清单和落地建议，方便你直接转成 `scenario json` / `scorer`。\n\n**Deliverable**  \n已保存到：`memory/packs/E_prompt_contract.md`\n\n文档包含：\n- scenario级字段\n- turn级字段\n- 评分级字段\n- guardrail 设计\n- 最小字段清单\n- loader / runner / scorer 落地建议\n\n**Memory Patch**  \n- 已落盘：`memory/packs/E_prompt_contract.md`  \n- 来源资产已随写入记录绑定。  \n\n如果你愿意，我下一步可以直接继续生成：\n1. `temporary_dir/<session_id>/scenario.template.json`  \n2. `temporary_dir/<session_id>/scorer_template.py`",
+  "attachments_used": [],
+  "trace_events": [
+    {
+      "tool_call_id": "call_La4uqKF5PvSU4R2oucxWY03l",
+      "tool": "write_file",
+      "args": {
+        "content": "---\ntitle: E_prompt_contract\nsummary: bridge evaluator prompt contract（含 scenario 级、turn 级、评分级字段）\nsource_assets:\n  - assets/uploads/35e2103c_PRO_PROMPT_PACKAGE_ARCHITECTURE.md\n  - assets/data/53be2d7c_closure_mapping.json\n  - assets/uploads/ced68974_closure_mapping.md\ncreated: 2026-03-22\n---\n\n# E_prompt_contract\n\n面向 `bridge evaluator` 的 prompt contract 草案，目标是让 **loader / runner / judge(scoring)** 三个环节可自动化，并把两类 guardrail 纳入同一套结构：\n- `binary_grounding_required`\n- `source-layer honesty`\n\n---\n\n## 一、scenario级字段\n\n> 作用：定义“这个 benchmark/scenario 是什么、测什么、允许依据什么、全局如何判”。\n\n### 1. 基础标识\n- `schema_version`：contract 版本\n- `scenario_id`：全局唯一场景 ID\n- `scenario_name`：人类可读名称\n- `scenario_type`：建议固定为 `bridge_evaluator`\n- `dataset_version`：数据集版本\n- `language`：输出语言\n- `route`：运行路由/模板\n\n### 2. closure / object 对齐字段\n- `closure_type`：如 `literature_closure` / `experiment_closure` / `writing_closure`\n- `closure_id`：与 `closure_mapping.json` 对齐的闭环 ID\n- `research_line`：所属研究主线\n- `target_object_type`：目标对象类型，如 `concept` / `task` / `pack` / `bridge_path`\n- `target_object_hint`：候选对象提示\n- `bridge_goal`：桥接目标，建议含 `from / to / task`\n- `non_goals`：非目标范围，防止越界\n\n### 3. 输入与证据字段\n- `startup_files`：首批推荐加载文件\n- `source_files`：关键证据文件\n- `attachment_roles`：附件角色标注，如 `startup_index` / `target_evidence` / `target_pack`\n- `suitable_tests`：适配测试类型\n- `uncertainty_tags`：如 `needs_manual_review` / `missing_context` / `uncertain`\n- `status`：如 `strong_candidate` / `planned_only` / `needs_manual_review`\n\n### 4. 全局输出与约束字段\n- `global_constraints`：全局约束\n- `deliverable_contract`：输出结构要求\n- `expected_output_tags`：期望输出标签，便于 scorer 做结构检查\n\n### 5. guardrail 字段\n\n#### 5.1 `binary_grounding_required`\n- `guardrails.binary_grounding_required.enabled`\n- `guardrails.binary_grounding_required.claim_unit`：建议为 `atomic_claim`\n- `guardrails.binary_grounding_required.applies_to`：\n  - `factual_claim`\n  - `file_operation_claim`\n  - `completion_claim`\n  - `mapping_claim`\n  - `evidence_claim`\n- `guardrails.binary_grounding_required.grounding_label_field`：建议为 `grounded`\n- `guardrails.binary_grounding_required.required_evidence_fields`：\n  - `source_layer`\n  - `source_ref`\n  - `locator`\n- `guardrails.binary_grounding_required.allowed_grounded_layers`：\n  - `system_preloaded`\n  - `user_message_inline`\n  - `user_attachment_manifest`\n  - `tool_read_current_turn`\n  - `tool_read_prior_turn`\n- `guardrails.binary_grounding_required.disallowed_as_sufficient_grounding`：\n  - `navigation_hint`\n  - `model_inference`\n- `guardrails.binary_grounding_required.unsupported_claim_policy`：建议为 `rewrite_as_missing_context_or_suggestion`\n- `guardrails.binary_grounding_required.hard_fail_on_assertive_ungrounded_claim`\n\n#### 5.2 `source-layer honesty`\n- `guardrails.source_layer_honesty.enabled`\n- `guardrails.source_layer_honesty.source_layers`：\n  - `system_preloaded`\n  - `navigation_hint`\n  - `user_message_inline`\n  - `user_attachment_manifest`\n  - `tool_read_current_turn`\n  - `tool_read_prior_turn`\n  - `tool_write_current_turn`\n  - `model_inference`\n- `guardrails.source_layer_honesty.must_distinguish`：\n  - `system_preloaded` vs `tool_read_current_turn`\n  - `navigation_hint` vs `tool_read_current_turn`\n  - `user_attachment_manifest` vs `tool_read_current_turn`\n  - `tool_read_prior_turn` vs `tool_read_current_turn`\n  - `suggested_write` vs `tool_write_current_turn`\n- `guardrails.source_layer_honesty.required_for_claim_types`：\n  - `file_operation_claim`\n  - `evidence_claim`\n  - `completion_claim`\n  - `memory_patch_claim`\n- `guardrails.source_layer_honesty.hard_fail_conditions`：\n  - `claim_read_without_matching_tool_or_preloaded_scope`\n  - `claim_write_without_successful_write_log`\n  - `treat_navigation_hint_as_read_evidence`\n\n---\n\n## 二、turn级字段\n\n> 作用：定义“这一轮具体要问什么、允许依据什么、要产出什么、如何判这一轮”。\n\n### 1. 基础字段\n- `turn_id`\n- `session_id`\n- `role`\n- `user_input`\n- `turn_goal`\n\n### 2. 上下文引用字段\n- `context_refs`：本轮允许依赖的文件/对象\n- `expected_actions`：本轮应该做的动作\n- `forbidden_actions`：本轮不应该做的动作\n- `output_contract`：本轮输出格式要求\n- `evidence_anchors`：本轮关键证据锚点\n- `hard_fail_conditions`：本轮一票否决条件\n\n### 3. turn 级 guardrail 字段\n\n#### 3.1 `binary_grounding_required`\n- `turn_guardrails.binary_grounding_required.claim_register_required`\n- `turn_guardrails.binary_grounding_required.must_ground_claim_types`\n- `turn_guardrails.binary_grounding_required.assertive_claims_need_evidence`\n\n#### 3.2 `source-layer honesty`\n- `turn_guardrails.source_layer_honesty.source_trace_required`\n- `turn_guardrails.source_layer_honesty.must_separate_current_vs_prior_reads`\n- `turn_guardrails.source_layer_honesty.must_not_claim_write_without_log`\n- `turn_guardrails.source_layer_honesty.must_not_treat_navigation_as_read`\n\n### 4. 机器可判的 meta 字段\n\n#### 4.1 `claim_register`\n每条 claim 建议至少包含：\n- `claim_id`\n- `claim_type`\n- `text`\n- `grounded`\n- `evidence[]`\n\n其中每个 `evidence` 至少包含：\n- `source_layer`\n- `source_ref`\n- `locator`\n\n#### 4.2 `source_trace`\n- `used_layers`\n- `did_current_turn_tool_read`\n- `did_current_turn_tool_write`\n- `tool_read_current_turn[]`\n- `tool_read_prior_turn[]`\n- `tool_write_current_turn[]`\n\n### 5. turn 级最小骨架\n```json\n{\n  \"turn_id\": \"t01\",\n  \"session_id\": \"scenario_E_session_001\",\n  \"role\": \"user\",\n  \"user_input\": \"请给出 bridge evaluator 的 prompt contract\",\n  \"turn_goal\": \"生成可判分的 contract 设计\",\n  \"context_refs\": [\n    \"assets/uploads/35e2103c_PRO_PROMPT_PACKAGE_ARCHITECTURE.md\",\n    \"assets/data/53be2d7c_closure_mapping.json\",\n    \"assets/uploads/ced68974_closure_mapping.md\"\n  ],\n  \"expected_actions\": [\n    \"区分 scenario/turn/评分字段\",\n    \"纳入 guardrails\",\n    \"给出结构化字段\"\n  ],\n  \"forbidden_actions\": [\n    \"把导航提示说成已读\",\n    \"无证据强断言\",\n    \"声称已写但无日志\"\n  ],\n  \"output_contract\": {\n    \"format\": \"markdown\",\n    \"required_sections\": [\"字段表\", \"JSON skeleton\", \"评分说明\"]\n  },\n  \"turn_guardrails\": {\n    \"binary_grounding_required\": {\n      \"claim_register_required\": true,\n      \"must_ground_claim_types\": [\n        \"factual_claim\",\n        \"file_operation_claim\",\n        \"completion_claim\",\n        \"mapping_claim\"\n      ]\n    },\n    \"source_layer_honesty\": {\n      \"source_trace_required\": true,\n      \"must_separate_current_vs_prior_reads\": true,\n      \"must_not_claim_write_without_log\": true\n    }\n  }\n}\n```\n\n---\n\n## 三、评分级字段\n\n> 作用：定义 scorer/judge 如何读取输出、如何扣分、哪些情况直接 fail。\n\n### 1. 基础评分字段\n- `scoring_profile.scorer_id`\n- `scoring_profile.pass_threshold`\n- `scoring_profile.weights`\n- `scoring_profile.hard_fail_conditions`\n\n### 2. 推荐评分维度\n- `object_landing`：是否正确落到目标 object/closure\n- `closure_alignment`：是否对齐 `closure_id / research_line / status`\n- `boundary_control`：是否守住读取边界与职责边界\n- `trace_alignment`：Context Trace 是否与真实执行一致\n- `uncertainty_preservation`：是否保留 `missing_context / needs_manual_review / uncertain`\n- `output_contract_compliance`：是否按约定结构输出\n- `binary_grounding_compliance`：claim 是否都有 grounded 判定与证据\n- `source_layer_honesty_compliance`：source layer 是否如实区分\n\n### 3. `binary_grounding_required` 对应评分字段\n- `scoring_profile.binary_grounding.required`\n- `scoring_profile.binary_grounding.check_claim_register`\n- `scoring_profile.binary_grounding.allowed_grounded_layers`\n- `scoring_profile.binary_grounding.disallowed_solo_layers`\n- `scoring_profile.binary_grounding.hard_fail_conditions`\n\n建议 hard fail：\n- `grounded=true` 但没有 `evidence`\n- `grounded=true` 但证据只来自 `navigation_hint` / `model_inference`\n- 出现强断言 factual claim，但未 grounding 也未降级为 `missing_context / suggestion`\n- 出现“已读/已写/已完成”类 claim，但无法与日志核对\n\n### 4. `source-layer honesty` 对应评分字段\n- `scoring_profile.source_honesty.required`\n- `scoring_profile.source_honesty.require_source_trace`\n- `scoring_profile.source_honesty.runtime_ledger_ref`\n- `scoring_profile.source_honesty.check_current_vs_prior_reads`\n- `scoring_profile.source_honesty.check_write_claims_against_log`\n- `scoring_profile.source_honesty.hard_fail_conditions`\n\n建议 hard fail：\n- 没有 `write_file` 成功记录却声称“已写/已落盘/已创建”\n- 仅凭 Memory Map / Recommended Files / 附件清单就声称“已读内容”\n- 把系统预加载表述成“本轮 read_file 已读”\n- 把 prior-turn read 表述成 current-turn read\n\n### 5. 推荐的评分输入\nscorer 最好同时读取以下 3 类输入：\n- `assistant_text`：模型正文\n- `assistant_meta`：`claim_register + source_trace`\n- `runtime_ledger`：runner 记录的真实工具日志\n\n### 6. 推荐的最小评分骨架\n```json\n{\n  \"scorer_id\": \"bridge_eval_v1\",\n  \"pass_threshold\": 0.75,\n  \"weights\": {\n    \"object_landing\": 0.2,\n    \"boundary_control\": 0.15,\n    \"trace_alignment\": 0.15,\n    \"uncertainty_preservation\": 0.1,\n    \"output_contract_compliance\": 0.1,\n    \"binary_grounding_compliance\": 0.15,\n    \"source_layer_honesty_compliance\": 0.15\n  },\n  \"hard_fail_conditions\": [\n    \"assertive_ungrounded_claim\",\n    \"claim_write_without_write_log\",\n    \"navigation_hint_claimed_as_read\",\n    \"preloaded_claimed_as_current_turn_tool_read\"\n  ]\n}\n```\n\n---\n\n## 四、最小必需字段清单\n\n### scenario级最小必需\n```json\n[\n  \"schema_version\",\n  \"scenario_id\",\n  \"scenario_type\",\n  \"language\",\n  \"route\",\n  \"closure_type\",\n  \"closure_id\",\n  \"research_line\",\n  \"target_object_type\",\n  \"target_object_hint\",\n  \"startup_files\",\n  \"source_files\",\n  \"suitable_tests\",\n  \"uncertainty_tags\",\n  \"status\",\n  \"bridge_goal\",\n  \"non_goals\",\n  \"global_constraints\",\n  \"deliverable_contract\",\n  \"guardrails.binary_grounding_required\",\n  \"guardrails.source_layer_honesty\",\n  \"scoring_profile\"\n]\n```\n\n### turn级最小必需\n```json\n[\n  \"turn_id\",\n  \"session_id\",\n  \"role\",\n  \"user_input\",\n  \"turn_goal\",\n  \"context_refs\",\n  \"expected_actions\",\n  \"forbidden_actions\",\n  \"output_contract\",\n  \"turn_guardrails.binary_grounding_required\",\n  \"turn_guardrails.source_layer_honesty\",\n  \"claim_register\",\n  \"source_trace\",\n  \"hard_fail_conditions\"\n]\n```\n\n### 评分级最小必需\n```json\n[\n  \"scoring_profile.scorer_id\",\n  \"scoring_profile.pass_threshold\",\n  \"scoring_profile.weights\",\n  \"scoring_profile.hard_fail_conditions\",\n  \"scoring_profile.binary_grounding\",\n  \"scoring_profile.source_honesty\"\n]\n```\n\n---\n\n## 五、落地建议\n- loader：读取 `startup_files + source_files + closure_id`，完成场景挂载\n- runner：维护 `runtime ledger`，并要求模型输出 `claim_register + source_trace`\n- scorer：同时校验正文、meta、tool log，不只看最终文本\n- 若证据不足：允许输出 `missing_context / needs_manual_review / suggestion`，但不允许伪装成已完成事实\n",
+        "cwd": ".",
+        "path": "memory/packs/E_prompt_contract.md",
+        "source_assets": [
+          "assets/uploads/35e2103c_PRO_PROMPT_PACKAGE_ARCHITECTURE.md",
+          "assets/data/53be2d7c_closure_mapping.json",
+          "assets/uploads/ced68974_closure_mapping.md"
+        ]
+      },
+      "timestamp": "2026-03-22T23:56:44.322148",
+      "status": "completed",
+      "result": "File written successfully: memory/packs/E_prompt_contract.md"
+    },
+    {
+      "tool_call_id": "call_La4uqKF5PvSU4R2oucxWY03l",
+      "tool": "write_file",
+      "args": null,
+      "timestamp": "2026-03-22T23:56:44.343394",
+      "status": "completed_unmatched",
+      "result": "File written successfully: memory/packs/E_prompt_contract.md"
+    }
+  ],
+  "created_paths": [
+    "memory/packs/E_prompt_contract.md"
+  ],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/1ee835b224ff",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "E-S009-T03-C1",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中 4 个，达到阈值。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "E-S009-T03-C2",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "artifact_result": {
+    "criterion_id": "E-S009-T03-C2A",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "judge_result": {
+    "criterion_id": "E-S009-T03-C3",
+    "score": 100.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 4 个关键术语",
+      "检测到工具使用: write_file"
+    ],
+    "risks": [],
+    "missing": [],
+    "raw_text": "你是一名擅长把复杂 benchmark 设计收束成可实现协议的系统架构师。请判断这条回答能否作为 bridge/eval closure 的稳定对象：它是否真正形成了 read-order、priority、schema、prompt contract、failure mode 或 handoff 这类可执行对象；是否区分了 scenario/session/turn/criterion 层级；是否兼顾实现成本、覆盖度与可评分性；是否能够被 Codex 直接消费为实现输入。不要用自己的经验替模型补上尚未写出的系统约束，只按现有回答评分。输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_E_session_009_prompt_contract\",\n  \"turn_id\": 3,\n  \"user_input\": \"把它保存成 `memory/packs/E_prompt_contract.md`，至少包含：`scenario级字段`、`turn级字段`、`评分级字段` 三节。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace（公开版）**  \\n- 已写 `memory/packs/E_prompt_contract.md`  \\n- 写入依据资产：  \\n  - `assets/uploads/35e2103c_PRO_PROMPT_PACKAGE_ARCHITECTURE.md`  \\n  - `assets/data/53be2d7c_closure_mapping.json`  \\n  - `assets/uploads/ced68974_closure_mapping.md`\\n\\n**Rationale（公开版）**  \\n- 按你的要求，文档至少包含三节：`scenario级字段`、`turn级字段`、`评分级字段`。  \\n- 同时把两类 guardrail 纳入了 contract：  \\n  - `binary_grounding_required`  \\"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [
+    {
+      "artifact_type": "pack",
+      "path": "memory/packs/E_prompt_contract.md",
+      "must_exist_after_turn": true,
+      "required_sections": [
+        "scenario级字段",
+        "turn级字段",
+        "评分级字段"
+      ]
+    }
+  ],
+  "temporary_expectations": null,
+  "provisional_turn_score": 100.0,
+  "final_turn_score": 100.0
+}

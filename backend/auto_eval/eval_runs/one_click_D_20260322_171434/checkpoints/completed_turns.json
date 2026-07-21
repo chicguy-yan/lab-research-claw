@@ -1,0 +1,83 @@
+{
+  "run_id": "one_click_D_20260322_171434",
+  "completed_turns": [
+    "scenario_D/scenario_D_session_001_bootstrap/turn_1",
+    "scenario_D/scenario_D_session_001_bootstrap/turn_2",
+    "scenario_D/scenario_D_session_001_bootstrap/turn_3",
+    "scenario_D/scenario_D_session_001_bootstrap/turn_4",
+    "scenario_D/scenario_D_session_002_thesis_gapmap/turn_1",
+    "scenario_D/scenario_D_session_002_thesis_gapmap/turn_2",
+    "scenario_D/scenario_D_session_002_thesis_gapmap/turn_3",
+    "scenario_D/scenario_D_session_003_two_week_plan/turn_1",
+    "scenario_D/scenario_D_session_003_two_week_plan/turn_2",
+    "scenario_D/scenario_D_session_003_two_week_plan/turn_3",
+    "scenario_D/scenario_D_session_004_hvco_storyboard/turn_1",
+    "scenario_D/scenario_D_session_004_hvco_storyboard/turn_2",
+    "scenario_D/scenario_D_session_004_hvco_storyboard/turn_3",
+    "scenario_D/scenario_D_session_005_group_meeting_replay/turn_1",
+    "scenario_D/scenario_D_session_005_group_meeting_replay/turn_2",
+    "scenario_D/scenario_D_session_005_group_meeting_replay/turn_3",
+    "scenario_D/scenario_D_session_006_proposal_revision/turn_1",
+    "scenario_D/scenario_D_session_006_proposal_revision/turn_2",
+    "scenario_D/scenario_D_session_006_proposal_revision/turn_3",
+    "scenario_D/scenario_D_session_007_figure_layout_rules/turn_1",
+    "scenario_D/scenario_D_session_007_figure_layout_rules/turn_2",
+    "scenario_D/scenario_D_session_007_figure_layout_rules/turn_3",
+    "scenario_D/scenario_D_session_008_selective_oxidation_bridge/turn_1",
+    "scenario_D/scenario_D_session_008_selective_oxidation_bridge/turn_2",
+    "scenario_D/scenario_D_session_008_selective_oxidation_bridge/turn_3",
+    "scenario_D/scenario_D_session_009_thesis_storyline/turn_1",
+    "scenario_D/scenario_D_session_009_thesis_storyline/turn_2",
+    "scenario_D/scenario_D_session_009_thesis_storyline/turn_3",
+    "scenario_D/scenario_D_session_010_handoff/turn_1",
+    "scenario_D/scenario_D_session_010_handoff/turn_2",
+    "scenario_D/scenario_D_session_010_handoff/turn_3"
+  ],
+  "scenario_states": {
+    "scenario_D": {
+      "workspace_id": "eval-scenario_d-260322_1714",
+      "session_backend_ids": {
+        "scenario_D_session_001_bootstrap": {
+          "backend_session_id": "__bootstrap__",
+          "trace_count": 34
+        },
+        "scenario_D_session_002_thesis_gapmap": {
+          "backend_session_id": "f707f8198314",
+          "trace_count": 14
+        },
+        "scenario_D_session_003_two_week_plan": {
+          "backend_session_id": "ffaf3c9a0075",
+          "trace_count": 13
+        },
+        "scenario_D_session_004_hvco_storyboard": {
+          "backend_session_id": "bc5b8784f3ed",
+          "trace_count": 8
+        },
+        "scenario_D_session_005_group_meeting_replay": {
+          "backend_session_id": "8f8dc7004ac0",
+          "trace_count": 23
+        },
+        "scenario_D_session_006_proposal_revision": {
+          "backend_session_id": "22b31efcaccb",
+          "trace_count": 37
+        },
+        "scenario_D_session_007_figure_layout_rules": {
+          "backend_session_id": "bdfc06829578",
+          "trace_count": 30
+        },
+        "scenario_D_session_008_selective_oxidation_bridge": {
+          "backend_session_id": "b022485e4f02",
+          "trace_count": 15
+        },
+        "scenario_D_session_009_thesis_storyline": {
+          "backend_session_id": "cfe530213982",
+          "trace_count": 41
+        },
+        "scenario_D_session_010_handoff": {
+          "backend_session_id": "db74a9807264",
+          "trace_count": 22
+        }
+      }
+    }
+  }
+}

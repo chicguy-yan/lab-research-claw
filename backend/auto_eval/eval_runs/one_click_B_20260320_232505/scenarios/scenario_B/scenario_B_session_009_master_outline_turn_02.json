@@ -1,0 +1,69 @@
+{
+  "scenario_id": "scenario_B",
+  "session_id": "scenario_B_session_009_master_outline",
+  "turn_id": 2,
+  "workspace_id": "eval-scenario_b-260320_2325",
+  "backend_session_id": "838a6b1f6950",
+  "assistant_text": "**Context Trace（公开版）**  \n本轮未调用工具。  \n以下内容基于你上一轮让我整理出的 master outline 框架，以及本轮你新增的“来源边界”标注需求；本轮未新增读取/写入文件。\n\n---\n\n**Rationale（公开版）**  \n你加这列非常有必要，因为你现在这三条线最容易出现的不是“逻辑不通”，而是**来源级别混写**：\n\n1. 把 **原始研究直接证据** 和 **review 框架语言** 混成一个层级；  \n2. 把 **你自己的笔记摘要** 误写成“原文已经这样证明”；  \n3. 把 **旁支体系借来的调控思路** 误写成“本 chlorite 体系已成立的机制”。  \n\n所以这列的作用不是补充信息，而是**给每条线装一个防越界护栏**。\n\n---\n\n# Deliverable\n\n## 先给你一个统一标签系统\n建议你后面在 thesis / group meeting 的文献总纲里统一用这 4 个标签：\n\n- **[O] Original**：原始研究原文直接证据  \n- **[R] Review**：综述/框架性来源  \n- **[N] Note**：你的笔记/二次摘要  \n- **[T] Transfer**：旁支体系借来的概念迁移或启发  \n\n这样你每个小标题后都能立刻标明：\n- 这是直接证据？\n- 还是综述框架？\n- 还是你当前的笔记入口？\n- 还是迁移思路？\n\n---\n\n## 更新后的三线总表（补上“不能混写的来源边界”）\n\n| 线 | 核心作用 | 证据偏向 | 不能混写的来源边界 | 推荐标法 |\n|---|---|---|---|---|\n| **① Co3O4 活化 chlorite 的基线机制** | 立住 chlorite 体系本身最硬的反应骨架 | **原文证据为主** | **不能把 review 对高价金属氧的一般性总结，写成 chlorite 体系的直接证明。** 也不能把你笔记里的术语/压缩表述，直接当成原文逐字结论。更具体地说：如果你现在实际引用入口是你的 EST/PNAS 笔记，那正式写作时要说“依据原始研究，当前整理基于笔记摘要”，而不是直接装作已逐图逐页核过原文。 | 主体写作时尽量标 **[O]**；如果当前只是整理提纲，可写 **[N→O]** |\n| **② Ce / 电子结构 / 低配位迁移线** | 解释为什么 Ce、电子结构、低配位值得引入为“上游调控变量” | **概念迁移为主** | **这条线内部最容易混写。** “低配位 Co 与 chlorite 活化增强”的一部分可以来自 chlorite 相关原始研究；但“Ce 调控”“4f–2p–3d 耦合”“d-band 描述符”等若来自其他体系，就必须标成**旁支迁移**，不能写成“Ce 已在 chlorite 体系中直接证明了……”。也不能把你的文献笔记里的综合判断，写成该文原文已给出的机制闭环。 | 对低配位位点可用 **[O/N]**；对 Ce/电子结构大部分应用 **[T]**，必要时补 **[N]** |\n| **③ high-valent metal-oxo / selective oxidation 的桥接线** | 把 chlorite 故事提升成“选择性氧化 / 高价金属氧化学”这一更一般的问题 | **混合，但对本体系落点偏概念迁移** | **不能把 review 或旁支材料里的 high-valent metal-oxo 一般规律，写成 chlorite 体系已被直接实验证明的主路径。** 也不能把 PMS、过一硫酸盐、Fenton-like、聚合反应、oxo-wall 等体系中的结论直接平移到 chlorite。若某段只是借来定义问题类型、借来写作语言、借来设计判据，必须明确说“这是框架/启发，不是本体系直接证据”。 | 综述性定义用 **[R]**；旁支启发用 **[T]**；如果只是你现阶段的归纳入口，可写 **[N]** |\n\n---\n\n## 你可以直接塞进 outline 的“来源边界列”版本\n\n### 版本：适合 thesis / group meeting 共用的精简表\n\n| 线 | 偏向 | 不能混写的来源边界 |\n|---|---|---|\n| **① Co3O4/chlorite 基线机制** | 原文证据为主 | 必须优先标成 **chlorite 相关原始研究证据**；不能把 review 对 Co(IV)=O / high-valent metal-oxo 的一般描述写成 chlorite 直接证据；不能把“我的笔记表述”直接冒充原文结论。 |\n| **② Ce / 电子结构 / 低配位迁移线** | 概念迁移为主 | 必须拆开写：**低配位 Co 位点** 若来自 chlorite 原始研究，可单列原文证据；**Ce / 电子结构 / d-band / 4f 耦合** 若来自其他体系，只能写成旁支迁移或启发，不能写成本体系已证机制。 |\n| **③ high-valent metal-oxo / selective oxidation 桥接线** | 混合，但偏概念迁移 | 必须明确这是 **review/旁支文献提供的框架语言**；不能把 selective oxidation、高价 metal-oxo 的一般规律，直接写成 chlorite 已被逐项验证的反应路径。 |\n\n---\n\n## 我更建议你把第②条线拆成“内部双来源结构”\n因为第②条现在最容易混。建议你在汇报里直接拆成：\n\n### ②A. 低配位 Co 位点\n- **来源偏向：** `原文证据 / 至少贴近 chlorite 体系`\n- **可说法：**  \n  “低配位 Co 位点与 chlorite 活化增强之间存在更直接的原文支撑/体系内支撑。”\n- **不能混写：**  \n  不要顺手把这部分和 Ce 调控绑成同一个已证结论。\n\n### ②B. Ce / 电子结构调控\n- **来源偏向：** `概念迁移 / 旁支启发`\n- **可说法：**  \n  “Ce 相关调控更像解释框架或设计假设，用来回答为何某些结构状态更利于高价 Co 形成。”\n- **不能混写：**  \n  不要写成“Ce 在 chlorite 中已经证明通过某电子结构路径促进 Co(IV)=O”。\n\n这一步一拆，你整套总纲会干净很多。\n\n---\n\n## 可直接复制的“来源边界说明”句式\n\n### 用在 thesis 里\n- **本节以 chlorite 相关原始研究为直接证据基础，综述与旁支材料仅用于提供机制语言与比较框架。**\n- **以下关于 Ce/电子结构的讨论主要作为概念迁移与假说生成，不等同于本体系已完成验证。**\n- **若某结论当前仅来自笔记归纳，则后续正式成文时需回到原始文献逐条核引。**\n\n### 用在 group meeting 里\n- **这部分我按来源分三层：原文直接证据、review 框架、旁支迁移思路。**\n- **能直接证明 chlorite 的我放在第一层；Ce 和电子结构更多是解释和启发，不当作已证主机制。**\n- **我自己的笔记只作为整理入口，不等于原文证据本身。**\n\n---\n\n## 如果你要做成 PPT，我建议每页右上角都打来源标签\n例如：\n\n- `Line 1 | [O/N→O]`\n- `Line 2A | [O]`\n- `Line 2B | [T/N]`\n- `Line 3 | [R/T]`\n\n这样导师一眼就能看出：\n- 你哪里在讲直接证据，\n- 哪里在讲框架，\n- 哪里在讲迁移，\n- 哪里还只是你当前笔记入口。\n\n---\n\n## 最后给你一个“红线版”提醒\n### 绝对不要混写成下面这三句\n1. **“Review 证明了 Co3O4/chlorite 的基线机制。”**  \n2. **“Ce 已在 chlorite 体系中证明促进 Co(IV)=O 形成。”**  \n3. **“high-valent metal-oxo 文献已经证明本体系的 selective oxidation 路径。”**\n\n### 更安全的替代表述\n1. **“chlorite 基线机制主要依据相关原始研究；review 仅用于放入更一般的高价金属氧框架。”**  \n2. **“Ce/电子结构部分目前主要作为迁移性解释框架，提示其可能影响高价 Co 形成，但仍需本体系验证。”**  \n3. **“high-valent metal-oxo / selective oxidation 文献为本体系提供概念桥接，而非本体系直接证据本身。”**\n\n---\n\n**Memory Patch（建议版）**  \n如果你下一步要把这轮真正落成一个可复用文档，建议新增一列并写入：\n\n- `memory/packs/PACK_master_outline_chlorite_literature.md`\n  - 新增字段：\n    - `source_type_tags`\n    - `non_mixable_source_boundaries`\n    - `safe_attribution_phrases`\n    - `red_flag_attribution_phrases`\n\n如果你愿意，我下一步可以直接把你那张“三条线总表”**重排成最终版 Markdown 表格**，做成可以直接贴进 thesis 草稿或组会 PPT 的版本。",
+  "attachments_used": [],
+  "trace_events": [],
+  "created_paths": [],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/838a6b1f6950",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "B-S009-T02-C1",
+    "score": 70.0,
+    "verdict": "partial",
+    "reasons": [
+      "关键术语命中不足：需要至少 3 个，实际 1 个。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "B-S009-T02-C2",
+    "score": 85.0,
+    "verdict": "pass",
+    "reasons": [
+      "该 turn 依赖 prior workspace memory，但 trace 中缺少明显 memory 读取痕迹。"
+    ]
+  },
+  "artifact_result": null,
+  "judge_result": {
+    "criterion_id": "B-S009-T02-C3",
+    "score": 79.0,
+    "verdict": "partial",
+    "strengths": [
+      "命中了 1 个关键术语"
+    ],
+    "risks": [
+      "缺失关键术语: ['来自 review', '来自我的笔记', '从旁支材料借来的思路']"
+    ],
+    "missing": [
+      "来自 review",
+      "来自我的笔记",
+      "从旁支材料借来的思路"
+    ],
+    "raw_text": "你是一名长期从事环境催化、亚氯酸盐活化、高价金属氧物种机理研究的评审专家。请只依据【用户问题】【上传文件列表】【assistant 回复】【trace 摘要】【预期 focus】进行评分，不要凭领域常识替模型补答案。你要重点检查五件事：第一，回答是否严格区分论文原文、个人笔记、以及从旁支体系借来的启发；第二，是否真正抓住 Co3O4/chlorite 基线机制的 OAT、PCET、ClO2/Co(IV)=O 双物种与 pH/质子增强等关键关系；第三，是否把 selective oxidation、PMS/Fenton-like、Ce 电子结构论文的迁移边界说清楚；第四，是否在证据不足时主动保留限定词；第五，是否围绕用户要求的对象（概念卡、对照表、handoff）组织内容。请输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_B_session_009_master_outline\",\n  \"turn_id\": 2,\n  \"user_input\": \"我还想额外加一列：`不能混写的来源边界`。比如哪些地方必须说“这来自 review / 这来自我的笔记 / 这只是从旁支材料借来的思路”。你帮我把这列也补上。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace（公开版）**  \\n本轮未调用工具。  \\n以下内容基于你上一轮让我整理出的 master outline 框架，以及本轮你新增的“来源边界”标注需求；本轮未新增读取/写入文件。\\n\\n---\\n\\n**Rationale（公开版）**  \\n你加这列非常有必要，因为你现在这三条线最容易出现的不是“逻辑不通”，而是**来源级别混写**：\\n\\n1. 把 **原始研究直接证据** 和 **review 框架语言** 混成一个层级；  \\n2. 把 **你自己的笔记摘要** 误写成“原文已经这样证明”；  \\n3. 把 **旁支体系借来的调控思路** 误写成“本 chlorite 体系已成立的机制”。  \\n\\n所以这列的作用不"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [
+      "已经证明"
+    ],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [],
+  "temporary_expectations": null,
+  "provisional_turn_score": 80.0,
+  "final_turn_score": 78.0
+}

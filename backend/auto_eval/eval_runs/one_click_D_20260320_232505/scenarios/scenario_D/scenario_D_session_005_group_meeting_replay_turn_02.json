@@ -1,0 +1,184 @@
+{
+  "scenario_id": "scenario_D",
+  "session_id": "scenario_D_session_005_group_meeting_replay",
+  "turn_id": 2,
+  "workspace_id": "eval-scenario_d-260320_2325",
+  "backend_session_id": "5ef0c3004fc4",
+  "assistant_text": "**Context Trace（公开版）**\n\n本轮实际调用了工具：\n\n- `read_file`\n  - `assets/uploads/5c66efd3_【20260305大组会】工作文档.md`\n  - `skills/_system/results_to_report_structuring/SKILL.md`\n- `python_repl`\n  - 提取并审阅 `assets/ppt_pack/ca327de5_20260305大组会-颜雍颀-v5_最终交付.pptx` 的 24 页文本骨架\n  - 提取并审阅 `assets/ppt_pack/1c8b74da_literature_report_FINAL_v2-1.pptx` 的 20 页文本骨架\n  - 提取 `assets/uploads/1aaf3ec1_示例ppt.pdf` 的页数与部分文本\n- 说明\n  - 对 `assets/uploads/1aaf3ec1_示例ppt.pdf` 的 `read_file` 尝试失败，因为它不是文本文件；后续改用 `python_repl` 读取 PDF 文本\n\n---\n\n**Rationale（公开版）**\n\n我这次不是泛泛给“改 PPT 建议”，而是按两个证据源来排优先级：\n\n1. **你的工作文档里的显式修改意见**\n   - 前两页要改成线框/逻辑图\n   - 目录页非常必要\n   - 当前主要问题是“只罗列图和数据，没有做到每页一个结论”\n   - “领域调控方法总览/引入页”概括得还不够准\n\n2. **最终交付 PPT 与 literature_report_FINAL 的结构差异**\n   - 最终版 24 页，前置铺垫更重，正文更密\n   - `literature_report_FINAL` 更像“提纲型骨架”\n   - 你的最终版已经有好骨架，但前场过重、页间结论不够硬、最后收束还可以再压缩\n\n所以第一轮 revision 的目标不该是“全面重做”，而应该是：\n\n> **先把最影响听众理解路径的 20% 改掉，让整套包先从‘能讲’变成‘好讲’。**\n\n---\n\n## Deliverable\n\n# 第一轮 revision checklist\n\n我建议你今天按 3 类来处理：\n\n- **A. 最该先改**\n- **B. 不完美但现在能接受**\n- **C. 第一轮先别碰，越改越乱**\n\n---\n\n## A. 最该先改（先做这 5 件）\n\n### 1）先改前两页：把“材料介绍”与“为什么要调控”彻底分开\n**对应页：P2–P3**\n\n#### 现在的问题\n- P2 已经在讲 Co3O4 平台材料价值，这没问题\n- 但 P3 很快滑到 **PMS-AOP 机理**，导致前场变成“偏 PMS 的背景页”\n- 可你的主题其实是 **Co3O4 结构调控**，而不是 PMS 专题\n\n#### 第一轮怎么改\n- **P2 只回答：Co3O4 是什么，为什么值得作为平台材料**\n- **P3 只回答：为什么平台材料还必须被调控**\n- 用线框/逻辑图，不要再把 P3 写成半个机理页\n\n#### 改完的判据\n听众在看完 P3 后，脑子里应该是这句话：\n> “Co3O4 本身很好，但天然存在活性位、电子结构、重构/选择性等瓶颈，所以必须调控。”\n\n---\n\n### 2）优先重做“调控方法总览/引入段”\n**对应页：当前 P4–P6，尤其是总览逻辑**\n\n#### 现在的问题\n工作文档里已经明确提到：\n- 这一块“概括得还不够精确”\n- 你最终版把它拆成了 3 页，信息很多，但更像“列举策略”，不像“建立判断框架”\n\n#### 第一轮怎么改\n把这段改成**一个真正能管后文的框架**，而不是方法清单。  \n每种调控手段至少要回答 3 件事：\n\n- **调什么**\n- **通常怎么证明调到了**\n- **最终想改写哪个反应关键步/中间态**\n\n建议压成 **2 页以内**：\n- 一页：主流调控手段分类\n- 一页：证明逻辑/证据链 + 三篇文献落点\n\n#### 改完的判据\n听众在进入文献前，已经知道：\n- 这三篇不是随便挑的\n- 它们分别代表哪种调控旋钮\n- 后面该看“什么证据才算真调控成功”\n\n---\n\n### 3）目录页必须保留，但要更“像路线图”\n**对应页：P7**\n\n#### 现在的问题\n这页已经是对的，**不是删掉**，而是要更锋利。\n目前更像“文献卡片目录”，还可以更进一步变成“阅读策略页”。\n\n#### 第一轮怎么改\n每篇文献只保留 3 个短语：\n- **调控手段**\n- **改写的关键位点/中间态**\n- **最终效果**\n\n比如统一成这种句法：\n- 配位调控 → Co(IV)=O 路径 → 选择性 PMS 活化\n- 界面倒置 → Co···Ov···Ce 位点 → 提升 PMS 关键步\n- 缺陷类型 → 重构桥连位点 → 优化 OER 动力学\n\n#### 改完的判据\n这页能回答：\n> “为什么是这三篇，且为什么按这个顺序讲？”\n\n---\n\n### 4）给每一页文献正文都补上“页眉结论句”\n**对应页：P8–P23**\n\n#### 现在的问题\n这也是工作文档里点得最明确的问题：\n> 现在更像“罗列数据和图内容”，还没做到“这一页讲完得到一个结论”。\n\n这不是小问题，这是正文的主病灶。\n\n#### 第一轮怎么改\n不要大改正文结构。  \n**只做一件事：每页补 1 句加粗的页眉结论句。**\n\n格式建议：\n- 20–28 字\n- 必须能被本页图直接支撑\n- 不要空泛词，如“性能显著提升”“机制更加清晰”\n\n#### 你最该优先补的页\n优先从这些页开始：\n- P9、P10、P11、P12\n- P14、P15、P16\n- P18、P19、P20、P21、P22、P23\n\n因为这些页是“证据页/结果页/DFT页”，最容易沦为图说。\n\n#### 改完的判据\n听众翻到任一正文页，**3 秒内知道这一页想证明什么。**\n\n---\n\n### 5）最后一页要降噪，做成真正的“70/30”\n**对应页：P24**\n\n#### 现在的问题\nP24 的方向是对的，但现在还是稍显“想说太多”。\n它已经有跨文献抽象和对自己实验的启发，但压缩度还不够高。\n\n#### 第一轮怎么改\n强制拆成两个视觉区：\n\n#### 上 70%：跨文献三条规则\n只保留三条最抽象、可迁移的句子：\n- 调控对象是什么\n- 改写了哪个关键中间态/RDS\n- 最终性能为什么提升\n\n#### 下 30%：对自己体系的 2–3 个可验证动作\n不要写成“启发很多”，而要写成：\n- 先测什么\n- 用什么对照\n- 预期要回答什么问题\n\n#### 改完的判据\n最后一页不是“总结很多内容”，而是：\n> “把三篇文献变成了你下一步能执行的设计规则。”\n\n---\n\n## B. 不完美但第一轮可以接受\n\n### 1）24 页篇幅本身可以接受\n虽然比 `literature_report_FINAL` 的 20 页更长，但这次主题更大、还加了前置框架。  \n**第一轮不要为了凑页数强行删到 20 页。**\n\n---\n\n### 2）三篇文献“各讲 4–7 页”的不均衡可以接受\n文献三明显更复杂，证据链更长，所以页数多是合理的。  \n**不用为了整齐硬改成每篇一样多。**\n\n---\n\n### 3）正文里保留原文图为主，这个策略是对的\n第一轮不要急着重截图、重拼图、重绘示意图。  \n只要图还能看，就先靠：\n- 页眉结论\n- 图号标注\n- 局部高亮\n来提升可讲性。\n\n---\n\n### 4）文献页标题偏长，可以先忍\n目前很多标题是问句式或说明式，略长，但它们在第一轮不是最急的问题。  \n**先补“页眉结论句”，再考虑标题瘦身。**\n\n---\n\n### 5）AOP 与 OER 混在一个主题里，并不天然有问题\n因为你的主线不是“同一反应体系”，而是“Co3O4 结构调控如何改写关键步骤”。  \n这个抽象层级是成立的。  \n所以第一轮不用重建成“按反应体系分两半”。\n\n---\n\n## C. 第一轮先别碰：这些地方越改越乱\n\n### 1）不要重排三篇文献顺序\n顺序一旦大动：\n- 前面目录页要改\n- 过渡逻辑要改\n- 最后一页抽象也要重写\n\n收益不如成本高。  \n**第一轮先保持顺序不动。**\n\n---\n\n### 2）不要把所有正文页都改版式\n这会直接把“revision”做成“重做一套新 PPT”。  \n而你现在真正缺的不是美术，而是**论证聚焦**。\n\n第一轮最多做：\n- 统一页眉\n- 对齐\n- 字号\n- 关键词加粗\n- 少量高亮框\n\n---\n\n### 3）不要过度补“领域综述”\n前场最容易失控的地方，就是忍不住继续补顶刊、补配图、补通识。  \n这样只会让 1–6 页越来越重。\n\n第一轮的原则是：\n> **前场只服务后文，不追求独立成篇。**\n\n---\n\n### 4）不要试图把 AOP 与 OER 画成一个大一统机理图\n这类图很容易“看起来高级，实际上更模糊”。  \n你的听众真正需要的是：\n- 哪个调控旋钮\n- 改了哪个关键位点/步骤\n- 用什么证据证明\n\n不是一个超大通用机理宇宙图。\n\n---\n\n### 5）不要为了“每页都完美”而逐页重写文案\n第一轮最危险的坑就是：\n- 一改前言\n- 顺手改正文\n- 再顺手补更多数据\n- 最后全套失控\n\n正确做法是：\n- 前场重构\n- 正文补结论句\n- 结尾降噪\n- 全局微调\n\n到这里就收手。\n\n---\n\n# 我建议你今天的实际执行顺序\n\n## 90 分钟版本\n\n### 第 1 步｜30 分钟\n只改 **P2–P3**\n- P2：Co3O4 是什么\n- P3：为什么要调控\n\n---\n\n### 第 2 步｜25 分钟\n重做 **P4–P7**\n- 方法总览压缩/重组\n- 目录页变“路线图页”\n\n---\n\n### 第 3 步｜25 分钟\n给 **P8–P23** 全部补页眉结论句  \n先不大动正文。\n\n---\n\n### 第 4 步｜10 分钟\n重做 **P24**\n- 上 70% 三条规则\n- 下 30% 两三个可执行启发\n\n---\n\n# 如果只允许你今天改 3 个点，我会选这三个\n\n1. **P2–P3 前两页重构**\n2. **P7 目录页做成阅读策略页**\n3. **P8–P23 每页补页眉结论句**\n\n这 3 件事改完，整套包的观感会立刻从：\n\n- “资料准备得很多”\n变成\n- “这是一个被组织过、可被听懂的组会包”\n\n---\n\n# 一个更直白的判断\n\n这套包现在**不是没内容**，而是**内容已经够了，但论证抓手还不够硬**。  \n所以第一轮 revision 的核心不是“再加东西”，而是：\n\n> **把听众的理解路径钉死。**\n\n---\n\n**Memory Patch（建议版，未实际写入）**\n\n如需沉淀这次 revision 规则，建议写入：\n\n- `memory/packs/PACK_20260305_group_meeting_revision_checklist.md`\n\n建议字段：\n- `must_fix_now`\n- `acceptable_for_round1`\n- `do_not_touch_in_round1`\n- `slide_ranges`\n- `page_level_rules`\n- `revision_order`\n\n如你愿意，我下一条可以直接继续给你两种之一：\n\n1. **逐页版 revision checklist（P1–P24 每页该不该改、怎么改）**  \n2. **直接可照抄的“页眉结论句清单”（把 P8–P23 每页一句话先写出来）**",
+  "attachments_used": [],
+  "trace_events": [
+    {
+      "tool_call_id": "call_iYFystlzXwxibVEjpVXeyEA7",
+      "tool": "read_file",
+      "args": {
+        "cwd": ".",
+        "path": "assets/uploads/5c66efd3_【20260305大组会】工作文档.md"
+      },
+      "timestamp": "2026-03-21T16:35:17.167639",
+      "status": "completed",
+      "result": "# 20260222prompt\n\n你现在的任务是：基于我提供的两篇主文献 + 两份文献汇报PPT示例，产出一份完整的文献汇报PPT方案（约20页，上下浮动2页）。\n\n一些通用的知识：\n一篇文献ppt大约在12页左右，你需要先通\n\n\n篇阅读我给你的文献-ppt示例学习清楚我需要什么样的ppt输出，然后把我现在给你的两篇做成汇报ppt\n一般普通文献（未必适用于本次任务，但占比可以作为参考）通常的篇幅为8-12页，各部分占比是【材料基础表征】-【活性测试】-【反应机理探究】-【应用测试】，其中材料表征据15%篇幅，活性测试和材料反应性质表征占据25%-35%，反应机理探究占据35%-40%，应用测试基本上一页就好（除非本文创新点与应用强相关则需要多一些篇幅）\n\n一些ppt的篇幅和排版安排的知识：\n1.基本上就是为什么要写这篇文章，简要介绍作者的情况1页\n- 主要介绍清楚课题组的基本信息，以及它们的主要研究方向，引出这个本篇文献主要研究方向\n2.然后一页文章本身的背景，引出文章要解决的问题（背景需要用逻辑图概括，可以参考我给你的ppt的17页，然后搜索强相关顶刊文献中相关背景的配图）\n3.然后有一页目录页（参考我给你的ppt的第四页的简洁程度no复杂，其主要作用是提炼出创新点，把各章节标题作为方块，用线条、箭头、括号等简单说明章节之间的逻辑关系以强调它们是如何）\n4.然后主体部分按照文献的图片+章节编排顺序来依次讲述，要求图必须源于文献本身\n- 根据每个章节要解决的问题，分为1-2页ppt，以文献中的图占据50%篇幅，然后用2-3有逻辑递进/并列的话讲清楚这个章节最终得到的结论以及创新点的作用\n- 关键的结论、量化的结果尽量多描述，以及实验关键的约束要放在下面的脚注\n- 这里尽可能参考我给你的示例ppt，（最好参考16-24页这种人类容易理解的逻辑关系适宜演讲者直接阅读并在没有读原文的情况下能够一眼看懂问现在写，但又对于人类听众来说看起来不会信息密度太高逻辑太复杂的）\n5.最后一页复盘主逻辑(70%最后一页)，或者指出对我现在的实验可能得指导（30%一页）\n\n\n\n## 1\n## ai修改版\n接下来我要制作一个文献汇报的ppt，主要文献是我给你的**两篇（以文献名字命名）**，且我有详细的输入输出示例（**这两篇文件命名里标注了可参考的示例PPT页码xx，仅用于参考排版和讲述效果，不代表内容可直接套用**）。输出目标是：**一份完整的约20页（上下浮动2页）的文献汇报PPT方案，并最终制作出PPT成品**。你需要主要参考的是**示例PPT的排版、信息密度和讲述逻辑**。\n\n---\n\n## 一些通用的知识\n\n一篇文献ppt大约在12页左右，**但本次任务是两篇合并汇报**，因此总页数以约20页（上下浮动2页）为目标，**不要机械按每篇12页平均分配**。  \n你需要先通篇阅读我给你的文献-ppt示例，学习清楚我需要什么样的ppt输出，**先总结示例PPT的页面类型、图文比例、信息密度、讲述逻辑，再开始生成本次PPT内容**。\n\n普通文献常见结构（仅作参考，不必机械套用）：【材料基础表征】-【活性测试】-【反应机理探究】-【应用测试】；其中材料表征约15%，活性测试+反应性质表征约25%-35%，机理探究约35%-40%，应用测试通常1页（除非创新点与应用强相关）。**本次请按两篇文献的实际创新重点动态调整。**\n\n---\n\n## 页面功能与排版要求（若与主文献内容冲突，一律以主文献原文为准）\n\n### 1）开场页（1页）\n\n为什么讲这篇文章，简要介绍作者/课题组情况。\n\n- 介绍课题组基本信息和主要研究方向，引出本文研究方向。\n    \n- **如果作者/课题组信息在文献中没有明确给出，不要编造，可用“待补充（需外部检索）”占位。**\n    \n\n### 2）背景页（1页）\n\n引出文章要解决的问题。\n\n- 背景用逻辑图概括，可参考示例PPT第17页。\n    \n- **背景页允许补充强相关顶刊文献配图，但必须标注来源（期刊/年份/DOI或图出处）**。\n    \n- **没有合适配图时，优先自绘逻辑图，不要使用来源不明图片。**\n    \n\n### 3）目录页（1页）\n\n参考示例PPT第4页的简洁程度，**不要复杂**。\n\n- 提炼创新点\n    \n- 用方块/箭头/括号说明章节逻辑\n    \n- 强调“问题提出 → 方法设计 → 关键证据 → 机理/结论 → 意义”的主线\n    \n\n### 4）主体部分（核心）\n\n按文献图片 + 章节顺序讲述，**图必须源于文献本身**。\n\n- 每个章节按问题拆成1-2页\n    \n- 每页文献图约占50%篇幅\n    \n- 用2-3条有逻辑递进/并列的话讲清楚：\n    \n    1. 这一节解决"
+    },
+    {
+      "tool_call_id": "call_BoqfGPAeERVbGEaBijOmUIfl",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T16:35:17.178263",
+      "status": "completed_unmatched",
+      "result": "# 20260222prompt\n\n你现在的任务是：基于我提供的两篇主文献 + 两份文献汇报PPT示例，产出一份完整的文献汇报PPT方案（约20页，上下浮动2页）。\n\n一些通用的知识：\n一篇文献ppt大约在12页左右，你需要先通\n\n\n篇阅读我给你的文献-ppt示例学习清楚我需要什么样的ppt输出，然后把我现在给你的两篇做成汇报ppt\n一般普通文献（未必适用于本次任务，但占比可以作为参考）通常的篇幅为8-12页，各部分占比是【材料基础表征】-【活性测试】-【反应机理探究】-【应用测试】，其中材料表征据15%篇幅，活性测试和材料反应性质表征占据25%-35%，反应机理探究占据35%-40%，应用测试基本上一页就好（除非本文创新点与应用强相关则需要多一些篇幅）\n\n一些ppt的篇幅和排版安排的知识：\n1.基本上就是为什么要写这篇文章，简要介绍作者的情况1页\n- 主要介绍清楚课题组的基本信息，以及它们的主要研究方向，引出这个本篇文献主要研究方向\n2.然后一页文章本身的背景，引出文章要解决的问题（背景需要用逻辑图概括，可以参考我给你的ppt的17页，然后搜索强相关顶刊文献中相关背景的配图）\n3.然后有一页目录页（参考我给你的ppt的第四页的简洁程度no复杂，其主要作用是提炼出创新点，把各章节标题作为方块，用线条、箭头、括号等简单说明章节之间的逻辑关系以强调它们是如何）\n4.然后主体部分按照文献的图片+章节编排顺序来依次讲述，要求图必须源于文献本身\n- 根据每个章节要解决的问题，分为1-2页ppt，以文献中的图占据50%篇幅，然后用2-3有逻辑递进/并列的话讲清楚这个章节最终得到的结论以及创新点的作用\n- 关键的结论、量化的结果尽量多描述，以及实验关键的约束要放在下面的脚注\n- 这里尽可能参考我给你的示例ppt，（最好参考16-24页这种人类容易理解的逻辑关系适宜演讲者直接阅读并在没有读原文的情况下能够一眼看懂问现在写，但又对于人类听众来说看起来不会信息密度太高逻辑太复杂的）\n5.最后一页复盘主逻辑(70%最后一页)，或者指出对我现在的实验可能得指导（30%一页）\n\n\n\n## 1\n## ai修改版\n接下来我要制作一个文献汇报的ppt，主要文献是我给你的**两篇（以文献名字命名）**，且我有详细的输入输出示例（**这两篇文件命名里标注了可参考的示例PPT页码xx，仅用于参考排版和讲述效果，不代表内容可直接套用**）。输出目标是：**一份完整的约20页（上下浮动2页）的文献汇报PPT方案，并最终制作出PPT成品**。你需要主要参考的是**示例PPT的排版、信息密度和讲述逻辑**。\n\n---\n\n## 一些通用的知识\n\n一篇文献ppt大约在12页左右，**但本次任务是两篇合并汇报**，因此总页数以约20页（上下浮动2页）为目标，**不要机械按每篇12页平均分配**。  \n你需要先通篇阅读我给你的文献-ppt示例，学习清楚我需要什么样的ppt输出，**先总结示例PPT的页面类型、图文比例、信息密度、讲述逻辑，再开始生成本次PPT内容**。\n\n普通文献常见结构（仅作参考，不必机械套用）：【材料基础表征】-【活性测试】-【反应机理探究】-【应用测试】；其中材料表征约15%，活性测试+反应性质表征约25%-35%，机理探究约35%-40%，应用测试通常1页（除非创新点与应用强相关）。**本次请按两篇文献的实际创新重点动态调整。**\n\n---\n\n## 页面功能与排版要求（若与主文献内容冲突，一律以主文献原文为准）\n\n### 1）开场页（1页）\n\n为什么讲这篇文章，简要介绍作者/课题组情况。\n\n- 介绍课题组基本信息和主要研究方向，引出本文研究方向。\n    \n- **如果作者/课题组信息在文献中没有明确给出，不要编造，可用“待补充（需外部检索）”占位。**\n    \n\n### 2）背景页（1页）\n\n引出文章要解决的问题。\n\n- 背景用逻辑图概括，可参考示例PPT第17页。\n    \n- **背景页允许补充强相关顶刊文献配图，但必须标注来源（期刊/年份/DOI或图出处）**。\n    \n- **没有合适配图时，优先自绘逻辑图，不要使用来源不明图片。**\n    \n\n### 3）目录页（1页）\n\n参考示例PPT第4页的简洁程度，**不要复杂**。\n\n- 提炼创新点\n    \n- 用方块/箭头/括号说明章节逻辑\n    \n- 强调“问题提出 → 方法设计 → 关键证据 → 机理/结论 → 意义”的主线\n    \n\n### 4）主体部分（核心）\n\n按文献图片 + 章节顺序讲述，**图必须源于文献本身**。\n\n- 每个章节按问题拆成1-2页\n    \n- 每页文献图约占50%篇幅\n    \n- 用2-3条有逻辑递进/并列的话讲清楚：\n    \n    1. 这一节解决"
+    },
+    {
+      "tool_call_id": "call_po0rlzTsERbWXZGeKirXp52Z",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T16:35:17.178263",
+      "status": "completed_unmatched",
+      "result": "---\nname: results_to_report_structuring\ndescription: 用于把已有结果、图、证据和结论组织成可汇报或可写作的结构，明确先后顺序、每页/每节主 claim、图的放置策略以及缺口与下一步。\nallowed-tools: Read Write Edit Bash\nlicense: Internal\n---\n\n# Results to Report Structuring\n\n## Overview\n\n这个 skill 用于处理**结果到汇报/写作结构的组织**任务。\n\n它适用于这样的问题：用户已经有了一批结果、图、读图结论、机制判断、证据链片段、Task 或 Pack 草稿，希望把这些内容组织成：\n\n- 一次阶段汇报\n- 一套组会/PPT 结构\n- 一段论文结果与讨论的章节顺序\n- 一份中期小结或阶段报告骨架\n\n这个 skill 的重点不是美化页面，也不是单独读图或单独做机制分析，而是把已有结果整理成一个**可讲、可写、可检查逻辑跳步**的结构。\n\n它应回答的核心问题包括：\n\n- 先证明什么，再证明什么\n- 每一页 / 每一节的主 claim 是什么\n- 哪张图该放在主线，哪张图更适合放补充部分\n- 哪些地方证据已经够形成主叙事，哪些地方还只能写成缺口或下一步\n- 如何让一套结果形成清晰的“北极星 → 分段支撑 → 缺口与下一步”的结构\n\n---\n\n## When to Use This Skill\n\n当满足以下任一情况时使用本 skill：\n\n- 用户已经有一批结果，希望整理成阶段汇报或写作结构\n- 需要决定“先讲什么、后讲什么”\n- 需要把图、claim、证据状态映射到 slide 或 section\n- 需要判断哪些图应该放主线，哪些放补充或 SI\n- 需要把实验结果、机理判断和证据链片段组织成一个更清楚的叙事顺序\n- 需要生成 5 到 10 页左右的汇报骨架，或一个可扩展的章节骨架\n- 需要把“当前最稳能说的内容”与“仍是缺口/下一步的内容”明确分开\n\n---\n\n## When NOT to Use This Skill\n\n以下情况不要使用本 skill：\n\n- 主要任务是读某张图或某组谱图\n  - 这类问题更适合交给图谱联合判读类 skill\n- 主要任务是比较两条路径或两类氧化剂的差异\n  - 这类问题更适合交给路径比较类 skill\n- 主要任务是搭建单一体系的机理分支图谱\n  - 这类问题更适合交给机理分析类 skill\n- 主要任务是整理 probe / scavenger / EPR 等活性物种证据矩阵\n  - 这类问题更适合交给活性物种证据矩阵类 skill\n- 主要任务是做多源证据综合判断\n  - 这类问题更适合交给多证据综合判断类 skill\n- 主要任务是审计哪张图支撑哪句话\n  - 这类问题更适合交给图-论断锚定类 skill\n- 输入里几乎没有结果、图或中间结论，只是一个空主题\n\n---\n\n## Required Inputs\n\n### Minimum Inputs\n\n至少需要以下输入之一的组合：\n\n- 一组图或结果条目\n- 一组已形成的 claim 或中间结论\n- 一组 Task / note / result summary\n- 一份待整理成汇报或写作结构的材料集合\n\n### Optional Inputs\n\n以下输入会显著提升结果质量：\n\n- 图号、图注或 figure list\n- 当前已有的 claim-evidence 对照\n- 证据链草稿或机制判断草稿\n- 用户对目标形式的要求\n  - 例如组会、阶段汇报、论文结果部分、PPT、WPS/Word 大纲\n- 已有的章节结构草稿或页面顺序草稿\n- 当前最想强调的主线\n- 当前最担心逻辑跳步的位置\n- 区分主文 / 补充 / SI 的偏好\n\n### Supported Material Types\n\n- figure screenshots\n- ppt notes\n- md notes\n- result summaries\n- task lists\n- evidence summaries\n- claim lists\n- raw outline drafts\n- pdf excerpts\n\n---\n\n## Expected Outputs\n\n本 skill 应输出以下类型的结构化结果：\n\n- `report_goal`\n  - 本轮结构整理要服务的目标\n- `north_star_claim`\n  - 整体汇报或写作最上层的核心主张\n- `section_or_slide_sequence`\n  - 页面或章节的顺序安排\n- `one_claim_per_unit`\n  - 每页/每节的主 cla"
+    },
+    {
+      "tool_call_id": "call_po0rlzTsERbWXZGeKirXp52Z",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T16:35:17.178263",
+      "status": "completed_unmatched",
+      "result": "Error: Cannot decode file (not a text file): assets/uploads/1aaf3ec1_示例ppt.pdf"
+    },
+    {
+      "tool_call_id": "call_wxaHJuyyzJvoUuj6fdKVOLAt",
+      "tool": "python_repl",
+      "args": {
+        "code": "from pptx import Presentation\nfrom pathlib import Path\nfor fname in [r'assets/ppt_pack/ca327de5_20260305大组会-颜雍颀-v5_最终交付.pptx', r'assets/ppt_pack/1c8b74da_literature_report_FINAL_v2-1.pptx']:\n    prs=Presentation(fname)\n    print('\\nFILE:', Path(fname).name, 'slides=', len(prs.slides))\n    for i,slide in enumerate(prs.slides,1):\n        texts=[]\n        for shape in slide.shapes:\n            if hasattr(shape,'text'):\n                t=' '.join(shape.text.split())\n                if t:\n                    texts.append(t)\n        joined=' | '.join(texts[:8])\n        print(f'{i:02d}: {joined[:220]}')\n",
+        "cwd": "."
+      },
+      "timestamp": "2026-03-21T16:35:37.953358",
+      "status": "completed",
+      "result": "Error: ModuleNotFoundError: No module named 'pptx'"
+    },
+    {
+      "tool_call_id": "call_LCelVBo2VHdLKT955PkRN8QK",
+      "tool": "python_repl",
+      "args": null,
+      "timestamp": "2026-03-21T16:35:37.959379",
+      "status": "completed_unmatched",
+      "result": "Error: ModuleNotFoundError: No module named 'pptx'"
+    },
+    {
+      "tool_call_id": "call_LCelVBo2VHdLKT955PkRN8QK",
+      "tool": "python_repl",
+      "args": null,
+      "timestamp": "2026-03-21T16:35:37.959379",
+      "status": "completed_unmatched",
+      "result": "Error: ModuleNotFoundError: No module named 'pptx'"
+    },
+    {
+      "tool_call_id": "call_cxRHFpSzuQKEo70Jv9WkpQM3",
+      "tool": "python_repl",
+      "args": {
+        "code": "import importlib\nmods=['zipfile','xml.etree.ElementTree','pypdf','PyPDF2']\nfor m in mods:\n    try:\n        importlib.import_module(m)\n        print(m, 'OK')\n    except Exception as e:\n        print(m, type(e).__name__, e)\n",
+        "cwd": "."
+      },
+      "timestamp": "2026-03-21T16:35:48.031887",
+      "status": "completed",
+      "result": "zipfile OK\nxml.etree.ElementTree OK\npypdf OK\nPyPDF2 OK\n"
+    },
+    {
+      "tool_call_id": "call_cxRHFpSzuQKEo70Jv9WkpQM3",
+      "tool": "python_repl",
+      "args": null,
+      "timestamp": "2026-03-21T16:35:48.098297",
+      "status": "completed_unmatched",
+      "result": "zipfile OK\nxml.etree.ElementTree OK\npypdf OK\nPyPDF2 OK\n"
+    },
+    {
+      "tool_call_id": "call_ds0drNqLICpvDxKKAd2Coboy",
+      "tool": "python_repl",
+      "args": null,
+      "timestamp": "2026-03-21T16:36:02.205111",
+      "status": "completed_unmatched",
+      "result": "Error: SyntaxError: f-string: single '}' is not allowed (<string>, line 31)"
+    },
+    {
+      "tool_call_id": "call_IDaHhvmVKakqo2U7YKtLVC3T",
+      "tool": "python_repl",
+      "args": null,
+      "timestamp": "2026-03-21T16:36:15.335814",
+      "status": "completed_unmatched",
+      "result": "Error: SyntaxError: f-string: single '}' is not allowed (<string>, line 28)"
+    },
+    {
+      "tool_call_id": "call_FiKFEha231whejrTaViDcfeB",
+      "tool": "python_repl",
+      "args": {
+        "code": "from zipfile import ZipFile\nfrom pathlib import Path\nimport re\nimport xml.etree.ElementTree as ET\nfrom pypdf import PdfReader\nNS={'a':'http://schemas.openxmlformats.org/drawingml/2006/main','p':'http://schemas.openxmlformats.org/presentationml/2006/main'}\n\ndef extract_pptx(path):\n    slides=[]\n    metrics=[]\n    with ZipFile(path) as z:\n        names=z.namelist()\n        slide_files=sorted([n for n in names if re.match(r'ppt/slides/slide\\d+\\.xml$', n)], key=lambda x:int(re.search(r'(\\d+)', x).group(1)))\n        for sf in slide_files:\n            i=int(re.search(r'(\\d+)', sf).group(1))\n            root=ET.fromstring(z.read(sf))\n            texts=[t.text.strip() for t in root.findall('.//a:t', NS) if t.text and t.text.strip()]\n            pics=len(root.findall('.//a:blip', NS))\n            sp=len(root.findall('.//p:sp', NS))\n            slides.append({'idx':i,'text':' | '.join(texts[:30]),'texts':texts})\n            metrics.append({'idx':i,'text_chars':sum(len(t) for t in texts),'pics':pics,'sp':sp})\n    return slides, metrics\n\nfor fname in [r'assets/ppt_pack/ca327de5_20260305大组会-颜雍颀-v5_最终交付.pptx', r'assets/ppt_pack/1c8b74da_literature_report_FINAL_v2-1.pptx']:\n    slides, metrics = extract_pptx(fname)\n    print('\\nFILE', Path(fname).name, 'slides', len(slides))\n    print('METRICS avg_text_chars', round(sum(m['text_chars'] for m in metrics)/len(metrics),1), 'avg_pics', round(sum(m['pics'] for m in metrics)/len(metrics),2), 'avg_shapes', round(sum(m['sp'] for m in metrics)/len(metrics),2))\n    for s in slides:\n        print(f\"{s['idx']:02d}: {s['text'][:260]}\")\n\nreader=PdfReader(r'assets/uploads/1aaf3ec1_示例ppt.pdf')\nprint('\\nPDF', Path(r'assets/uploads/1aaf3ec1_示例ppt.pdf').name, 'pages', len(reader.pages))\nfor i,p in enumerate(reader.pages,1):\n    try:\n        t=' '.join((p.extract_text() or '').split())\n    except Exception:\n        t=''\n    print(f'{i:02d}: {t[:260]}')\n",
+        "cwd": "."
+      },
+      "timestamp": "2026-03-21T16:36:29.478497",
+      "status": "completed",
+      "result": "\nFILE ca327de5_20260305大组会-颜雍颀-v5_最终交付.pptx slides 24\nMETRICS avg_text_chars 361.0 avg_pics 4.29 avg_shapes 13.17\n01: Co | 3 | O | 4 | 结构调控主题文献汇报 | 颜雍颀 | 2026.03 | 核心结论：结构调控可定向Co3O4活性与重构路径\n02: | | 引言 | 应用广泛：电化学、能源催化、高级氧化等领域 | 成本优势：比 | 贵金属 | 性能似、成本低、来源广 | 构效明确： | 尖晶石结构材料 | 调控学术积淀深厚 | Chem. Rev. 2017, 117, 10121−1021 | Co | 3 | O | 4 | 成本低、性能好、应用广 | Chem. Rev. 2017, 117, 10121−1021 | 双位点多价态： | Co | ²⁺ | /Co | ³⁺ | 可逆氧化还原位点 | 电子结构可调： | Co | 位点比例控制 | Co\n03: | | 引言 | 水处理｜PMS-AOP | PMS | 活化核心机理： | O-O | 键断裂方式 | 均裂路径 | Co | ²⁺ | /Co | ³⁺ | 单电子转移 | → | O–O | 均裂生成 | SO | ₄ | • | ⁻ | 和 | •OH | 非均裂路径 | Co | 活性位吸附 | PMS | → | CoIV=O | 形成 | →\n04: | | 引言 | 调控方法：调节前驱体配体、 | pH | 、尿素浓度、水热 | / | 溶剂热条件、表面活性剂等 | 调控案例： | 2D | 多孔 | 纳米片：比表面积大，中间体扩散路径短， | OER | 电流密度更高，过电位更低。 | 多级中空 | / | 核 | – | 壳结构：内外表面共同参与反应，结构缓冲体积变化，提高循环稳定性。 | 形貌与原子层数调控 | Co | 3 | O | 4 | 的形貌 | / | 结构调控的手段 | 孔结构设计 | 调控方法：硬模板（ | SiO | ₂\n05: | | 引言 | 调控方法： | Fe | 、 | Ni | 、 | Mn | 、 | Cu | 掺杂进入八面体位点（ | Co | ³⁺ | 位）。 | 调控效果： | 调节 | Co | ²⁺ | /Co | ³⁺ | 比例并提高产生 | Co | 4+ | 概率 | 调整 | Co–O | 键强度 | Co 3d–O 2p | 杂化 | 提高费米能级附近\n06: | | 引言 | 调控方法：形成 | CoO/Co | ₃ | O | ₄ | 、 | Co | ₃ | O | ₄ | / | 碳、 | Co | ₃ | O | ₄ | / | 导电氧化物等。 | 调控效果： | 形成内建电场和电荷重新分布，提高电荷分离与转移效率 | Co | ₃ | O | ₄ | / | 碳基复合提供高导电性和多级孔道，也可通过 | M–N–C | 配位调节\n07: | | 目录 | 文献一 | ｜O 掺杂 Co-SAC | Co | 单原子 | N/O 配位 → Co(IV)=O 主导 PMS | 文献二 | ｜倒置负载 CeO₂ → Co₃O₄ | Co–Ov–Ce | 界面空位 | → | SO | ₄ | - | ⁻ | 快速脱附循环 | 文献三 | ｜V | O | 和 | V | Co | 的 | 缺陷工程 | 重构OER动力学→ | V | Co | 诱导最优桥位点 | Q1\n08: | | 文献一：为什么要调控？ | PMS-AOP | 中 | Co(IV)=O | 氧化选择性强、半衰期长。 | 但现有体系中 | Co(IV)=O | 生成效率极低。 | Co | 单原子的配位环境直接决定 | Co(IV)=O | 的生成能力。 | 配位调控是改变活性物种类型的根本抓手。 | O | 的电负性（ | 3.44 | ）高于 | N | （ | 3.04 | ），可抽吸引 | Co | 中心电子，使 | d | 带中心提高， | PMS | 更易吸附和电子传输。 | 用 | O\n09: | | 文献一： | 如何证明调控成功？ | Fig.1: | TEM/HRTEM + EDS mapping: Co/C/N/O | 元素均匀分布，且 | Co | 以孤立亮点分散（单原子）。 | Fig.2 : XNANES+EXAFS | ： | Co | 以 | 2+ | 价态存在，无 | Co-Co | 键，形成 | Co-N/O | 单原子 | + | 双配位结构。 | 不同配位结构 | DFT | 结合能计算： | Co–N | ₅ | O | ₁ | 的结合能最低"
+    },
+    {
+      "tool_call_id": "call_FiKFEha231whejrTaViDcfeB",
+      "tool": "python_repl",
+      "args": null,
+      "timestamp": "2026-03-21T16:36:30.859266",
+      "status": "completed_unmatched",
+      "result": "Error: SyntaxError: f-string: single '}' is not allowed (<string>, line 28)"
+    }
+  ],
+  "created_paths": [],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/5ef0c3004fc4",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "D-S005-T02-C1",
+    "score": 85.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中不足：需要至少 3 个，实际 2 个。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "D-S005-T02-C2",
+    "score": 85.0,
+    "verdict": "pass",
+    "reasons": [
+      "该 turn 依赖 prior workspace memory，但 trace 中缺少明显 memory 读取痕迹。"
+    ]
+  },
+  "artifact_result": null,
+  "judge_result": {
+    "criterion_id": "D-S005-T02-C3",
+    "score": 86.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 2 个关键术语",
+      "检测到工具使用: python_repl, read_file"
+    ],
+    "risks": [
+      "缺失关键术语: ['暂时可以接受', '只会越改越乱']"
+    ],
+    "missing": [
+      "暂时可以接受",
+      "只会越改越乱"
+    ],
+    "raw_text": "你是一名长期指导博士论文、开题答辩、组会汇报与科研写作 pack 设计的导师型评审。请只依据【用户问题】【上传文件列表】【assistant 回复】【trace 摘要】【预期 focus】评分，不要替模型补写作结构。你要重点检查：回答是否真正围绕 pack-quality 交付件组织；是否区分最终稿、工作文档、中间版本、排版示例、背景论文等不同 authority level；是否能够把 thesis / proposal / group meeting / storyboard / layout rule 转成可复用的交付对象；是否在二进制 PPTX/DOCX/PDF 信息不足时保持诚实；是否避免把版本草稿说成稳定结论。请输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_D_session_005_group_meeting_replay\",\n  \"turn_id\": 2,\n  \"user_input\": \"如果让我今天重做这套组会包，你再帮我给出一个`第一轮 revision checklist`：哪些地方最该先改，哪些地方虽然不完美但暂时可以接受，哪些地方属于只会越改越乱。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace（公开版）**\\n\\n本轮实际调用了工具：\\n\\n- `read_file`\\n  - `assets/uploads/5c66efd3_【20260305大组会】工作文档.md`\\n  - `skills/_system/results_to_report_structuring/SKILL.md`\\n- `python_repl`\\n  - 提取并审阅 `assets/ppt_pack/ca327de5_20260305大组会-颜雍颀-v5_最终交付.pptx` 的 24 页文本骨架\\n  - 提取并审阅 `assets/ppt_pack/1c8b74da_literature_report_FINAL_v2-1.pptx` 的 20 页文本骨架"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": true,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [],
+  "temporary_expectations": null,
+  "provisional_turn_score": 85.0,
+  "final_turn_score": 85.33
+}

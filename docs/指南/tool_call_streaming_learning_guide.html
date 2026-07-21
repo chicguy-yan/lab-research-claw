@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Call Streaming 与并发处理学习指南</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-yellow: #d29922;
+            --accent-red: #f85149;
+            --accent-purple: #bc8cff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--accent-green);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin: 1.5rem 0 0.8rem;
+            color: var(--accent-yellow);
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            margin: 1rem 0 0.5rem;
+            color: var(--accent-purple);
+        }
+
+        p, li {
+            margin-bottom: 0.8rem;
+            color: var(--text-primary);
+        }
+
+        code {
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: "SF Mono", Monaco, Consolas, monospace;
+            font-size: 0.9em;
+            color: var(--accent-blue);
+        }
+
+        pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+        }
+
+        .callout {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-blue);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .callout.warning {
+            border-left-color: var(--accent-yellow);
+        }
+
+        .callout.error {
+            border-left-color: var(--accent-red);
+        }
+
+        .callout.success {
+            border-left-color: var(--accent-green);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: var(--bg-secondary);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 0.8rem;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background: var(--bg-tertiary);
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        .comparison-table tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-good {
+            background: rgba(63, 185, 80, 0.2);
+            color: var(--accent-green);
+        }
+
+        .badge-bad {
+            background: rgba(248, 81, 73, 0.2);
+            color: var(--accent-red);
+        }
+
+        .badge-neutral {
+            background: rgba(139, 148, 158, 0.2);
+            color: var(--text-secondary);
+        }
+
+        .code-block-header {
+            background: var(--bg-tertiary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px 6px 0 0;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            margin-bottom: 0;
+        }
+
+        .code-block-header + pre {
+            margin-top: 0;
+            border-radius: 0 0 6px 6px;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .toc {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .toc h2 {
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Tool Call Streaming 与并发处理学习指南</h1>
+
+        <div class="callout">
+            <strong>学习目标</strong>：理解 LangChain Agent 的 tool call streaming 机制，掌握并发工具调用的处理方法，学习如何设计健壮的事件聚合系统。
+        </div>
+
+        <div class="toc">
+            <h2>📚 目录</h2>
+            <ul>
+                <li><a href="#section1">1. 核心概念：什么是 Tool Call Streaming</a></li>
+                <li><a href="#section2">2. 问题场景：为什么需要聚合 Chunks</a></li>
+                <li><a href="#section3">3. 解决方案对比：4 种聚合策略</a></li>
+                <li><a href="#section4">4. 并发处理：单变量 vs 字典跟踪</a></li>
+                <li><a href="#section5">5. 兼容性设计：Fallback 机制</a></li>
+                <li><a href="#section6">6. 举一反三：其他场景的应用</a></li>
+                <li><a href="#section7">7. 最佳实践与陷阱</a></li>
+            </ul>
+        </div>
+
+        <h2 id="section1">1. 核心概念：什么是 Tool Call Streaming</h2>
+
+        <h3>1.1 LangChain Agent 的工作流程</h3>
+
+        <p>LangChain Agent 使用 LLM（如 GPT-4）来决定调用哪些工具。完整流程：</p>
+
+        <pre><code>用户消息 → LLM 推理 → 生成 tool_calls → 执行工具 → 返回结果 → LLM 总结 → 回复用户</code></pre>
+
+        <div class="callout">
+            <strong>关键点</strong>：LLM 生成 tool_calls 时，为了实现流式输出（streaming），会将一个完整的 tool call 拆分成多个 <code>tool_call_chunks</code> 逐步传输。
+        </div>
+
+        <h3>1.2 Tool Call Chunk 的结构</h3>
+
+        <p>LangChain 的 <code>AIMessageChunk</code> 包含 <code>tool_call_chunks</code> 字段，每个 chunk 可能包含：</p>
+
+        <div class="code-block-header">Python - tool_call_chunk 示例</div>
+        <pre><code># Chunk 1: 只有 id 和 name
+{
+    "id": "call_abc123",
+    "name": "terminal",
+    "args": "",
+    "index": 0
+}
+
+# Chunk 2: 累积 args（部分）
+{
+    "id": "call_abc123",
+    "name": None,
+    "args": '{"command": "ls',
+    "index": 0
+}
+
+# Chunk 3: 继续累积 args
+{
+    "id": "call_abc123",
+    "name": None,
+    "args": ' -la"}',
+    "index": 0
+}</code></pre>
+
+        <div class="callout warning">
+            <strong>⚠️ 陷阱</strong>：如果每收到一个 chunk 就立即处理，会导致：
+            <ul>
+                <li>同一个 tool call 触发多次 <code>tool_start</code> 事件</li>
+                <li><code>args</code> 不完整（只拿到最后一个 chunk 的片段）</li>
+                <li>无法解析 JSON（args 被截断）</li>
+            </ul>
+        </div>
+
+        <h2 id="section2">2. 问题场景：为什么需要聚合 Chunks</h2>
+
+        <h3>2.1 原始实现的问题</h3>
+
+        <div class="code-block-header">❌ 错误实现：立即处理每个 chunk</div>
+        <pre><code>for tc in chunk.tool_call_chunks:
+    name = tc.get("name", "")
+    args = tc.get("args", "")
+    if name:  # 只要有 name 就发出 tool_start
+        yield {
+            "event": "tool_start",
+            "data": {
+                "tool": name,
+                "input": args,  # ❌ args 不完整！
+            },
+        }</code></pre>
+
+        <h3>2.2 实际运行效果</h3>
+
+        <p>假设 LLM 要调用 <code>terminal</code> 工具，参数是 <code>{"command": "ls -la /home/user"}</code>：</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Chunk #</th>
+                    <th>收到的数据</th>
+                    <th>错误实现的行为</th>
+                    <th>问题</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><code>name="terminal", args=""</code></td>
+                    <td>发出 tool_start，args=""</td>
+                    <td><span class="badge badge-bad">参数丢失</span></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><code>name=None, args='{"command":'</code></td>
+                    <td>跳过（无 name）</td>
+                    <td><span class="badge badge-neutral">未处理</span></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><code>name=None, args=' "ls -la'</code></td>
+                    <td>跳过（无 name）</td>
+                    <td><span class="badge badge-neutral">未处理</span></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><code>name=None, args=' /home/user"}'</code></td>
+                    <td>跳过（无 name）</td>
+                    <td><span class="badge badge-neutral">未处理</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="callout error">
+            <strong>结果</strong>：<code>tool_start</code> 事件的 <code>input</code> 字段是空字符串，工具执行时拿不到参数！
+        </div>
+
+        <h2 id="section3">3. 解决方案对比：4 种聚合策略</h2>
+
+        <h3>3.1 方案 1：按 tool_call_id 缓存 + JSON 验证（推荐）</h3>
+
+        <div class="code-block-header">✅ 最佳实践</div>
+        <pre><code>tool_call_buffer = {}  # {tool_call_id: {"name": str, "args": str}}
+
+for tc in chunk.tool_call_chunks:
+    call_id = tc.get("id")
+    if not call_id:
+        continue
+
+    # 初始化缓存
+    if call_id not in tool_call_buffer:
+        tool_call_buffer[call_id] = {"name": None, "args": ""}
+
+    # 累积 name 和 args
+    if tc.get("name"):
+        tool_call_buffer[call_id]["name"] = tc["name"]
+    if tc.get("args"):
+        tool_call_buffer[call_id]["args"] += tc["args"]
+
+    # 尝试解析 JSON，成功则发出 tool_start
+    if tool_call_buffer[call_id]["name"] and tool_call_buffer[call_id]["args"]:
+        try:
+            parsed_args = json.loads(tool_call_buffer[call_id]["args"])
+        except json.JSONDecodeError:
+            continue  # args 还不完整，等待更多 chunks
+
+        # 完整接收，发出事件
+        yield {
+            "event": "tool_start",
+            "data": {
+                "tool_call_id": call_id,
+                "tool": tool_call_buffer[call_id]["name"],
+                "input": parsed_args,
+            },
+        }</code></pre>
+
+        <p><strong>优点</strong>：</p>
+        <ul>
+            <li><span class="badge badge-good">准确</span> 通过 JSON 解析验证参数完整性</li>
+            <li><span class="badge badge-good">健壮</span> 支持任意长度的参数</li>
+            <li><span class="badge badge-good">并发安全</span> 按 ID 隔离不同的 tool call</li>
+        </ul>
+
+        <p><strong>缺点</strong>：</p>
+        <ul>
+            <li><span class="badge badge-neutral">复杂度</span> 需要维护缓存字典</li>
+            <li><span class="badge badge-neutral">内存</span> 大参数会占用内存（可限制 buffer 大小）</li>
+        </ul>
+
+
+        <h3>3.2 方案 2：等待特定标记（index 字段）</h3>
+
+        <div class="code-block-header">方案 2 - 基于 index 标记</div>
+        <pre><code>tool_call_buffer = {}
+
+for tc in chunk.tool_call_chunks:
+    call_id = tc.get("id")
+    if not call_id:
+        continue
+
+    if call_id not in tool_call_buffer:
+        tool_call_buffer[call_id] = {"name": None, "args": ""}
+
+    if tc.get("name"):
+        tool_call_buffer[call_id]["name"] = tc["name"]
+    if tc.get("args"):
+        tool_call_buffer[call_id]["args"] += tc["args"]
+
+    # 检查是否是最后一个 chunk（某些实现会有 "final": true 标记）
+    if tc.get("final") or tc.get("index") == -1:
+        yield {
+            "event": "tool_start",
+            "data": {
+                "tool_call_id": call_id,
+                "tool": tool_call_buffer[call_id]["name"],
+                "input": json.loads(tool_call_buffer[call_id]["args"]),
+            },
+        }</code></pre>
+
+        <p><strong>优点</strong>：</p>
+        <ul>
+            <li><span class="badge badge-good">明确</span> 依赖协议标记，不需要猜测</li>
+        </ul>
+
+        <p><strong>缺点</strong>：</p>
+        <ul>
+            <li><span class="badge badge-bad">依赖性</span> LangChain 不保证所有版本都有 <code>final</code> 标记</li>
+            <li><span class="badge badge-bad">脆弱</span> 如果标记缺失，永远不会发出 tool_start</li>
+        </ul>
+
+        <h3>3.3 方案 3：延迟发送（等待下一个 chunk）</h3>
+
+        <div class="code-block-header">方案 3 - 延迟策略</div>
+        <pre><code>tool_call_buffer = {}
+pending_events = {}  # 待发送的事件
+
+for tc in chunk.tool_call_chunks:
+    call_id = tc.get("id")
+    if not call_id:
+        continue
+
+    # 如果有待发送的事件，先发送（说明上一个已完整）
+    if call_id in pending_events:
+        yield pending_events[call_id]
+        del pending_events[call_id]
+
+    # 累积当前 chunk
+    if call_id not in tool_call_buffer:
+        tool_call_buffer[call_id] = {"name": None, "args": ""}
+
+    if tc.get("name"):
+        tool_call_buffer[call_id]["name"] = tc["name"]
+    if tc.get("args"):
+        tool_call_buffer[call_id]["args"] += tc["args"]
+
+    # 尝试解析，成功则标记为待发送
+    if tool_call_buffer[call_id]["name"] and tool_call_buffer[call_id]["args"]:
+        try:
+            parsed_args = json.loads(tool_call_buffer[call_id]["args"])
+            pending_events[call_id] = {
+                "event": "tool_start",
+                "data": {
+                    "tool_call_id": call_id,
+                    "tool": tool_call_buffer[call_id]["name"],
+                    "input": parsed_args,
+                },
+            }
+        except json.JSONDecodeError:
+            pass  # 继续等待
+
+# 循环结束后，发送所有待发送的事件
+for event in pending_events.values():
+    yield event</code></pre>
+
+        <p><strong>优点</strong>：</p>
+        <ul>
+            <li><span class="badge badge-good">保守</span> 确保不会过早发送</li>
+        </ul>
+
+        <p><strong>缺点</strong>：</p>
+        <ul>
+            <li><span class="badge badge-bad">延迟</span> 用户体验差，tool_start 延迟一个 chunk</li>
+            <li><span class="badge badge-bad">复杂</span> 需要维护两个字典</li>
+        </ul>
+
+        <h3>3.4 方案 4：简单累积（无验证）</h3>
+
+        <div class="code-block-header">⚠️ 不推荐 - 无验证方案</div>
+        <pre><code>tool_call_buffer = {}
+
+for tc in chunk.tool_call_chunks:
+    call_id = tc.get("id")
+    if not call_id:
+        continue
+
+    if call_id not in tool_call_buffer:
+        tool_call_buffer[call_id] = {"name": None, "args": "", "emitted": False}
+
+    if tc.get("name"):
+        tool_call_buffer[call_id]["name"] = tc["name"]
+    if tc.get("args"):
+        tool_call_buffer[call_id]["args"] += tc["args"]
+
+    # 只要有 name 和 args，且未发送过，就发送
+    if (tool_call_buffer[call_id]["name"] and
+        tool_call_buffer[call_id]["args"] and
+        not tool_call_buffer[call_id]["emitted"]):
+
+        yield {
+            "event": "tool_start",
+            "data": {
+                "tool_call_id": call_id,
+                "tool": tool_call_buffer[call_id]["name"],
+                "input": tool_call_buffer[call_id]["args"],  # ❌ 可能不是有效 JSON
+            },
+        }
+        tool_call_buffer[call_id]["emitted"] = True</code></pre>
+
+        <p><strong>优点</strong>：</p>
+        <ul>
+            <li><span class="badge badge-neutral">简单</span> 代码最少</li>
+        </ul>
+
+        <p><strong>缺点</strong>：</p>
+        <ul>
+            <li><span class="badge badge-bad">不安全</span> args 可能不是完整的 JSON</li>
+            <li><span class="badge badge-bad">过早发送</span> 可能在第一个 args chunk 就发送</li>
+        </ul>
+
+        <h3>3.5 方案对比总结</h3>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>方案</th>
+                    <th>准确性</th>
+                    <th>性能</th>
+                    <th>复杂度</th>
+                    <th>推荐度</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>方案 1: JSON 验证</strong></td>
+                    <td><span class="badge badge-good">高</span></td>
+                    <td><span class="badge badge-good">好</span></td>
+                    <td><span class="badge badge-neutral">中</span></td>
+                    <td><span class="badge badge-good">⭐⭐⭐⭐⭐</span></td>
+                </tr>
+                <tr>
+                    <td><strong>方案 2: 标记检测</strong></td>
+                    <td><span class="badge badge-neutral">中</span></td>
+                    <td><span class="badge badge-good">好</span></td>
+                    <td><span class="badge badge-good">低</span></td>
+                    <td><span class="badge badge-neutral">⭐⭐⭐</span></td>
+                </tr>
+                <tr>
+                    <td><strong>方案 3: 延迟发送</strong></td>
+                    <td><span class="badge badge-good">高</span></td>
+                    <td><span class="badge badge-bad">差</span></td>
+                    <td><span class="badge badge-bad">高</span></td>
+                    <td><span class="badge badge-neutral">⭐⭐</span></td>
+                </tr>
+                <tr>
+                    <td><strong>方案 4: 无验证</strong></td>
+                    <td><span class="badge badge-bad">低</span></td>
+                    <td><span class="badge badge-good">好</span></td>
+                    <td><span class="badge badge-good">低</span></td>
+                    <td><span class="badge badge-bad">⭐</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="callout success">
+            <strong>推荐</strong>：使用 <strong>方案 1（JSON 验证）</strong>，它在准确性、性能和复杂度之间取得了最佳平衡。
+        </div>
+
+
+        <h2 id="section4">4. 并发处理：单变量 vs 字典跟踪</h2>
+
+        <h3>4.1 问题场景：LLM 并发调用多个工具</h3>
+
+        <p>现代 LLM（如 GPT-4）支持 <strong>parallel tool calling</strong>，即一次推理中同时调用多个工具：</p>
+
+        <div class="code-block-header">LLM 输出示例</div>
+        <pre><code>用户：帮我查看 /home/user 目录的文件，并读取 README.md 的内容
+
+LLM 决策：
+  - 调用 terminal(command="ls /home/user")
+  - 调用 read_file(path="/home/user/README.md")
+
+这两个工具调用是并发的！</code></pre>
+
+        <h3>4.2 错误实现：单变量跟踪</h3>
+
+        <div class="code-block-header">❌ 错误：使用单个变量</div>
+        <pre><code>current_tool_call = None
+
+# 处理 tool_start 事件
+if event_type == "tool_start":
+    current_tool_call = {
+        "tool": event_data.get("tool"),
+        "args": event_data.get("input"),
+        "timestamp": datetime.now().isoformat(),
+    }
+
+# 处理 tool_end 事件
+elif event_type == "tool_end":
+    if current_tool_call:
+        current_tool_call["result"] = event_data.get("output")
+        tool_calls.append(current_tool_call)
+        current_tool_call = None</code></pre>
+
+        <h3>4.3 并发场景下的执行流程</h3>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>事件</th>
+                    <th>current_tool_call 的值</th>
+                    <th>问题</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>T1</td>
+                    <td>tool_start (terminal)</td>
+                    <td><code>{"tool": "terminal", "args": {...}}</code></td>
+                    <td><span class="badge badge-good">正常</span></td>
+                </tr>
+                <tr>
+                    <td>T2</td>
+                    <td>tool_start (read_file)</td>
+                    <td><code>{"tool": "read_file", "args": {...}}</code></td>
+                    <td><span class="badge badge-bad">覆盖了 terminal！</span></td>
+                </tr>
+                <tr>
+                    <td>T3</td>
+                    <td>tool_end (terminal)</td>
+                    <td><code>None</code></td>
+                    <td><span class="badge badge-bad">配对错误，terminal 的结果写入了 read_file</span></td>
+                </tr>
+                <tr>
+                    <td>T4</td>
+                    <td>tool_end (read_file)</td>
+                    <td><code>None</code></td>
+                    <td><span class="badge badge-bad">无法匹配，read_file 的结果丢失</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="callout error">
+            <strong>结果</strong>：
+            <ul>
+                <li>terminal 的 tool call 记录丢失</li>
+                <li>read_file 的结果被错误地关联到 terminal</li>
+                <li>trace 数据完全错乱</li>
+            </ul>
+        </div>
+
+        <h3>4.4 正确实现：字典跟踪</h3>
+
+        <div class="code-block-header">✅ 正确：使用字典按 ID 跟踪</div>
+        <pre><code>active_tool_calls = {}  # {tool_call_id: {...}}
+
+# 处理 tool_start 事件
+if event_type == "tool_start":
+    call_id = event_data.get("tool_call_id")
+    if call_id:
+        active_tool_calls[call_id] = {
+            "tool_call_id": call_id,
+            "tool": event_data.get("tool"),
+            "args": event_data.get("input"),
+            "timestamp": datetime.now().isoformat(),
+            "status": "running",
+        }
+
+# 处理 tool_end 事件
+elif event_type == "tool_end":
+    call_id = event_data.get("tool_call_id")
+    if call_id and call_id in active_tool_calls:
+        active_tool_calls[call_id]["result"] = event_data.get("output")
+        active_tool_calls[call_id]["status"] = "completed"
+        tool_calls.append(active_tool_calls[call_id])
+        del active_tool_calls[call_id]  # 清理已完成的</code></pre>
+
+        <h3>4.5 字典跟踪的执行流程</h3>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>事件</th>
+                    <th>active_tool_calls 的状态</th>
+                    <th>结果</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>T1</td>
+                    <td>tool_start (terminal, id=call_1)</td>
+                    <td><code>{"call_1": {...terminal...}}</code></td>
+                    <td><span class="badge badge-good">正常</span></td>
+                </tr>
+                <tr>
+                    <td>T2</td>
+                    <td>tool_start (read_file, id=call_2)</td>
+                    <td><code>{"call_1": {...}, "call_2": {...}}</code></td>
+                    <td><span class="badge badge-good">两个都在跟踪</span></td>
+                </tr>
+                <tr>
+                    <td>T3</td>
+                    <td>tool_end (terminal, id=call_1)</td>
+                    <td><code>{"call_2": {...}}</code></td>
+                    <td><span class="badge badge-good">call_1 完成并移除</span></td>
+                </tr>
+                <tr>
+                    <td>T4</td>
+                    <td>tool_end (read_file, id=call_2)</td>
+                    <td><code>{}</code></td>
+                    <td><span class="badge badge-good">call_2 完成并移除</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="callout success">
+            <strong>结果</strong>：每个 tool call 都被正确跟踪，start 和 end 精确配对，trace 数据完整准确。
+        </div>
+
+        <h3>4.6 举一反三：其他需要字典跟踪的场景</h3>
+
+        <h4>场景 1：WebSocket 连接管理</h4>
+
+        <div class="code-block-header">WebSocket 连接池</div>
+        <pre><code># ❌ 错误：单个变量
+current_connection = None
+
+# ✅ 正确：字典管理多个连接
+active_connections = {}  # {connection_id: WebSocket}
+
+async def handle_connect(connection_id, websocket):
+    active_connections[connection_id] = websocket
+
+async def handle_disconnect(connection_id):
+    if connection_id in active_connections:
+        await active_connections[connection_id].close()
+        del active_connections[connection_id]</code></pre>
+
+        <h4>场景 2：异步任务跟踪</h4>
+
+        <div class="code-block-header">异步任务管理</div>
+        <pre><code># ❌ 错误：单个变量
+current_task = None
+
+# ✅ 正确：字典管理多个任务
+active_tasks = {}  # {task_id: asyncio.Task}
+
+async def start_task(task_id, coro):
+    task = asyncio.create_task(coro)
+    active_tasks[task_id] = task
+    return task_id
+
+async def cancel_task(task_id):
+    if task_id in active_tasks:
+        active_tasks[task_id].cancel()
+        del active_tasks[task_id]</code></pre>
+
+        <h4>场景 3：HTTP 请求去重</h4>
+
+        <div class="code-block-header">请求去重（防止重复请求）</div>
+        <pre><code>pending_requests = {}  # {url: Future}
+
+async def fetch_with_dedup(url):
+    # 如果已有相同 URL 的请求在进行中，等待它完成
+    if url in pending_requests:
+        return await pending_requests[url]
+
+    # 创建新请求
+    future = asyncio.Future()
+    pending_requests[url] = future
+
+    try:
+        result = await http_client.get(url)
+        future.set_result(result)
+        return result
+    finally:
+        del pending_requests[url]</code></pre>
+
+        <div class="callout">
+            <strong>通用规则</strong>：当需要跟踪多个并发的、有生命周期的实体时，使用 <strong>字典 + 唯一 ID</strong> 是最佳实践。
+        </div>
+
+
+        <h2 id="section5">5. 兼容性设计：Fallback 机制</h2>
+
+        <h3>5.1 为什么需要 Fallback</h3>
+
+        <p>在实际项目中，可能遇到以下情况：</p>
+
+        <ul>
+            <li>旧版本的 agent.py 没有发送 <code>tool_call_id</code></li>
+            <li>第三方库的事件格式不一致</li>
+            <li>某些边缘情况下 ID 丢失</li>
+        </ul>
+
+        <div class="callout warning">
+            <strong>设计原则</strong>：新系统应该能兼容旧数据格式，避免升级时出现功能降级。
+        </div>
+
+        <h3>5.2 Fallback 实现策略</h3>
+
+        <div class="code-block-header">✅ 带 Fallback 的实现</div>
+        <pre><code>active_tool_calls = {}
+
+elif event_type == "tool_end":
+    call_id = event_data.get("tool_call_id")
+
+    # 优先按 tool_call_id 匹配（精确匹配）
+    if call_id and call_id in active_tool_calls:
+        active_tool_calls[call_id]["result"] = event_data.get("output")
+        active_tool_calls[call_id]["status"] = "completed"
+        tool_calls.append(active_tool_calls[call_id])
+        del active_tool_calls[call_id]
+
+    # Fallback: 如果没有 tool_call_id，按 tool_name 匹配（不可靠）
+    elif not call_id:
+        tool_name = event_data.get("tool")
+        for cid, tc in list(active_tool_calls.items()):
+            if tc["tool"] == tool_name:
+                tc["result"] = event_data.get("output")
+                tc["status"] = "completed"
+                tool_calls.append(tc)
+                del active_tool_calls[cid]
+                break  # 只匹配第一个</code></pre>
+
+        <h3>5.3 Fallback 的局限性</h3>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>场景</th>
+                    <th>按 ID 匹配</th>
+                    <th>按 Name 匹配（Fallback）</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>单个工具调用</td>
+                    <td><span class="badge badge-good">准确</span></td>
+                    <td><span class="badge badge-good">准确</span></td>
+                </tr>
+                <tr>
+                    <td>并发调用不同工具</td>
+                    <td><span class="badge badge-good">准确</span></td>
+                    <td><span class="badge badge-good">准确</span></td>
+                </tr>
+                <tr>
+                    <td>并发调用同名工具</td>
+                    <td><span class="badge badge-good">准确</span></td>
+                    <td><span class="badge badge-bad">错误（只匹配第一个）</span></td>
+                </tr>
+                <tr>
+                    <td>乱序到达（end 先于 start）</td>
+                    <td><span class="badge badge-good">可处理</span></td>
+                    <td><span class="badge badge-bad">无法处理</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="callout warning">
+            <strong>Fallback 的权衡</strong>：
+            <ul>
+                <li>✅ 提供向后兼容性，避免系统崩溃</li>
+                <li>⚠️ 在并发同名工具场景下不可靠</li>
+                <li>⚠️ 应该记录警告日志，提示升级</li>
+            </ul>
+        </div>
+
+        <h3>5.4 更健壮的 Fallback 策略</h3>
+
+        <div class="code-block-header">改进版 Fallback（带时间戳匹配）</div>
+        <pre><code>elif not call_id:
+    tool_name = event_data.get("tool")
+    current_time = datetime.now()
+
+    # 按 tool_name 匹配，优先选择最早的（FIFO）
+    candidates = [
+        (cid, tc) for cid, tc in active_tool_calls.items()
+        if tc["tool"] == tool_name
+    ]
+
+    if candidates:
+        # 按时间戳排序，选择最早的
+        candidates.sort(key=lambda x: x[1]["timestamp"])
+        cid, tc = candidates[0]
+
+        tc["result"] = event_data.get("output")
+        tc["status"] = "completed"
+        tool_calls.append(tc)
+        del active_tool_calls[cid]
+
+        # 记录警告日志
+        logger.warning(
+            f"tool_end without tool_call_id, matched by name (tool={tool_name}). "
+            f"Consider upgrading agent.py to include tool_call_id."
+        )</code></pre>
+
+        <h3>5.5 举一反三：其他 Fallback 场景</h3>
+
+        <h4>场景 1：API 版本兼容</h4>
+
+        <div class="code-block-header">API 响应格式兼容</div>
+        <pre><code>def parse_api_response(response):
+    # 优先使用新格式（v2）
+    if "data" in response and "items" in response["data"]:
+        return response["data"]["items"]
+
+    # Fallback: 旧格式（v1）
+    elif "results" in response:
+        logger.warning("Using legacy API format (v1), consider upgrading")
+        return response["results"]
+
+    # 最后的 Fallback: 空列表
+    else:
+        logger.error("Unknown API response format")
+        return []</code></pre>
+
+        <h4>场景 2：配置文件兼容</h4>
+
+        <div class="code-block-header">配置读取 Fallback</div>
+        <pre><code>def load_config():
+    config = {}
+
+    # 优先读取新配置文件
+    if os.path.exists("config.yaml"):
+        config = yaml.safe_load(open("config.yaml"))
+
+    # Fallback: 旧配置文件
+    elif os.path.exists("config.json"):
+        logger.warning("Using legacy config.json, migrate to config.yaml")
+        config = json.load(open("config.json"))
+
+    # Fallback: 环境变量
+    else:
+        logger.warning("No config file found, using environment variables")
+        config = {
+            "api_key": os.getenv("API_KEY"),
+            "base_url": os.getenv("BASE_URL", "https://api.example.com"),
+        }
+
+    return config</code></pre>
+
+        <h4>场景 3：数据库字段兼容</h4>
+
+        <div class="code-block-header">数据库字段 Fallback</div>
+        <pre><code>def get_user_email(user_record):
+    # 优先使用新字段
+    if "email_address" in user_record:
+        return user_record["email_address"]
+
+    # Fallback: 旧字段
+    elif "email" in user_record:
+        logger.warning(f"User {user_record['id']} using legacy 'email' field")
+        return user_record["email"]
+
+    # 最后的 Fallback: None
+    else:
+        logger.error(f"User {user_record['id']} has no email field")
+        return None</code></pre>
+
+        <div class="callout success">
+            <strong>Fallback 设计原则</strong>：
+            <ol>
+                <li><strong>优先级明确</strong>：新格式 → 旧格式 → 默认值</li>
+                <li><strong>记录日志</strong>：使用 Fallback 时记录警告，便于追踪</li>
+                <li><strong>渐进式迁移</strong>：给用户时间升级，不强制立即切换</li>
+                <li><strong>最终移除</strong>：设定 deprecation 时间表，最终移除旧格式</li>
+            </ol>
+        </div>
+
+        <h2 id="section6">6. 举一反三：其他场景的应用</h2>
+
+        <h3>6.1 场景：HTTP Chunked Transfer Encoding</h3>
+
+        <p>HTTP 的 chunked 传输编码也是类似的流式传输场景：</p>
+
+        <div class="code-block-header">HTTP Chunked 响应处理</div>
+        <pre><code>async def read_chunked_response(response):
+    buffer = b""
+
+    async for chunk in response.content.iter_chunked(1024):
+        buffer += chunk
+
+        # 尝试解析完整的 JSON 对象
+        try:
+            data = json.loads(buffer.decode("utf-8"))
+            yield data
+            buffer = b""  # 清空缓冲区
+        except json.JSONDecodeError:
+            # 数据还不完整，继续累积
+            continue
+
+    # 处理剩余数据
+    if buffer:
+        try:
+            data = json.loads(buffer.decode("utf-8"))
+            yield data
+        except json.JSONDecodeError:
+            logger.error(f"Incomplete data in buffer: {buffer}")</code></pre>
+
+        <h3>6.2 场景：WebSocket 消息分片</h3>
+
+        <div class="code-block-header">WebSocket 分片消息重组</div>
+        <pre><code>class WebSocketMessageAssembler:
+    def __init__(self):
+        self.fragments = {}  # {message_id: [fragment1, fragment2, ...]}
+
+    async def handle_fragment(self, fragment):
+        msg_id = fragment["message_id"]
+        part_num = fragment["part"]
+        total_parts = fragment["total"]
+        data = fragment["data"]
+
+        # 初始化缓冲区
+        if msg_id not in self.fragments:
+            self.fragments[msg_id] = [None] * total_parts
+
+        # 存储分片
+        self.fragments[msg_id][part_num] = data
+
+        # 检查是否所有分片都到齐
+        if all(f is not None for f in self.fragments[msg_id]):
+            # 重组完整消息
+            complete_message = "".join(self.fragments[msg_id])
+            del self.fragments[msg_id]  # 清理缓冲区
+            return complete_message
+
+        return None  # 还不完整</code></pre>
+
+        <h3>6.3 场景：视频流关键帧检测</h3>
+
+        <div class="code-block-header">视频流处理</div>
+        <pre><code>class VideoStreamProcessor:
+    def __init__(self):
+        self.frame_buffer = {}  # {stream_id: [frame1, frame2, ...]}
+
+    def process_frame(self, stream_id, frame):
+        if stream_id not in self.frame_buffer:
+            self.frame_buffer[stream_id] = []
+
+        self.frame_buffer[stream_id].append(frame)
+
+        # 检测关键帧（I-frame）
+        if frame.is_keyframe:
+            # 处理从上一个关键帧到当前的所有帧
+            frames = self.frame_buffer[stream_id]
+            self.process_gop(frames)  # GOP: Group of Pictures
+            self.frame_buffer[stream_id] = []  # 清空缓冲区</code></pre>
+
+        <h3>6.4 场景：日志聚合（多行日志）</h3>
+
+        <div class="code-block-header">多行日志聚合</div>
+        <pre><code>class MultilineLogAggregator:
+    def __init__(self):
+        self.current_log = None
+
+    def process_line(self, line):
+        # 检测日志开始标记（如时间戳）
+        if re.match(r'^\d{4}-\d{2}-\d{2}', line):
+            # 如果有未完成的日志，先输出
+            if self.current_log:
+                yield self.current_log
+
+            # 开始新日志
+            self.current_log = line
+        else:
+            # 续行（如堆栈跟踪）
+            if self.current_log:
+                self.current_log += "\n" + line
+
+    def flush(self):
+        # 输出最后一条日志
+        if self.current_log:
+            yield self.current_log
+            self.current_log = None</code></pre>
+
+        <div class="callout">
+            <strong>共同模式</strong>：
+            <ul>
+                <li>📦 <strong>缓冲区</strong>：临时存储不完整的数据</li>
+                <li>🔍 <strong>完整性检测</strong>：判断数据是否完整（JSON 解析、关键帧、分隔符等）</li>
+                <li>🧹 <strong>清理机制</strong>：完整数据处理后清空缓冲区</li>
+                <li>⚠️ <strong>超时处理</strong>：避免缓冲区无限增长</li>
+            </ul>
+        </div>
+
+
+        <h2 id="section7">7. 最佳实践与陷阱</h2>
+
+        <h3>7.1 最佳实践清单</h3>
+
+        <h4>✅ DO: 使用唯一 ID 跟踪实体</h4>
+
+        <pre><code># ✅ 好
+active_items = {}  # {item_id: item_data}
+
+# ❌ 坏
+current_item = None</code></pre>
+
+        <h4>✅ DO: 验证数据完整性</h4>
+
+        <pre><code># ✅ 好：尝试解析 JSON
+try:
+    parsed = json.loads(buffer)
+    yield parsed
+except json.JSONDecodeError:
+    continue  # 等待更多数据
+
+# ❌ 坏：直接使用未验证的数据
+yield buffer  # 可能不完整</code></pre>
+
+        <h4>✅ DO: 清理已完成的资源</h4>
+
+        <pre><code># ✅ 好：处理完后删除
+if call_id in active_calls:
+    result = active_calls[call_id]
+    del active_calls[call_id]  # 防止内存泄漏
+
+# ❌ 坏：不清理
+result = active_calls[call_id]  # 字典无限增长</code></pre>
+
+        <h4>✅ DO: 记录关键事件日志</h4>
+
+        <pre><code># ✅ 好：记录调试信息
+logger.debug(f"tool_start received: call_id={call_id}, tool={tool_name}")
+
+# ❌ 坏：静默失败
+if call_id not in active_calls:
+    return  # 无法排查问题</code></pre>
+
+        <h4>✅ DO: 设置缓冲区大小限制</h4>
+
+        <pre><code># ✅ 好：限制缓冲区大小
+MAX_BUFFER_SIZE = 100
+
+if len(tool_call_buffer) > MAX_BUFFER_SIZE:
+    # 清理最旧的条目
+    oldest_id = min(tool_call_buffer.keys(), key=lambda k: tool_call_buffer[k]["timestamp"])
+    del tool_call_buffer[oldest_id]
+    logger.warning(f"Buffer overflow, removed {oldest_id}")
+
+# ❌ 坏：无限制
+tool_call_buffer[call_id] = data  # 可能 OOM</code></pre>
+
+        <h3>7.2 常见陷阱</h3>
+
+        <h4>❌ 陷阱 1：过早发送事件</h4>
+
+        <div class="callout error">
+            <strong>问题</strong>：在数据不完整时就发送事件，导致下游处理失败。
+        </div>
+
+        <pre><code># ❌ 错误
+if tc.get("name"):
+    yield {"event": "tool_start", "data": {"tool": tc["name"], "input": tc.get("args", "")}}
+
+# ✅ 正确
+if tc.get("name") and tc.get("args"):
+    try:
+        parsed_args = json.loads(tc["args"])
+        yield {"event": "tool_start", "data": {"tool": tc["name"], "input": parsed_args}}
+    except json.JSONDecodeError:
+        continue  # 等待更多数据</code></pre>
+
+        <h4>❌ 陷阱 2：忘记处理边界情况</h4>
+
+        <div class="callout error">
+            <strong>问题</strong>：没有处理 tool_start 无对应 tool_end 的情况（工具执行超时/崩溃）。
+        </div>
+
+        <pre><code># ❌ 错误：不处理残留
+# 如果 tool_end 永远不到达，active_tool_calls 会一直残留
+
+# ✅ 正确：在流结束时清理残留
+async def event_generator():
+    active_tool_calls = {}
+
+    async for event in agent.astream(...):
+        # ... 处理事件 ...
+
+    # 流结束后，检查残留
+    for call_id, tc in active_tool_calls.items():
+        tc["status"] = "timeout"
+        tc["result"] = "Tool execution timeout"
+        tool_calls.append(tc)
+        logger.warning(f"Tool call {call_id} did not complete")</code></pre>
+
+        <h4>❌ 陷阱 3：字符串拼接导致的编码问题</h4>
+
+        <div class="callout error">
+            <strong>问题</strong>：直接拼接字符串可能导致 UTF-8 多字节字符被截断。
+        </div>
+
+        <pre><code># ❌ 错误：直接拼接字符串
+buffer += chunk  # 如果 chunk 截断了多字节字符，会报错
+
+# ✅ 正确：使用字节流
+buffer = b""
+for chunk in chunks:
+    buffer += chunk.encode("utf-8")
+
+try:
+    text = buffer.decode("utf-8")
+except UnicodeDecodeError:
+    continue  # 等待更多数据</code></pre>
+
+        <h4>❌ 陷阱 4：没有考虑乱序到达</h4>
+
+        <div class="callout error">
+            <strong>问题</strong>：在某些异步场景下，tool_end 可能先于 tool_start 到达。
+        </div>
+
+        <pre><code># ❌ 错误：假设顺序到达
+if event_type == "tool_end":
+    if call_id in active_tool_calls:  # 如果 tool_start 还没到，这里会失败
+        # ...
+
+# ✅ 正确：缓存乱序事件
+pending_tool_ends = {}  # {call_id: tool_end_data}
+
+if event_type == "tool_end":
+    call_id = event_data.get("tool_call_id")
+    if call_id in active_tool_calls:
+        # 正常情况：tool_start 已到达
+        active_tool_calls[call_id]["result"] = event_data.get("output")
+        tool_calls.append(active_tool_calls[call_id])
+        del active_tool_calls[call_id]
+    else:
+        # 乱序情况：tool_start 还没到，先缓存 tool_end
+        pending_tool_ends[call_id] = event_data
+
+elif event_type == "tool_start":
+    call_id = event_data.get("tool_call_id")
+    active_tool_calls[call_id] = {...}
+
+    # 检查是否有对应的 tool_end 已到达
+    if call_id in pending_tool_ends:
+        active_tool_calls[call_id]["result"] = pending_tool_ends[call_id].get("output")
+        tool_calls.append(active_tool_calls[call_id])
+        del active_tool_calls[call_id]
+        del pending_tool_ends[call_id]</code></pre>
+
+        <h3>7.3 性能优化建议</h3>
+
+        <h4>优化 1：减少 JSON 解析次数</h4>
+
+        <pre><code># ❌ 低效：每次 chunk 都尝试解析
+for tc in chunks:
+    buffer += tc["args"]
+    try:
+        json.loads(buffer)  # 每次都解析，浪费 CPU
+    except:
+        pass
+
+# ✅ 高效：只在可能完整时解析
+for tc in chunks:
+    buffer += tc["args"]
+    # 简单检查：JSON 对象必须以 } 结尾
+    if buffer.endswith("}"):
+        try:
+            json.loads(buffer)
+        except:
+            pass</code></pre>
+
+        <h4>优化 2：使用生成器避免内存占用</h4>
+
+        <pre><code># ❌ 低效：一次性加载所有数据
+def process_all_chunks(chunks):
+    results = []
+    for chunk in chunks:
+        results.append(process(chunk))
+    return results
+
+# ✅ 高效：使用生成器
+def process_all_chunks(chunks):
+    for chunk in chunks:
+        yield process(chunk)</code></pre>
+
+        <h4>优化 3：批量处理小 chunks</h4>
+
+        <pre><code># ❌ 低效：每个 chunk 都触发处理
+for chunk in chunks:
+    process(chunk)
+
+# ✅ 高效：累积到一定大小再处理
+buffer = []
+BATCH_SIZE = 10
+
+for chunk in chunks:
+    buffer.append(chunk)
+    if len(buffer) >= BATCH_SIZE:
+        process_batch(buffer)
+        buffer = []
+
+# 处理剩余
+if buffer:
+    process_batch(buffer)</code></pre>
+
+        <h3>7.4 测试建议</h3>
+
+        <h4>单元测试：模拟 chunks</h4>
+
+        <pre><code>import pytest
+
+def test_tool_call_aggregation():
+    aggregator = ToolCallAggregator()
+
+    # 模拟分块传输
+    chunks = [
+        {"id": "call_1", "name": "terminal", "args": ""},
+        {"id": "call_1", "name": None, "args": '{"command":'},
+        {"id": "call_1", "name": None, "args": ' "ls -la"}'},
+    ]
+
+    result = None
+    for chunk in chunks:
+        result = aggregator.process_chunk(chunk)
+        if result:
+            break
+
+    assert result is not None
+    assert result["tool"] == "terminal"
+    assert result["input"] == {"command": "ls -la"}</code></pre>
+
+        <h4>集成测试：并发场景</h4>
+
+        <pre><code>@pytest.mark.asyncio
+async def test_concurrent_tool_calls():
+    tracker = ToolCallTracker()
+
+    # 模拟并发调用
+    await tracker.handle_event({"event": "tool_start", "data": {"tool_call_id": "call_1", "tool": "terminal"}})
+    await tracker.handle_event({"event": "tool_start", "data": {"tool_call_id": "call_2", "tool": "read_file"}})
+    await tracker.handle_event({"event": "tool_end", "data": {"tool_call_id": "call_1", "output": "result1"}})
+    await tracker.handle_event({"event": "tool_end", "data": {"tool_call_id": "call_2", "output": "result2"}})
+
+    results = tracker.get_completed_calls()
+    assert len(results) == 2
+    assert results[0]["tool_call_id"] == "call_1"
+    assert results[1]["tool_call_id"] == "call_2"</code></pre>
+
+        <h3>7.5 总结：设计健壮系统的核心原则</h3>
+
+        <div class="callout success">
+            <ol>
+                <li><strong>唯一标识</strong>：使用 ID 而非名称跟踪实体</li>
+                <li><strong>数据验证</strong>：在使用前验证数据完整性</li>
+                <li><strong>资源清理</strong>：及时释放已完成的资源</li>
+                <li><strong>边界处理</strong>：考虑超时、乱序、丢失等异常情况</li>
+                <li><strong>向后兼容</strong>：提供 Fallback 机制，记录警告日志</li>
+                <li><strong>可观测性</strong>：记录关键事件，便于调试</li>
+                <li><strong>性能优化</strong>：避免不必要的计算和内存占用</li>
+                <li><strong>测试覆盖</strong>：单元测试 + 集成测试 + 边界测试</li>
+            </ol>
+        </div>
+
+        <h2>📖 延伸阅读</h2>
+
+        <ul>
+            <li><a href="https://python.langchain.com/docs/modules/agents/" target="_blank">LangChain Agents 官方文档</a></li>
+            <li><a href="https://platform.openai.com/docs/指南/function-calling" target="_blank">OpenAI Function Calling 指南</a></li>
+            <li><a href="https://docs.python.org/3/library/asyncio.html" target="_blank">Python asyncio 文档</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events" target="_blank">Server-Sent Events (SSE) 规范</a></li>
+        </ul>
+
+        <hr style="margin: 3rem 0; border: none; border-top: 1px solid var(--border-color);">
+
+        <p style="text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+            📝 本文档基于 ResearchAgentPrivateWorkspace 项目的 trace 采集链路修正实践编写<br>
+            最后更新：2026-03-10
+        </p>
+
+    </div>
+</body>
+</html>

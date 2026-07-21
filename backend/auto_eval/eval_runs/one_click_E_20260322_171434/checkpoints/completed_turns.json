@@ -1,0 +1,83 @@
+{
+  "run_id": "one_click_E_20260322_171434",
+  "completed_turns": [
+    "scenario_E/scenario_E_session_001_bootstrap/turn_1",
+    "scenario_E/scenario_E_session_001_bootstrap/turn_2",
+    "scenario_E/scenario_E_session_001_bootstrap/turn_3",
+    "scenario_E/scenario_E_session_001_bootstrap/turn_4",
+    "scenario_E/scenario_E_session_002_package_read_order/turn_1",
+    "scenario_E/scenario_E_session_002_package_read_order/turn_2",
+    "scenario_E/scenario_E_session_002_package_read_order/turn_3",
+    "scenario_E/scenario_E_session_003_literature_priority/turn_1",
+    "scenario_E/scenario_E_session_003_literature_priority/turn_2",
+    "scenario_E/scenario_E_session_003_literature_priority/turn_3",
+    "scenario_E/scenario_E_session_004_experiment_priority/turn_1",
+    "scenario_E/scenario_E_session_004_experiment_priority/turn_2",
+    "scenario_E/scenario_E_session_004_experiment_priority/turn_3",
+    "scenario_E/scenario_E_session_005_writing_priority/turn_1",
+    "scenario_E/scenario_E_session_005_writing_priority/turn_2",
+    "scenario_E/scenario_E_session_005_writing_priority/turn_3",
+    "scenario_E/scenario_E_session_006_mapping_schema_audit/turn_1",
+    "scenario_E/scenario_E_session_006_mapping_schema_audit/turn_2",
+    "scenario_E/scenario_E_session_006_mapping_schema_audit/turn_3",
+    "scenario_E/scenario_E_session_007_cross_closure_failure_modes/turn_1",
+    "scenario_E/scenario_E_session_007_cross_closure_failure_modes/turn_2",
+    "scenario_E/scenario_E_session_007_cross_closure_failure_modes/turn_3",
+    "scenario_E/scenario_E_session_008_benchmark_prioritization/turn_1",
+    "scenario_E/scenario_E_session_008_benchmark_prioritization/turn_2",
+    "scenario_E/scenario_E_session_008_benchmark_prioritization/turn_3",
+    "scenario_E/scenario_E_session_009_prompt_contract/turn_1",
+    "scenario_E/scenario_E_session_009_prompt_contract/turn_2",
+    "scenario_E/scenario_E_session_009_prompt_contract/turn_3",
+    "scenario_E/scenario_E_session_010_handoff/turn_1",
+    "scenario_E/scenario_E_session_010_handoff/turn_2",
+    "scenario_E/scenario_E_session_010_handoff/turn_3"
+  ],
+  "scenario_states": {
+    "scenario_E": {
+      "workspace_id": "eval-scenario_e-260322_1714",
+      "session_backend_ids": {
+        "scenario_E_session_001_bootstrap": {
+          "backend_session_id": "__bootstrap__",
+          "trace_count": 29
+        },
+        "scenario_E_session_002_package_read_order": {
+          "backend_session_id": "4d56400459cd",
+          "trace_count": 10
+        },
+        "scenario_E_session_003_literature_priority": {
+          "backend_session_id": "3991cd5c334b",
+          "trace_count": 28
+        },
+        "scenario_E_session_004_experiment_priority": {
+          "backend_session_id": "7bc176a38b81",
+          "trace_count": 24
+        },
+        "scenario_E_session_005_writing_priority": {
+          "backend_session_id": "e82ce864ee63",
+          "trace_count": 31
+        },
+        "scenario_E_session_006_mapping_schema_audit": {
+          "backend_session_id": "e96fbf73f5a0",
+          "trace_count": 30
+        },
+        "scenario_E_session_007_cross_closure_failure_modes": {
+          "backend_session_id": "1fec145a5778",
+          "trace_count": 20
+        },
+        "scenario_E_session_008_benchmark_prioritization": {
+          "backend_session_id": "3eaedbaf80fd",
+          "trace_count": 38
+        },
+        "scenario_E_session_009_prompt_contract": {
+          "backend_session_id": "1ee835b224ff",
+          "trace_count": 6
+        },
+        "scenario_E_session_010_handoff": {
+          "backend_session_id": "a6dd5d454039",
+          "trace_count": 12
+        }
+      }
+    }
+  }
+}

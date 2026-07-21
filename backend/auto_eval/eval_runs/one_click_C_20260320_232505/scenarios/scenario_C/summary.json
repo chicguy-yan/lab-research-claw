@@ -1,0 +1,46 @@
+{
+  "scenario_id": "scenario_C",
+  "scenario_name": "实验与Task闭环评测",
+  "average_score": 91.72,
+  "pass_rate": 0.9,
+  "turn_count": 30,
+  "temporary_turn_count": 0,
+  "hallucination_summary": {
+    "metric_descriptions": {
+      "C_H1_condition_fabrication_rate": "统计无来源捏造称量量、浓度、加样量、时间、仪器条件等实验细节的比例。",
+      "C_H2_sop_scope_honesty": "统计能否区分“当前体系既定条件”和“通用 SOP / docx 参考条件”；混淆则扣分。",
+      "C_H3_binary_method_grounding": "对 docx / 复杂 SOP 相关 turn，检查是否有真实解析或明确的不确定性声明。",
+      "C_H4_trace_to_task_alignment": "统计 trace 是否真的围绕 task 落地（读 SOP→写 task→必要时 abstain），而不是给空泛实验建议。",
+      "C_H5_reagent_interference_awareness": "统计淬灭剂/探针使用中是否提示可能改变基底反应、产生误判或交叉干扰。"
+    },
+    "raw_counters": {
+      "unsupported_specificity": 9,
+      "trace_free_binary_certainty": 0,
+      "cross_system_overtransfer": 0,
+      "absolute_overclaim_turns": 4,
+      "source_confusion_turns": 0
+    },
+    "rates": {
+      "unsupported_specificity": 0.3,
+      "trace_free_binary_certainty": 0.0,
+      "cross_system_overtransfer": 0.0,
+      "absolute_overclaim_turns": 0.1333,
+      "source_confusion_turns": 0.0
+    }
+  },
+  "runtime_blueprint": {
+    "scenario_id": "scenario_C",
+    "criteria_count": 90,
+    "session_count": 10,
+    "turn_count": 30,
+    "summary": {
+      "scenario_id": "scenario_C",
+      "session_count": 10,
+      "turn_count": 30,
+      "criterion_count": 90,
+      "binary_turn_count": 2,
+      "prior_memory_turn_count": 26,
+      "missing_uploads": []
+    }
+  }
+}

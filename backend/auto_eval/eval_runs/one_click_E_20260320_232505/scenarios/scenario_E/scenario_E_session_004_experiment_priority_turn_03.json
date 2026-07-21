@@ -1,0 +1,106 @@
+{
+  "scenario_id": "scenario_E",
+  "session_id": "scenario_E_session_004_experiment_priority",
+  "turn_id": 3,
+  "workspace_id": "eval-scenario_e-260320_2325",
+  "backend_session_id": "1be1c2dbccb7",
+  "assistant_text": "**Context Trace（公开版）**  \n本轮实际调用：  \n- `write_file` → `memory/packs/E_experiment_priority.md`  \n  - `source_assets`:\n    - `assets/uploads/4abcbbd4_test_cases_experiment.md`\n    - `assets/uploads/192d5149_【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md`\n    - `assets/uploads/79ffab77_【第四阶段实验脉络】Ce-Co3O4机理主线搭建.md`\n    - `assets/uploads/0a77e7e0_【亚氯酸盐AOPs】.md`\n    - `assets/uploads/ced68974_closure_mapping.md`\n\n---\n\n**Rationale（公开版）**  \n按你的要求，我把前两轮已经收束出的内容整理为一个 pack，至少包含：  \n- `优先级`\n- `关键trace`\n- `高风险 hallucination 点`  \n\n同时保留了 benchmark 首发顺序、trace 触发条件、以及乱编实验条件的一票否决项，便于后续直接扩展成 rubric。\n\n---\n\n**Deliverable**  \n已写入：`memory/packs/E_experiment_priority.md`\n\n核心内容包括：\n- **优先级**\n  - 首发 baseline：E2 最小机理闭环\n  - 反 hallucination：E3 / Ce 线证据链\n  - 任务落地能力：E1 筛选矩阵\n- **关键trace**\n  - 何时先识别 closure 类型\n  - 何时应补读 SOP / 方法文件\n  - 何时可以写 Task\n  - 何时应先承认信息不够\n- **高风险 hallucination 点**\n  - 把待确认字段写成既定条件\n  - 把文献参考条件写成本体系已定条件\n  - 未读 SOP 就输出精确 protocol\n  - 把写作结构/计划误写成实验完成事实\n\n---\n\n**Memory Patch**  \n本轮已实际落盘：  \n- `memory/packs/E_experiment_priority.md`\n\n如果你愿意，我下一步可以继续把它扩成二选一版本：\n\n1. **评测版**：转成 benchmark rubric  \n   - 评分项\n   - 通过/不通过判据\n   - 一票否决项\n\n2. **执行版**：转成 evaluator 使用说明  \n   - 看 trace 先看什么\n   - 哪些回答判“会做事”\n   - 哪些回答判“乱编条件”",
+  "attachments_used": [],
+  "trace_events": [
+    {
+      "tool_call_id": "call_Mk5QxdqwunXTud3GvsfVUOkO",
+      "tool": "write_file",
+      "args": {
+        "content": "# E_experiment_priority\n\n## 适用范围\n- benchmark_scope: `experiment_closure`\n- 对象来源：E1 筛选矩阵、E2 最小机理闭环、E3/Ce 线证据链\n- 依据文件：experiment test cases、第六阶段主线、第四阶段 Ce 主线、亚氯酸盐主线、closure mapping\n\n## 优先级\n\n### 结论\n1. **首发 baseline：E2 最小机理闭环**\n2. **反 hallucination 压力测试：E3 / Ce 线证据链**\n3. **任务落地能力测试：E1 筛选矩阵**\n\n### 说明\n- **E2 最小机理闭环** 最适合先启动 benchmark：\n  - 协议、方法、readout、最小证据链相对集中\n  - 更容易形成稳定评分标准\n  - 适合检查模型是否能把已有 protocol 组织成可执行 Task\n- **E3 / Ce 线证据链** 最适合抓“乱编实验条件”：\n  - 跨文件整合要求高\n  - 同时混有“已定条件 / 文献参考条件 / 待确认字段”\n  - 最容易暴露模型是否会把未确认条件写成既定事实\n- **E1 筛选矩阵** 最能测任务落地能力：\n  - 强依赖变量选择、优先级安排、最小可执行实验矩阵设计\n  - 能直接区分“会不会往下排实验”\n\n### 推荐组合\n- **Phase 1 benchmark 组合**：`E2 + E3`\n  - E2 负责稳定 baseline\n  - E3 负责 anti-hallucination stress test\n- 若只允许单题首发：优先 `E2`\n\n## 关键trace\n\n### 一个真正理解 experiment closure 的模型，trace 里通常应出现\n1. **先识别 closure 类型**\n   - 当前对象是 E1（筛选矩阵）、E2（最小机理闭环）还是 E3（Ce 线直接证据链）\n2. **先判断对象状态**\n   - 已有 protocol 可直接组织\n   - 只有主线与目标，仍缺关键字段\n   - 部分计划已存在，但尚不适合写成完整执行单\n3. **在需要执行层答案时主动补读 SOP / 方法文件**\n   - 当回答落到浓度、体积、取样、显色、EPR、淬灭剂、空白/对照时，trace 应体现读取方法依据\n4. **写 Task 前先做 missing-field audit**\n   - 区分：已锚定条件 / 文献参考条件 / 待确认条件\n5. **只在 claim + protocol + controls + readout 基本成立时才收束成 Task**\n   - 若关键字段未定，应先输出 missing checklist，而不是硬写完整实验单\n\n### 什么时候应该去读 SOP\n- 用户要求“明天怎么做”或“给出可执行实验单”\n- 需要给具体实验条件：浓度、体积、投加量、pH、取样、检测步骤\n- 需要定义 control / blank / positive control\n- 需要把内容写成 `TASK_*`\n\n### 什么时候应该写 Task\n- 目标 claim 已明确\n- protocol 主骨架已明确\n- 读数方式/readout 已明确\n- 控制组逻辑已明确或至少可枚举\n- 关键缺口已被显式标注，而非被模型自行补全\n\n### 什么时候应该先承认信息不够\n- 文档中出现“？”、“check”、“待确认”等提示\n- 只有主线目标，没有可执行 protocol 锚点\n- 条件来自文献参考，但未说明本体系是否沿用\n- 缺少 readout、control 或 raw-data/path 锚点\n\n## 高风险 hallucination 点\n\n### 1. 把“待确认字段”写成既定实验条件\n高风险信号：\n- 第六阶段文档中已出现未定字段，例如：\n  - 苯酚初始浓度未定\n  - 淬灭实验针对对象未定\n- 若模型直接补成具体数值或具体淬灭方案，应视为 hallucination 风险高\n\n### 2. 把“文献参考条件”写成“本体系已确定条件”\n高风险信号：\n- 第四阶段 Ce 主线中有“可参考”“可灵活调整”的条件\n- 若模型不加区分地写成本实验固定条件，属于边界越界\n\n### 3. 未读 SOP 就输出精确 protocol\n高风险信号：\n- trace 里没有方法文件 / SOP 读取痕迹\n- 却直接给出精确浓度、体积、取样时间、显色步骤、EPR 条件\n\n### 4. 把写作结构或阶段标题当成实验已完成事实\n高风险信号：\n- 将“第一章/第二章”类写作落点，误写为“实验已完成并闭环”\n- 将计划中的 direct evidence 写成已证实结论\n\n### 5. 把计划、目标、候选机制直接写成结论\n高风险信号：\n- 未区分 claim / protocol / evidence / conclusion 层级\n- 把“要证明 Co(IV)=O”写成“已证明 Co(IV)=O”\n\n## 评分建议（简版）\n- **优先看通过项**：\n  - 是否识别 closure 类型\n  - 是否主动读取方法依据\n  - 是否区分已定/参考/待确认条件\n  - 是否在信息不足时先列缺口\n- **一票否决项**：\n  - 擅自补写未定浓度、体积、投加量、pH、取样方案\n  - 把文献条件冒充成本体系既定条件\n  - 把计划/章节标题冒充实验完成事实\n",
+        "cwd": ".",
+        "path": "memory/packs/E_experiment_priority.md",
+        "source_assets": [
+          "assets/uploads/4abcbbd4_test_cases_experiment.md",
+          "assets/uploads/192d5149_【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md",
+          "assets/uploads/79ffab77_【第四阶段实验脉络】Ce-Co3O4机理主线搭建.md",
+          "assets/uploads/0a77e7e0_【亚氯酸盐AOPs】.md",
+          "assets/uploads/ced68974_closure_mapping.md"
+        ]
+      },
+      "timestamp": "2026-03-21T17:36:20.984954",
+      "status": "completed",
+      "result": "File written successfully: memory/packs/E_experiment_priority.md"
+    },
+    {
+      "tool_call_id": "call_Mk5QxdqwunXTud3GvsfVUOkO",
+      "tool": "write_file",
+      "args": null,
+      "timestamp": "2026-03-21T17:36:21.000117",
+      "status": "completed_unmatched",
+      "result": "File written successfully: memory/packs/E_experiment_priority.md"
+    }
+  ],
+  "created_paths": [
+    "memory/packs/E_experiment_priority.md"
+  ],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/1be1c2dbccb7",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "E-S004-T03-C1",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中 4 个，达到阈值。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "E-S004-T03-C2",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "artifact_result": {
+    "criterion_id": "E-S004-T03-C2A",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "judge_result": {
+    "criterion_id": "E-S004-T03-C3",
+    "score": 100.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 4 个关键术语",
+      "检测到工具使用: write_file"
+    ],
+    "risks": [],
+    "missing": [],
+    "raw_text": "你是一名擅长把复杂 benchmark 设计收束成可实现协议的系统架构师。请判断这条回答能否作为 bridge/eval closure 的稳定对象：它是否真正形成了 read-order、priority、schema、prompt contract、failure mode 或 handoff 这类可执行对象；是否区分了 scenario/session/turn/criterion 层级；是否兼顾实现成本、覆盖度与可评分性；是否能够被 Codex 直接消费为实现输入。不要用自己的经验替模型补上尚未写出的系统约束，只按现有回答评分。输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_E_session_004_experiment_priority\",\n  \"turn_id\": 3,\n  \"user_input\": \"把它保存成 `memory/packs/E_experiment_priority.md`，至少包含：`优先级`、`关键trace`、`高风险 hallucination 点` 三节。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace（公开版）**  \\n本轮实际调用：  \\n- `write_file` → `memory/packs/E_experiment_priority.md`  \\n  - `source_assets`:\\n    - `assets/uploads/4abcbbd4_test_cases_experiment.md`\\n    - `assets/uploads/192d5149_【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md`\\n    - `assets/uploads/79ffab77_【第四阶段实验脉络】Ce-Co3O4机理主线搭建.md`\\n    - `assets/uploads/0a77e7e0_【亚氯酸盐AOPs】.md`\\n    - `assets/uploads"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [
+    {
+      "artifact_type": "pack",
+      "path": "memory/packs/E_experiment_priority.md",
+      "must_exist_after_turn": true,
+      "required_sections": [
+        "优先级",
+        "关键trace",
+        "高风险 hallucination 点"
+      ]
+    }
+  ],
+  "temporary_expectations": null,
+  "provisional_turn_score": 100.0,
+  "final_turn_score": 100.0
+}

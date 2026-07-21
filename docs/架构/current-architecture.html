@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Current Architecture Overview</title>
+<style>
+  :root {
+    --bg: #f4efe6;
+    --bg-strong: #eadfce;
+    --paper: rgba(255, 252, 246, 0.92);
+    --paper-strong: #fffaf2;
+    --ink: #1f2933;
+    --ink-soft: #556371;
+    --line: rgba(31, 41, 51, 0.12);
+    --teal: #1d6f74;
+    --teal-soft: rgba(29, 111, 116, 0.10);
+    --orange: #c96f2d;
+    --orange-soft: rgba(201, 111, 45, 0.10);
+    --olive: #5c6a32;
+    --olive-soft: rgba(92, 106, 50, 0.10);
+    --wine: #8a3b35;
+    --wine-soft: rgba(138, 59, 53, 0.10);
+    --shadow: 0 18px 50px rgba(72, 56, 35, 0.10);
+    --radius: 22px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at top left, rgba(201, 111, 45, 0.12), transparent 28%),
+      radial-gradient(circle at top right, rgba(29, 111, 116, 0.14), transparent 24%),
+      linear-gradient(180deg, #fbf7ef 0%, var(--bg) 42%, #efe5d4 100%);
+  }
+
+  a { color: inherit; }
+
+  .page {
+    width: min(1200px, calc(100vw - 32px));
+    margin: 0 auto;
+    padding: 28px 0 56px;
+  }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(255, 250, 242, 0.92), rgba(245, 237, 223, 0.88));
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    border-radius: 30px;
+    box-shadow: var(--shadow);
+    padding: 36px;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    right: -80px;
+    top: -60px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(29, 111, 116, 0.18), rgba(29, 111, 116, 0));
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(31, 41, 51, 0.06);
+    color: var(--ink-soft);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+
+  h1 {
+    margin: 16px 0 12px;
+    font-size: clamp(34px, 5vw, 58px);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    max-width: 9ch;
+  }
+
+  .hero p {
+    max-width: 760px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin: 0 0 24px;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 22px;
+    align-items: start;
+  }
+
+  .hero-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .mini-card {
+    background: rgba(255, 255, 255, 0.64);
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    border-radius: 18px;
+    padding: 18px;
+    backdrop-filter: blur(10px);
+  }
+
+  .mini-card strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  .mini-card span {
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 11px;
+    border-radius: 999px;
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(31, 41, 51, 0.08);
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .nav {
+    position: sticky;
+    top: 12px;
+    z-index: 3;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0 24px;
+    padding: 12px;
+    background: rgba(255, 250, 242, 0.78);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(72, 56, 35, 0.08);
+  }
+
+  .nav a {
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(31, 41, 51, 0.05);
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  section {
+    margin-top: 34px;
+    background: var(--paper);
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+  }
+
+  .section-title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(25px, 3vw, 36px);
+    letter-spacing: -0.03em;
+  }
+
+  .section-title p,
+  .section-note,
+  .muted {
+    margin: 0;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  .system-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .pillar {
+    position: relative;
+    padding: 18px 18px 22px;
+    border-radius: 20px;
+    background: var(--paper-strong);
+    border: 1px solid var(--line);
+    min-height: 280px;
+  }
+
+  .pillar h3,
+  .flow-step h3,
+  .layer h3,
+  .stage h3,
+  .safety-card h3,
+  .guide-card h3 {
+    margin: 0 0 12px;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  .tag {
+    display: inline-block;
+    margin-bottom: 14px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .teal { background: var(--teal-soft); color: var(--teal); }
+  .orange { background: var(--orange-soft); color: var(--orange); }
+  .olive { background: var(--olive-soft); color: var(--olive); }
+  .wine { background: var(--wine-soft); color: var(--wine); }
+
+  ul {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ink-soft);
+    line-height: 1.75;
+    font-size: 14px;
+  }
+
+  .arrow-row {
+    display: grid;
+    grid-template-columns: repeat(7, auto);
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 18px;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  .arrow-box {
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid var(--line);
+    font-weight: 600;
+  }
+
+  .flow-list {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .flow-step {
+    position: relative;
+    padding: 18px;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    background: var(--paper-strong);
+  }
+
+  .flow-step::before {
+    content: attr(data-step);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 12px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .bridge {
+    margin-top: 18px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: linear-gradient(90deg, rgba(29, 111, 116, 0.10), rgba(201, 111, 45, 0.08));
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    color: var(--ink-soft);
+    line-height: 1.8;
+    font-size: 15px;
+  }
+
+  .memory-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 18px;
+  }
+
+  .layer-stack {
+    display: grid;
+    gap: 14px;
+  }
+
+  .layer {
+    padding: 18px;
+    border-radius: 18px;
+    background: var(--paper-strong);
+    border: 1px solid var(--line);
+  }
+
+  .layer small,
+  .stage small {
+    display: block;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+
+  .trace-panel {
+    padding: 22px;
+    border-radius: 20px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(244, 239, 230, 0.82)),
+      linear-gradient(135deg, rgba(92, 106, 50, 0.08), rgba(138, 59, 53, 0.08));
+    border: 1px solid var(--line);
+  }
+
+  .path-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .path-item {
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    font-family: "SFMono-Regular", "Menlo", "Monaco", monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .skills-grid,
+  .safety-grid,
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .skill-column,
+  .safety-card,
+  .guide-card {
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--paper-strong);
+    border: 1px solid var(--line);
+  }
+
+  .skill-column strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+
+  .skill-flow {
+    display: grid;
+    gap: 10px;
+  }
+
+  .skill-node {
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.68);
+    color: var(--ink-soft);
+    line-height: 1.6;
+    font-size: 14px;
+  }
+
+  .skill-node b,
+  .path-item b {
+    color: var(--ink);
+  }
+
+  .lifecycle {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .stage {
+    position: relative;
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--paper-strong);
+    border: 1px solid var(--line);
+  }
+
+  .stage::after {
+    content: "→";
+    position: absolute;
+    right: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 26px;
+    color: rgba(31, 41, 51, 0.26);
+  }
+
+  .stage:last-child::after {
+    display: none;
+  }
+
+  .footer {
+    margin-top: 24px;
+    padding: 18px 22px;
+    border-radius: 18px;
+    background: rgba(255, 250, 242, 0.78);
+    border: 1px dashed rgba(31, 41, 51, 0.16);
+    color: var(--ink-soft);
+    line-height: 1.8;
+    font-size: 14px;
+  }
+
+  @media (max-width: 1100px) {
+    .hero-grid,
+    .memory-grid,
+    .skills-grid,
+    .safety-grid,
+    .guide-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .system-grid,
+    .flow-list,
+    .lifecycle {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .page {
+      width: min(100vw - 18px, 1200px);
+      padding-top: 12px;
+    }
+
+    .hero,
+    section {
+      padding: 20px;
+      border-radius: 22px;
+    }
+
+    .hero-summary,
+    .system-grid,
+    .flow-list,
+    .lifecycle {
+      grid-template-columns: 1fr;
+    }
+
+    .arrow-row {
+      grid-template-columns: 1fr;
+      justify-items: stretch;
+    }
+
+    .arrow-row span:nth-child(even) {
+      text-align: center;
+      transform: rotate(90deg);
+    }
+
+    .stage::after {
+      display: none;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="eyebrow">ResearchAgentPrivateWorkspace · current architecture · source: architecture-diagrams.md</div>
+      <div class="hero-grid">
+        <div>
+          <h1>现在这套架构可以怎么理解</h1>
+          <p>这不是一个“单纯聊天框”，而是一个以 <b>Workspace 文件系统</b> 为中心的研究型 Agent 工作台。前端负责展示和交互，后端负责调度 Agent，Agent 通过 Tools 读写 Memory 与 Assets，最后所有过程都会被 Trace 留痕。</p>
+          <div class="legend">
+            <div class="chip"><span class="dot" style="background:#1d6f74;"></span>前端 / 交互层</div>
+            <div class="chip"><span class="dot" style="background:#c96f2d;"></span>后端 / 编排层</div>
+            <div class="chip"><span class="dot" style="background:#5c6a32;"></span>Memory & Assets</div>
+            <div class="chip"><span class="dot" style="background:#8a3b35;"></span>安全 / 审计</div>
+          </div>
+        </div>
+        <div class="hero-summary">
+          <div class="mini-card">
+            <strong>一句话模型</strong>
+            <span>UI 发请求，Backend 组上下文，Agent 调工具，Workspace 落文件，Trace 可回放。</span>
+          </div>
+          <div class="mini-card">
+            <strong>系统重心</strong>
+            <span>核心资产不是“上下文窗口”，而是持续积累的 `memory/`、`assets/`、`context_trace/`。</span>
+          </div>
+          <div class="mini-card">
+            <strong>可扩展点</strong>
+            <span>Skills 负责把高频任务模板化，Tools 负责提供标准执行能力。</span>
+          </div>
+          <div class="mini-card">
+            <strong>为什么容易理解</strong>
+            <span>它本质上是一个“文件优先”的研究操作系统，而不是黑盒 Agent。</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="nav">
+      <a href="#overview">总览</a>
+      <a href="#conversation">单次对话</a>
+      <a href="#memory">Memory / Assets</a>
+      <a href="#skills">Skills 与 Tools</a>
+      <a href="#lifecycle">Workspace 生命周期</a>
+      <a href="#safety">安全与审计</a>
+      <a href="#guide">怎么记住</a>
+    </nav>
+
+    <section id="overview">
+      <div class="section-title">
+        <h2>1. 四层总览</h2>
+        <p>先不要看细节，先把系统拆成 4 个盒子。</p>
+      </div>
+      <div class="system-grid">
+        <article class="pillar">
+          <div class="tag teal">Frontend</div>
+          <h3>前端是观察窗</h3>
+          <ul>
+            <li>三栏 UI：左侧 Layer1/2，中间 Chat + ThoughtChain，右侧 Layer3。</li>
+            <li>负责消息输入、文件上传、SSE 流式显示、Trace 回放。</li>
+            <li>它不做决策，主要做可视化和交互承载。</li>
+          </ul>
+        </article>
+        <article class="pillar">
+          <div class="tag orange">Backend</div>
+          <h3>后端是总调度台</h3>
+          <ul>
+            <li>`API` 接请求，`ContextOrchestrator` 选上下文，`PromptBuilder` 组 Prompt。</li>
+            <li>`AgentManager` 调用 LangChain `create_agent` 执行任务。</li>
+            <li>`SessionManager` 与 `TraceWriter` 负责持久化和审计。</li>
+          </ul>
+        </article>
+        <article class="pillar">
+          <div class="tag olive">Tools + Workspace</div>
+          <h3>工具改文件，文件构成记忆</h3>
+          <ul>
+            <li>Tools 包括 `read_file`、`write_file`、`terminal`、`python_repl`、`fetch_url` 等。</li>
+            <li>Workspace 采用 file-first 设计，控制层、技能快照、三层记忆、资产、审计都在目录里。</li>
+            <li>Agent 的“长期能力”其实落在文件组织方式上。</li>
+          </ul>
+        </article>
+        <article class="pillar">
+          <div class="tag wine">Trace & Safety</div>
+          <h3>可追溯而不是黑盒</h3>
+          <ul>
+            <li>每次对话都会写入 `context_trace/`，保留选了哪些文件、调用了哪些工具。</li>
+            <li>工具调用经过路径安全、命令黑名单、目录白名单、大小限制。</li>
+            <li>所以系统既能自动化，又保留工程可控性。</li>
+          </ul>
+        </article>
+      </div>
+      <div class="arrow-row" aria-label="overview flow">
+        <div class="arrow-box">用户 / UI</div>
+        <span>→</span>
+        <div class="arrow-box">Backend 编排</div>
+        <span>→</span>
+        <div class="arrow-box">Tools 执行</div>
+        <span>→</span>
+        <div class="arrow-box">Workspace 落盘</div>
+      </div>
+    </section>
+
+    <section id="conversation">
+      <div class="section-title">
+        <h2>2. 一次对话到底发生了什么</h2>
+        <p>把这个流程记住，你就能读懂大部分模块职责。</p>
+      </div>
+      <div class="flow-list">
+        <article class="flow-step" data-step="01">
+          <h3>接收请求</h3>
+          <p class="muted">用户在前端发消息、上传文件，前端调用 `POST /api/chat`。</p>
+        </article>
+        <article class="flow-step" data-step="02">
+          <h3>筛选上下文</h3>
+          <p class="muted">`ContextOrchestrator` 扫描 Layer1/2/3，返回当前应该注入的文件和预算。</p>
+        </article>
+        <article class="flow-step" data-step="03">
+          <h3>构建 Prompt</h3>
+          <p class="muted">`PromptBuilder` 把控制层文件、技能快照、用户消息拼成完整输入。</p>
+        </article>
+        <article class="flow-step" data-step="04">
+          <h3>Agent 执行</h3>
+          <p class="muted">`AgentManager` 开始流式执行，过程中可多次调用 Tools。</p>
+        </article>
+        <article class="flow-step" data-step="05">
+          <h3>读写 Workspace</h3>
+          <p class="muted">Tools 读 `memory/`、写 `memory/`，也可能生成 `assets/` 中的图表、数据或素材。</p>
+        </article>
+        <article class="flow-step" data-step="06">
+          <h3>写审计并回放</h3>
+          <p class="muted">结束后 `TraceWriter` 落盘，前端再拉取 Trace 详情给用户做回放。</p>
+        </article>
+      </div>
+      <div class="bridge">
+        这个链路说明了一个关键点：<b>Agent 不是直接“记住一切”</b>，而是每轮先取一部分文件作为上下文，再通过工具把新的认知重新沉淀回 Workspace。也就是说，它靠“选文件 + 调工具 + 写结果”形成连续性。
+      </div>
+    </section>
+
+    <section id="memory">
+      <div class="section-title">
+        <h2>3. Workspace 为什么是核心</h2>
+        <p>如果只看一个部分，优先看这里。</p>
+      </div>
+      <div class="memory-grid">
+        <div class="layer-stack">
+          <article class="layer">
+            <small>Layer 1 · Identity</small>
+            <h3>长期稳定层</h3>
+            <p class="muted">定义用户偏好、项目北极星、实验室约束、上下文预算。它回答的是“我们是谁、目标是什么”。</p>
+            <div class="path-list">
+              <div class="path-item">memory/layer1/<b>user.md</b></div>
+              <div class="path-item">memory/layer1/<b>project.md</b></div>
+              <div class="path-item">memory/layer1/<b>lab_context.md</b></div>
+              <div class="path-item">memory/layer1/<b>context_budget.md</b></div>
+            </div>
+          </article>
+          <article class="layer">
+            <small>Layer 2 · Timeline</small>
+            <h3>时间推进层</h3>
+            <p class="muted">记录 180 天总览、阶段、周报、日报、阶段汇报。它回答的是“这件事推进到了哪里”。</p>
+            <div class="path-list">
+              <div class="path-item">memory/layer2/<b>180d_index.md</b></div>
+              <div class="path-item">memory/layer2/<b>phases/</b> · <b>weeks/</b> · <b>days/</b></div>
+              <div class="path-item">memory/layer2/<b>stage_reports/</b></div>
+            </div>
+          </article>
+          <article class="layer">
+            <small>Layer 3 · Atom Notes</small>
+            <h3>原子知识层</h3>
+            <p class="muted">把概念、任务、交付物拆成细颗粒度对象，便于复用和溯源。它回答的是“证据和对象具体是什么”。</p>
+            <div class="path-list">
+              <div class="path-item">memory/layer3/<b>concepts/</b></div>
+              <div class="path-item">memory/layer3/<b>tasks/</b></div>
+              <div class="path-item">memory/layer3/<b>packs/</b></div>
+            </div>
+          </article>
+        </div>
+        <aside class="trace-panel">
+          <h3>Assets 不是记忆，但它们是证据源</h3>
+          <p class="muted">上传文件、实验数据、图表、PPT 素材都放在 `assets/`。Memory 文件不会复制原始大文件，而是嵌入相对路径来保持溯源关系。</p>
+          <div class="path-list">
+            <div class="path-item">assets/<b>uploads/</b> · 用户原始上传</div>
+            <div class="path-item">assets/<b>data/</b> · 处理中间数据</div>
+            <div class="path-item">assets/<b>figures/</b> · 生成图表</div>
+            <div class="path-item">assets/<b>ppt_pack/</b> · 汇报素材包</div>
+          </div>
+          <div class="footer">
+            理解方式：<b>Memory 负责“结构化认知”</b>，<b>Assets 负责“原始证据和产物”</b>。二者通过路径链接起来，所以用户能从结论一路点回原文件。
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="section-title">
+        <h2>4. Skills 和 Tools 是怎么配合的</h2>
+        <p>这个系统把“能力”拆成了两层：技能负责流程，工具负责动作。</p>
+      </div>
+      <div class="skills-grid">
+        <article class="skill-column">
+          <div class="tag orange">Skill Discovery</div>
+          <h3>Agent 先看技能清单</h3>
+          <div class="skill-flow">
+            <div class="skill-node"><b>Bootstrap</b><br>扫描 `backend/skills/`，生成 `SKILLS_SNAPSHOT.md`。</div>
+            <div class="skill-node"><b>Prompt 注入</b><br>`PromptBuilder` 把快照放进 System Prompt。</div>
+            <div class="skill-node"><b>决策时机</b><br>Agent 根据任务判断是否需要某个 Skill。</div>
+          </div>
+        </article>
+        <article class="skill-column">
+          <div class="tag teal">Skill Execution</div>
+          <h3>Skill 决定怎么做</h3>
+          <div class="skill-flow">
+            <div class="skill-node"><b>read_file</b><br>读取完整 `SKILL.md` 说明，而不是只靠简介。</div>
+            <div class="skill-node"><b>按步骤执行</b><br>例如先读周报，再分析素材，再写入 pack。</div>
+            <div class="skill-node"><b>沉淀输出</b><br>结果继续写回 `memory/packs/` 或其他路径。</div>
+          </div>
+        </article>
+        <article class="skill-column">
+          <div class="tag olive">Tool Surface</div>
+          <h3>Tools 只提供标准动作</h3>
+          <div class="skill-flow">
+            <div class="skill-node"><b>读写类</b><br>`read_file`、`write_file`、`search_knowledge_base`</div>
+            <div class="skill-node"><b>执行类</b><br>`terminal`、`python_repl`</div>
+            <div class="skill-node"><b>网络类</b><br>`fetch_url`、`web_search`</div>
+          </div>
+        </article>
+      </div>
+      <div class="bridge">
+        所以可以把它理解成：<b>Skill = 做事方法论</b>，<b>Tool = 可调用能力接口</b>。前者决定顺序和规则，后者真正完成读、写、算、查。
+      </div>
+    </section>
+
+    <section id="lifecycle">
+      <div class="section-title">
+        <h2>5. Workspace 的生命周期</h2>
+        <p>这不是一次性目录，而是会演化、归档、克隆的研究容器。</p>
+      </div>
+      <div class="lifecycle">
+        <article class="stage">
+          <small>Create</small>
+          <h3>初始化</h3>
+          <p class="muted">从 `workspace-templates` 复制基础结构，初始化 memory、assets、trace。</p>
+        </article>
+        <article class="stage">
+          <small>Run</small>
+          <h3>日常运行</h3>
+          <p class="muted">每次聊天都经历意图识别、上下文选择、Agent 执行、写回记忆、审计落盘。</p>
+        </article>
+        <article class="stage">
+          <small>Evolve</small>
+          <h3>提炼模式</h3>
+          <p class="muted">当重复任务出现时，系统把模式抽成 Skill，并更新 Layer2 记录。</p>
+        </article>
+        <article class="stage">
+          <small>Archive</small>
+          <h3>冻结归档</h3>
+          <p class="muted">周期结束时冻结状态，生成 `manifest.json` 便于追踪和交接。</p>
+        </article>
+        <article class="stage">
+          <small>Clone</small>
+          <h3>继承新周期</h3>
+          <p class="muted">有选择地继承某些层，再启动下一轮 workspace。</p>
+        </article>
+      </div>
+      <div class="footer">
+        这部分很重要，因为它说明当前架构不是“聊天记录堆积”，而是想做成 <b>可持续演进的研究工作空间</b>。
+      </div>
+    </section>
+
+    <section id="safety">
+      <div class="section-title">
+        <h2>6. 为什么这套系统是工程化的</h2>
+        <p>因为它给 Agent 上了边界，而不是让它无限制执行。</p>
+      </div>
+      <div class="safety-grid">
+        <article class="safety-card">
+          <div class="tag wine">Path Safety</div>
+          <h3>路径安全</h3>
+          <p class="muted">通过 `resolve_safe_path` 做目录边界控制，避免路径穿越。</p>
+        </article>
+        <article class="safety-card">
+          <div class="tag orange">Command Safety</div>
+          <h3>命令约束</h3>
+          <p class="muted">黑名单和允许目录机制把危险命令、危险路径拦在工具层之前。</p>
+        </article>
+        <article class="safety-card">
+          <div class="tag olive">Auditability</div>
+          <h3>完整留痕</h3>
+          <p class="muted">工具调用、上下文选择、输出结果都能在 Trace 中回放，便于复盘和排错。</p>
+        </article>
+      </div>
+      <div class="bridge">
+        从架构上看，<b>安全检查层</b> 夹在 Agent 和真实执行动作之间；<b>审计层</b> 则在执行之后留证据。前者防事故，后者防失控。
+      </div>
+    </section>
+
+    <section id="guide">
+      <div class="section-title">
+        <h2>7. 你可以这样记住它</h2>
+        <p>下面这 3 句话基本就是整套架构的心智模型。</p>
+      </div>
+      <div class="guide-grid">
+        <article class="guide-card">
+          <div class="tag teal">心智模型 1</div>
+          <h3>Workspace 才是“大脑”</h3>
+          <p class="muted">模型本身会话性很强，但长期知识被拆进 Layer1/2/3 与 Assets，所以系统记忆不依赖单轮上下文。</p>
+        </article>
+        <article class="guide-card">
+          <div class="tag orange">心智模型 2</div>
+          <h3>Agent 更像“调度员”</h3>
+          <p class="muted">它不直接拥有全部能力，只是决定读哪些文件、调用哪些工具、是否启用某个 Skill。</p>
+        </article>
+        <article class="guide-card">
+          <div class="tag olive">心智模型 3</div>
+          <h3>Trace 让系统可理解</h3>
+          <p class="muted">不是只有结果，而是把中间步骤也留下来，这样用户和开发者都能解释系统到底怎么得出答案。</p>
+        </article>
+      </div>
+      <div class="footer">
+        如果后面你继续扩展这套系统，最值得盯住的主线是：<b>上下文怎么选</b>、<b>技能怎么沉淀</b>、<b>写回什么结构化记忆</b>。这三件事决定它会不会越用越强。
+      </div>
+    </section>
+  </div>
+</body>
+</html>

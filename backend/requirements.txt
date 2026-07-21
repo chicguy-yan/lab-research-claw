@@ -1,0 +1,32 @@
+# Experimental-Research-OpenClaw — Phase 1-4 核心依赖
+#
+# 可复现安装：pip install -r requirements.lock（精确版本）
+# 兼容安装：  pip install -r requirements.txt（范围约束）
+#
+# 注意：langchain 1.1.0 存在 create_agent 从 __init__.py 消失的已知问题，
+#       锁定 >=1.1.1 避开该区间。当前验证版本为 1.1.3。
+
+langchain>=1.1.1,<1.2
+langchain-openai>=0.3.34,<0.4
+langchain-community>=0.3.31,<0.4
+langgraph>=1.0.10,<1.1
+fastapi>=0.115,<0.116
+uvicorn>=0.34,<0.35
+pydantic>=2.10,<3.0
+python-dotenv>=1.0,<2.0
+tiktoken>=0.7,<1.0
+httpx[socks]>=0.28,<0.29
+html2text>=2025.4,<2026.0  # Phase 4: fetch_url tool
+requests>=2.32,<3.0  # Phase 4: fetch_url tool
+python-multipart>=0.0.20,<0.1  # Phase 4: assets upload
+
+# backend/skills Python runtime dependencies
+# PDF / Office / skill helper scripts
+pypdf>=5.0,<6.0
+pdf2image>=1.17,<2.0
+pdfplumber>=0.11,<0.12
+Pillow>=10.4,<11.0
+
+defusedxml>=0.7,<0.8
+lxml>=5.3,<6.0
+PyYAML>=6.0,<7.0

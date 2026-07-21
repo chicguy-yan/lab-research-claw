@@ -1,0 +1,64 @@
+{
+  "scenario_id": "scenario_E",
+  "session_id": "scenario_E_session_001_bootstrap",
+  "turn_id": 3,
+  "workspace_id": "eval-scenario_e-260322_1714",
+  "backend_session_id": "__bootstrap__",
+  "assistant_text": "**Context Trace（本轮真实情况）**  \n- 本轮未调用工具。  \n- 以下收敛基于你刚补充的限制，以及上轮已读取过的 3 份桥接文件后的判断延伸；本轮没有新的文件读写。  \n\n**Rationale**  \n- 你补的限制很关键：这个容器不是“内容消费器”，而是**桥接层路由器 / 读取决策器**。  \n- 所以 bridge 文件的首要作用不是“替代原始材料”，而是先判定：**该读什么、先不读什么、为什么读、读完交给谁**。  \n- 这进一步强化了我上轮的结论：**首入口仍应是 `ecosystem map`**，因为它最适合做对象分区和读取分流；`closure mapping` 用来把可承接对象落成 eval/handoff 单元；`package architecture` 再定义读取顺序与封装规则。  \n- 同时，你也把 seed 的定义收紧了：seed 不应是 `Concept/Task/Pack` 模板拼盘，而应是一个**bridge/handoff seed**，即“桥接决策 + 后续入口”的最小交付单元。  \n\n**Deliverable**\n\n### 1) 我现在对这个 workspace 职责的修正版理解\n这个 workspace 应定义为：\n\n> **跨闭环桥接容器**：  \n> 面向 benchmark / eval system，先用 bridge 文件完成对象识别、读取边界判定、优先级路由与 handoff 设计；  \n> **不负责重新通读全部原始材料，不负责直接堆砌普通研究笔记。**\n\n### 2) 它现在的核心职责\n1. **对象分流**\n   - 判断当前请求属于文献、实验、写作哪条线\n   - 判断是否涉及跨线桥接\n\n2. **读取裁剪**\n   - 决定“该读哪些桥接文件”\n   - 决定“暂时不该展开哪些原始材料”\n\n3. **桥接建模**\n   - 把对象映射为可评测、可 handoff 的最小单元\n   - 明确输入、边界、出口\n\n4. **handoff 准备**\n   - 把后续任务交给 package builder / case runner / prompt contract / benchmark builder\n   - 而不是自己在桥接层把所有内容做完\n\n### 3) 明确非职责\n这个容器**不应该**先做：\n- 重新读完所有原始材料\n- 直接产出泛泛的研究总结\n- 不加边界地生成 concept/task/pack\n- 把 package architecture 误做成大而全系统设计稿\n- 在没有 bridge 判定前直接下沉到 case 细节\n\n### 4) 现在更清晰的起手顺序\n#### 第一入口：`ecosystem map`\n作用不是做背景介绍，而是先回答：\n- 这个系统里有哪些对象域？\n- 哪些跨线跳转值得桥？\n- 哪些对象根本不该在 bootstrap 阶段展开？\n\n#### 第二入口：`closure mapping`\n作用不是立刻做 full closure，而是回答：\n- 哪些 closure 值得进入 eval 池？\n- 每个 closure 的最小 handoff 单元是什么？\n- 哪些对象可以先做 seed，哪些先挂起？\n\n#### 第三入口：`package architecture`\n作用不是先谈大架构，而是约束：\n- 读取顺序\n- 包边界\n- prompt contract 的依赖入口\n- handoff 接口怎么挂上去\n\n### 5) seed 应该改成什么\n你这个限制下，seed 更适合定义成：\n\n## `bridge/handoff seed`\n不是研究模板，而是一个**桥接决策对象**。\n\n建议至少包含 8 个字段：\n\n| 字段 | 含义 |\n|---|---|\n| `seed_id` | 唯一标识 |\n| `source_bridge_docs[]` | 依据了哪些 bridge 文件 |\n| `target_object` | 当前桥接对象是什么 |\n| `recommended_reads[]` | 下一步建议读哪些文件 |\n| `deferred_reads[]` | 明确现在不该读什么 |\n| `handoff_target` | 要交给哪个下游模块 |\n| `output_contract` | 下游应该产出什么 |\n| `stop_condition` | 到什么程度桥接层就该停手 |\n\n### 6) 这样可以怎样避免跑偏\n用这 3 条硬规则卡住：\n\n#### Rule A：bridge-first\n先做读取判定，再做内容展开。  \n没有 bridge 判定，不进入原始材料深读。\n\n#### Rule B：read-gating\n任何读取建议都要同时给出：\n- 为什么该读\n- 为什么别的先不读\n- 读完是为了 handoff 给谁\n\n#### Rule C：seed-notes ≠ research notes\nseed 只能是桥接与交接对象，  \n不能偷变成 concept/task/pack 的散装占位稿。\n\n### 7) 我建议你现在的 bootstrap 主问题改写成一句话\n> 这个 workspace 不是“研究知识库”，而是“跨闭环桥接决策层”；  \n> 它的第一职责是用 bridge 文件决定读取与 handoff，而不是自己吞掉全部原始材料。\n\n### 8) 如果继续往下，我建议下一步只收敛这 4 个 contract 字段\n1. **Primary bridge unit**\n   - closure / case / handoff seed，三选一主单位\n\n2. **Read gate**\n   - 允许读到哪一层为止\n   - 什么条件下才允许下钻原始材料\n\n3. **Handoff targets**\n   - benchmark builder\n   - eval case builder\n   - prompt contract packager\n   - package orchestrator\n\n4. **Seed schema**\n   - bridge seed 的固定字段\n   - 禁止混入 concept/task/pack 模板字段\n\n**Memory Patch（建议写入，未实际落盘）**  \n建议后续固化成一个 bootstrap contract 文件，名称可选：\n- `memory/packs/PACK_bridge_container_bootstrap_contract.md`\n\n建议包含 5 块：\n1. `workspace_role`\n2. `non_goals`\n3. `read_gating_rules`\n4. `bridge_handoff_seed_schema`\n5. `handoff_targets`\n\n如果你愿意，我下一步可以直接给你一版 **“bridge/handoff seed schema v0”**，只写字段、边界、触发条件和停止条件，不掺任何 concept/task/pack 模板。",
+  "attachments_used": [],
+  "trace_events": [],
+  "created_paths": [],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/__bootstrap__",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "E-S001-T03-C1",
+    "score": 85.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中不足：需要至少 3 个，实际 2 个。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "E-S001-T03-C2",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "artifact_result": null,
+  "judge_result": {
+    "criterion_id": "E-S001-T03-C3",
+    "score": 86.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 2 个关键术语"
+    ],
+    "risks": [
+      "缺失关键术语: ['不是重新读完所有原始材料', '暂时不该读什么']"
+    ],
+    "missing": [
+      "不是重新读完所有原始材料",
+      "暂时不该读什么"
+    ],
+    "raw_text": "你是一名长期设计 benchmark、evaluator、数据集包架构与科研智能体协议的系统评审专家。请只依据【用户问题】【上传文件列表】【assistant 回复】【trace 摘要】【预期 focus】评分，不要替模型补系统设计。你要重点检查：回答是否真正站在 bridge/eval 视角而不是研究内容视角；是否清楚区分 package architecture、closure mapping、ecosystem map、test cases 与 downstream representative assets 的角色；是否把 loader / runner / scorer / llm-judge / report 等对象说清楚；是否明确哪些是 runtime 必须字段、哪些只是 analyst 注释；是否避免泛泛而谈的“平台化建议”。请输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_E_session_001_bootstrap\",\n  \"turn_id\": 3,\n  \"user_input\": \"补一个限制：这个容器的职责不是重新读完所有原始材料，而是先用 bridge 文件决定 `该读什么`、`暂时不该读什么`。如果要生成 seed，也应该是一个 bridge/handoff，而不是 concept/task/pack 的任意模板堆砌。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace（本轮真实情况）**  \\n- 本轮未调用工具。  \\n- 以下收敛基于你刚补充的限制，以及上轮已读取过的 3 份桥接文件后的判断延伸；本轮没有新的文件读写。  \\n\\n**Rationale**  \\n- 你补的限制很关键：这个容器不是“内容消费器”，而是**桥接层路由器 / 读取决策器**。  \\n- 所以 bridge 文件的首要作用不是“替代原始材料”，而是先判定：**该读什么、先不读什么、为什么读、读完交给谁**。  \\n- 这进一步强化了我上轮的结论：**首入口仍应是"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [],
+  "temporary_expectations": null,
+  "provisional_turn_score": 95.0,
+  "final_turn_score": 90.33
+}

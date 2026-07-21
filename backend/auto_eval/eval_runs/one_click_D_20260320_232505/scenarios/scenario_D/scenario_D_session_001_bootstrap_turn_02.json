@@ -1,0 +1,64 @@
+{
+  "scenario_id": "scenario_D",
+  "session_id": "scenario_D_session_001_bootstrap",
+  "turn_id": 2,
+  "workspace_id": "eval-scenario_d-260320_2325",
+  "backend_session_id": "__bootstrap__",
+  "assistant_text": "已按你的补充重新整理 scope confirmation 草案。\n\n```yaml\n{\n  \"confirmed_scope\": {\n    \"semantic_scope\": \"literature\",\n    \"time_mode\": \"long_horizon\",\n    \"primary_object\": \"concept_first\",\n    \"exclusions\": [\n      \"不负责实验排期推进\",\n      \"不负责跨 workspace 素材整合\"\n    ],\n    \"evidence_basis\": [\n      \"user_statement\",\n      \"workspace_manifest\",\n      \"initial_assets\",\n      \"parse_handoff\"\n    ]\n  },\n  \"initial_asset_status\": {\n    \"presence\": \"present\",\n    \"sufficiency\": \"sufficient\",\n    \"tendency\": \"literature_heavy\",\n    \"asset_paths\": [\n      \"assets/uploads/04bbe294_【PACK】高价钴氧物种生成机理链.md\",\n      \"assets/uploads/99550dc7_【毕业论文】工作文档0305.md\",\n      \"assets/uploads/b99056f9_20251230【进度规划】.md\"\n    ],\n    \"notes\": [\n      \"received 3 representative asset(s)\",\n      \"bootstrap only consumed lightweight file metadata and summaries\"\n    ]\n  },\n  \"parse_handoff_result\": {\n    \"used\": true,\n    \"parsed_assets\": [\n      {\n        \"asset_path\": \"assets/uploads/04bbe294_【PACK】高价钴氧物种生成机理链.md\",\n        \"asset_type\": \"md\",\n        \"likely_role\": \"mixed\",\n        \"scope_signal\": \"lightweight scope signal only\",\n        \"source_summary\": \".md 文件, 12KB\"\n      },\n      {\n        \"asset_path\": \"assets/uploads/99550dc7_【毕业论文】工作文档0305.md\",\n        \"asset_type\": \"md\",\n        \"likely_role\": \"mixed\",\n        \"scope_signal\": \"lightweight scope signal only\",\n        \"source_summary\": \".md 文件, 9KB\"\n      },\n      {\n        \"asset_path\": \"assets/uploads/b99056f9_20251230【进度规划】.md\",\n        \"asset_type\": \"md\",\n        \"likely_role\": \"mixed\",\n        \"scope_signal\": \"lightweight scope signal only\",\n        \"source_summary\": \".md 文件, 1KB\"\n      }\n    ],\n    \"overall_notes\": [\n      \"parsed assets lean toward mixed\"\n    ]\n  },\n  \"bootstrap_plan\": {\n    \"bootstrap_runtime_workspace_id\": \"eval-scenario_d-260320_2325\",\n    \"confirmed_scope\": {\n      \"semantic_scope\": \"literature\",\n      \"time_mode\": \"long_horizon\",\n      \"primary_object\": \"concept_first\"\n    },\n    \"initial_asset_status\": {\n      \"presence\": \"present\",\n      \"sufficiency\": \"sufficient\"\n    },\n    \"parse_handoff_used\": true,\n    \"must_generate\": [\n      \"memory/identity/workspace_scope.md\",\n      \"memory/identity/project.md\",\n      \"memory/identity/context_budget.md\"\n    ],\n    \"conditional_generate\": [\n      \"memory/identity/work_context.md\",\n      \"memory/timeline/180d_index.md\",\n      \"memory/concepts/CONCEPT_bootstrap_seed.md\"\n    ],\n    \"skip_by_design\": [\n      \"memory/tasks/TASK_bootstrap_initial_questions.md\",\n      \"memory/concepts/CONCEPT_<topic>.md\",\n      \"memory/identity/lab_context.md\"\n    ],\n    \"seed_strategy\": \"concept_first\",\n    \"rationale\": [\n      \"semantic_scope=literature\",\n      \"time_mode=long_horizon\",\n      \"primary_object=concept_first\",\n      \"asset_presence=present\",\n      \"asset_sufficiency=sufficient\",\n      \"parse_handoff_used=True\",\n      \"seed_strategy=concept_first\"\n    ]\n  }\n}\n```\n\n确认后回复“确认初始化”。如果还要改，继续直接说修改点。",
+  "attachments_used": [],
+  "trace_events": [],
+  "created_paths": [],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/__bootstrap__",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "D-S001-T02-C1",
+    "score": 55.0,
+    "verdict": "fail",
+    "reasons": [
+      "关键术语命中不足：需要至少 3 个，实际 0 个。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "D-S001-T02-C2",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "artifact_result": null,
+  "judge_result": {
+    "criterion_id": "D-S001-T02-C3",
+    "score": 72.0,
+    "verdict": "partial",
+    "strengths": [],
+    "risks": [
+      "缺失关键术语: ['哪个 pack 最有复用价值', '哪个文件是权威来源', '哪个只能当参考素材', '起步策略']"
+    ],
+    "missing": [
+      "哪个 pack 最有复用价值",
+      "哪个文件是权威来源",
+      "哪个只能当参考素材",
+      "起步策略"
+    ],
+    "raw_text": "你是一名长期指导博士论文、开题答辩、组会汇报与科研写作 pack 设计的导师型评审。请只依据【用户问题】【上传文件列表】【assistant 回复】【trace 摘要】【预期 focus】评分，不要替模型补写作结构。你要重点检查：回答是否真正围绕 pack-quality 交付件组织；是否区分最终稿、工作文档、中间版本、排版示例、背景论文等不同 authority level；是否能够把 thesis / proposal / group meeting / storyboard / layout rule 转成可复用的交付对象；是否在二进制 PPTX/DOCX/PDF 信息不足时保持诚实；是否避免把版本草稿说成稳定结论。请输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_D_session_001_bootstrap\",\n  \"turn_id\": 2,\n  \"user_input\": \"再加一个限制：这个容器不是用来重写论文全文的，而是要先判断`哪个 pack 最有复用价值`、`哪个文件是权威来源`、`哪个只能当参考素材`。请你直接给我一个起步策略。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"已按你的补充重新整理 scope confirmation 草案。\\n\\n```yaml\\n{\\n  \\\"confirmed_scope\\\": {\\n    \\\"semantic_scope\\\": \\\"literature\\\",\\n    \\\"time_mode\\\": \\\"long_horizon\\\",\\n    \\\"primary_object\\\": \\\"concept_first\\\",\\n    \\\"exclusions\\\": [\\n      \\\"不负责实验排期推进\\\",\\n      \\\"不负责跨 workspace 素材整合\\\"\\n    ],\\n    \\\"evidence_basis\\\": [\\n      \\\"user_statement\\\",\\n      \\\"workspace_mani"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [],
+  "temporary_expectations": null,
+  "provisional_turn_score": 85.0,
+  "final_turn_score": 75.67
+}

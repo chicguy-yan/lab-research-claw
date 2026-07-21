@@ -1,0 +1,111 @@
+{
+  "scenario_id": "scenario_D",
+  "session_id": "scenario_D_session_002_thesis_gapmap",
+  "turn_id": 2,
+  "workspace_id": "eval-scenario_d-260322_1714",
+  "backend_session_id": "f707f8198314",
+  "assistant_text": "**Context Trace**\n\n- 本轮已读取：\n  - `assets/uploads/99550dc7_【毕业论文】工作文档0305.md`（复核 thesis 主线与 0309 更新）\n  - `assets/uploads/b99056f9_20251230【进度规划】.md`\n  - `assets/uploads/5c66efd3_【20260305大组会】工作文档.md`\n  - `memory/identity/project.md`\n- 本轮未写入文件。\n\n---\n\n**Rationale**\n\n我这次不是按“哪个最容易做”排，而是按**解锁半径**排：  \n看一个缺口补上后，能不能同时解锁：\n\n1. **第一章主 claim**\n2. **组会主线**\n3. **第二章可复用框架**\n4. **机制总图/论文叙事**\n5. **后续实验是否不需要返工**\n\n结合你文件里的关键信号：\n\n- `毕业论文工作文档0305` 明确说：**第一章要围绕高价钴选择性生成**，且 **第一章框架要能复用到第二章**\n- `进度规划` 明确把 **ClO2 EPR** 和 **PMSO** 标成主线任务\n- `0309` 更新又说明：**XPS/XANES 现在不能再按“价态升高”讲**\n- `project.md` 还把判据卡得很死：  \n  - `ClO2` 至少 2 类证据  \n  - `Co(IV)` 不能只靠单个 probe\n\n所以，真正“解锁最多后续工作”的，不是补一个零散图，而是**把第一章最小机制闭环先立住**。\n\n---\n\n## Deliverable｜按“补上后影响最大”排序的 Thesis Gap Priority\n\n### 总结先说一句\n**最高优先级不是“再做更多图”，而是先把第一章的“标准体系 + Co(IV)/ClO2 最小证据闭环 + 统一叙事口径”锁死。**  \n因为这三件事一旦定下来，你的 thesis、组会、第二章框架、甚至后续哪些实验该做/不该做，都会一起清楚。\n\n---\n\n### Priority 1｜补第一章的“最小机制闭环”：Co(IV) + ClO2 联合证据包\n**为什么排第 1：** 这是解锁面最大的核心卡点。\n\n**对应缺口**\n- PMSO 标线有问题，1 mM 需重做\n- ClO2 目前还没形成 `project.md` 要求的“至少 2 类证据”\n- LSV / 同位素 / 原位 Raman 还在候选态\n\n**一旦补上，会直接解锁**\n- 第一章主 claim 可以成立\n- 组会主线不再只是“现象堆积”，而是“机制主线”\n- Fig3 机制图终于有落脚点\n- 第二章可以直接复用“高价钴/选择性氧化”的解释框架\n- 淬灭剂、FFA、D2O、glycine 等结果才有统一判读口径\n\n**最低过线标准**\n- `PMSO/PMSO2` 定量链可信\n- `ClO2` 至少两类独立证据\n- `LSV / 同位素 / 原位Raman` 至少拿下一项作为 Co(IV) 的非单-probe 支撑\n\n**为什么它比别的都更值**\n- 这不是补一张图，而是**同时决定第一章怎么写、第二章怎么继承、组会怎么讲、机理图怎么画**\n\n---\n\n### Priority 2｜锁定“最终标准体系”：最优样品 + 反应条件 + 关键控制组\n**为什么排第 2：** 它决定你后面所有机制实验是不是都做在正确对象上。\n\n**对应缺口**\n- 最终最优样品仍需锁定（文档里明显在确认 05Ce 性能）\n- 不同负载量 / 催化剂投加量 / 亚氯酸盐投加量还需要形成标准条件\n- `CeO2(HMT)` 还没补\n- 吸附 / 均相控制虽有布局，但要变成标准支撑组\n\n**一旦补上，会直接解锁**\n- 后续所有机理实验都能统一在一个“标准体系”上做\n- 第一章 Fig2 可以定稿\n- 第二章苯酚实验可以直接照这个框架迁移\n- 组会中“为什么选这个样品/条件”不用来回解释\n- ICP、循环、机理探针都不容易返工\n\n**最低过线标准**\n- 确认最终主样品\n- 固定一套标准反应条件\n- 补齐最少必要控制：单组分、吸附、均相、关键空白\n\n**为什么它比表征分析更靠前**\n- 因为它不是“润色已有图”，而是**给所有后续图定坐标系**\n\n---\n\n### Priority 3｜统一第一章叙事口径：CeO2 到底能稳稳说什么，不能说什么\n**为什么排第 3：** 这是当前最容易让论文/汇报反复返工的逻辑坑。\n\n**对应缺口**\n- 0305 早期思路想讲“价态升高”\n- 0309 更新却明确写了：**XPS 和 XANES 目前都是降低价态**\n- CeO2 的作用目前只能较稳地落在：\n  - 扰乱结构有序性\n  - 增加氧空位\n  - 自身有一定活性\n- 但还不能硬拔高到更强机制结论\n\n**一旦补上，会直接解锁**\n- Fig1 材料表征段可以开始正式写\n- 第一章前半段正文可先成稿\n- 大组会不会再出现“前后两版结论冲突”\n- 你后续做的机理实验会更清楚是为了“补哪一句”\n\n**最低过线标准**\n- 全文统一成一版**保守表述**\n- 不再用“价态升高”做核心论断\n- 把表征结论统一收束为“电子/局域结构改变 + 氧空位/界面效应可能相关”\n\n**为什么它重要**\n- 它不一定最耗实验，但**极大减少返工和过度论断风险**\n\n---\n\n### Priority 4｜把淬灭剂/探针结果重构成“证据矩阵”，而不是零散现象\n**为什么排第 4：** 你已经有很多相关想法和部分数据，但还没变成可写逻辑。\n\n**对应缺口**\n- FFA 既可能指向 `1O2`，也可能消耗 `ClO2`\n- D2O、glycine、TBA、p-BQ 的结果若不重构，很容易互相打架\n- 现在更像“知道每个试剂是啥”，还不是“这组结果整体证明什么”\n\n**一旦补上，会直接解锁**\n- 第一章机制讨论段更顺\n- 组会时别人追问“那你这个到底证明了啥”时更能扛住\n- 可以直接服务 Co(IV)/ClO2 的主线，而不是变成旁枝杂证\n\n**最低过线标准**\n- 每个淬灭剂只写三件事：\n  1. 它理论上针对什么\n  2. 在你体系里可能有哪些副反应\n  3. 它最多支持到哪一层，不支持哪一层\n\n**为什么没排前 3**\n- 因为它更像“逻辑整理器”，前提仍是主机制和标准体系要先稳住\n\n---\n\n### Priority 5｜做出第二章苯酚的“最小可写矩阵”\n**为什么排第 5：** 它会决定你 thesis 是只有一章能打，还是能真正展开。\n\n**对应缺口**\n- 目前第二章还主要停留在计划态\n- 需要至少形成：\n  - 不同负载量\n  - 催化剂投加量\n  - 亚氯酸盐投加量\n  - 一组关键淬灭/排除实验\n\n**一旦补上，会直接解锁**\n- 第二章正文框架\n- 与第一章的“复用关系”终于能落地\n- 组会能从“我计划做什么”升级为“我现在已有两章结构”\n\n**为什么不排更前**\n- 因为它高度依赖前面第一章的标准体系与机制口径  \n- 否则第二章容易只是重复做一遍现象图\n\n---\n\n### Priority 6｜循环 + ICP（最好同时覆盖 SMX 与 PhOH）\n**为什么排第 6：** 这是把“能反应”变成“像一个完整 thesis”的关键支撑。\n\n**对应缺口**\n- 文档已明确提到要测 `ICP`\n- 也提到“先体系优化——循环测试，然后再机理”\n- 但目前看尚未闭环\n\n**一旦补上，会直接解锁**\n- 异相性/稳定性支撑\n- 应用可信度\n- 组会里“是不是溶出导致”的常规质疑\n\n**为什么不排更前**\n- 因为它更多是**增强可信度**，不是决定主线是否成立\n\n---\n\n### Priority 7｜苯酚“聚合贡献量/判据”这套算法与证据\n**为什么排第 7：** 它是第三章的门槛，但对前两章的解锁作用有限。\n\n**对应缺口**\n- 0309 只写到“用苯酚去计算两者贡献量”\n- 目前仍缺明确判据：怎么区分聚合、选择性氧化、矿化\n\n**一旦补上，会直接解锁**\n- 第三章成立基础\n- 让“选择性去除”更有说服力\n\n**为什么排后面**\n- 这是**章扩展型任务**，不是当前主线保命任务\n\n---\n\n### Priority 8｜多污染物扩展 / 流动式实验\n**为什么排第 8：** 加分高，但对当前 thesis 主体解锁最少。\n\n**对应缺口**\n- Fig4、Fig5 都更像占位\n- 当前主线还没完全立住\n\n**一旦补上，会解锁**\n- 应用外延\n- 论文后半段完整度\n- 可能的答辩亮点\n\n**为什么排最后**\n- 现在做它们，最容易出现“应用做得比机理还多，但主线没站稳”\n\n---\n\n## 一张更直观的“解锁优先级表”\n\n| 排名 | 缺口 | 解锁范围 | 为什么高影响 |\n|---|---|---|---|\n| 1 | 第一章 Co(IV)+ClO2 最小机制闭环 | 第一章主claim、组会主线、Fig3、第二章复用 | 一补上就能从“有现象”变成“有主线” |\n| 2 | 锁定标准体系与最优样品 | 全部后续机理实验、Fig2、第二章迁移 | 给所有后续图设统一坐标系 |\n| 3 | 统一 CeO2/表征叙事口径 | Fig1、第一章前半段、汇报一致性 | 大幅减少返工和前后矛盾 |\n| 4 | 淬灭/探针证据矩阵重构 | 机制讨论、答辩问答、图句锚定 | 把零散数据变成可写逻辑 |\n| 5 | 第二章苯酚最小矩阵 | 第二章正文、章节复用 | thesis 从“一章主线”扩成“两章结构” |\n| 6 | 循环+ICP | 稳定性、异相性、应用可信度 | 提升论文完整度与抗质疑能力 |\n| 7 | 苯酚聚合贡献量 | 第三章 | 对当前主线解锁有限 |\n| 8 | 多污染物/流动式 | 应用加分 | 不是当前最卡脖子的点 |\n\n---\n\n## 如果你现在只能抓 3 件事，就抓这 3 件\n\n### 必抓 1\n**PMSO + ClO2 + 一项非 probe 支撑**  \n把第一章机制最小闭环立起来。\n\n### 必抓 2\n**锁定最终标准体系**  \n把“到底用哪个样品、什么条件、哪些控制组”定死。\n\n### 必抓 3\n**统一表征与 CeO2 作用口径**  \n把 Fig1–Fig2 的话术一次性收束。\n\n---\n\n## 我更实际的建议：你接下来不要按“章节”推进，而要按“解锁包”推进\n\n### 解锁包 A（最高优先级）\n- 标准体系锁定\n- PMSO 重做\n- ClO2 第二证据\n- LSV/同位素/原位Raman 至少一项\n\n### 解锁包 B\n- Fig1 叙事统一\n- 淬灭剂证据矩阵重写\n- 第一章初稿先起\n\n### 解锁包 C\n- 第二章苯酚最小矩阵\n- ICP / 循环\n\n这样推进，比“今天补一张图、明天补一张图”更像 thesis 工程。\n\n---\n\n**Memory Patch**\n\n- 本轮未调用 `write_file`，以下仅为建议写入：\n  - 建议新增：`memory/packs/PACK_thesis_gap_priority_2026-03-22.md`\n  - 建议字段：\n    - gap_name\n    - current_status\n    - unlock_scope\n    - why_high_impact\n    - minimum_pass_line\n    - priority_rank\n  - 建议 `source_assets`：\n    - `assets/uploads/99550dc7_【毕业论文】工作文档0305.md`\n    - `assets/uploads/b99056f9_20251230【进度规划】.md`\n    - `assets/uploads/5c66efd3_【20260305大组会】工作文档.md`\n\n如果你愿意，我下一条可以继续直接帮你把这份排序**压成一个“未来 10 天执行清单”**，格式会是：  \n**任务｜预计半天/一天｜依赖关系｜完成后解锁哪些写作/汇报**。",
+  "attachments_used": [],
+  "trace_events": [
+    {
+      "tool_call_id": "call_57MmKhagavgp30cAgiDdSNNz",
+      "tool": "read_file",
+      "args": {
+        "cwd": ".",
+        "path": "assets/uploads/99550dc7_【毕业论文】工作文档0305.md"
+      },
+      "timestamp": "2026-03-22T21:43:46.243586",
+      "status": "completed",
+      "result": "# basic information\n\n大概小五十张图的数据量。\n其实数据量够\n\n# 0303\n请你先阅读这些硕博毕业论文的目录，再观察它每个小章节中叙述+图片组织逻辑，我需要你帮我抽象出一个框架来帮助我梳理自己的实验数据/表征图片的内在证据链，方便我后续规划和论文写作（应该是以gpt5pro的提示词+自己的实验数据ppt的逻辑，有的是已经有的结果，有的是有结果但还没分析）\n\n\n# 0305重新规划\n\n你需要做的只有实验和拿数据，其他一旦要花很长时间学习的就找咸鱼。\n\n## ACB：\nhttps://www.sciencedirect.com/science/article/pii/S0926337325004035#fig0010\n\n材料命名：\nCeO2\nCo3O4\n0.25mmol：5mmol 5% CeO2/Co3O4\n0.5mmol：5mmol 10% CeO2/Co3O4\n1mmol：5mmol 20% CeO2/Co3O4\n\n潜在任务量：可能需要规范一下图的画法\n- y轴堆积图：只要左侧是intesity(a.u.)基本都是需要的\n\t- xrd、epr（活性物种、氧空位）、raman（原位）\n- 带误差棒的折线图\n- 带误差棒的多列柱状图\n（这些已经买了模版（放在2025实验数据，origin绘图模版中），实在做不出来咸鱼上统一找人代画即可）\nhttps://www.goofish.com/item?spm=a21ybx.search.searchFeedList.8.1110603cjrxpNZ&id=986727652852&categoryId=202036301\n## Fig1 材料表征\nsem\n- 展示基本材料就行\nxrd\n- 该命名，突出CeO2的复合结构\nstem+mapping\n- CeO2不均匀分布，说明异质结\nXAS+XPS\n- #TODO XAS需要小图放大掺杂Ce以后线条的轻微右移，\n- 结论：XANES轻微右移，说明负载Ce后价态变高；XPS中Co3+的比例变高，向较低结合能的方向移动。\n![[Pasted image 20260304115655.png]]\n> 图源：[[Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf]]\n## Fig2 活性评价\n主结构参考[[0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/Utilizing the oxygen-atom trapping effect of Co_            3_            O_            4_            with oxygen vacancies to promote chlorite activation for water decontamination.pdf]]\n![[Pasted image 20260304122953.png]]\n\n\n\n\n\n## 活性测试图：\n### 基础活性测试图(相同方法不同负载量)\n\n![[Pasted image 20260304122715.png]]\n图源：[[0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/Utilizing the oxygen-atom trapping effect of Co_            3_            O_            4_            with oxygen vacancies to promote chlorite activation for water decontamination.pdf]]\n5% CeO2/Co3O4\n10% CeO2/Co3O4\n 20% CeO2/Co3O4\n Co3O4、CeO2\n - #TODO:需要补充CeO2(HMT)\n - [铈基催化剂的合成方法与应用研究进展](https://www.hanspub.org/journal/paperinformation?paperid=136815#:~:text=%E8%AF%A5%E6%96%B9%E6%B3%95%E6%93%8D%E4%BD%9C%E8%BF%87%E7%A8%8B%E4%B8%BA%EF%BC%8C%E5%B0%86%E9%93%88%E7%9B%90%20%28%E5%A6%82Ce%20%28NO%203%29%203%20%E3%80%8"
+    },
+    {
+      "tool_call_id": "call_gJQGA2Y8xD8eSGXqgEs7e963",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T21:43:46.251066",
+      "status": "completed_unmatched",
+      "result": "# basic information\n\n大概小五十张图的数据量。\n其实数据量够\n\n# 0303\n请你先阅读这些硕博毕业论文的目录，再观察它每个小章节中叙述+图片组织逻辑，我需要你帮我抽象出一个框架来帮助我梳理自己的实验数据/表征图片的内在证据链，方便我后续规划和论文写作（应该是以gpt5pro的提示词+自己的实验数据ppt的逻辑，有的是已经有的结果，有的是有结果但还没分析）\n\n\n# 0305重新规划\n\n你需要做的只有实验和拿数据，其他一旦要花很长时间学习的就找咸鱼。\n\n## ACB：\nhttps://www.sciencedirect.com/science/article/pii/S0926337325004035#fig0010\n\n材料命名：\nCeO2\nCo3O4\n0.25mmol：5mmol 5% CeO2/Co3O4\n0.5mmol：5mmol 10% CeO2/Co3O4\n1mmol：5mmol 20% CeO2/Co3O4\n\n潜在任务量：可能需要规范一下图的画法\n- y轴堆积图：只要左侧是intesity(a.u.)基本都是需要的\n\t- xrd、epr（活性物种、氧空位）、raman（原位）\n- 带误差棒的折线图\n- 带误差棒的多列柱状图\n（这些已经买了模版（放在2025实验数据，origin绘图模版中），实在做不出来咸鱼上统一找人代画即可）\nhttps://www.goofish.com/item?spm=a21ybx.search.searchFeedList.8.1110603cjrxpNZ&id=986727652852&categoryId=202036301\n## Fig1 材料表征\nsem\n- 展示基本材料就行\nxrd\n- 该命名，突出CeO2的复合结构\nstem+mapping\n- CeO2不均匀分布，说明异质结\nXAS+XPS\n- #TODO XAS需要小图放大掺杂Ce以后线条的轻微右移，\n- 结论：XANES轻微右移，说明负载Ce后价态变高；XPS中Co3+的比例变高，向较低结合能的方向移动。\n![[Pasted image 20260304115655.png]]\n> 图源：[[Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf]]\n## Fig2 活性评价\n主结构参考[[0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/Utilizing the oxygen-atom trapping effect of Co_            3_            O_            4_            with oxygen vacancies to promote chlorite activation for water decontamination.pdf]]\n![[Pasted image 20260304122953.png]]\n\n\n\n\n\n## 活性测试图：\n### 基础活性测试图(相同方法不同负载量)\n\n![[Pasted image 20260304122715.png]]\n图源：[[0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/Utilizing the oxygen-atom trapping effect of Co_            3_            O_            4_            with oxygen vacancies to promote chlorite activation for water decontamination.pdf]]\n5% CeO2/Co3O4\n10% CeO2/Co3O4\n 20% CeO2/Co3O4\n Co3O4、CeO2\n - #TODO:需要补充CeO2(HMT)\n - [铈基催化剂的合成方法与应用研究进展](https://www.hanspub.org/journal/paperinformation?paperid=136815#:~:text=%E8%AF%A5%E6%96%B9%E6%B3%95%E6%93%8D%E4%BD%9C%E8%BF%87%E7%A8%8B%E4%B8%BA%EF%BC%8C%E5%B0%86%E9%93%88%E7%9B%90%20%28%E5%A6%82Ce%20%28NO%203%29%203%20%E3%80%8"
+    },
+    {
+      "tool_call_id": "call_mCQ6YJjPq3qDiYqEAeGNHQot",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T21:43:46.251066",
+      "status": "completed_unmatched",
+      "result": "# 主要参考\n实验内容：苏瑞典以及山大组的硕士论文，比较出来哪些该做，安歇不该做\n结构：黄晨洋师兄、孙林潇师姐\n# 目前安排\n- [ ] 主线任务：ClO2 epr\n\n- [ ] 主线任务：pmso\n- 一些实验上的事情要处理，需要重新测试pmso的标线\n0106目前pmso标线有点问题，先沿用原来老的，再观察pmso2\n然后再重复一下1mM的实验\n- \n- [ ] 支线任务：xps、xrd数据分析（哪天抽个空就可以做了，花个10min）\n\n# 剩余实验\n\n\n形貌结构和xps、epr、xrd是可以同步做的\n是先体系优化——循环测试\n然后再去探讨机理\n\n\n\n\n## 形貌结构\n表面形貌\nSEM,HRTEM+eds mapping\n不中不要：bet\n物理结构：\n [x]  xps\n- [ ] esr\n- [ ] xrd\n\n\n# 反应条件优化，体系确定\n\n\n## 机理\n- 氧化剂亚氯酸盐的有效浓度分析\n- 反应活性物种掩蔽动力学\n\t- ![[Pasted image 20251231155152.png]]\n\n\n\n噶加金属活性物种\n![[Pasted image 20251231155403.png]]\n\n"
+    },
+    {
+      "tool_call_id": "call_DP5uHhCCJ7zBvshfTOApNZr3",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T21:43:46.251066",
+      "status": "completed_unmatched",
+      "result": "# 20260222prompt\n\n你现在的任务是：基于我提供的两篇主文献 + 两份文献汇报PPT示例，产出一份完整的文献汇报PPT方案（约20页，上下浮动2页）。\n\n一些通用的知识：\n一篇文献ppt大约在12页左右，你需要先通\n\n\n篇阅读我给你的文献-ppt示例学习清楚我需要什么样的ppt输出，然后把我现在给你的两篇做成汇报ppt\n一般普通文献（未必适用于本次任务，但占比可以作为参考）通常的篇幅为8-12页，各部分占比是【材料基础表征】-【活性测试】-【反应机理探究】-【应用测试】，其中材料表征据15%篇幅，活性测试和材料反应性质表征占据25%-35%，反应机理探究占据35%-40%，应用测试基本上一页就好（除非本文创新点与应用强相关则需要多一些篇幅）\n\n一些ppt的篇幅和排版安排的知识：\n1.基本上就是为什么要写这篇文章，简要介绍作者的情况1页\n- 主要介绍清楚课题组的基本信息，以及它们的主要研究方向，引出这个本篇文献主要研究方向\n2.然后一页文章本身的背景，引出文章要解决的问题（背景需要用逻辑图概括，可以参考我给你的ppt的17页，然后搜索强相关顶刊文献中相关背景的配图）\n3.然后有一页目录页（参考我给你的ppt的第四页的简洁程度no复杂，其主要作用是提炼出创新点，把各章节标题作为方块，用线条、箭头、括号等简单说明章节之间的逻辑关系以强调它们是如何）\n4.然后主体部分按照文献的图片+章节编排顺序来依次讲述，要求图必须源于文献本身\n- 根据每个章节要解决的问题，分为1-2页ppt，以文献中的图占据50%篇幅，然后用2-3有逻辑递进/并列的话讲清楚这个章节最终得到的结论以及创新点的作用\n- 关键的结论、量化的结果尽量多描述，以及实验关键的约束要放在下面的脚注\n- 这里尽可能参考我给你的示例ppt，（最好参考16-24页这种人类容易理解的逻辑关系适宜演讲者直接阅读并在没有读原文的情况下能够一眼看懂问现在写，但又对于人类听众来说看起来不会信息密度太高逻辑太复杂的）\n5.最后一页复盘主逻辑(70%最后一页)，或者指出对我现在的实验可能得指导（30%一页）\n\n\n\n## 1\n## ai修改版\n接下来我要制作一个文献汇报的ppt，主要文献是我给你的**两篇（以文献名字命名）**，且我有详细的输入输出示例（**这两篇文件命名里标注了可参考的示例PPT页码xx，仅用于参考排版和讲述效果，不代表内容可直接套用**）。输出目标是：**一份完整的约20页（上下浮动2页）的文献汇报PPT方案，并最终制作出PPT成品**。你需要主要参考的是**示例PPT的排版、信息密度和讲述逻辑**。\n\n---\n\n## 一些通用的知识\n\n一篇文献ppt大约在12页左右，**但本次任务是两篇合并汇报**，因此总页数以约20页（上下浮动2页）为目标，**不要机械按每篇12页平均分配**。  \n你需要先通篇阅读我给你的文献-ppt示例，学习清楚我需要什么样的ppt输出，**先总结示例PPT的页面类型、图文比例、信息密度、讲述逻辑，再开始生成本次PPT内容**。\n\n普通文献常见结构（仅作参考，不必机械套用）：【材料基础表征】-【活性测试】-【反应机理探究】-【应用测试】；其中材料表征约15%，活性测试+反应性质表征约25%-35%，机理探究约35%-40%，应用测试通常1页（除非创新点与应用强相关）。**本次请按两篇文献的实际创新重点动态调整。**\n\n---\n\n## 页面功能与排版要求（若与主文献内容冲突，一律以主文献原文为准）\n\n### 1）开场页（1页）\n\n为什么讲这篇文章，简要介绍作者/课题组情况。\n\n- 介绍课题组基本信息和主要研究方向，引出本文研究方向。\n    \n- **如果作者/课题组信息在文献中没有明确给出，不要编造，可用“待补充（需外部检索）”占位。**\n    \n\n### 2）背景页（1页）\n\n引出文章要解决的问题。\n\n- 背景用逻辑图概括，可参考示例PPT第17页。\n    \n- **背景页允许补充强相关顶刊文献配图，但必须标注来源（期刊/年份/DOI或图出处）**。\n    \n- **没有合适配图时，优先自绘逻辑图，不要使用来源不明图片。**\n    \n\n### 3）目录页（1页）\n\n参考示例PPT第4页的简洁程度，**不要复杂**。\n\n- 提炼创新点\n    \n- 用方块/箭头/括号说明章节逻辑\n    \n- 强调“问题提出 → 方法设计 → 关键证据 → 机理/结论 → 意义”的主线\n    \n\n### 4）主体部分（核心）\n\n按文献图片 + 章节顺序讲述，**图必须源于文献本身**。\n\n- 每个章节按问题拆成1-2页\n    \n- 每页文献图约占50%篇幅\n    \n- 用2-3条有逻辑递进/并列的话讲清楚：\n    \n    1. 这一节解决"
+    },
+    {
+      "tool_call_id": "call_DP5uHhCCJ7zBvshfTOApNZr3",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T21:43:46.251066",
+      "status": "completed_unmatched",
+      "result": "# Layer1 / project.md — 项目主线假设、指标、术语表、判据\n\n> 这份文件定义“项目的北极星”和“什么算证据”。  \n> **任何机理闭环的结论，必须与这里的判据对齐。**\n\n## 1) Project Snapshot\n\n- **项目标题：**（例：Ce-Co3O4 激活 NaClO2 实现选择性氧化降解抗生素）\n- **North Star（主线一句话）：**\n  - 我要证明：……\n- **目标污染物/体系：**\n  - 污染物：……\n  - 氧化剂：……\n  - 催化剂：……\n- **关键输出指标（KPI）：**\n  - 活性：k_obs / t90 / 去除率\n  - 选择性：副反应/矿化/目标官能团选择性\n  - 基质耐受：Cl⁻ / HCO3⁻ / NOM 等\n  - 稳定性：循环、溶出、结构保持\n  - 副产物：ClO2/ClO3⁻/ClO4⁻/有机副产物（按项目需求）\n\n## 2) 术语表（Glossary）\n\n- **ClO₂ / ClO₂⁻ / ClO₃⁻ / ClO₄⁻：**（项目内定义）\n- **Co(IV) / high-valent Co=O：**（项目内定义）\n- **OAT / PCET：**（项目内定义）\n- **选择性氧化：**（项目内定义）\n\n## 3) Claim → Evidence 判据（必须遵守）\n\n> 例：你经常要补齐“Co(IV) / ClO₂ 的硬证据链”。  \n> 这里把“哪些证据才算支持/不支持”写清楚，避免凭印象。\n\n### 3.1 Claim：体系中生成了 ClO₂（或可检测的 ClO₂）\n\n**建议证据组合（至少 2 类）：**\n- DPD 显色（注明波长/校准/干扰排查）\n- UV-Vis 特征吸收（如有）\n- 头空间/离子色谱（如有）\n- 关键空白/对照：无催化剂、无 NaClO2、暗/光、pH 对照\n\n**不充分证据（单独出现不允许下结论）：**\n- 只有“气味/颜色变化”描述\n- 只有单次显色无空白/无校准\n\n### 3.2 Claim：存在高价 Co(IV) 或 Co=O 参与 OAT/PCET\n\n**建议证据组合：**\n- 原位/准原位谱学（XAS/XPS/EPR 等，按实验条件）\n- 探针（如 PMSO）+ 产物定量 + 空白/对照\n- 淬灭剂矩阵（说明副反应可能性与判读逻辑）\n- 反应动力学与 pH/同位素效应等间接证据（须写清“间接”）\n\n**关键提醒：**\n- **探针/淬灭剂结果必须配套空白与干扰排查**（否则容易被审稿人打回）\n- “推测 Co(IV)”必须标注证据等级（强/中/弱）\n\n## 4) 当前最大不确定性（持续更新）\n\n1. …\n2. …\n3. …\n\n## 5) 近期验证计划（持续更新）\n\n- Plan A：…\n- Plan B：…\n\n"
+    }
+  ],
+  "created_paths": [],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/f707f8198314",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "D-S002-T02-C1",
+    "score": 70.0,
+    "verdict": "partial",
+    "reasons": [
+      "关键术语命中不足：需要至少 3 个，实际 1 个。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "D-S002-T02-C2",
+    "score": 85.0,
+    "verdict": "pass",
+    "reasons": [
+      "该 turn 依赖 prior workspace memory，但 trace 中缺少明显 memory 读取痕迹。"
+    ]
+  },
+  "artifact_result": null,
+  "judge_result": {
+    "criterion_id": "D-S002-T02-C3",
+    "score": 86.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 1 个关键术语",
+      "检测到工具使用: read_file"
+    ],
+    "risks": [
+      "缺失关键术语: ['最先补会影响最大的', '同时解锁多少后续写作/汇报工作']"
+    ],
+    "missing": [
+      "最先补会影响最大的",
+      "同时解锁多少后续写作/汇报工作"
+    ],
+    "raw_text": "你是一名长期指导博士论文、开题答辩、组会汇报与科研写作 pack 设计的导师型评审。请只依据【用户问题】【上传文件列表】【assistant 回复】【trace 摘要】【预期 focus】评分，不要替模型补写作结构。你要重点检查：回答是否真正围绕 pack-quality 交付件组织；是否区分最终稿、工作文档、中间版本、排版示例、背景论文等不同 authority level；是否能够把 thesis / proposal / group meeting / storyboard / layout rule 转成可复用的交付对象；是否在二进制 PPTX/DOCX/PDF 信息不足时保持诚实；是否避免把版本草稿说成稳定结论。请输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_D_session_002_thesis_gapmap\",\n  \"turn_id\": 2,\n  \"user_input\": \"你再进一步，把这些缺口按`最先补会影响最大的`顺序排一下。不是简单按难度，而是按‘一旦补上，会同时解锁多少后续写作/汇报工作’来排。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace**\\n\\n- 本轮已读取：\\n  - `assets/uploads/99550dc7_【毕业论文】工作文档0305.md`（复核 thesis 主线与 0309 更新）\\n  - `assets/uploads/b99056f9_20251230【进度规划】.md`\\n  - `assets/uploads/5c66efd3_【20260305大组会】工作文档.md`\\n  - `memory/identity/project.md`\\n- 本轮未写入文件。\\n\\n---\\n\\n**Rationale**\\n\\n我这次不是按“哪个最容易做”排，而是按**解锁半径**排：  \\n看一个缺口补上后，能不能同时解锁：\\n\\n1. **第一章主 claim**\\n2. **组会主线**\\n3. **第二章可"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [],
+  "temporary_expectations": null,
+  "provisional_turn_score": 80.0,
+  "final_turn_score": 80.33
+}

@@ -1,0 +1,155 @@
+{
+  "scenario_id": "scenario_E",
+  "session_id": "scenario_E_session_003_literature_priority",
+  "turn_id": 3,
+  "workspace_id": "eval-scenario_e-260320_2325",
+  "backend_session_id": "9eb5c63e0007",
+  "assistant_text": "**Context Trace（公开版）**  \n本回合实际工具操作：\n\n已读：\n- `assets/uploads/5ee0c395_test_cases_literature.md`\n- `assets/uploads/ced68974_closure_mapping.md`\n- `assets/uploads/04bbe294_【PACK】高价钴氧物种生成机理链.md`\n- `memory/packs/PACK_TEMPLATE.md`\n\n已写：\n- `memory/packs/E_literature_priority.md`\n- `context_trace/T0003_literature_priority_pack.json`\n\n---\n\n**Rationale（公开版）**  \n我按你刚才这轮讨论，把内容压成了一个可复用的 pack，核心保留三块：\n\n1. **优先级**  \n   - 基线 chlorite 机制  \n   - Ce-Co3O4 / 电子结构迁移  \n   - high-valent metal-oxo / selective oxidation bridge  \n\n2. **为什么这样排**  \n   依据来自：\n   - `test_cases_literature.md` 的测试用途定义\n   - `closure_mapping.md` 的 `status / uncertainty_tags / object_hint`\n   - 高价钴 pack 中对 Ce 叙事边界和补证优先级的约束\n\n3. **评价信号**  \n   我把“模型只是复述文件名”与“真正抓到 source layer / boundary / transfer”做了明确区分，并分成：\n   - 通用硬指标\n   - 三类 closure 各自的成功信号 / 失败信号\n\n---\n\n**Deliverable**  \n已整理并落盘到：\n\n- `memory/packs/E_literature_priority.md`\n\n文件至少包含你要求的三节：\n- `优先级`\n- `为什么`\n- `评价信号`\n\n另外我也同步记录了本轮 trace：\n- `context_trace/T0003_literature_priority_pack.json`\n\n你现在可以直接把这个 pack 当作：\n- literature_closure benchmark 的优先级说明\n- 后续 rubric 细化的母稿\n- prompt / test case 设计前的对齐文档\n\n---\n\n**Memory Patch**  \n已实际写入：\n\n1. `memory/packs/E_literature_priority.md`  \n   来源资产：\n   - `assets/uploads/5ee0c395_test_cases_literature.md`\n   - `assets/uploads/ced68974_closure_mapping.md`\n   - `assets/uploads/04bbe294_【PACK】高价钴氧物种生成机理链.md`\n\n2. `context_trace/T0003_literature_priority_pack.json`\n\n如果你要，我下一步可以继续把这个 pack 拆成一个更可执行的：\n- **评分 rubric 表格版**\n- **benchmark checklist 版**\n- **6–8 个测试 prompt 初稿版**",
+  "attachments_used": [],
+  "trace_events": [
+    {
+      "tool_call_id": "call_AZEMAIEAlMIb38IeBkWnNVGh",
+      "tool": "read_file",
+      "args": {
+        "cwd": ".",
+        "path": "assets/uploads/5ee0c395_test_cases_literature.md"
+      },
+      "timestamp": "2026-03-21T17:29:28.086950",
+      "status": "completed",
+      "result": "# Literature Closure Test Cases\n\n## L1 基线机制文献簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md`\n- 为什么典型: 同一主题下同时有原始 PDF、文献笔记和方法外延，最适合测试 Concept 落点。\n- 适合测试: `context_hit_test`, `object_landing_test`, `trace_replay_test`\n\n## L2 Ce-Co3O4 主逻辑迁移簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260305和师兄探讨过的主逻辑参考文献/Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf`; `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第四阶段/【第四阶段实验脉络】Ce-Co3O4机理主线搭建.md`\n- 为什么典型: 适合测试系统能否从“材料结构调控文献”命中文献，再连接到实验脉络。\n- 适合测试: `context_hit_test`, `object_landing_test`\n\n## L3 d-band 到聚合路径的跨主题综述簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species - 文献笔记.md`; `科研obsidian/0-毕业论文安排20251230/聚合框架/【gpt文献调研：高价钴氧物种生成+聚合证据链】.md`; `科研obsidian/0-毕业论文安排20251230/选择性氧化框架/reaction-pathway-tuning-between-electron-transfer-mediate"
+    },
+    {
+      "tool_call_id": "call_Ljo0ha3SzztLAAKUi8VmhZSG",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T17:29:28.095515",
+      "status": "completed_unmatched",
+      "result": "# Literature Closure Test Cases\n\n## L1 基线机制文献簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md`\n- 为什么典型: 同一主题下同时有原始 PDF、文献笔记和方法外延，最适合测试 Concept 落点。\n- 适合测试: `context_hit_test`, `object_landing_test`, `trace_replay_test`\n\n## L2 Ce-Co3O4 主逻辑迁移簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260305和师兄探讨过的主逻辑参考文献/Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf`; `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第四阶段/【第四阶段实验脉络】Ce-Co3O4机理主线搭建.md`\n- 为什么典型: 适合测试系统能否从“材料结构调控文献”命中文献，再连接到实验脉络。\n- 适合测试: `context_hit_test`, `object_landing_test`\n\n## L3 d-band 到聚合路径的跨主题综述簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species - 文献笔记.md`; `科研obsidian/0-毕业论文安排20251230/聚合框架/【gpt文献调研：高价钴氧物种生成+聚合证据链】.md`; `科研obsidian/0-毕业论文安排20251230/选择性氧化框架/reaction-pathway-tuning-between-electron-transfer-mediate"
+    },
+    {
+      "tool_call_id": "call_hhG17DCxwEKx3e16837Ajotk",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T17:29:28.095515",
+      "status": "completed_unmatched",
+      "result": "# Closure Mapping\n\n## literature_closure\n### 亚氯酸盐活化基线机制：Co3O4 -> Co(IV) + ClO2\n- research_line: `RL1_chlorite_activation_high_valent_cobalt`\n- object_hint: `亚氯酸盐活化下的 Co(IV)=O / ClO2 双活性物种机制`\n- reason: 文献 PDF 与对应文献笔记同目录共现，且笔记中明确把 OAT、质子增强、ClO2 与 Co(IV) 的贡献区分作为研究目的。\n- suitable_tests: `context_hit_test`, `object_landing_test`, `trace_replay_test`\n- uncertainty_tags: `none`\n- status: `strong_candidate`\n- source_files:\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md`\n\n### Ce-Co3O4 与氧空位/界面电子结构调控\n- research_line: `RL2_ce_co3o4_heterojunction`\n- object_hint: `CeO2/Co3O4 界面调控如何促进高价钴生成`\n- reason: 文献目录名、第四阶段笔记和后续高价钴证明目录共同围绕 Ce、氧空位、d 带/梯度轨道耦合展开。\n- suitable_tests: `context_hit_test`, `object_landing_test`\n- uncertainty_tags: `needs_manual_review`\n- status: `candidate_with_partial_manual_linking`\n- source_files:\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260305和师兄探讨过的主逻辑参考文献/Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf`\n  - `科研obsidian/1-主逻辑树-自上而下（脉络）+自"
+    },
+    {
+      "tool_call_id": "call_FUFD7VFvGKStInCCnLtx7eM7",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T17:29:28.095515",
+      "status": "completed_unmatched",
+      "result": "\nhttps://chatgpt.com/g/g-p-68d536a5d2508191b87182af5929a762-ke-yan/c/69afa3a8-2354-83a9-a797-fefa4737850b\n# 0310todo\n\n这周就按这个顺序推进：\n\n1. **先把 CeO₂ 数据和 XPS/XANES 叙事改口**  \n    不再说“Ce 让 Co 静态升价”，改说“Ce 让 Co 更低配位、更富电子、更利于反应中升到高价”。\n    \n2. **优先做 PMSO + H₂¹⁸O**  \n    这是高价 Co 的主证。\n    \n3. **并行准备冻淬 EPR**  【√】\n    条件先沿你贴出来那篇 SI 走。\n    \n4. **CV 作为支持证据跟上**  【√】\n    回答“Ce/OV 到底是不是 Co(IV)=O 更易形成的根源”。\n5. ICP测试二价钴浸出，这个是反应体系吗？\n\n6. **Raman 最后做**  \n    先 blank，再加 SMX。\n\n\n\n# 提问prompt\n\n中文回答这篇文献中La-O-Ce如何诱导高价钴氧物种生成，用了哪些表征？Co位点究竟发生了什么变化？用了什么哈藕断调控，调控形成了什么，对Co位点形成何种变化？中文回答这篇文献中La-O-Ce如何诱导高价钴氧物种生成，用了哪些表征？Co位点究竟发生了什么变化？用了什么哈藕断调控，调控形成了什么，对Co位点形成何种变化？\n\n# 核心目的\n毕业论文第一章就smx降解为主去思考高价钴，第二章看情况选择性降解和简单聚合。\n\n确定材料机理链，目前有三条，你先不急了，到时候再继续推，目前xps和xanes都是降低价态，其他的CeO2作用啥的你也暂时拔高不了。\n- 看看CeO2到底有啥用，结构上就是扰乱了长城有序，增加了氧空位，加上本身有点活性（活性数据证明了）\n\n以smx为主污染物去证明高价钴\n- 看同位素、lsv[[【PACK】高价钴氧物种生成机理链]]可以这周做，\n- 原位拉曼看看可不可以用smx做，证明是高价钴起作用。\n\nicp的话，最好是测smx体系和phoh体系（在此确定05Ce的性能，可以用乌洛托品再试一次合成两种）\n- 明天就处理CeO2数据\n- 新合一批0.5Ce和0Ce，确定PhOH的降解性能，如果做不出来我觉得可以顺理成章不做这个或者直接去做[[【光活化】2025-Angew-Co3O4&BiVO4- photoexcited holes&-CoIV=O -SDZ]]的选择性氧化，和我的大框架尽可能一致。\n\n然后用苯酚去计算两者贡献量（花一个下午研究一下）\n\n# 两条机理链\n\n类芬顿反应主要是依赖局部电子离域、3d轨道被抬升，价态升高，电子更易与PMS的O-O键均裂产生oxo wall\n亚氯酸盐高级氧化主要是通过空位/低配位Co，价态可能降低（？），通过定向吸附ClO2-来向该电子供养。\n\n\n# 目前的问题：在我的ClO2-体系里，怎样的Co价态变化对生成oxo wall有利？CeO2异质结在其中到底起到什么作用？\n\nXNAES是左移，代表升高\nxps看起来是Co2+/Co3+变高，代表价态变低\n有氧空位。\n\n\n\n## [[2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260305和师兄探讨过的主逻辑参考文献/Utilizing the oxygen-atom trapping effect of Co_            3_            O_            4_            with oxygen vacancies to promote chlorite activation for water decontamination.pdf|Utilizing the oxygen-atom trapping effect of Co_            3_            O_            4_            with oxygen vacancies to promote chlorite activation for water decontamination]]\n如果CeO2进去后真的是OV导致低配位Co，ClO2-中Cl-O均裂，在Ov上吸收，形成高价金属oxo，这可能就不太骨感，无法突出CeO2的作用。\n\n## [[Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf]]\n这篇也是Co2+和ClO2-反应生层高价钴，但主要的机理"
+    },
+    {
+      "tool_call_id": "call_FUFD7VFvGKStInCCnLtx7eM7",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T17:29:28.096538",
+      "status": "completed_unmatched",
+      "result": "# PACK Template — PACK_<type>_<topic>.md\n\n> Pack = 交付物容器：把多个 Task 的证据链组织成可交付成果（PPT/机理闭环/写作段落/图集）。\n\n## meta\n- `id`: PACK_...\n- `pack_type`: mechanism_pack | stage_report_pack | figure_pack | writing_pack\n- `created_at`: YYYY-MM-DD\n- `time_range`: YYYY-MM-DD ~ YYYY-MM-DD（可选）\n\n## task_refs[]\n- TASK_...\n\n## final_assets[]\n- assets/ppt_pack/...\n- assets/figures/...\n- manuscripts/...\n\n## takeaways[]（每个资产 1 句话）\n- …\n\n## narrative（给论文/组会的叙事骨架）\n- …\n\n## limitations & risks\n- …\n\n## next_plan\n- …\n\n"
+    },
+    {
+      "tool_call_id": "call_6RU9kzebLkQQa9TeHKWAGuR3",
+      "tool": "write_file",
+      "args": {
+        "content": "# E_literature_priority\n\n## meta\n- id: `E_literature_priority`\n- pack_type: `writing_pack`\n- created_at: `2026-03-21`\n- scope: `literature_closure benchmark 优先级与评价信号`\n- basis:\n  - `assets/uploads/5ee0c395_test_cases_literature.md`\n  - `assets/uploads/ced68974_closure_mapping.md`\n  - `assets/uploads/04bbe294_【PACK】高价钴氧物种生成机理链.md`\n\n## 优先级\n\n### 主排序（建议先做什么）\n1. **基线 chlorite 机制**\n2. **Ce-Co3O4 / 电子结构迁移**\n3. **high-valent metal-oxo / selective oxidation bridge**\n\n### 若按 benchmark 目标重排\n- **立标尺**：基线 chlorite 机制\n- **抓主线内幻觉**：Ce-Co3O4 / 电子结构迁移\n- **测迁移上限**：high-valent metal-oxo / selective oxidation bridge\n\n### 简版判断\n- **最核心**：基线 chlorite 机制\n- **最容易稳定评出模型幻觉**：Ce-Co3O4 / 电子结构迁移\n- **最适合作为进阶题**：high-valent metal-oxo / selective oxidation bridge\n\n## 为什么\n\n### 1) 基线 chlorite 机制排第一\n- `closure_mapping` 中该类为 `strong_candidate`，且 `uncertainty_tags = none`。\n- `test_cases_literature` 中该类同时包含原始 PDF、文献笔记和方法外延，最适合做 `context_hit_test`、`object_landing_test`、`trace_replay_test`。\n- 其对象落点明确：`亚氯酸盐活化下的 Co(IV)=O / ClO2 双活性物种机制`。\n- 这是后续 Ce 作用、高价钴证明与 bridge 迁移的母题；如果连这类都命不中，后面两类的评测结果会失真。\n- 评分稳定性最高，最适合先作为 literature_closure benchmark 的基准题。\n\n### 2) Ce-Co3O4 / 电子结构迁移排第二\n- `closure_mapping` 中该类为 `candidate_with_partial_manual_linking`，且 `uncertainty_tags = needs_manual_review`。\n- 它不是“没有文献”，而是“有锚点，但不能自动说满”，因此特别适合测模型会不会把候选关系误写成已闭环关系。\n- 该类 source layer 天然混合：既有材料结构调控 paper，也有实验脉络文档和高价钴 pack，最容易暴露模型是否会把组织层文件误当成原始证据。\n- 高价钴 pack 已明确提出叙事约束：**不能直接说“Ce 让 Co 静态升价”**，更稳妥的口径是“Ce 让 Co 更低配位/更富电子/更利于反应中升到高价”。\n- 该类还天然带有“XPS / XANES 张力 + PMSO/H2^18O/EPR/CV 待补证据”结构，因此很适合做 hallucination audit。\n\n### 3) high-valent metal-oxo / selective oxidation bridge 排第三\n- `closure_mapping` 中该类为 `conceptual_bridge_candidate`，且 `uncertainty_tags = uncertain`。\n- 其本质是跨主题迁移题，不是同主题直接闭环题；更适合测“该读什么 / 不该读什么”“能迁移什么 / 不能迁移什么”。\n- 这类题最容易诱发高级幻觉：把别的氧化体系、高价 metal-oxo 综述或写作框架，直接迁移成当前主线里的已证实机制。\n- 它的辨别力很强，但评分稳定性低于前两类，因此更适合作为进阶题或 generalization 题，而非首批基准题。\n\n## 评价信号\n\n### A. 通用硬指标：区分“文件名复读”与“真正 closure”\n\n#### 1. source layer\n**成功信号**\n- 能主动区分：\n  - **原始证据层**：paper / PDF\n  - **解释整理层**：文献笔记\n  - **组织与路由层**：closure mapping、pack、阶段脉络文档\n- 能说明每层文件在 closure 中的作用，而不是只报文件名。\n\n**失败信号**\n- 只会列出文件路径或标题，不说明谁是原始证据、谁是解释层、谁只是组织层。\n- 把 pack、mapping、阶段脉络文档直接当成机制已证实的原始依据。\n\n#### 2. boundary\n**成功信号**\n- 能明确说出当前 closure **能回答什么**、**不能回答什么**。\n- 不把基线题自动外推到 Ce 调控，也不把 bridge 题自动外推到主线已闭环。\n\n**失败信号**\n- 看到关键词相似就一路串联，默认同词即同证据。\n- 从 L1 直接跳到 Ce 作用成立，从 L3 直接跳到聚合/选择性氧化已成立。\n\n#### 3. transfer\n**成功信号**\n- 能区分：\n  - **直接证据支持**\n  - **同主题辅助支撑**\n  - **跨主题概念桥接**\n- 能写清“迁移的是框架/候选因果链”还是“迁移的是已证实结论”。\n\n**失败信号**\n- 只要两个文件都提到“高价钴”“d-band”“选择性氧化”，就默认可直接互证。\n- 把跨体系类比写成当前体系的已证实结论。\n\n#### 4. object landing + trace replay\n**成功信号**\n- 能把回答落到 `object_hint`，而不是只停留在主题词层面。\n- 能说明阅读顺序和各文件分工，例如“哪篇是主机制 paper，哪篇是补 OAT/PCET/pH，哪篇只是组织层文档”。\n\n**失败信号**\n- 只能说“相关文件有 A/B/C”，却不能说明读它们的先后、角色与支撑范围。\n\n---\n\n### B. 各类 closure 的成功信号 / 失败信号\n\n### 1) 基线 chlorite 机制\n**成功信号**\n- 命中成对的 **原始 PDF + 文献笔记**，识别其为同主题标准簇。\n- 对象稳定落到：`Co(IV)=O / ClO2 双活性物种机制`。\n- 能说明 OAT、PCET、pH、Cl 形态等在该簇中的功能分工。\n- 能做 `trace replay`：知道哪篇更像主机制，哪篇更像机制外延或补充。\n- 不越界去证明 Ce 作用或 selective oxidation / polymerization bridge。\n\n**失败信号**\n- 只会念 PNAS / EST 文件名，却不能说明 paper 与文献笔记的层级关系。\n- 不能把对象落到 `Co(IV)=O / ClO2`，而是泛泛而谈“高价钴很重要”。\n- 直接把基线机制外推成 Ce 调控已经成立。\n- 把 chlorite 主线与 bridge 写作题混讲。\n\n### 2) Ce-Co3O4 / 电子结构迁移\n**成功信号**\n- 能识别这是“有文献锚点，但需要人工审查”的主逻辑迁移簇。\n- 能区分：\n  - paper = 原始依据\n  - 第四阶段实验脉络 = 主线连接层\n  - 高价钴 pack = 推理组织层 / 待补证据链说明\n- 会主动收束口径：不说“Ce 让 Co 静态升价”，而说“Ce 让 Co 更低配位/更富电子/更利于反应中升到高价”。\n- 会指出 XPS / XANES 之间存在张力，不强行抹平。\n- 会把 PMSO + H2^18O、冻淬 EPR、CV 识别为关键补证，而不是装作已经完成。\n\n**失败信号**\n- 把 `【PACK】高价钴氧物种生成机理链.md` 当成直接机制证据。\n- 直接宣称“Ce 已证明让 Co 价态升高，因此更易形成高价钴”。\n- 把 `needs_manual_review` 题说成已经稳闭环。\n- 不提 XPS / XANES 张力和待补证据。\n\n### 3) high-valent metal-oxo / selective oxidation bridge\n**成功信号**\n- 会明确标注其为 `conceptual_bridge_candidate` / `uncertain`。\n- 能区分：\n  - high-valent metal-oxo 文献 = 机制概念源\n  - 文献笔记 = 解释整理层\n  - 聚合/选择性氧化框架文档 = 写作组织层\n- 会说明：这里可迁移的是**概念框架、术语与候选路径语言**，不可直接迁移的是**体系特异结论、已证实机制与定量贡献占比**。\n- 能体现“该读什么 / 不该读什么”的选择能力：当问题是 chlorite 主线机制时，该类只能作概念补充；当问题是写作组织或第二章桥接时，该类才进入前台。\n\n**失败信号**\n- 把跨主题 bridge 直接说成当前体系的直接证据。\n- 把聚合框架或 GPT 文档当成科学事实证明。\n- 只因都提到 high-valent metal-oxo / d-band，就默认 polymerization 或 selective oxidation 已成立。\n- 不承认该类 closure 的 `uncertain` 属性。\n\n## 结论\n- **baseline 负责立尺子**：先校准检索命中、对象落点和 trace replay。\n- **Ce-Co3O4 负责抓幻觉**：重点看模型是否误把候选证据说成已闭环，以及是否混淆 source layer。\n- **bridge 负责测上限**：重点看模型是否会有限迁移，而不是跨体系乱借机制。\n\n如果只先做一轮 `literature_closure` benchmark，建议采用：\n1. 基线 chlorite 机制 × 2–3 题\n2. Ce-Co3O4 / 电子结构迁移 × 2 题\n3. bridge × 1 题（作为 advanced / exploratory）\n",
+        "cwd": ".",
+        "path": "memory/packs/E_literature_priority.md",
+        "source_assets": [
+          "assets/uploads/5ee0c395_test_cases_literature.md",
+          "assets/uploads/ced68974_closure_mapping.md",
+          "assets/uploads/04bbe294_【PACK】高价钴氧物种生成机理链.md"
+        ]
+      },
+      "timestamp": "2026-03-21T17:31:06.718493",
+      "status": "completed",
+      "result": "File written successfully: memory/packs/E_literature_priority.md"
+    },
+    {
+      "tool_call_id": "call_a0TQiAk5mZKU3csHoMqeQzRz",
+      "tool": "write_file",
+      "args": null,
+      "timestamp": "2026-03-21T17:31:06.740053",
+      "status": "completed_unmatched",
+      "result": "File written successfully: memory/packs/E_literature_priority.md"
+    },
+    {
+      "tool_call_id": "call_a0TQiAk5mZKU3csHoMqeQzRz",
+      "tool": "write_file",
+      "args": null,
+      "timestamp": "2026-03-21T17:31:06.740053",
+      "status": "completed_unmatched",
+      "result": "File written successfully: context_trace/T0003_literature_priority_pack.json"
+    }
+  ],
+  "created_paths": [
+    "memory/packs/E_literature_priority.md"
+  ],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/9eb5c63e0007",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "E-S003-T03-C1",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中 4 个，达到阈值。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "E-S003-T03-C2",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "artifact_result": {
+    "criterion_id": "E-S003-T03-C2A",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "judge_result": {
+    "criterion_id": "E-S003-T03-C3",
+    "score": 100.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 4 个关键术语",
+      "检测到工具使用: read_file, write_file"
+    ],
+    "risks": [],
+    "missing": [],
+    "raw_text": "你是一名擅长把复杂 benchmark 设计收束成可实现协议的系统架构师。请判断这条回答能否作为 bridge/eval closure 的稳定对象：它是否真正形成了 read-order、priority、schema、prompt contract、failure mode 或 handoff 这类可执行对象；是否区分了 scenario/session/turn/criterion 层级；是否兼顾实现成本、覆盖度与可评分性；是否能够被 Codex 直接消费为实现输入。不要用自己的经验替模型补上尚未写出的系统约束，只按现有回答评分。输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_E_session_003_literature_priority\",\n  \"turn_id\": 3,\n  \"user_input\": \"把这轮整理成 `memory/packs/E_literature_priority.md`，至少包含：`优先级`、`为什么`、`评价信号` 三节。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace（公开版）**  \\n本回合实际工具操作：\\n\\n已读：\\n- `assets/uploads/5ee0c395_test_cases_literature.md`\\n- `assets/uploads/ced68974_closure_mapping.md`\\n- `assets/uploads/04bbe294_【PACK】高价钴氧物种生成机理链.md`\\n- `memory/packs/PACK_TEMPLATE.md`\\n\\n已写：\\n- `memory/packs/E_literature_priority.md`\\n- `context_trace/T0003_literature_priority_pack.json`\\n\\n---\\n\\n**Rationale（公开版）**  \\n我按你刚才这轮讨论，把内容压成了一个可复用的 pack，核心保留三块"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [
+    {
+      "artifact_type": "pack",
+      "path": "memory/packs/E_literature_priority.md",
+      "must_exist_after_turn": true,
+      "required_sections": [
+        "优先级",
+        "为什么",
+        "评价信号"
+      ]
+    }
+  ],
+  "temporary_expectations": null,
+  "provisional_turn_score": 100.0,
+  "final_turn_score": 100.0
+}

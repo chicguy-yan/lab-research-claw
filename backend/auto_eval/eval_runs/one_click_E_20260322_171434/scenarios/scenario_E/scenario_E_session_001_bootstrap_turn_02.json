@@ -1,0 +1,118 @@
+{
+  "scenario_id": "scenario_E",
+  "session_id": "scenario_E_session_001_bootstrap",
+  "turn_id": 2,
+  "workspace_id": "eval-scenario_e-260322_1714",
+  "backend_session_id": "__bootstrap__",
+  "assistant_text": "**Context Trace（本轮真实工具调用）**\n- 已读 `assets/uploads/35e2103c_PRO_PROMPT_PACKAGE_ARCHITECTURE.md`\n- 已读 `assets/uploads/4288b081_research_os_ecosystem_map.md`\n- 已读 `assets/data/53be2d7c_closure_mapping.json`\n- 未调用 `write_file`，因此本轮没有任何已落盘的 memory 更新\n\n**Rationale**\n- **我的判断：更应该从 `ecosystem map` 起手。**\n- 证据一：`research_os_ecosystem_map.md` 已经把材料压缩成 **3 条研究主线 + 3 类文献闭环 + 3 类实验闭环 + 3 类写作闭环**，并且直接映射到 `Concept / Task / Pack`，这最符合你要定义的“跨闭环桥接容器”职责。\n- 证据二：同文件还给了 **benchmark 样例优先级**，说明它天然承担“先看系统要桥什么对象、哪些样例值得优先承接”的入口作用，而不是普通研究总结。\n- 证据三：`closure_mapping.json` 更像**第二层操作化入口**：它把每个 closure 拆成 `candidate_concept / candidate_task / candidate_pack`、`suitable_tests`、`status`、`uncertainty_tags`，适合在你先定清“地图”后，再落到 eval 单元。\n- 证据四：`PRO_PROMPT_PACKAGE_ARCHITECTURE.md` 更像**第三层治理/读取规则入口**：它定义逻辑包、推荐读法、提示词约束。它很重要，但更偏“如何组织读取与打包”，而不是最先回答“这个 bridge 容器到底要桥哪些对象”。\n- 反证也很明确：同一份 `package architecture` 里，在“生成 benchmark / demo”的推荐读法中，明确写的是 **先读 `research_os_ecosystem_map.md`，再读 `closure_mapping.md`**。这基本等于给了起手顺序。\n\n**Deliverable**\n\n### 结论\n**首入口：`ecosystem map`**  \n**第二入口：`closure mapping`**  \n**第三入口：`package architecture`**\n\n### 为什么不是另外两个先起手\n\n| 入口 | 更适合扮演的角色 | 现在不宜先起手的原因 |\n|---|---|---|\n| `ecosystem map` | 顶层对象地图 | 最适合先回答“桥什么、跨哪几条线、哪些对象最值得 benchmark” |\n| `closure mapping` | 可评测 closure 单元清单 | 太快进入 case 级，会在顶层职责未定前就陷入局部对象 |\n| `package architecture` | 读取/分包/提示词治理层 | 容易把问题做成“包怎么组织”，而不是“bridge 层承接哪些对象、边界在哪” |\n\n### 你这个 workspace 的推荐起手顺序\n1. **先用 `ecosystem map` 定容器职责**\n   - 三条主线各自怎么桥\n   - 文献 / 实验 / 写作三线之间哪些跳转是高价值桥接\n   - 哪些对象进入 benchmark 主样例池\n\n2. **再用 `closure mapping` 定 eval 单元**\n   - 每个 closure 对应什么 `Concept / Task / Pack`\n   - 哪些 `suitable_tests` 要先支持\n   - 哪些对象是 `strong_candidate`，哪些还要 `manual_review`\n\n3. **最后用 `package architecture` 定读取边界与 handoff 方式**\n   - 先读什么、后读什么\n   - 哪些是索引层，哪些是原始层，哪些是写作交付层\n   - prompt contract 里如何限制“不能无差别扫全库”\n\n### 对你当前目标的直接含义\n如果把 workspace 定义成 **“跨闭环桥接容器”**，那它的 bootstrap 不应先回答：\n- 包怎么分\n- 文件怎么命名\n- 系统架构画成几层\n\n而应先回答：\n- **哪 3 类闭环最值得桥**\n- **桥接的最小对象单元是什么**\n- **哪些跳转属于 bridge 层，哪些不属于**\n- **benchmark/eval 先吃哪些代表样例**\n\n### 我建议你下一步就收敛的 4 个字段\n基于 `ecosystem map` 先定：\n1. **Bridge Scope**：文献→实验、实验→写作、文献→写作，三类都收，还是先收前两类？\n2. **Bridge Unit**：最小承接单元是 `closure`、`case`、还是 `Concept/Task/Pack triple`？\n3. **Read Boundary**：桥接层默认只读索引/映射文件，还是允许回溯原始科研文件？\n4. **Handoff Target**：后续 handoff 给 benchmark builder、prompt packager，还是 case runner？\n\n**Memory Patch（建议写入，未实际落盘）**\n- 建议新增 `memory/identity/bridge_container_scope.md`\n  - 字段建议：\n    - `workspace_role`\n    - `primary_entry = ecosystem_map`\n    - `secondary_entry = closure_mapping`\n    - `governance_entry = package_architecture`\n    - `bridge_objects[]`\n    - `read_boundary`\n    - `handoff_targets[]`\n- 建议更新 `memory/identity/project.md`\n  - 把 North Star 改成：**服务 benchmark / eval system 的跨闭环桥接容器**\n  - 增加：`non_goals`，明确“不做普通研究总结 / 不做泛泛系统设计”\n- 建议新增 `memory/packs/PACK_bootstrap_bridge_contract.md`\n  - 用来固化 bootstrap 后的职责表、边界表、handoff 入口表\n\n如果你愿意，我下一步可以直接给你产出一个 **“bridge/eval 容器 bootstrap contract v0”**，内容只含 4 块：职责、边界、桥接对象、handoff 入口。",
+  "attachments_used": [
+    {
+      "saved_path": "assets/uploads/35e2103c_PRO_PROMPT_PACKAGE_ARCHITECTURE.md",
+      "file_type": "md",
+      "summary": ".md 文件, 8KB",
+      "source_path": "D:\\ai_software\\yyq_project\\给GPT5PRO提示词\\闭环测试集\\测试集上传的文件\\E_跨闭环桥接\\outputs\\pro_dataset_expanded_20260317\\PRO_PROMPT_PACKAGE_ARCHITECTURE.md",
+      "reused_from_cache": false
+    },
+    {
+      "saved_path": "assets/uploads/4288b081_research_os_ecosystem_map.md",
+      "file_type": "md",
+      "summary": ".md 文件, 3KB",
+      "source_path": "D:\\ai_software\\yyq_project\\给GPT5PRO提示词\\闭环测试集\\测试集上传的文件\\E_跨闭环桥接\\outputs\\research_os_ecosystem_map.md",
+      "reused_from_cache": false
+    },
+    {
+      "saved_path": "assets/data/53be2d7c_closure_mapping.json",
+      "file_type": "json",
+      "summary": ".json 文件, 12KB",
+      "source_path": "D:\\ai_software\\yyq_project\\给GPT5PRO提示词\\闭环测试集\\测试集上传的文件\\E_跨闭环桥接\\outputs\\closure_mapping.json",
+      "reused_from_cache": false
+    }
+  ],
+  "trace_events": [
+    {
+      "tool_call_id": "call_qfdYkUkd0EV1ejIzJXk6eyUc",
+      "tool": "read_file",
+      "args": {
+        "cwd": ".",
+        "path": "assets/uploads/35e2103c_PRO_PROMPT_PACKAGE_ARCHITECTURE.md"
+      },
+      "timestamp": "2026-03-22T22:53:16.552416",
+      "status": "completed",
+      "result": "# Pro Prompt Package Architecture\n\n这个文件用于解释增强版数据集压缩包的文件架构、分包原由，以及如何据此给 `GPT-5 Pro` 写提示词。\n\n## 一句话定位\n\n这个增强版包不是“原始科研资料全集”，而是一个围绕 `Concept / Task / Pack` 与 `literature_closure / experiment_closure / writing_closure` 组织出来的高价值测试子集。\n\n它的目标是：\n- 让 `GPT-5 Pro` 快速理解这套数据能测什么\n- 让 `GPT-5 Pro` 按包读取，而不是无差别扫所有文件\n- 让 `GPT-5 Pro` 能区分 `原始资产`、`结构化转译结果`、`写作交付件`\n\n## 总体架构\n\n增强版包可以理解成 5 个逻辑包：\n\n1. `A_转译索引包`\n2. `B_文献与 Concept 包`\n3. `C_实验与 Task 包`\n4. `D_写作与 Pack 包`\n5. `E_跨闭环桥接包`\n\n下面的“包”是逻辑分组，不是磁盘上的单独目录。实际文件仍然来自原始 `科研obsidian/` 路径与 `outputs/` 路径。\n\n## A_转译索引包\n\n### 代表文件\n- `outputs/archive_manifest.md`\n- `outputs/archive_manifest.csv`\n- `outputs/closure_mapping.md`\n- `outputs/closure_mapping.json`\n- `outputs/concepts_candidates.json`\n- `outputs/tasks_candidates.json`\n- `outputs/packs_candidates.json`\n- `outputs/test_cases_literature.md`\n- `outputs/test_cases_experiment.md`\n- `outputs/test_cases_writing.md`\n- `outputs/assets_to_memory_plan.md`\n- `outputs/manual_review_points.md`\n- `outputs/research_os_ecosystem_map.md`\n\n### 原由\n- 这是整个数据集的“译后索引层”。\n- 如果 `GPT-5 Pro` 先读这一层，就能先理解对象设计、闭环样例和不确定项，再决定是否下钻原始文件。\n- 这层最适合作为提示词中的“先验上下文”。\n\n### 对 `GPT-5 Pro` 的作用\n- 快速建立 ResearchLoop-OpenClaw 的对象视角\n- 避免 `GPT-5 Pro` 一开始陷入文件海\n- 明确哪些是 `high confidence`，哪些是 `needs_manual_review`\n\n## B_文献与 Concept 包\n\n### 代表主题\n- `亚氯酸盐活化下的 Co(IV)=O / ClO2 双活性物种机制`\n- `CeO2/Co3O4 界面电子耦合与氧空位促进高价钴生成`\n- `d-band / 高价 metal-oxo 与选择性氧化-聚合路径`\n- `高价钴证明方法学库`\n\n### 代表文件\n- `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/...`\n- `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/...`\n- `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/...`\n- `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/...`\n\n### 原由\n- 这一包负责提供“研究问题是怎么从文献里长出来的”。\n- 它最适合测试：\n  - `literature_closure`\n  - `context_hit_test`\n  - `object_landing_test`\n\n### 使用建议\n- 如果提示词目标是“抽 Concept”“重建研究主题”“测试系统该读哪些文献”，先读这包。\n- 不要让 `GPT-5 Pro` 直接从文献跳到实验结论；中间要经过 Task 或 Pack 的证据层。\n\n## C_实验与 Task 包\n\n### 代表主题\n- `M-Co3O4 亚氯酸盐活化性能筛选`\n- `Ce-Co3O4 机理主线搭建与活性物种测试`\n- `第五阶段最小机理闭环：PMSO / ClO2 / EP"
+    },
+    {
+      "tool_call_id": "call_tix6Ifawcm6JjpHPdLhC5Oiz",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T22:53:16.565922",
+      "status": "completed_unmatched",
+      "result": "# Pro Prompt Package Architecture\n\n这个文件用于解释增强版数据集压缩包的文件架构、分包原由，以及如何据此给 `GPT-5 Pro` 写提示词。\n\n## 一句话定位\n\n这个增强版包不是“原始科研资料全集”，而是一个围绕 `Concept / Task / Pack` 与 `literature_closure / experiment_closure / writing_closure` 组织出来的高价值测试子集。\n\n它的目标是：\n- 让 `GPT-5 Pro` 快速理解这套数据能测什么\n- 让 `GPT-5 Pro` 按包读取，而不是无差别扫所有文件\n- 让 `GPT-5 Pro` 能区分 `原始资产`、`结构化转译结果`、`写作交付件`\n\n## 总体架构\n\n增强版包可以理解成 5 个逻辑包：\n\n1. `A_转译索引包`\n2. `B_文献与 Concept 包`\n3. `C_实验与 Task 包`\n4. `D_写作与 Pack 包`\n5. `E_跨闭环桥接包`\n\n下面的“包”是逻辑分组，不是磁盘上的单独目录。实际文件仍然来自原始 `科研obsidian/` 路径与 `outputs/` 路径。\n\n## A_转译索引包\n\n### 代表文件\n- `outputs/archive_manifest.md`\n- `outputs/archive_manifest.csv`\n- `outputs/closure_mapping.md`\n- `outputs/closure_mapping.json`\n- `outputs/concepts_candidates.json`\n- `outputs/tasks_candidates.json`\n- `outputs/packs_candidates.json`\n- `outputs/test_cases_literature.md`\n- `outputs/test_cases_experiment.md`\n- `outputs/test_cases_writing.md`\n- `outputs/assets_to_memory_plan.md`\n- `outputs/manual_review_points.md`\n- `outputs/research_os_ecosystem_map.md`\n\n### 原由\n- 这是整个数据集的“译后索引层”。\n- 如果 `GPT-5 Pro` 先读这一层，就能先理解对象设计、闭环样例和不确定项，再决定是否下钻原始文件。\n- 这层最适合作为提示词中的“先验上下文”。\n\n### 对 `GPT-5 Pro` 的作用\n- 快速建立 ResearchLoop-OpenClaw 的对象视角\n- 避免 `GPT-5 Pro` 一开始陷入文件海\n- 明确哪些是 `high confidence`，哪些是 `needs_manual_review`\n\n## B_文献与 Concept 包\n\n### 代表主题\n- `亚氯酸盐活化下的 Co(IV)=O / ClO2 双活性物种机制`\n- `CeO2/Co3O4 界面电子耦合与氧空位促进高价钴生成`\n- `d-band / 高价 metal-oxo 与选择性氧化-聚合路径`\n- `高价钴证明方法学库`\n\n### 代表文件\n- `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/...`\n- `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/...`\n- `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/...`\n- `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/...`\n\n### 原由\n- 这一包负责提供“研究问题是怎么从文献里长出来的”。\n- 它最适合测试：\n  - `literature_closure`\n  - `context_hit_test`\n  - `object_landing_test`\n\n### 使用建议\n- 如果提示词目标是“抽 Concept”“重建研究主题”“测试系统该读哪些文献”，先读这包。\n- 不要让 `GPT-5 Pro` 直接从文献跳到实验结论；中间要经过 Task 或 Pack 的证据层。\n\n## C_实验与 Task 包\n\n### 代表主题\n- `M-Co3O4 亚氯酸盐活化性能筛选`\n- `Ce-Co3O4 机理主线搭建与活性物种测试`\n- `第五阶段最小机理闭环：PMSO / ClO2 / EP"
+    },
+    {
+      "tool_call_id": "call_AssPZGR70Ldo6Lz9AkcPSOTT",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T22:53:16.565922",
+      "status": "completed_unmatched",
+      "result": "# Research OS Ecosystem Map\n\n## 最有代表性的 3 条研究主线\n1. `亚氯酸盐活化 -> Co(IV)=O / ClO2 机制`\n   - 代表材料：`20250912-亚氯酸盐活化框架搭建`、`2023 EST`、`2024 PNAS`、第二阶段筛选记录。\n   - 对应对象：Concept + Task。\n2. `Ce-Co3O4 结构调控 -> 氧空位 / 电子结构 -> 高价钴促进`\n   - 代表材料：第四阶段脉络、`20260309高价钴物种证明`、第五/第六阶段 SOP、`Ce掺杂Co3O4亚氯酸盐高级氧化.pptx`。\n   - 对应对象：Concept + Task + Pack。\n3. `高价 metal-oxo -> 选择性氧化 / 聚合 -> 写作迁移`\n   - 代表材料：`2024-SACs&taloring D band-high-valent metal-oxo species`、聚合框架、选择性氧化框架、0327 大组会。\n   - 对应对象：Concept + Pack。\n\n## 最有代表性的 3 个文献闭环\n1. `2023 EST + 2024 PNAS + 对应文献笔记`\n   - 说明：主题文献 -> 研究问题 -> Co(IV)/ClO2 证据链。\n2. `Ce-Co3O4 / 高价钴物种证明` 文献簇\n   - 说明：材料设计文献 -> 界面电子结构问题 -> Ce 促进机制候选。\n3. `d-band / 高价 metal-oxo / 聚合` 文献簇\n   - 说明：机制文献 -> 迁移到选择性氧化/聚合主线。\n\n## 最有代表性的 3 个实验闭环\n1. `第二阶段 M-Co3O4 筛选`\n   - 实验目标 -> 合成方法 -> 性能图 -> 机制问题提出。\n2. `第五阶段最小机理闭环`\n   - 实验目标 -> SOP / EPR / PMSO / ClO2 显色 -> 缺原始数据但链路完整。\n3. `第六阶段高价钴直接证据`\n   - 目标 -> CeO2 合成对照 -> EPR/CV/同位素/ICP 计划 -> 高价钴证据包。\n\n## 最有代表性的 3 个写作闭环\n1. `20260305 大组会`\n   - 文献组织 -> 工作文档 -> 最终 PPT。\n2. `毕业论文 0305 反推`\n   - 阶段目标 -> 图组需求 -> 待补实验 -> 章节组织。\n3. `开题报告演化`\n   - 脉路笔记 -> 多版本 PPT/DOC -> 最终候选。\n\n## 映射到 ResearchLoop-OpenClaw 对象设计\n- `Layer 1`: 亚氯酸盐 AOPs 背景、高价金属氧物种的一般机理、项目长期主问题。\n- `Layer 2`: 第二/四/五/六阶段推进，`20260305` 大组会与 `0305` 毕业论文反推等时间推进节点。\n- `Concept`: 双活性物种机制、Ce-Co3O4 界面调控、d-band 与聚合路径、高价钴方法学库。\n- `Task`: 性能筛选、活性物种测试、最小机理闭环、CeO2 合成对照。\n- `Pack`: 大组会包、毕业论文包、开题报告包、高价钴证据包。\n\n## 哪些内容最适合进入 benchmark / demo / 简历 / 面试题库\n- `benchmark`: 第二阶段筛选、第五阶段最小机理闭环、20260305 大组会。\n- `demo`: 高价钴证据包、毕业论文章节反推、开题报告版本演化。\n- `简历/面试`: “如何从文献-实验-写作构建闭环”这条 meta 叙事，以及 Ce-Co3O4 的问题拆解与证据链规划。\n\n## 推荐 benchmark 样例优先级\n1. `第六阶段高价钴直接证据任务`\n2. `20260305 大组会文献汇报包`\n3. `第二阶段 M-Co3O4 性能筛选`\n4. `2023 EST + 2024 PNAS 基线机制文献簇`\n"
+    },
+    {
+      "tool_call_id": "call_AssPZGR70Ldo6Lz9AkcPSOTT",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T22:53:16.565922",
+      "status": "completed_unmatched",
+      "result": "{\n  \"literature_closure\": [\n    {\n      \"id\": \"literature_closure_01\",\n      \"title\": \"亚氯酸盐活化基线机制：Co3O4 -> Co(IV) + ClO2\",\n      \"research_line\": \"RL1_chlorite_activation_high_valent_cobalt\",\n      \"candidate_concept\": \"亚氯酸盐活化下的 Co(IV)=O / ClO2 双活性物种机制\",\n      \"source_files\": [\n        \"科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf\",\n        \"科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md\",\n        \"科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf\",\n        \"科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md\"\n      ],\n      \"reason\": \"文献 PDF 与对应文献笔记同目录共现，且笔记中明确把 OAT、质子增强、ClO2 与 Co(IV) 的贡献区分作为研究目的。\",\n      \"suitable_tests\": [\n        \"context_hit_test\",\n        \"object_landing_test\",\n        \"trace_replay_test\"\n      ],\n      \"uncertainty_tags\": [],\n      \"status\": \"strong_candidate\"\n    },\n    {\n      \"id\": \"literature_closure_02\",\n      \"title\": \"Ce-Co3O4 与氧空位/界面电子结构调控\",\n      \"research_line\": \"RL2_ce_co3o4_heterojunction\",\n      \"candidate_concept\": \"CeO2/Co3O4 界面调控如何促进高价钴生成\",\n      \"source_files\": [\n        \"科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf\",\n        \"科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf\",\n        \"科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260305和师兄探讨过的主逻辑参考文献/Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton"
+    }
+  ],
+  "created_paths": [],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/__bootstrap__",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "E-S001-T02-C1",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中 6 个，达到阈值。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "E-S001-T02-C2",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "artifact_result": null,
+  "judge_result": {
+    "criterion_id": "E-S001-T02-C3",
+    "score": 100.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 6 个关键术语",
+      "检测到工具使用: read_file"
+    ],
+    "risks": [],
+    "missing": [],
+    "raw_text": "你是一名长期设计 benchmark、evaluator、数据集包架构与科研智能体协议的系统评审专家。请只依据【用户问题】【上传文件列表】【assistant 回复】【trace 摘要】【预期 focus】评分，不要替模型补系统设计。你要重点检查：回答是否真正站在 bridge/eval 视角而不是研究内容视角；是否清楚区分 package architecture、closure mapping、ecosystem map、test cases 与 downstream representative assets 的角色；是否把 loader / runner / scorer / llm-judge / report 等对象说清楚；是否明确哪些是 runtime 必须字段、哪些只是 analyst 注释；是否避免泛泛而谈的“平台化建议”。请输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_E_session_001_bootstrap\",\n  \"turn_id\": 2,\n  \"user_input\": \"这个 workspace 我想定义成 `跨闭环桥接容器`，主要是把文献、实验、写作三条线桥起来，给 benchmark / eval system 用。你先根据我上传的 3 份桥接文件判断：它更应该从 `package architecture`、`closure mapping`，还是 `ecosystem map` 这个入口起手。\",\n  \"user_upload\": [\n    \"outputs/pro_dataset_expanded_20260317/PRO_PROMPT_PACKAGE_ARCHITECTURE.md\",\n    \"outputs/research_os_ecosystem_map.md\",\n    \"outputs/closure_mapping.json\"\n  ],\n  \"assistant_text\": \"**Context Trace（本轮真实工具调用）**\\n- 已读 `assets/uploads/"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [],
+  "temporary_expectations": null,
+  "provisional_turn_score": 100.0,
+  "final_turn_score": 100.0
+}

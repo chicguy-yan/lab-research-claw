@@ -1,0 +1,53 @@
+{
+  "run_id": "one_click_E_20260322_171434",
+  "overall_score": 95.69,
+  "completed_turns": 31,
+  "scenario_summaries": [
+    {
+      "scenario_id": "scenario_E",
+      "scenario_name": "跨闭环桥接评测",
+      "average_score": 95.69,
+      "pass_rate": 1.0,
+      "turn_count": 31,
+      "temporary_turn_count": 0,
+      "hallucination_summary": {
+        "metric_descriptions": {
+          "E_H1_schema_runtime_fidelity": "统计 scenario/session/turn/criterion 字段建议是否真正可被 loader-runner-scorer 消费，而非高层空话。",
+          "E_H2_bridge_source_honesty": "统计是否正确区分 bridge 层索引文件与原始科研证据，避免把 mapping 说成事实本身。",
+          "E_H3_priority_coverage_integrity": "统计 benchmark prioritization 是否同时覆盖 bootstrap、binary、artifact、memory、guardrail 等关键能力。",
+          "E_H4_cross_closure_failure_awareness": "统计是否识别 literature→experiment→writing 的断链点与误迁移模式。",
+          "E_H5_evaluator_self_guardrails": "统计是否把 binary_grounding_required、source-layer honesty、stop-rule、abstain 等 evaluator 自身护栏落到接口层。"
+        },
+        "raw_counters": {
+          "unsupported_specificity": 0,
+          "trace_free_binary_certainty": 0,
+          "cross_system_overtransfer": 0,
+          "absolute_overclaim_turns": 5,
+          "source_confusion_turns": 0
+        },
+        "rates": {
+          "unsupported_specificity": 0.0,
+          "trace_free_binary_certainty": 0.0,
+          "cross_system_overtransfer": 0.0,
+          "absolute_overclaim_turns": 0.1613,
+          "source_confusion_turns": 0.0
+        }
+      },
+      "runtime_blueprint": {
+        "scenario_id": "scenario_E",
+        "criteria_count": 93,
+        "session_count": 10,
+        "turn_count": 31,
+        "summary": {
+          "scenario_id": "scenario_E",
+          "session_count": 10,
+          "turn_count": 31,
+          "criterion_count": 93,
+          "binary_turn_count": 1,
+          "prior_memory_turn_count": 26,
+          "missing_uploads": []
+        }
+      }
+    }
+  ]
+}

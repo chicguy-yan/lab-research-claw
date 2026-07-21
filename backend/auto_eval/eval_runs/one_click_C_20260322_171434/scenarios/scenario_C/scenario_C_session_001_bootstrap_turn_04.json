@@ -1,0 +1,159 @@
+{
+  "scenario_id": "scenario_C",
+  "session_id": "scenario_C_session_001_bootstrap",
+  "turn_id": 4,
+  "workspace_id": "eval-scenario_c-260322_1714",
+  "backend_session_id": "__bootstrap__",
+  "assistant_text": "**Context Trace（本回合真实工具记录）**  \n- 已读取：`memory/packs/PACK_TEMPLATE.md`  \n- 已读取：`memory/identity/project.md`  \n- 已读取：`assets/uploads/6abbf239_C_EXPERIMENT_TASK_BENCHMARK_RATIONALE.md`  \n- 已读取：`assets/uploads/f26a14af_【第二阶段】材料合成方法汇总.md`  \n- 已读取：`assets/uploads/d5740e86_【第二阶段实验脉络：Co3O4What？Why？How？】.md`  \n- 已写入：`memory/packs/PACK_bootstrap_kickoff.md`\n\n**Rationale（判断依据摘要）**  \n- 你明确要求把 workspace 定义成“实验/Task 容器”，目标是先拆本周实验，不先写综述。  \n- 已读的 benchmark rationale 支持以“性能筛选 → 任务升级”作为实验容器入口。  \n- 合成总表提供执行素材，但不应反客为主变成主容器。  \n- Co3O4 what/why/how 脉络内容丰富，但当前只抽取了对 bootstrap 有用的部分：候选对象、筛选优先级、暂不展开的线。\n\n**Deliverable**  \n已按 seed pack 形式初始化并落盘：  \n- `memory/packs/PACK_bootstrap_kickoff.md`\n\n这个 pack 里已至少写清楚：\n- **这个包测什么**：测当前 workspace 能否把第二阶段材料与脉络信息收束成“本周要做什么实验”的 task 容器  \n- **先做哪类任务**：样品就绪审计 → 缺失样品补合成 → 首轮性能筛选 → 升级门槛判定  \n- **暂不展开的线**：综述/论文故事线、全材料库扩张线、全面机理深挖线、写作/PPT 交付线\n\n**Memory Patch**  \n- 已新增：`memory/packs/PACK_bootstrap_kickoff.md`  \n- 来源素材已登记：  \n  - `assets/uploads/6abbf239_C_EXPERIMENT_TASK_BENCHMARK_RATIONALE.md`  \n  - `assets/uploads/f26a14af_【第二阶段】材料合成方法汇总.md`  \n  - `assets/uploads/d5740e86_【第二阶段实验脉络：Co3O4What？Why？How？】.md`\n\n如果你愿意，我下一步可以继续把这个 pack 往下接成 4 个真正可执行的周任务文件。",
+  "attachments_used": [],
+  "trace_events": [
+    {
+      "tool_call_id": "call_69hAhgrbYf9X11noeFT4w3mm",
+      "tool": "read_file",
+      "args": {
+        "cwd": ".",
+        "path": "memory/packs/PACK_TEMPLATE.md"
+      },
+      "timestamp": "2026-03-22T20:27:41.206911",
+      "status": "completed",
+      "result": "# PACK Template — PACK_<type>_<topic>.md\n\n> Pack = 交付物容器：把多个 Task 的证据链组织成可交付成果（PPT/机理闭环/写作段落/图集）。\n\n## meta\n- `id`: PACK_...\n- `pack_type`: mechanism_pack | stage_report_pack | figure_pack | writing_pack\n- `created_at`: YYYY-MM-DD\n- `time_range`: YYYY-MM-DD ~ YYYY-MM-DD（可选）\n\n## task_refs[]\n- TASK_...\n\n## final_assets[]\n- assets/ppt_pack/...\n- assets/figures/...\n- manuscripts/...\n\n## takeaways[]（每个资产 1 句话）\n- …\n\n## narrative（给论文/组会的叙事骨架）\n- …\n\n## limitations & risks\n- …\n\n## next_plan\n- …\n\n"
+    },
+    {
+      "tool_call_id": "call_6uwyGDBhRtoIMyoKWPbQlMY1",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T20:27:41.221439",
+      "status": "completed_unmatched",
+      "result": "# PACK Template — PACK_<type>_<topic>.md\n\n> Pack = 交付物容器：把多个 Task 的证据链组织成可交付成果（PPT/机理闭环/写作段落/图集）。\n\n## meta\n- `id`: PACK_...\n- `pack_type`: mechanism_pack | stage_report_pack | figure_pack | writing_pack\n- `created_at`: YYYY-MM-DD\n- `time_range`: YYYY-MM-DD ~ YYYY-MM-DD（可选）\n\n## task_refs[]\n- TASK_...\n\n## final_assets[]\n- assets/ppt_pack/...\n- assets/figures/...\n- manuscripts/...\n\n## takeaways[]（每个资产 1 句话）\n- …\n\n## narrative（给论文/组会的叙事骨架）\n- …\n\n## limitations & risks\n- …\n\n## next_plan\n- …\n\n"
+    },
+    {
+      "tool_call_id": "call_HhDb32vLCdwtHNbp8qiCimRg",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T20:27:41.221439",
+      "status": "completed_unmatched",
+      "result": "# Layer1 / project.md — 项目主线假设、指标、术语表、判据\n\n> 这份文件定义“项目的北极星”和“什么算证据”。  \n> **任何机理闭环的结论，必须与这里的判据对齐。**\n\n## 1) Project Snapshot\n\n- **项目标题：**（例：Ce-Co3O4 激活 NaClO2 实现选择性氧化降解抗生素）\n- **North Star（主线一句话）：**\n  - 我要证明：……\n- **目标污染物/体系：**\n  - 污染物：……\n  - 氧化剂：……\n  - 催化剂：……\n- **关键输出指标（KPI）：**\n  - 活性：k_obs / t90 / 去除率\n  - 选择性：副反应/矿化/目标官能团选择性\n  - 基质耐受：Cl⁻ / HCO3⁻ / NOM 等\n  - 稳定性：循环、溶出、结构保持\n  - 副产物：ClO2/ClO3⁻/ClO4⁻/有机副产物（按项目需求）\n\n## 2) 术语表（Glossary）\n\n- **ClO₂ / ClO₂⁻ / ClO₃⁻ / ClO₄⁻：**（项目内定义）\n- **Co(IV) / high-valent Co=O：**（项目内定义）\n- **OAT / PCET：**（项目内定义）\n- **选择性氧化：**（项目内定义）\n\n## 3) Claim → Evidence 判据（必须遵守）\n\n> 例：你经常要补齐“Co(IV) / ClO₂ 的硬证据链”。  \n> 这里把“哪些证据才算支持/不支持”写清楚，避免凭印象。\n\n### 3.1 Claim：体系中生成了 ClO₂（或可检测的 ClO₂）\n\n**建议证据组合（至少 2 类）：**\n- DPD 显色（注明波长/校准/干扰排查）\n- UV-Vis 特征吸收（如有）\n- 头空间/离子色谱（如有）\n- 关键空白/对照：无催化剂、无 NaClO2、暗/光、pH 对照\n\n**不充分证据（单独出现不允许下结论）：**\n- 只有“气味/颜色变化”描述\n- 只有单次显色无空白/无校准\n\n### 3.2 Claim：存在高价 Co(IV) 或 Co=O 参与 OAT/PCET\n\n**建议证据组合：**\n- 原位/准原位谱学（XAS/XPS/EPR 等，按实验条件）\n- 探针（如 PMSO）+ 产物定量 + 空白/对照\n- 淬灭剂矩阵（说明副反应可能性与判读逻辑）\n- 反应动力学与 pH/同位素效应等间接证据（须写清“间接”）\n\n**关键提醒：**\n- **探针/淬灭剂结果必须配套空白与干扰排查**（否则容易被审稿人打回）\n- “推测 Co(IV)”必须标注证据等级（强/中/弱）\n\n## 4) 当前最大不确定性（持续更新）\n\n1. …\n2. …\n3. …\n\n## 5) 近期验证计划（持续更新）\n\n- Plan A：…\n- Plan B：…\n\n"
+    },
+    {
+      "tool_call_id": "call_mRj4BHWw4MpHCjZN2soucUfK",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T20:27:41.221439",
+      "status": "completed_unmatched",
+      "result": "# C Experiment Task Benchmark Rationale\n\n## C_实验与Task包为什么适合作为 experiment_closure benchmark 样例\n\n`C_实验与Task包` 是这套数据里最接近真实科研任务闭环的部分，因为它不是单纯的实验记录堆积，而是已经自然形成了“实验目标 -> 方法 -> 证据 -> 下一步”的任务链。\n\n它适合作为 `experiment_closure benchmark`，主要有 6 个原因：\n\n### 1. 它有明确的任务起点，而不是只有零散文件\n\n这一包里的代表文件并不是孤立的 SOP 或单次实验截图，而是围绕具体任务展开：\n- `M-Co3O4 亚氯酸盐活化性能筛选`\n- `Ce-Co3O4 机理主线搭建与活性物种测试`\n- `第五阶段最小机理闭环：PMSO / ClO2 / EPR`\n- `第六阶段高价钴直接证据任务`\n- `CeO2 对照材料单独合成`\n\n这意味着系统可以从“实验想回答什么问题”出发，而不是只能事后分类文件。\n\n### 2. 它同时包含 protocol、task intent、evidence planning 和 next step\n\n这一包里同时存在：\n- 实验脉络文件\n- SOP / 方法文件\n- 活性物种测试方案\n- 图谱 / 显色 / EPR 等证据工具说明\n- 下一步实验与写作落点\n\n这正是 `experiment_closure` 的理想测试材料，因为系统不仅要识别“做了什么”，还要识别：\n- 为什么做\n- 怎么做\n- 证据链缺什么\n- 下一步该接什么\n\n### 3. 它天然包含“闭环未完成”的真实科研状态\n\n这包并不是一套过度整理的完美案例，反而保留了真实科研中最有测试价值的状态：\n- 有些任务已经有 SOP 但缺稳定原始结果\n- 有些任务已经形成证据链草图，但还处于计划态\n- 有些任务已经进入写作，但实验闭环并不完全闭合\n\n这非常适合做 benchmark，因为可以测试系统是否能正确识别：\n- 已闭环部分\n- 半闭环部分\n- 缺失上下文部分\n\n而不是把所有任务都错误地当成“已完成实验”。\n\n### 4. 它能测试系统是否会把不同层级的实验材料正确落到 Task\n\n`C_实验与Task包` 中的材料类型混合度很高，包括：\n- `实验目标`\n- `材料合成方法`\n- `活性物种测试方法`\n- `淬灭 / EPR / PMSO / ClO2 测试 SOP`\n- `阶段实验脉络`\n- `GraphPad 拟合方法`\n\n一个好的系统需要能把这些材料组织成一个 `Task`，而不是仅仅按文件类型拆开。\n\n因此它特别适合测试：\n- `object_landing_test`\n- `trace_replay_test`\n\n### 5. 它与文献和写作有清晰连接，便于测跨层闭环\n\n这个包不是自闭的实验岛，它和：\n- `B_文献与Concept包`\n- `D_写作与Pack包`\n\n之间有明显桥接关系。\n\n例如：\n- 第二阶段实验记录会回指基线文献\n- 第五阶段最小机理闭环会回指活性物种方法学\n- 第六阶段高价钴直接证据任务会直接进入毕业论文与证据包组织\n\n这使它特别适合作为 `experiment_closure benchmark`，因为它能测试系统是否会把实验任务与：\n- 上游文献依据\n- 下游写作落点\n\n正确接起来。\n\n### 6. 它覆盖了多种 experiment_closure 难点\n\n这包里的 benchmark 价值不止在“有实验”，而在于它覆盖了多种典型难点：\n- 性能筛选任务如何升级为机制任务\n- 方法学任务如何作为独立 Task 被组织\n- 计划态证据链如何与已完成结果区分\n- 一个 Task 如何被写作 Pack 吸收\n- 缺失原始数据时系统是否能诚实标记 `missing_context`\n\n因此它不只是“实验文件夹”，而是最能测试 ResearchLoop-OpenClaw 对 `Task` 和 `experiment_closure` 理解能力的真实数据切片。\n\n## 在 benchmark 里的推荐代表样例\n\n优先推荐这 3 个：\n\n1. `第二阶段 M-Co3O4 性能筛选`\n   - 适合测试：系统是否能从性能筛选中识别任务升级点，并落到机制问题\n\n2. `第五阶段最小机理闭环：PMSO / ClO2 / EPR`\n   - 适合测试：系统是否能把 protocol、测试目标和证据工具组织成最小可回放 Task\n\n3. `第六阶段高价钴直接证据任务`\n   - 适合测试：系统是否能处理“高价值但部分计划态”的任务，而不误判为已完成结论\n\n## 总结\n\n`C_实验与Task包` 适合作为 `exper"
+    },
+    {
+      "tool_call_id": "call_1PUe37npFnLZySKRrodo49OA",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T20:27:41.221439",
+      "status": "completed_unmatched",
+      "result": "# 材料合成：初始Co3O4和Cu-Co3O4\n#日志20250912\n\n#日志20250926 \n想要不带脑子的关键：==所有【标号】都不能掉==，否则有搞混or样品交叉污染的风险。\n[[【第二阶段v1】20250925材料制备]]\n\n## 第一天\n\n【第一步】液体用量筒称量放入100ml水热釜内胆\n\n| 乙二醇![[Pasted image 20250912161007.png]] | C2H6O2 | 40ml（44.5g用密度换算） | 液体  | 国药、沪试，500ml | 量筒  |\n| --------------------------------------- | ------ | ---------------- | --- | ----------- | --- |\n+20 g H2O\n\n【第二步】三个水热釜拿走，称取5mmol、1.455g硝酸钴\n\n| 材料名称      | 化合物        | 化合物摩尔质量 (g/mol) | 0.5 mmol 金属元素对应质量 (mg) | 化学计量数：硝酸盐：金属元素 | 位置  | 厂商            | 备注   | 制备批次 |\n| --------- | ---------- | --------------- | ---------------------- | -------------- | --- | ------------- | ---- | ---- |\n| **Co3O4** | **六水合硝酸钴** |                 | 1455 mg（5mmol）         | 1:1            | 干燥箱 | **国药、沪试、25g** | 容易潮解 | 1    |\n|           |            |                 |                        |                |     |               |      |      |\n#日志20250915 硝酸钴不够了，后面等测试完这批材料买国药100g的\n\n【第三步】对准釜的标号，分别称取称取 0.5mmol硝酸铜水合物制备Cu-Co3O4，初始Co3O4则没有这一步\n\n| 材料名称     | 化合物           | 化合物摩尔质量 (g/mol) | 0.5 /0.2mmol 金属元素对应质量 (mg):直接把原数×了0.4，不用管 | 化学计量数：硝酸盐：金属元素 | 位置  | 厂商  | 备注          | 制备标号 | 制备计划/批次     | 备注  |\n| -------- | ------------- | --------------- | ----------------------------------------- | -------------- | --- | --- | ----------- | ---- | ----------- | --- |\n| Cu-Co3O4 | Cu(NO₃)₂·xH₂O | 187.56          | 94 mg；37.6mg                              | 1:1            | X固体 | 麦克林 | 易潮解，结块，94mg | B1   | #日志20250918 |     |\n| 六水合氯化铈   |               |                 |                                           |                |     |     |             |      |             |     |\n\n\n拿回来，稍微倾斜水热釜内胆贴壁放入搅拌子，600转搅拌10min\n开始搅拌后，去用小舟称取3个0.5g尿素\n——————\n\n| 化合物                                    | 化学式      | 所需质量 | 位置  | 厂商         | 备注                          |\n| -------------------------------------- | -------- | ---- | --- | ---------- | --------------------------- |\n| 尿素![[Pasted image 20250912161027.png]] | CO(NH2)2 | 0.5g | N   | 国药、沪试，500g | #日志20250919"
+    },
+    {
+      "tool_call_id": "call_1PUe37npFnLZySKRrodo49OA",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T20:27:41.221439",
+      "status": "completed_unmatched",
+      "result": "\n一会开会时候整理我的回答，然后确定好【生态位】-比较-配位/掺杂/异质结的方法有哪些（顶层综述-具体的实验文章）+其他意群：（碳材料、晶相的一些顶刊）\n精读这篇PNAS\n\n# 当进行到ClO2和高价Co测试时-亚氯酸盐原理意群\n\n# 顶层设计：What Co3O4？\n\n\n#日志20250929\n[[20250926-Co3O4掺杂-配位.canvas|20250926-Co3O4掺杂-配位]]，这里会有详细记载\n\n因为我实在好奇为什么是四氧化三钴而不是其他材料\n\n[[2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2]]\n\n##  Co₃O₄的宏观生态位？\n\n- 顶层是 **SAC/DAC**，代表机理研究与极限性能探索；\n    \n- 中层是 **Co₃O₄ 等尖晶石/钙钛矿**，代表可调性强的工程化过渡金属氧化物；\n    \n- 底层是 **碳基材料**，代表稳定、廉价、可规模化的绿色解决方案。\n\n\n- 你的问题：\n    \n    - “可变价态金属有很多，为什么大家总是强调 Co₃O₄ 的尖晶石结构？”\n        \n- 结论：\n    \n    - **多价态灵活**：Co²⁺ ↔ Co³⁺ ↔ Co⁴⁺，尤其能稳定 Co(IV)=O。\n        \n    - **天然双位点**：Co²⁺(Td) + Co³⁺(Oh) → 内生耦合电子通道。\n        \n    - **缺陷响应好**：OV 可控且可再生（光/热）。\n        \n    - **晶格稳定**：溶出低，适合实际应用。\n        \n- 对比：Fe/Mn/Cu/Ni 系虽有价态变化，但高价态不稳/缺陷难控/溶出严重。\n    \n- → **Co₃O₄ 是“活性–选择性–稳定性平衡点”**。\n\n\n| 材料体系              | **独特价值 (优势功能)**                                                                        | **核心短板 (主要局限)**                          |\n| ----------------- | -------------------------------------------------------------------------------------- | ---------------------------------------- |\n| **Co₃O₄ 尖晶石**     | - 天然双位点（Co²⁺–Td + Co³⁺–Oh）协同 - 多价态循环灵活，稳定生成 Co(IV)=O - 缺陷与掺杂可控，结构调节成熟 - 活性–选择性–稳定性三者平衡 | - Co 元素价格较高 - 金属本身有一定毒性 - 在复杂水体系中仍可能少量溶出 |\n| **单原子催化剂 (SACs)** | - 原子利用率 100% - 配位环境可精准设计 - 机理研究的理想模型（便于理论+实验对照）                                        | - 极易团聚，需强锚定 - 缺陷/配体依赖性强 - 规模化与稳定性不足      |\n| **双原子催化剂 (DACs)** | - 双位点协同效应显著，可突破单点极限 - 可设计异质双金属耦合，扩展反应路径                                                | - 位点结构构建复杂 - 稳定性不足，易重构/失活 - 合成与放大制备困难    |\n| **碳材料 (0D–3D)**   | - 廉价、资源丰富 - 缺陷/杂原子掺杂灵活可控 - 高化学稳定性与耐腐蚀性 - 可规模化应用（活性炭、生物炭等）                              | - 缺少金属价态循环功能 - 单位活性偏低 - 机理复杂，难以明确主导活性位点  |\n\n\n| **体系**            | **位点设计**                         | **电子特征**           | **优势**                 | **短板**          |\n| ----------------- | -------------------------------- | ------------------ | ---------------------- | --------------- |\n"
+    },
+    {
+      "tool_call_id": "call_66ZmYEFtoY5VFK9bg96bOkuS",
+      "tool": "write_file",
+      "args": {
+        "content": "---\nsource_assets:\n  - assets/uploads/6abbf239_C_EXPERIMENT_TASK_BENCHMARK_RATIONALE.md\n  - assets/uploads/f26a14af_【第二阶段】材料合成方法汇总.md\n  - assets/uploads/d5740e86_【第二阶段实验脉络：Co3O4What？Why？How？】.md\ncreated_at: 2026-03-22\n---\n\n# PACK_bootstrap_kickoff\n\n> bootstrap seed pack：用于把当前 workspace 定义成“实验/Task 容器”，先服务本周实验排产与 task 拆解，而不是先进入论文故事或综述收束。\n\n## meta\n- `id`: PACK_bootstrap_kickoff\n- `pack_type`: stage_report_pack\n- `created_at`: 2026-03-22\n- `time_range`: bootstrap phase\n\n## task_refs[]\n- 待创建：`TASK_week_sample_readiness`\n- 待创建：`TASK_week_missing_sample_synthesis`\n- 待创建：`TASK_week_performance_screening`\n- 待创建：`TASK_week_promotion_gate`\n\n## final_assets[]\n- `memory/packs/PACK_bootstrap_kickoff.md`\n\n## 这个包测什么\n- 这个包不测“论文叙事是否完整”，而是测：**当前 workspace 能否把第二阶段材料与脉络信息收束成“本周要做什么实验”的 task 容器。**\n- 核心判断对象不是综述问题，而是：**下一步该做哪些实验对象、这些对象属于哪类 task、先后顺序怎么排。**\n- 这个包优先服务 3 件事：\n  1. 明确 `experiment/task` 容器职责边界；\n  2. 收敛本周优先实验对象；\n  3. 给后续合成 checklist、性能筛选、最小机理闭环、Ce-Co3O4 任务板建立入口。\n- 当前包的成功标准不是“讲清楚 Co3O4 的全部故事”，而是：**能把本周实验拆成可执行任务，并知道哪些线暂时不展开。**\n\n## 先做哪类任务\n\n### 1) 样品就绪/批次审计类 task\n- 目标：先确认本周真正能上机、能比较、能复现的样品对象。\n- 优先对象：`Co3O4 baseline`、`Ce-Co3O4`、`Cu-Co3O4`、`CeO2 control`。\n- 作用：防止后续性能筛选建立在“样品未就绪 / 批次不一致 / 对照缺失”上。\n\n### 2) 缺失样品补合成类 task\n- 目标：只补本周筛选必须缺的对象，不补全整个材料库。\n- 作用：让合成服务于任务落地，而不是把 workspace 变成合成大全或 SOP 仓库。\n- 原则：优先补 baseline、关键候选样和必要对照；暂不全面扩展到所有掺杂和形貌分支。\n\n### 3) 首轮性能筛选类 task\n- 目标：用统一反应体系比较基线、候选与对照，判断谁值得继续投入。\n- 关注指标：活性、重复性、基础稳定性、与对照差异。\n- 这是当前最优先的主任务，因为它最直接回答：**接下来该做谁。**\n\n### 4) 升级门槛判定类 task\n- 目标：把筛选结果转成下一周动作，明确谁进入最小机理闭环、谁保留、谁暂停。\n- 作用：避免“看到一点差异就立刻展开大机制/大综述/大写作”。\n- 判定逻辑：至少满足性能差异明确、重复性可接受、对照齐全，才允许升级。\n\n## 暂不展开的线\n\n### A. 暂不展开综述/论文故事线\n- 暂不先写 Co3O4 材料生态位综述；\n- 暂不先组织论文主线叙事；\n- 暂不先做“为什么是 Co3O4 而不是别的材料”的大段写作收束。\n\n### B. 暂不展开全材料库扩张线\n- 暂不把所有 0.5 mmol / 0.2 mmol 掺杂样全部纳入本周主线；\n- 暂不平行推进过多形貌样、异质结样、碳耦合样；\n- 暂不把容器做成“材料宇宙总表”。\n\n### C. 暂不展开全面机理深挖线\n- 暂不直接全面铺开 PMSO / ClO2 / EPR / 高价 Co 证据链；\n- 暂不在对象未收敛前启动高成本强证据机理任务；\n- 最小机理闭环应作为“筛选升级后的第二层任务”，而不是 bootstrap 起手任务。\n\n### D. 暂不展开写作/PPT 交付线\n- 暂不优先做组会故事板；\n- 暂不优先做论文目录树；\n- 暂不把结果整理重心放到对外表达，而优先放到 task 排产。\n\n## takeaways[]\n- 当前 workspace 的职责是“实验/Task 容器”，不是综述容器。\n- bootstrap 第一优先不是合成大全，也不是机理大全，而是本周实验对象收敛。\n- 最合适的起手顺序是：样品就绪审计 → 缺失样品补合成 → 首轮性能筛选 → 升级门槛判定。\n- 合成 checklist 应作为对象 task 的附属支持层；最小机理闭环应作为升级后的第二层任务。\n\n## narrative\n- 当前阶段不追求讲完整研究故事。\n- 叙事骨架只保留到“为什么本周先做这些 task”：\n  1. 已有材料与脉络信息足够支持实验对象收敛；\n  2. 当前最重要的是把候选样品与对照样整理成可执行 task；\n  3. 只有筛选出值得推进的对象，后续才进入最小机理闭环与 Ce-Co3O4 任务板深化。\n\n## limitations & risks\n- 现有 `project.md` 仍未填写具体项目主线与量化判据，因此本包只能先定义容器职责与任务优先级，不能替代正式项目定义。\n- 上传材料中已有较多综述式与顶层问题脉络，若不加限制，后续很容易重新滑回“研究总结”模式。\n- 当前还没有真实落盘的周任务 `TASK_*.md`，因此本包只是 kickoff seed，而不是完整执行板。\n\n## next_plan\n1. 新建 `TASK_week_sample_readiness.md`：列出本周必测样品、批次状态、缺失对照。\n2. 新建 `TASK_week_missing_sample_synthesis.md`：只补本周筛选缺的样品。\n3. 新建 `TASK_week_performance_screening.md`：统一首轮筛选矩阵与记录字段。\n4. 新建 `TASK_week_promotion_gate.md`：定义进入最小机理闭环的门槛。\n5. 后续再按筛选结果决定是否进入 Ce-Co3O4 重点任务或最小机理闭环。\n",
+        "cwd": ".",
+        "path": "memory/packs/PACK_bootstrap_kickoff.md",
+        "source_assets": [
+          "assets/uploads/6abbf239_C_EXPERIMENT_TASK_BENCHMARK_RATIONALE.md",
+          "assets/uploads/f26a14af_【第二阶段】材料合成方法汇总.md",
+          "assets/uploads/d5740e86_【第二阶段实验脉络：Co3O4What？Why？How？】.md"
+        ]
+      },
+      "timestamp": "2026-03-22T20:28:20.516999",
+      "status": "completed",
+      "result": "File written successfully: memory/packs/PACK_bootstrap_kickoff.md"
+    },
+    {
+      "tool_call_id": "call_66ZmYEFtoY5VFK9bg96bOkuS",
+      "tool": "write_file",
+      "args": null,
+      "timestamp": "2026-03-22T20:28:20.533791",
+      "status": "completed_unmatched",
+      "result": "File written successfully: memory/packs/PACK_bootstrap_kickoff.md"
+    }
+  ],
+  "created_paths": [
+    "memory/packs/PACK_bootstrap_kickoff.md"
+  ],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/__bootstrap__",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "C-S001-T04-C1",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中 4 个，达到阈值。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "C-S001-T04-C2",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "artifact_result": {
+    "criterion_id": "C-S001-T04-C2A",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "judge_result": {
+    "criterion_id": "C-S001-T04-C3",
+    "score": 93.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 4 个关键术语",
+      "检测到工具使用: read_file, write_file"
+    ],
+    "risks": [
+      "缺失关键术语: ['确认初始化']"
+    ],
+    "missing": [
+      "确认初始化"
+    ],
+    "raw_text": "你是一名擅长把实验主线压缩成 Task/Pack 的材料科研项目经理。请判断这条回答能否被当作 experiment closure 的稳定对象：它是否有清晰的任务目标、执行顺序、依赖关系、回退路线与结果判读；是否真的把实验对象落到 checklist / matrix / task board，而不是写成机理散文；是否保留了条件边界与误判风险；是否足够具体到研究生日常可以照着执行或继续补充。请严格只基于给定材料评分，不要用你自己的实验经验替模型补缺。输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_C_session_001_bootstrap\",\n  \"turn_id\": 4,\n  \"user_input\": \"可以，确认初始化。请把 seed pack 存成 `memory/packs/PACK_bootstrap_kickoff.md`，至少写清楚：`这个包测什么`、`先做哪类任务`、`暂不展开的线`。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace（本回合真实工具记录）**  \\n- 已读取：`memory/packs/PACK_TEMPLATE.md`  \\n- 已读取：`memory/identity/project.md`  \\n- 已读取：`assets/uploads/6abbf239_C_EXPERIMENT_TASK_BENCHMARK_RATIONALE.md`  \\n- 已读取：`assets/uploads/f26a14af_【第二阶段】材料合成方法汇总.md`  \\n- 已读取：`assets/uploads/d5740e86_【第二阶段实验脉络：Co3O4What？Why？How？】.md`  \\n- 已写入：`memory/packs/PACK_bootstrap_kickoff.md`\\n\\n**Rationale（判断依据摘要）**  \\n- 你明确要求把 workspace 定义成“实验/Task 容器”，目标是先拆本周实验，不先"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [
+    {
+      "artifact_type": "pack",
+      "path": "memory/packs/PACK_bootstrap_kickoff.md",
+      "must_exist_after_turn": true,
+      "required_sections": [
+        "这个包测什么",
+        "先做哪类任务",
+        "暂不展开的线"
+      ]
+    }
+  ],
+  "temporary_expectations": null,
+  "provisional_turn_score": 100.0,
+  "final_turn_score": 97.67
+}

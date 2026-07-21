@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 5.3 Architecture — Workspace Runtime Switch + Bootstrap Lifecycle</title>
+<style>
+:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2128;--border:#30363d;--text:#e6edf3;--text2:#8b949e;--accent:#58a6ff;--green:#3fb950;--yellow:#d29922;--red:#f85149;--purple:#bc8cff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding:32px;max-width:1200px;margin:0 auto}
+h1{font-size:28px;margin-bottom:8px}
+h2{font-size:20px;margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3{font-size:16px;margin:20px 0 10px;color:var(--accent)}
+p,li{font-size:14px;color:var(--text2)}
+a{color:var(--accent);text-decoration:none}
+table{width:100%;border-collapse:collapse;margin:12px 0}
+th,td{padding:8px 12px;border:1px solid var(--border);font-size:13px;text-align:left}
+th{background:var(--bg2);color:var(--text);font-weight:600}
+td{color:var(--text2)}
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
+.badge-done{background:rgba(63,185,80,.15);color:var(--green)}
+.badge-phase53{background:rgba(88,166,255,.15);color:var(--accent)}
+.badge-later{background:rgba(139,148,158,.15);color:var(--text2)}
+.badge-pass{background:rgba(63,185,80,.15);color:var(--green)}
+.badge-stub{background:rgba(210,153,34,.15);color:var(--yellow)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;margin:8px 0}
+.card-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px}
+.card-body{font-size:13px;color:var(--text2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin:12px 0}
+.callout{border-left:3px solid var(--accent);background:var(--bg2);padding:12px 16px;margin:12px 0;border-radius:0 6px 6px 0}
+.callout-title{font-weight:600;color:var(--accent);margin-bottom:4px;font-size:13px}
+.callout-body{font-size:13px;color:var(--text2)}
+pre{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px;font-size:12px;overflow-x:auto;color:var(--text2);margin:8px 0}
+.file-tree{font-family:monospace;font-size:13px;line-height:1.8}
+.file-tree .new{color:var(--green)}
+.file-tree .phase1{color:var(--text2)}
+.file-tree .modified{color:var(--yellow)}
+.subtitle{color:var(--text2);font-size:14px;margin-bottom:24px}
+</style>
+</head>
+<body>
+
+<h1>Phase 5.3 Architecture</h1>
+<p class="subtitle">Workspace Runtime Switch + Workspace/Session Naming + Bootstrap Lifecycle Integration</p>
+
+<!-- 1. Phase 目标与验收 -->
+<h2>1. Phase 目标与验收</h2>
+<table>
+<tr><th>#</th><th>验证项</th><th>状态</th></tr>
+<tr><td>1</td><td>WorkspaceRuntimeRegistry 替代全局单例</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>2</td><td>SharedAgentResources 共享 LLM（不按 workspace 复制）</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>3</td><td>所有 API 通过 X-Workspace-Id header 路由到对应 workspace</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>4</td><td>workspace_manifest.json 含 bootstrap_status 字段</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>5</td><td>POST /api/workspaces 创建 workspace 并设 pending</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>6</td><td>POST /api/workspaces/{id}/bootstrap/start 状态流转</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>7</td><td>前端 workspace selector + 切换后重载</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>8</td><td>前端 session rename UI</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>9</td><td>已有 workspace 自动补 manifest</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>10</td><td>Bootstrap runner 完整执行逻辑</td><td><span class="badge badge-stub">STUB</span></td></tr>
+<tr><td>11</td><td>前端 bootstrap 引导界面（阻止 pending 进入 chat）</td><td><span class="badge badge-stub">STUB</span></td></tr>
+</table>
+
+<!-- 2. 文件清单 -->
+<h2>2. 文件清单</h2>
+<div class="file-tree">
+backend/<br>
+├── <span class="modified">app.py</span> (启动改用 WorkspaceRuntimeRegistry)<br>
+├── <span class="modified">config.py</span><br>
+├── runtime/<br>
+│   ├── <span class="new">__init__.py</span><br>
+│   └── <span class="new">workspace_registry.py</span> (核心: Registry + SharedResources + Runtime)<br>
+├── api/<br>
+│   ├── <span class="new">runtime_context.py</span> (get_runtime helper)<br>
+│   ├── <span class="new">workspaces.py</span> (5 endpoints: CRUD + bootstrap/start)<br>
+│   ├── <span class="modified">agents.py</span> (backward-compat wrapper)<br>
+│   ├── <span class="modified">chat.py</span> (per-request agent build)<br>
+│   ├── <span class="modified">sessions.py</span> (workspace-aware)<br>
+│   ├── <span class="modified">files.py</span> (workspace-aware)<br>
+│   └── <span class="modified">assets.py</span> (workspace-aware)<br>
+├── graph/<br>
+│   ├── <span class="phase1">agent.py</span> (AgentManager — no longer used by chat.py)<br>
+│   ├── <span class="phase1">session_manager.py</span><br>
+│   ├── <span class="phase1">context_orchestrator.py</span><br>
+│   ├── <span class="phase1">prompt_builder.py</span><br>
+│   ├── <span class="phase1">skill_loader.py</span><br>
+│   ├── <span class="phase1">trace_writer.py</span><br>
+│   └── <span class="phase1">path_utils.py</span><br>
+├── workspace-templates/<br>
+│   └── <span class="modified">BOOTSTRAP.md</span> (v1.0 — full lifecycle protocol)<br>
+frontend/<br>
+└── <span class="modified">index.html</span> (workspace selector + session rename + X-Workspace-Id header)<br>
+</div>
+
+<!-- 3. API 端点 -->
+<h2>3. API 端点</h2>
+<table>
+<tr><th>Method</th><th>Path</th><th>Phase</th><th>说明</th></tr>
+<tr><td>GET</td><td>/</td><td>1</td><td>Health check</td></tr>
+<tr><td>POST</td><td>/api/chat</td><td>1 → 5.3</td><td>SSE streaming chat (now workspace-aware)</td></tr>
+<tr><td>GET</td><td>/api/sessions</td><td>1 → 5.3</td><td>List sessions (scoped by workspace)</td></tr>
+<tr><td>POST</td><td>/api/sessions</td><td>1 → 5.3</td><td>Create session</td></tr>
+<tr><td>PUT</td><td>/api/sessions/{id}</td><td>1 → 5.3</td><td>Rename session</td></tr>
+<tr><td>DELETE</td><td>/api/sessions/{id}</td><td>1 → 5.3</td><td>Delete session</td></tr>
+<tr><td>GET</td><td>/api/sessions/{id}/history</td><td>1 → 5.3</td><td>Get message history</td></tr>
+<tr><td>GET</td><td>/api/files</td><td>2 → 5.3</td><td>Read file</td></tr>
+<tr><td>POST</td><td>/api/files</td><td>2 → 5.3</td><td>Save file</td></tr>
+<tr><td>GET</td><td>/api/files/tree</td><td>2 → 5.3</td><td>Directory tree</td></tr>
+<tr><td>GET</td><td>/api/files/preview</td><td>2 → 5.3</td><td>File preview</td></tr>
+<tr><td>GET</td><td>/api/agents</td><td>2 → 5.3</td><td>List agents (deprecated, wraps workspaces)</td></tr>
+<tr><td>POST</td><td>/api/agents</td><td>2 → 5.3</td><td>Create agent (deprecated, wraps workspaces)</td></tr>
+<tr><td>POST</td><td>/api/assets/upload</td><td>3+4 → 5.3</td><td>Upload asset</td></tr>
+<tr><td>GET</td><td>/api/assets/download</td><td>5.2 → 5.3</td><td>Download asset</td></tr>
+<tr><td>GET</td><td>/api/workspaces</td><td><span class="badge badge-phase53">5.3</span></td><td>List all workspaces</td></tr>
+<tr><td>POST</td><td>/api/workspaces</td><td><span class="badge badge-phase53">5.3</span></td><td>Provision new workspace</td></tr>
+<tr><td>PUT</td><td>/api/workspaces/{id}</td><td><span class="badge badge-phase53">5.3</span></td><td>Rename workspace</td></tr>
+<tr><td>GET</td><td>/api/workspaces/{id}/manifest</td><td><span class="badge badge-phase53">5.3</span></td><td>Read manifest</td></tr>
+<tr><td>POST</td><td>/api/workspaces/{id}/bootstrap/start</td><td><span class="badge badge-phase53">5.3</span></td><td>Start bootstrap runner</td></tr>
+</table>
+
+<!-- 4. 核心模块职责 -->
+<h2>4. 核心模块职责</h2>
+<div class="grid">
+<div class="card"><div class="card-title">WorkspaceRuntimeRegistry</div><div class="card-body">中央注册表。管理 workspace 生命周期（provision/bootstrap/active）、manifest CRUD、runtime 懒加载。启动时初始化共享资源，按需创建 per-workspace runtime。</div></div>
+<div class="card"><div class="card-title">SharedAgentResources</div><div class="card-body">进程级单例。持有共享 ChatOpenAI 实例和 FetchURLTool。所有 workspace 共用同一个 LLM 连接。</div></div>
+<div class="card"><div class="card-title">WorkspaceRuntime</div><div class="card-body">per-workspace 隔离单元。持有该 workspace 的 SessionManager 和 workspace-scoped tools（Terminal/PythonREPL/ReadFile/WriteFile）。</div></div>
+<div class="card"><div class="card-title">runtime_context.py</div><div class="card-body">API 层统一入口。从 X-Workspace-Id header 或 body 解析 workspace_id，返回对应 WorkspaceRuntime。所有 API 共用。</div></div>
+<div class="card"><div class="card-title">workspaces.py</div><div class="card-body">Workspace CRUD API。provision（POST）、rename（PUT）、list（GET）、manifest 读取、bootstrap/start 状态流转。</div></div>
+<div class="card"><div class="card-title">chat.py (Phase 5.3)</div><div class="card-body">不再依赖全局 AgentManager。每请求用 shared.llm + workspace tools + system_prompt 临时构建 agent，直接 astream。</div></div>
+<div class="card"><div class="card-title">workspace_manifest.json</div><div class="card-body">机器可读元数据。workspace_id、display_name、description、bootstrap_status（pending/running/completed/failed）、timestamps。</div></div>
+<div class="card"><div class="card-title">BOOTSTRAP.md (v1.0)</div><div class="card-body">Agent 可读的 first-run 初始化协议。定义 scope discovery → asset intake → generation plan → identity generation → handoff 全流程。由 bootstrap runner 触发执行。</div></div>
+</div>
+
+<!-- 5. 请求流程 -->
+<h2>5. 请求流程</h2>
+<h3>5.1 普通 chat 请求</h3>
+<pre>
+Frontend                    Backend
+   │                           │
+   │ POST /api/chat            │
+   │ X-Workspace-Id: ws-A      │
+   │ body: {workspace_id, ...} │
+   ├──────────────────────────►│
+   │                           ├─► runtime_context.resolve_workspace_id()
+   │                           │   (body > header > "default")
+   │                           ├─► registry.get_runtime("ws-A")
+   │                           │   → lazy init SessionManager + tools
+   │                           ├─► registry.get_shared()
+   │                           │   → shared LLM + FetchURLTool
+   │                           ├─► ContextOrchestrator(workspace_dir)
+   │                           ├─► PromptBuilder(workspace_dir)
+   │                           ├─► create_agent(shared.llm, all_tools, system_prompt)
+   │                           ├─► agent.astream() → SSE tokens
+   │◄──────────────────────────┤
+   │ event: token/tool_start/  │
+   │        tool_end/done      │
+</pre>
+
+<h3>5.2 workspace provision + bootstrap</h3>
+<pre>
+Frontend                         Backend
+   │                                │
+   │ POST /api/workspaces           │
+   │ {workspace_id, display_name}   │
+   ├───────────────────────────────►│
+   │                                ├─► copytree(templates)
+   │                                ├─► write manifest (bootstrap_status=pending)
+   │                                ├─► normalize skills
+   │◄───────────────────────────────┤ manifest returned
+   │                                │
+   │ (switch to new workspace)      │
+   │ GET /api/workspaces/{id}/manifest
+   ├───────────────────────────────►│
+   │◄───────────────────────────────┤ bootstrap_status=pending
+   │                                │
+   │ POST /api/workspaces/{id}/bootstrap/start
+   ├───────────────────────────────►│
+   │                                ├─► manifest: pending → running
+   │◄───────────────────────────────┤
+   │                                │
+   │ (bootstrap agent chat session) │
+   │ ... scope discovery, etc ...   │
+   │                                │
+   │ (runner marks completed)       │
+   │                                ├─► manifest: running → completed
+</pre>
+
+<!-- 6. 关键决策记录 -->
+<h2>6. 关键决策记录</h2>
+<div class="callout"><div class="callout-title">决策 1：请求级 workspace 选择，不做全局切换</div><div class="callout-body">不新增 POST /api/agents/switch 或 app.state.current_workspace。每个请求通过 X-Workspace-Id header 显式指定 workspace，并发安全。</div></div>
+<div class="callout"><div class="callout-title">决策 2：共享 LLM，隔离 tools</div><div class="callout-body">ChatOpenAI 和 FetchURLTool 是无状态的，进程级共享。TerminalTool/ReadFileTool/WriteFileTool/PythonREPLTool 依赖 workspace_dir，按 workspace 隔离。</div></div>
+<div class="callout"><div class="callout-title">决策 3：manifest 由 runner 写，不由 agent 写</div><div class="callout-body">workspace_manifest.json 是系统级状态文件。bootstrap_status 的流转由 bootstrap runner（后端代码）负责，不由 BOOTSTRAP agent 通过 write_file 工具直接回写。</div></div>
+<div class="callout"><div class="callout-title">决策 4：provision ≠ bootstrap</div><div class="callout-body">POST /api/workspaces 只做 provision（创建目录 + 写 manifest + pending）。bootstrap 是独立的后续步骤，通过显式 start 入口触发。</div></div>
+<div class="callout"><div class="callout-title">决策 5：display_name 在 manifest，不在 IDENTITY.md</div><div class="callout-body">workspace 命名元数据由 workspace_manifest.json 承担。IDENTITY.md 和 project.md 只写 agent 可读的语义内容。</div></div>
+
+<!-- 7. 模块依赖关系 -->
+<h2>7. 模块依赖关系</h2>
+<pre>
+┌─────────────────────────────────────────────────┐
+│                   app.py                         │
+│  on_startup() → WorkspaceRuntimeRegistry         │
+│                  ├── initialize_shared()          │
+│                  ├── ensure_default_workspace()   │
+│                  └── get_runtime("default")       │
+└──────────┬──────────────────────────────────────┘
+           │ app.state.workspace_registry
+           ▼
+┌──────────────────────┐    ┌──────────────────────┐
+│  runtime_context.py  │───►│ workspace_registry.py│
+│  get_runtime(req)    │    │  SharedAgentResources │
+│  resolve_workspace_id│    │  WorkspaceRuntime     │
+└──────────┬───────────┘    │  manifest CRUD        │
+           │                │  workspace lifecycle  │
+     ┌─────┼─────┐         └──────────┬───────────┘
+     ▼     ▼     ▼                    │
+  chat  sessions files/assets    ┌────┴────┐
+  .py    .py     .py             ▼         ▼
+                            SessionMgr  Tools[]
+                            (per-ws)   (per-ws)
+</pre>
+
+<!-- 8. Phase 路线图 -->
+<h2>8. Phase 路线图</h2>
+<table>
+<tr><th>Phase</th><th>内容</th><th>状态</th></tr>
+<tr><td>Phase 1</td><td>后端基础骨架：SSE chat + 会话 CRUD</td><td><span class="badge badge-done">DONE</span></td></tr>
+<tr><td>Phase 2</td><td>文件系统 API + Agent CRUD + 路径安全</td><td><span class="badge badge-done">DONE</span></td></tr>
+<tr><td>Phase 3+4</td><td>Context Orchestrator + PromptBuilder + TraceWriter + 5 核心工具 + Assets</td><td><span class="badge badge-done">DONE</span></td></tr>
+<tr><td>Phase 5</td><td>Skills 渐进式披露（SkillLoader + Agent 自主读取）</td><td><span class="badge badge-done">DONE</span></td></tr>
+<tr><td>Phase 5.3</td><td>Workspace Runtime Switch + Naming + Bootstrap Lifecycle</td><td><span class="badge badge-phase53">CURRENT</span></td></tr>
+<tr><td>Phase 5.4</td><td>Bootstrap Runner 完整实现 + 前端 bootstrap 引导界面</td><td><span class="badge badge-later">NEXT</span></td></tr>
+<tr><td>Phase 6</td><td>前端三栏 UI 增强 + route 选择器 + 技能面板</td><td><span class="badge badge-later">LATER</span></td></tr>
+</table>
+
+<!-- 9. Phase 衔接表 -->
+<h2>9. Phase 衔接表</h2>
+<table>
+<tr><th>5.3 产出</th><th>后续 Phase 依赖</th><th>备注</th></tr>
+<tr><td>WorkspaceRuntimeRegistry</td><td>5.4: bootstrap runner 读 BOOTSTRAP.md 并执行</td><td></td></tr>
+<tr><td>POST /api/workspaces/{id}/bootstrap/start</td><td>5.4: 完整 bootstrap 执行逻辑</td><td>当前只做 pending→running 状态流转</td></tr>
+<tr><td>workspace_manifest.json + bootstrap_status</td><td>5.4: 前端 bootstrap 引导界面</td><td>⚠️ 前端尚未阻止 pending workspace 进入 chat</td></tr>
+<tr><td>X-Workspace-Id header 机制</td><td>5.4: bootstrap 对话也需带此 header</td><td></td></tr>
+<tr><td>BOOTSTRAP.md v1.0</td><td>5.4: agent 按协议执行 scope discovery → generation</td><td></td></tr>
+<tr><td>graph/agent.py AgentManager</td><td>可清理</td><td>⚠️ 不再被 chat.py 使用，保留为独立测试入口</td></tr>
+</table>
+
+<!-- ARCH_PART3 -->
+</body>
+</html>

@@ -1,0 +1,1048 @@
+[
+  {
+    "scenario_id": "scenario_C",
+    "scenario_name": "实验与Task闭环评测",
+    "scenario_description": "围绕第二阶段合成、第五阶段最小机理闭环、第四/六阶段 Ce-Co3O4 与高价钴实验主线构造的 experiment closure benchmark，重点评测 task landing、SOP 解析、条件克制、trace-to-task 对齐与实验规划反幻觉。",
+    "benchmark_focus": [
+      "stage2 synthesis checklist 与标号/交叉污染防错",
+      "性能+动力学 screening matrix",
+      "PMSO / ClO2 / EPR 最小机理闭环",
+      "Ce-Co3O4 两周任务板与依赖关系",
+      "章节-实验依赖图与实验 handoff"
+    ],
+    "source_package_root": "C_实验与Task",
+    "session_reset_semantics": "每个新 session 代表清空对话上下文，但沿用同一个 workspace，因此同 workspace 下的 memory/concepts/tasks/packs 仍可被后续 session 读取和复用。",
+    "workspace_init": {
+      "workspace_display_name_template": "[EVAL][C] experiment_task benchmark {run_id}",
+      "workspace_description": "围绕第二阶段合成、第五阶段最小机理闭环、第四/六阶段 Ce-Co3O4 与高价钴实验主线构造的 experiment closure benchmark，重点评测 task landing、SOP 解析、条件克制、trace-to-task 对齐与实验规划反幻觉。",
+      "workspace_kind": "experiment_task",
+      "bootstrap_required": true,
+      "bootstrap_route": "bootstrap",
+      "bootstrap_session_id": "__bootstrap__",
+      "create_agent_semantics": "通过 bootstrap session 完成 workspace 初始化与 seed pack 写入；不要求修改后端 create_agent 逻辑。",
+      "recommended_artifact_namespace": {
+        "concepts": "memory/concepts",
+        "tasks": "memory/tasks",
+        "packs": "memory/packs"
+      }
+    },
+    "file_coverage_assertion": {
+      "must_upload_all_files_at_least_once": true,
+      "all_source_files": [
+        "C_EXPERIMENT_TASK_BENCHMARK_RATIONALE.md",
+        "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/2-材料合成方法/【第二阶段】材料合成方法汇总.md",
+        "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第二阶段/【第二阶段实验脉络：Co3O4What？Why？How？】.md",
+        "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第二阶段/【第二阶段实验记录：M-Co3O4亚氯酸盐活化选择性降解污染物】.md",
+        "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第五阶段：最小机理闭环/ClO2测试方法文献/方法整理.docx",
+        "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第五阶段：最小机理闭环/【亚氯酸盐AOPs】 1.md",
+        "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第五阶段：最小机理闭环/【第五阶段】ClO2的EPR测试方法建模.md",
+        "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第六阶段0305/【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md",
+        "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第四阶段/【第四阶段实验脉络】Ce-Co3O4机理主线搭建.md",
+        "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【亚氯酸盐AOPs活性物种测试】PMSO探针和ClO2显色.md",
+        "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【实验sop】关键活性物种の探针&淬灭&显色剂.md",
+        "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【第五阶段实验sop】·OH、1O2、O2-掩蔽动力学（淬灭）.md",
+        "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【第五阶段实验sop】·OH、1O2、O2-的EPR测试.md",
+        "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【第六阶段】亚氯酸盐体系！CeO2合成&淬灭实验sop.md",
+        "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/3-节点外工具/【Graphpad】性能体系：性能+动力学.md"
+      ]
+    },
+    "sessions": [
+      {
+        "session_id": "scenario_C_session_001_bootstrap",
+        "session_title": "[EVAL][C] bootstrap experiment task workspace",
+        "session_type": "bootstrap",
+        "offset_hours": 0,
+        "route": "bootstrap",
+        "notes": "该 session 必须复用 __bootstrap__。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "先做一个 bootstrap 目标澄清。我的当前实验目标是尽快把接下来该做哪些实验对象和任务落下来，而不是先展开论文式综述。背景信息是：这个 workspace 后面会继续覆盖合成 checklist、性能筛选、最小机理闭环、以及 Ce-Co3O4 任务板，所以这里必须先把 experiment/task 容器的职责和当前实验上下文说清楚。你先根据这些目标和背景，复述你理解的 workspace 职责、最优先要承接的任务对象，以及你准备怎么避免一上来就写成研究总结。",
+            "user_upload": [],
+            "key_terms": [
+              "实验目标",
+              "背景信息",
+              "experiment/task 容器",
+              "任务对象",
+              "不是研究总结"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须先接住用户给出的实验目标、背景信息和 workspace 边界，明确这是 experiment/task 容器，而不是研究综述入口。",
+            "trace_focus": "这一轮重点是 bootstrap scope alignment，可以先做任务范围澄清与计划，不要求立即展开大量文件读取。",
+            "llm_focus": "判断模型是否先理解实验任务容器的职责，再进入后续具体实验问题。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "bootstrap",
+            "eval_tags": [
+              "bootstrap_goal_alignment",
+              "task_scope_seed"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "这个 workspace 我想定义成 `实验/Task 容器`，目标不是先讲论文故事，而是尽快把“接下来该做哪些实验对象”落下来。你先根据 benchmark rationale、第二阶段合成总表、以及 Co3O4 what/why/how 的脉络，判断这个容器应该先从`合成 checklist`、`性能筛选矩阵`还是`最小机理闭环`起手。",
+            "user_upload": [
+              "C_EXPERIMENT_TASK_BENCHMARK_RATIONALE.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/2-材料合成方法/【第二阶段】材料合成方法汇总.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第二阶段/【第二阶段实验脉络：Co3O4What？Why？How？】.md"
+            ],
+            "key_terms": [
+              "实验/Task 容器",
+              "benchmark rationale",
+              "合成 checklist",
+              "性能筛选矩阵",
+              "最小机理闭环",
+              "接下来该做哪些实验对象"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 workspace 定义成 experiment/task 容器，并给出最合适的起手对象。",
+            "trace_focus": "bootstrap 阶段至少应读取 markdown 源；不应误入 literature summary 或 writing pack。",
+            "llm_focus": "判断模型是否真正理解 experiment closure 的核心是任务落地，而不是泛泛整理研究背景。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "bootstrap_scope_alignment",
+              "task_object_selection"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "再补一个限制：这个容器的职责不是帮我写综述，而是把`本周要做的实验`拆成能执行的 task。请告诉我你准备先产出哪类 task 对象、为什么、以及暂时不该展开哪些线。",
+            "user_upload": [],
+            "key_terms": [
+              "本周要做的实验",
+              "拆成能执行的 task",
+              "先产出哪类 task 对象",
+              "暂时不该展开哪些线"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须输出 task-oriented 的初始化策略，并指出暂缓线索。",
+            "trace_focus": "本轮应体现 skip-by-design，不应默认生成大篇综述或写作材料。",
+            "llm_focus": "判断模型是否把实验 workspace 的职责压缩到近期可执行对象。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "bootstrap_minimalism",
+              "task_prioritization"
+            ]
+          },
+          {
+            "turn_id": 4,
+            "user_input": "可以，确认初始化。请把 seed pack 存成 `memory/packs/PACK_bootstrap_kickoff.md`，至少写清楚：`这个包测什么`、`先做哪类任务`、`暂不展开的线`。",
+            "user_upload": [],
+            "key_terms": [
+              "确认初始化",
+              "这个包测什么",
+              "先做哪类任务",
+              "暂不展开的线",
+              "PACK_bootstrap_kickoff"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要完成实验 workspace 的 bootstrap，并落一份 seed pack。",
+            "trace_focus": "应写入 memory/packs/PACK_bootstrap_kickoff.md，并保留 source_assets frontmatter。",
+            "llm_focus": "判断 seed pack 是否明确了 task-first 的初始化目标。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/PACK_bootstrap_kickoff.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "这个包测什么",
+                  "先做哪类任务",
+                  "暂不展开的线"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "bootstrap_completion",
+              "artifact_generation"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_C_session_002_stage2_checklist",
+        "session_title": "[EVAL][C] stage2 synthesis checklist",
+        "session_type": "normal",
+        "offset_hours": 12,
+        "route": "default",
+        "notes": "主测 stage2 synthesis 是否能被准确拆成现场执行 task。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我准备今天照着《第二阶段材料合成方法汇总》去做一轮初始 Co3O4 / Cu-Co3O4。请你结合合成总表和实验记录，把今天的流程整理成`按时间顺序的 checklist`：每一步写清楚称量量、容器、标号、搅拌/水热/洗涤/煅烧条件。尤其要提醒我哪些步骤最容易把样品编号搞混或发生交叉污染。",
+            "user_upload": [
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/2-材料合成方法/【第二阶段】材料合成方法汇总.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第二阶段/【第二阶段实验记录：M-Co3O4亚氯酸盐活化选择性降解污染物】.md"
+            ],
+            "key_terms": [
+              "按时间顺序的 checklist",
+              "称量量",
+              "容器",
+              "标号",
+              "搅拌",
+              "水热",
+              "洗涤",
+              "煅烧",
+              "交叉污染"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 Stage2 合成步骤转成按时间顺序的操作 checklist，并突出标号/交叉污染风险。",
+            "trace_focus": "应读取两份 stage2 markdown，并尽量引用其中的具体量与风险提示。",
+            "llm_focus": "判断 checklist 是否真的可执行，而不是松散总结。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "stage2_checklist",
+              "numbering_risk"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再单独帮我抽一张`标号防错清单`：从配液、称量、转移、取出内胆、洗涤、烘干到煅烧，哪些节点最该在瓶身/离心管/坩埚上同步写标号？如果我图省事漏写，会造成什么具体后果？",
+            "user_upload": [],
+            "key_terms": [
+              "标号防错清单",
+              "瓶身",
+              "离心管",
+              "坩埚",
+              "同步写标号",
+              "具体后果"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要给出贯穿全过程的标号防错方案，并说明漏写的具体后果。",
+            "trace_focus": "应复用 stage2 资料和上轮结果，不需要离开当前 task 主题。",
+            "llm_focus": "判断回答是否真正抓住实验现场最容易出错的节点。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "numbering_checklist",
+              "cross_contamination_prevention"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮整理成 `memory/tasks/C_stage2_checklist.md`，至少包含：`按时间顺序 checklist`、`标号和防交叉污染`、`需要现场记录的数据` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "按时间顺序 checklist",
+              "标号和防交叉污染",
+              "需要现场记录的数据",
+              "C_stage2_checklist"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 stage2 合成 checklist 固化为 task 文档。",
+            "trace_focus": "应写入 memory/tasks/C_stage2_checklist.md，并与 stage2 源文件保持关联。",
+            "llm_focus": "判断 task 文档是否可以直接带进实验台旁边使用。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "task",
+                "path": "memory/tasks/C_stage2_checklist.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "按时间顺序 checklist",
+                  "标号和防交叉污染",
+                  "需要现场记录的数据"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "task_doc"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_C_session_003_screening_matrix",
+        "session_title": "[EVAL][C] stage2 screening and kinetics",
+        "session_type": "normal",
+        "offset_hours": 24,
+        "route": "default",
+        "notes": "主测从合成走向筛选矩阵和动力学对象化。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我不想只停留在“把材料做出来”。请你结合第二阶段 why/how、实验记录、以及 GraphPad 的动力学笔记，给我设计一个`性能+动力学筛选矩阵`：哪些材料是横轴，哪些性能/动力学指标是纵轴，哪些图或拟合结果必须保留，才能在下一步决定值不值得往 Ce-Co3O4 升级。",
+            "user_upload": [
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第二阶段/【第二阶段实验脉络：Co3O4What？Why？How？】.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第二阶段/【第二阶段实验记录：M-Co3O4亚氯酸盐活化选择性降解污染物】.md",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/3-节点外工具/【Graphpad】性能体系：性能+动力学.md"
+            ],
+            "key_terms": [
+              "性能+动力学筛选矩阵",
+              "材料横轴",
+              "性能指标",
+              "动力学指标",
+              "GraphPad",
+              "决定值不值得往 Ce-Co3O4 升级"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须给出 stage2 screening matrix，并能支持后续升级决策。",
+            "trace_focus": "应读取 why/how、record 与 GraphPad 笔记，不应只输出空泛 KPI。",
+            "llm_focus": "判断矩阵是否真正能服务材料筛选与下一阶段决策。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "screening_matrix",
+              "kinetics_object"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再往下走一步：请你给我一个最小数据表模板。我要知道原始数据、归一化后的降解曲线、伪一级拟合、误差线、重复实验这些分别放在哪里；哪些字段如果现在不记，后面就没法可靠重画图。",
+            "user_upload": [],
+            "key_terms": [
+              "最小数据表模板",
+              "原始数据",
+              "归一化后的降解曲线",
+              "伪一级拟合",
+              "误差线",
+              "重复实验",
+              "后面没法可靠重画图"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要输出可直接落地的数据表模板，并指出关键不可丢字段。",
+            "trace_focus": "应复用上一轮 matrix 与 GraphPad 逻辑，不应跳去无关实验设计。",
+            "llm_focus": "判断模板是否足够细，能支持后续绘图和拟合复现。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "data_template",
+              "reproducibility"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "请把这轮保存成 `memory/tasks/C_screening_matrix.md`，至少分成：`材料维度`、`性能维度`、`GraphPad输出要求` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "材料维度",
+              "性能维度",
+              "GraphPad输出要求",
+              "C_screening_matrix"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 screening 逻辑沉淀为后续可复用 task。",
+            "trace_focus": "应写入 memory/tasks/C_screening_matrix.md。",
+            "llm_focus": "判断该任务文件是否兼顾实验设计和数据处理。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "task",
+                "path": "memory/tasks/C_screening_matrix.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "材料维度",
+                  "性能维度",
+                  "GraphPad输出要求"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "screening_task"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_C_session_004_why_co3o4",
+        "session_title": "[EVAL][C] why Co3O4 and when to upgrade",
+        "session_type": "normal",
+        "offset_hours": 36,
+        "route": "default",
+        "notes": "主测实验路线起点合理性与升级触发条件。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我在写 task board 的开头时总会把“为什么先做 Co3O4”写得很散。请你结合 benchmark rationale、第二阶段 why/how、以及实验记录，帮我回答三个问题：① 为什么从 Co3O4 起步；② 为什么不是一开始就上更复杂体系；③ 到什么信号出现时，才值得升级到 Ce-Co3O4 这条线。",
+            "user_upload": [
+              "C_EXPERIMENT_TASK_BENCHMARK_RATIONALE.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第二阶段/【第二阶段实验脉络：Co3O4What？Why？How？】.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第二阶段/【第二阶段实验记录：M-Co3O4亚氯酸盐活化选择性降解污染物】.md"
+            ],
+            "key_terms": [
+              "为什么从 Co3O4 起步",
+              "为什么不是一开始就上更复杂体系",
+              "什么时候升级到 Ce-Co3O4",
+              "benchmark rationale"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 why Co3O4 的理由、跳步风险、升级条件拆清楚。",
+            "trace_focus": "应读取 rationale + why/how + record，不可只给泛泛的材料学套话。",
+            "llm_focus": "判断回答是否真的理解阶段性研究设计，而不是抽象科学意义。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "why_co3o4",
+              "upgrade_threshold"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "顺手再帮我把它改写成一个更适合贴在 task 文档开头的版本：要求短、硬、能指导行动。也请你顺便指出其中哪些表述如果写太重，会显得像先验站队。",
+            "user_upload": [],
+            "key_terms": [
+              "短",
+              "硬",
+              "能指导行动",
+              "task 文档开头",
+              "表述写太重",
+              "先验站队"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "要把 why Co3O4 改写成 task-board 可用的开场，并保留谨慎边界。",
+            "trace_focus": "应复用本 session 的逻辑，不需要新增其它来源。",
+            "llm_focus": "判断文本是否兼具方向感与证据克制。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "actionable_opening",
+              "claim_weight_control"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把它沉淀成 `memory/concepts/C_why_co3o4.md`，至少包含：`为什么从Co3O4开始`、`升级条件`、`不能跳步的原因` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "为什么从Co3O4开始",
+              "升级条件",
+              "不能跳步的原因",
+              "C_why_co3o4"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要形成一个专门解释 stage2 起点与升级条件的 concept card。",
+            "trace_focus": "应写入 memory/concepts/C_why_co3o4.md，并保持内容紧贴实验任务。",
+            "llm_focus": "判断 concept card 是否能够作为后续实验/写作共享的前言对象。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "concept",
+                "path": "memory/concepts/C_why_co3o4.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "为什么从Co3O4开始",
+                  "升级条件",
+                  "不能跳步的原因"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "why_concept"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_C_session_005_pmso_clo2",
+        "session_title": "[EVAL][C] PMSO and ClO2 minimal mechanism task",
+        "session_type": "normal",
+        "offset_hours": 48,
+        "route": "default",
+        "notes": "主测第五阶段最小机制闭环、docx grounding 与条件克制。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "现在进入第五阶段的最小机理闭环。请你结合《亚氯酸盐AOPs》、PMSO+ClO2 的 SOP、以及那个 docx 方法整理，给我设计一个`最小机制任务链`：从试剂准备、取样、PMSO/PMSO2、ClO2 测定，到结果怎么判读。我要的是一个真正能执行的 task，不是机理综述。",
+            "user_upload": [
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第五阶段：最小机理闭环/【亚氯酸盐AOPs】 1.md",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【亚氯酸盐AOPs活性物种测试】PMSO探针和ClO2显色.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第五阶段：最小机理闭环/ClO2测试方法文献/方法整理.docx"
+            ],
+            "key_terms": [
+              "最小机制任务链",
+              "试剂准备",
+              "取样",
+              "PMSO/PMSO2",
+              "ClO2 测定",
+              "结果怎么判读",
+              "真正能执行的 task"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把第五阶段最小机理闭环拆成可执行 task 链，覆盖 PMSO 与 ClO2 两条检测线。",
+            "trace_focus": "包含 docx；若回答涉及 docx 里的具体方法差异，trace 应体现对二进制的解析或明确不确定边界。",
+            "llm_focus": "判断方案是否真正服务 chlorite 体系的最小机理闭环，而不是泛化的高级氧化综述。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "minimal_mechanism_chain",
+              "binary_method_grounding"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "你再补一列`哪些信息是直接针对 chlorite，哪些只是通用方法参考`。我最怕你把 docx 里的通用分析条件直接当成我的体系既定条件。",
+            "user_upload": [],
+            "key_terms": [
+              "直接针对 chlorite",
+              "通用方法参考",
+              "不要直接当成既定条件",
+              "docx"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须区分 chlorite-specific 条件与 generic analytical reference，防止条件被误写成既定值。",
+            "trace_focus": "应复用本轮读取结果，并对 docx 的不确定部分保持诚实。",
+            "llm_focus": "判断模型是否具备方法学迁移时的边界意识。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "method_scope_partition",
+              "anti_condition_fabrication"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮存成 `memory/tasks/C_pmso_clo2_minimal_mechanism.md`，至少包含：`最小闭环目标`、`实验步骤`、`结果判读` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "最小闭环目标",
+              "实验步骤",
+              "结果判读",
+              "C_pmso_clo2_minimal_mechanism"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 PMSO + ClO2 最小机理闭环固定成 task 文档。",
+            "trace_focus": "应写入 memory/tasks/C_pmso_clo2_minimal_mechanism.md，并尽量附带 source_assets。",
+            "llm_focus": "判断该任务文档是否足够具体，后续可直接执行。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "task",
+                "path": "memory/tasks/C_pmso_clo2_minimal_mechanism.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "最小闭环目标",
+                  "实验步骤",
+                  "结果判读"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "minimal_mechanism_task"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_C_session_006_epr_strategy",
+        "session_title": "[EVAL][C] direct EPR vs spin-trap strategy",
+        "session_type": "normal",
+        "offset_hours": 60,
+        "route": "default",
+        "notes": "主测方法学取舍与 binary 文档 grounding。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "如果目标是把 Co(IV)=O、ClO2、·OH、1O2 这些线索尽量分开看，请你结合 ClO2 的 EPR 建模、EPR SOP、以及方法整理 docx，比较一下：直接 EPR、加捕获剂的 EPR、以及不走 EPR 只走显色/探针三条路线，各自最能回答什么问题、最不能回答什么问题。",
+            "user_upload": [
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第五阶段：最小机理闭环/【第五阶段】ClO2的EPR测试方法建模.md",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【第五阶段实验sop】·OH、1O2、O2-的EPR测试.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第五阶段：最小机理闭环/ClO2测试方法文献/方法整理.docx"
+            ],
+            "key_terms": [
+              "直接 EPR",
+              "加捕获剂的 EPR",
+              "显色/探针",
+              "最能回答什么",
+              "最不能回答什么",
+              "Co(IV)=O",
+              "ClO2",
+              "·OH",
+              "1O2"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须比较三条检测路线在当前机制问题中的能力边界。",
+            "trace_focus": "包含 EPR md + docx，若给出具体实验配置或限制，trace 应有相应读取或解析行为。",
+            "llm_focus": "判断比较是否真正服务问题分辨，而不是泛泛介绍 EPR。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "epr_strategy",
+              "question_method_fit"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "请你站在‘实验资源有限’的角度，再做一个取舍：如果只能先启动一条主线、一条备线，你会怎么选？理由里必须包含`结论边界`和`失败后的回退路径`。",
+            "user_upload": [],
+            "key_terms": [
+              "实验资源有限",
+              "一条主线",
+              "一条备线",
+              "结论边界",
+              "失败后的回退路径"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须给出资源受限下的主线/备线选择，并带回退策略。",
+            "trace_focus": "应复用上轮的路线比较，不应脱离当前资料新增昂贵方法。",
+            "llm_focus": "判断选择是否体现最小可行和失败回退意识。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "main_backup_route",
+              "resource_aware_design"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮整理成 `memory/tasks/C_epr_strategy.md`，至少有：`首选路线`、`并行路线`、`结论边界` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "首选路线",
+              "并行路线",
+              "结论边界",
+              "C_epr_strategy"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要沉淀一份 EPR/探针策略 task 文档。",
+            "trace_focus": "应写入 memory/tasks/C_epr_strategy.md。",
+            "llm_focus": "判断 task 文档是否真的能指导资源有限时的实验路线选择。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "task",
+                "path": "memory/tasks/C_epr_strategy.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "首选路线",
+                  "并行路线",
+                  "结论边界"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "epr_task"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_C_session_007_quencher_matrix",
+        "session_title": "[EVAL][C] quencher matrix and concentration sanity",
+        "session_type": "normal",
+        "offset_hours": 72,
+        "route": "default",
+        "notes": "主测 quencher / probe 条件是否被准确提取并用于反误判。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我想把淬灭实验做成一个不会乱的矩阵。请你结合‘关键活性物种の探针&淬灭&显色剂’、‘掩蔽动力学（淬灭）’、以及第六阶段主线文档，给我整理一个 quencher matrix：每种淬灭剂/探针对应什么母液、目标浓度、加样量、主要想排除什么、又最容易引入什么干扰。",
+            "user_upload": [
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【实验sop】关键活性物种の探针&淬灭&显色剂.md",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【第五阶段实验sop】·OH、1O2、O2-掩蔽动力学（淬灭）.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第六阶段0305/【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md"
+            ],
+            "key_terms": [
+              "quencher matrix",
+              "母液",
+              "目标浓度",
+              "加样量",
+              "主要想排除什么",
+              "最容易引入什么干扰"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把淬灭/探针方案整理成浓度明确、干扰明确的矩阵。",
+            "trace_focus": "应读取两份 SOP 和 stage6 主线，不应只给淬灭剂名称列表。",
+            "llm_focus": "判断矩阵是否兼顾可执行性与误判风险。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "quencher_matrix",
+              "concentration_sanity"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再单独帮我找`最可能把体系搞歪的浓度区间`。比如哪些加得太狠可能直接改变基底反应、哪些只是看起来像‘抑制了某物种’。我要的是风险提醒，不是只复制 SOP 数字。",
+            "user_upload": [],
+            "key_terms": [
+              "最可能把体系搞歪的浓度区间",
+              "改变基底反应",
+              "看起来像抑制了某物种",
+              "风险提醒"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要指出 quencher 使用中的高风险浓度与误判来源。",
+            "trace_focus": "应基于 SOP 数字和 stage6 语境做风险解释，不可机械抄表。",
+            "llm_focus": "判断回答是否体现了实验判断而不是表格搬运。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "risk_concentration",
+              "misinterpretation_guard"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "请把它存成 `memory/tasks/C_quencher_matrix.md`，至少分成：`淬灭剂矩阵`、`浓度与加样量`、`可能误判` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "淬灭剂矩阵",
+              "浓度与加样量",
+              "可能误判",
+              "C_quencher_matrix"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要将 quencher 设计固化成 task 文档。",
+            "trace_focus": "应写入 memory/tasks/C_quencher_matrix.md。",
+            "llm_focus": "判断文档是否能真正指导后续淬灭实验设计。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "task",
+                "path": "memory/tasks/C_quencher_matrix.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "淬灭剂矩阵",
+                  "浓度与加样量",
+                  "可能误判"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "quencher_task"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_C_session_008_ce_task_board",
+        "session_title": "[EVAL][C] Ce-Co3O4 mechanism board",
+        "session_type": "normal",
+        "offset_hours": 84,
+        "route": "default",
+        "notes": "主测 Ce 线从 stage4 走向 stage6 的 task orchestration。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我想把 Ce-Co3O4 这条线变成一个两周 task board。请你结合第四阶段 Ce 主线、第六阶段主线、以及 CeO2 合成&淬灭 SOP，把未来两周拆成：CeO2 / Ce-Co3O4 样品准备、性能回测、以及高价钴证据三条并行任务。每条都要写出依赖关系。",
+            "user_upload": [
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第四阶段/【第四阶段实验脉络】Ce-Co3O4机理主线搭建.md",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【第六阶段】亚氯酸盐体系！CeO2合成&淬灭实验sop.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第六阶段0305/【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md"
+            ],
+            "key_terms": [
+              "两周 task board",
+              "CeO2 / Ce-Co3O4 样品准备",
+              "性能回测",
+              "高价钴证据",
+              "依赖关系"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 Ce 线拆成两周内可执行的并行任务板，并标出依赖关系。",
+            "trace_focus": "应读取 stage4/stage6/ceo2 sop，不应只输出概念化路线图。",
+            "llm_focus": "判断任务板是否兼具样品制备、性能验证与机制证据三条线。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "ce_task_board",
+              "dependency_mapping"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再帮我区分一下：哪些是`必须做`，哪些是`有条件再做`，哪些是`失败时的回退路线`。尤其如果 CeO2 合成不稳定，后面哪些任务需要整体后移？",
+            "user_upload": [],
+            "key_terms": [
+              "必须做",
+              "有条件再做",
+              "失败时的回退路线",
+              "CeO2 合成不稳定",
+              "后移"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要完成 must-have / conditional / fallback 的任务分层。",
+            "trace_focus": "应基于上轮依赖关系来给出顺序调整，不应忽视制样失败对后续任务的连锁影响。",
+            "llm_focus": "判断回答是否有真实项目管理感，而不是平铺任务清单。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "must_conditional_fallback",
+              "project_management"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮保存成 `memory/tasks/C_ce_task_board.md`，至少包含：`必须做`、`依赖关系`、`失败回退路线` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "必须做",
+              "依赖关系",
+              "失败回退路线",
+              "C_ce_task_board"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 Ce 线任务板沉淀成可执行 task 文档。",
+            "trace_focus": "应写入 memory/tasks/C_ce_task_board.md。",
+            "llm_focus": "判断 task board 是否具备执行顺序和失败回退逻辑。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "task",
+                "path": "memory/tasks/C_ce_task_board.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "必须做",
+                  "依赖关系",
+                  "失败回退路线"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "ce_board_task"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_C_session_009_chapter_dependency",
+        "session_title": "[EVAL][C] chapter-linked experiment dependency map",
+        "session_type": "normal",
+        "offset_hours": 96,
+        "route": "default",
+        "notes": "主测 experiment closure 与 future chapter structure 的对接。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我想把实验任务和写作章节提前挂钩。请你结合第六阶段主线、GraphPad 笔记、以及《亚氯酸盐AOPs》，画一个`章节-实验依赖图`：第一章高价钴选择性生成，第二章苯酚/淬灭/活性图，各自依赖哪些实验、数据处理、对照组，哪些方法又是两章共用的。",
+            "user_upload": [
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第六阶段0305/【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/3-节点外工具/【Graphpad】性能体系：性能+动力学.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第五阶段：最小机理闭环/【亚氯酸盐AOPs】 1.md"
+            ],
+            "key_terms": [
+              "章节-实验依赖图",
+              "第一章高价钴选择性生成",
+              "第二章苯酚/淬灭/活性图",
+              "共用方法"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把章节目标映射到实验依赖与数据处理依赖上。",
+            "trace_focus": "应读取 stage6、graphpad、AOPS 主线，并能复用已有 task cards。",
+            "llm_focus": "判断回答是否真正让 experiment closure 与 future writing closure 对齐。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "chapter_dependency",
+              "experiment_writing_bridge"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "如果 direct proof 暂时做不出来，你再帮我写一个`不失真但能先推进写作`的替代方案：哪些地方可以先写 supporting evidence，哪些地方必须留白等补实验。",
+            "user_upload": [],
+            "key_terms": [
+              "direct proof 暂时做不出来",
+              "不失真但能先推进写作",
+              "supporting evidence",
+              "必须留白"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "要给出 direct proof 缺席时的写作推进策略，强调不失真。",
+            "trace_focus": "应基于依赖图与前序 proof/quencher/epr tasks，而不是随意补洞。",
+            "llm_focus": "判断方案是否诚实且仍具推进性。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "fallback_for_writing",
+              "honest_progress"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "请把这轮存成 `memory/packs/C_chapter_dependency.md`，至少包含：`第一章`、`第二章`、`共用方法与卡点` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "第一章",
+              "第二章",
+              "共用方法与卡点",
+              "C_chapter_dependency"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把章节-实验依赖图沉淀成 pack 文档。",
+            "trace_focus": "应写入 memory/packs/C_chapter_dependency.md，并尽量引用前序 task 名称。",
+            "llm_focus": "判断 pack 是否真正有助于把实验任务接到写作主线。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/C_chapter_dependency.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "第一章",
+                  "第二章",
+                  "共用方法与卡点"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "dependency_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_C_session_010_handoff",
+        "session_title": "[EVAL][C] experiment task handoff",
+        "session_type": "normal",
+        "offset_hours": 108,
+        "route": "default",
+        "notes": "最终 handoff session，用于评测实验 workspace 的状态管理与反幻觉规则。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "最后请你帮我做一个 experiment handoff：把第二阶段合成、第四阶段 Ce 主线、第五阶段最小机理闭环、第六阶段高价钴主线，整理成‘当前有哪些任务在飞、每个任务最缺什么、下一步先做什么’的表。",
+            "user_upload": [
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/2-材料合成方法/【第二阶段】材料合成方法汇总.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第四阶段/【第四阶段实验脉络】Ce-Co3O4机理主线搭建.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第五阶段：最小机理闭环/【亚氯酸盐AOPs】 1.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第六阶段0305/【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【第五阶段实验sop】·OH、1O2、O2-的EPR测试.md"
+            ],
+            "key_terms": [
+              "experiment handoff",
+              "当前有哪些任务在飞",
+              "每个任务最缺什么",
+              "下一步先做什么"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须对整个实验 workspace 的任务状态做 handoff 分层。",
+            "trace_focus": "应复用前序 tasks/packs，并与这轮上传文件核对，不应忽视 stage5/stage6 之间的连接。",
+            "llm_focus": "判断 handoff 是否真正反映了实验任务的当前状态与缺口。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "handoff_state",
+              "task_inventory"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再补一个`实验规划 anti-hallucination 清单`：以后如果我继续问你实验设计，哪些类型的问题你应该先提醒‘需要回 SOP / 回原始记录 / 回方法文档’，而不是直接编一个顺手的条件给我。",
+            "user_upload": [],
+            "key_terms": [
+              "anti-hallucination 清单",
+              "回 SOP",
+              "回原始记录",
+              "回方法文档",
+              "不要直接编条件"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "要生成实验规划问答的防幻觉清单。",
+            "trace_focus": "应基于 docx/SOP/record 的二义性来给出 guardrails。",
+            "llm_focus": "判断清单是否击中实验规划最常见的编条件风险。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "planning_guardrails",
+              "condition_honesty"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把最后的 handoff 存成 `memory/packs/C_handoff.md`，至少包含：`当前任务板`、`未闭环的关键证据`、`后续问答禁区` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "当前任务板",
+              "未闭环的关键证据",
+              "后续问答禁区",
+              "C_handoff"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要将实验 workspace 的 handoff 形成最终 pack。",
+            "trace_focus": "应写入 memory/packs/C_handoff.md。",
+            "llm_focus": "判断最终 handoff 是否足以让另一个模型继续接手实验任务。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/C_handoff.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "当前任务板",
+                  "未闭环的关键证据",
+                  "后续问答禁区"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "final_handoff"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "run_stamp": "20260322_171434",
+  "run_ids": {
+    "B": "one_click_B_20260322_171434",
+    "C": "one_click_C_20260322_171434",
+    "D": "one_click_D_20260322_171434",
+    "E": "one_click_E_20260322_171434"
+  },
+  "status": {
+    "B": "completed",
+    "C": "completed",
+    "D": "completed",
+    "E": "completed"
+  },
+  "current_scenario": "E",
+  "finished": true,
+  "updated_at": "2026-03-23T00:01:21",
+  "last_error": ""
+}

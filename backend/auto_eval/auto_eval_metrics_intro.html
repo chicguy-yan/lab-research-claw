@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>auto_eval 评测指标说明</title>
+  <style>
+    :root {
+      --bg: #f4f0e7;
+      --paper: rgba(255, 252, 246, 0.94);
+      --ink: #1f2a30;
+      --muted: #5c6a71;
+      --line: rgba(31, 42, 48, 0.12);
+      --accent: #b24c1e;
+      --accent-soft: #f2d6c2;
+      --green: #295f52;
+      --green-soft: #d8ebe5;
+      --blue: #315c7f;
+      --blue-soft: #d9e5ef;
+      --shadow: 0 18px 50px rgba(55, 42, 25, 0.10);
+      --mono: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+      --sans: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      --serif: "STSong", "Songti SC", "Noto Serif SC", serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at left top, rgba(178, 76, 30, 0.14), transparent 28%),
+        radial-gradient(circle at 85% 10%, rgba(41, 95, 82, 0.14), transparent 24%),
+        linear-gradient(180deg, #f7f3eb 0%, #f3ede3 56%, #ece4d6 100%);
+    }
+
+    .page {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 36px 20px 64px;
+    }
+
+    .hero,
+    .section,
+    .footer {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: 28px;
+    }
+
+    .hero {
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -120px;
+      bottom: -120px;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(178, 76, 30, 0.18), transparent 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #873714;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+    }
+
+    h1 {
+      margin-top: 18px;
+      max-width: 860px;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.06;
+      font-family: var(--serif);
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      max-width: 820px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      line-height: 1.85;
+      font-size: 17px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero-grid {
+      margin-top: 24px;
+      grid-template-columns: 1.3fr 0.9fr;
+    }
+
+    .card,
+    .mini-card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 251, 244, 0.95);
+    }
+
+    .card {
+      padding: 22px;
+    }
+
+    .mini-card {
+      padding: 16px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 28px;
+      line-height: 1;
+      color: var(--accent);
+    }
+
+    .mini-card span {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .section {
+      margin-top: 22px;
+      padding: 28px;
+    }
+
+    .section h2 {
+      font-size: 28px;
+      margin-bottom: 14px;
+    }
+
+    .lead {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.85;
+      font-size: 16px;
+    }
+
+    .triple {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .box {
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(249,244,237,0.95));
+    }
+
+    .box h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .box p,
+    .box li,
+    .table li,
+    .note {
+      color: var(--muted);
+      line-height: 1.78;
+      font-size: 15px;
+    }
+
+    ul, ol {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .table {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .table li {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .table li:last-child {
+      border-bottom: 0;
+    }
+
+    code, .code {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: #8a3511;
+      background: rgba(178, 76, 30, 0.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+
+    .code-block {
+      padding: 18px;
+      border-radius: 20px;
+      background: #1f262b;
+      color: #f6f3ed;
+      overflow: auto;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .callout {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(41, 95, 82, 0.18);
+      background: var(--green-soft);
+    }
+
+    .callout strong {
+      color: var(--green);
+    }
+
+    .warn {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(49, 92, 127, 0.18);
+      background: var(--blue-soft);
+    }
+
+    .warn strong {
+      color: var(--blue);
+    }
+
+    .flow-wrap {
+      margin-top: 18px;
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.92), rgba(247,241,232,0.92));
+      overflow-x: auto;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(180px, 1fr));
+      gap: 16px;
+      align-items: start;
+      min-width: 1360px;
+    }
+
+    .node {
+      position: relative;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fffdf9;
+      min-height: 156px;
+    }
+
+    .node.orange { background: linear-gradient(180deg, #fff8f2, #f9ebe0); }
+    .node.green { background: linear-gradient(180deg, #f4fbf8, #e8f4ef); }
+    .node.blue { background: linear-gradient(180deg, #f6f9fc, #eaf0f6); }
+
+    .node .step {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .node strong {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 8px;
+    }
+
+    .node p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .arrow {
+      position: relative;
+      align-self: center;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(178,76,30,0.35), rgba(178,76,30,0.8));
+    }
+
+    .arrow::after {
+      content: "";
+      position: absolute;
+      top: -5px;
+      right: -1px;
+      width: 0;
+      height: 0;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 10px solid rgba(178,76,30,0.85);
+    }
+
+    .flow-grid {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) 46px minmax(180px, 1fr) 46px minmax(180px, 1fr) 46px minmax(180px, 1fr) 46px minmax(180px, 1fr) 46px minmax(180px, 1fr) 46px minmax(180px, 1fr);
+      min-width: 1520px;
+      gap: 0;
+      align-items: stretch;
+    }
+
+    .metric-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255, 251, 244, 0.96);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .nav-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 251, 244, 0.96);
+      color: #8a3511;
+      font-size: 13px;
+    }
+
+    .footer {
+      margin-top: 22px;
+      padding: 22px 24px;
+      line-height: 1.85;
+      color: var(--muted);
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .triple,
+      .split,
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .table li {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">auto_eval / Metrics Guide</div>
+      <h1>这套自动评测集的指标，不是单独一张表，而是“JSON 声明 + Python 规则 + Runner 汇总”三层拼起来的</h1>
+      <p>
+        也就是说，一个 turn 想测什么，先在场景 JSON 里声明；怎么扣分，写在场景自己的
+        <span class="code">content / trace / artifact / hallucination</span> 模块里；最后由
+        <span class="code">runbook</span> 和 <span class="code">runner</span> 统一汇总成
+        <span class="code">final_turn_score</span>、hallucination rates 和 scenario summary。
+      </p>
+
+      <div class="grid hero-grid">
+        <div class="card">
+          <h2>一句话理解</h2>
+          <p class="lead">
+            如果说 benchmark 问题集在描述“我要考模型什么能力”，那指标实现层就是“我准备怎样根据回答文本、trace、生成文件和风险信号来扣分”。
+          </p>
+          <div class="metric-tags">
+            <span class="tag">内容命中</span>
+            <span class="tag">禁词/危险表述</span>
+            <span class="tag">工具使用与 trace</span>
+            <span class="tag">artifact 真正落盘</span>
+            <span class="tag">binary grounding</span>
+            <span class="tag">workspace memory 复用</span>
+            <span class="tag">hallucination 率</span>
+          </div>
+        </div>
+        <div class="mini-grid">
+          <div class="mini-card">
+            <strong>3 类</strong>
+            <span>每个 turn 默认拆成 content、trace/artifact、judge 三类 criterion。</span>
+          </div>
+          <div class="mini-card">
+            <strong>Turn 级</strong>
+            <span>逐轮评分，逐轮保存 JSON 结果和 checkpoint。</span>
+          </div>
+          <div class="mini-card">
+            <strong>Scenario 级</strong>
+            <span>把 turn 结果进一步汇总成平均分和幻觉指标。</span>
+          </div>
+          <div class="mini-card">
+            <strong>当前实现</strong>
+            <span>LLM judge prompt 已设计好，但实际落地评分目前仍是启发式 judge。</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <a class="nav-link" href="auto_eval_intro.html">返回总介绍页</a>
+        <a class="nav-link" href="auto_eval_metrics_brief.html">打开汇报简洁版</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>一、指标先在场景 JSON 里声明</h2>
+      <p class="lead">
+        每个 turn 的“评测需求”先写在 <span class="code">*_scenario_questions.json</span> 里。
+        这里不直接算分，而是声明这个问题该关注什么、需要什么证据、需要输出什么文件。
+      </p>
+      <div class="split">
+        <div class="box">
+          <h3>核心字段</h3>
+          <ul class="table">
+            <li><span><code>key_terms</code></span><span>回答中应该覆盖的关键词或概念锚点。</span></li>
+            <li><span><code>forbidden_terms</code></span><span>不应出现的危险表述或错误迁移。</span></li>
+            <li><span><code>content_focus</code></span><span>内容评分重点，告诉规则层这轮的主目标是什么。</span></li>
+            <li><span><code>trace_focus</code></span><span>过程侧要求，例如要不要读 PDF、要不要真正写文件。</span></li>
+            <li><span><code>llm_focus</code></span><span>judge 应重点盯的高层判断维度。</span></li>
+            <li><span><code>expected_artifacts</code></span><span>本轮必须产出的文件路径、必须包含的 section。</span></li>
+            <li><span><code>binary_grounding_required</code></span><span>要求不能只靠 quick summary，必须有真实二进制解析痕迹。</span></li>
+            <li><span><code>requires_workspace_memory_from_prior_sessions</code></span><span>要求本轮显示复用前面 session 的 memory 结果。</span></li>
+            <li><span><code>eval_tags</code></span><span>给这轮指标打标签，便于 registry 和解释层整理。</span></li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>这个层的作用</h3>
+          <ul>
+            <li>把 benchmark 设计者的评测意图结构化下来。</li>
+            <li>把“我要考什么”从 Python 算分逻辑里抽离出来。</li>
+            <li>让不同场景可以各自写自己的 turn 要求，不共用死板模板。</li>
+            <li>给后续 content / trace / artifact / judge 模块提供统一输入。</li>
+          </ul>
+          <div class="code-block" style="margin-top:14px;"><pre>{
+  "key_terms": ["OAT", "PCET", "ClO2", "Co(IV)=O"],
+  "forbidden_terms": ["PMS直接活化", "芬顿主线"],
+  "binary_grounding_required": true,
+  "expected_artifacts": [],
+  "requires_workspace_memory_from_prior_sessions": false
+}</pre></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>二、registry 把一个 turn 拆成多条 criterion</h2>
+      <p class="lead">
+        场景 registry 负责把 JSON 里的一个 turn，展开成可执行的评分条目。B 场景里，每个 turn 默认至少有三条：
+        <span class="code">C1 content-rule</span>、<span class="code">C2 trace/artifact</span>、<span class="code">C3 llm-judge</span>。
+      </p>
+      <div class="triple">
+        <div class="box">
+          <h3>C1 内容指标</h3>
+          <p>回答有没有覆盖关键术语、有没有踩禁词、有没有体现 prior memory、有没有显式提到目标 artifact 名称。</p>
+        </div>
+        <div class="box">
+          <h3>C2 过程或产物指标</h3>
+          <p>如果该 turn 要生成文件，就检查 artifact；否则就检查 trace、读文件行为、binary grounding 和 memory 读取痕迹。</p>
+        </div>
+        <div class="box">
+          <h3>C3 Judge 指标</h3>
+          <p>先根据 turn 类型构造不同 judge prompt。当前代码里 prompt 已有，但最终实际评分仍由启发式 judge 计算。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>三、指标真正怎么写</h2>
+      <p class="lead">
+        真正的扣分逻辑，写在场景自己的 Python 模块里。B 场景是最典型的例子。
+      </p>
+      <div class="triple">
+        <div class="box">
+          <h3>content_checks</h3>
+          <ul>
+            <li>命中至少若干个 <span class="code">key_terms</span></li>
+            <li>命中 <span class="code">forbidden_terms</span> 就扣分</li>
+            <li>该复用 prior memory 却没体现也扣分</li>
+            <li>要生成 artifact 却连文件名都没提，会轻扣</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>trace_checks</h3>
+          <ul>
+            <li>需要写 artifact 却没看到 <span class="code">write_file</span></li>
+            <li>上传了文件却没看到读文件动作</li>
+            <li>binary turn 却没有 <span class="code">terminal/python_repl</span></li>
+            <li>依赖 prior memory 却没看到 memory 读取痕迹</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>artifact_checks</h3>
+          <ul>
+            <li>预期文件不存在，重扣</li>
+            <li>缺少 required sections，继续扣</li>
+            <li>写到 <span class="code">memory/</span> 下的文件若无 <span class="code">source_assets</span> frontmatter，也会扣</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>四、幻觉指标不是单轮主分，而是额外 flags + 汇总率</h2>
+      <p class="lead">
+        这类指标的写法和 content/trace 不一样。它更多是先给每个 turn 打风险标记，再在 scenario 级聚合成 rate。
+      </p>
+      <div class="split">
+        <div class="box">
+          <h3>单轮 flags 示例</h3>
+          <ul>
+            <li><span class="code">unsupported_specificity</span>：无依据捏造很多具体数值/页码/定量细节</li>
+            <li><span class="code">absolute_overclaim_hits</span>：用了“已经证明”“完全证实”这类强断言</li>
+            <li><span class="code">source_confusion_hits</span>：把 note/ppt/docx 压缩结论说成 paper 原文直接结论</li>
+            <li><span class="code">trace_free_binary_certainty</span>：没做二进制解析，却说“第几页明确证明”</li>
+            <li><span class="code">cross_system_overtransfer</span>：把 PMS/Fenton/Ce 旁支结果直接迁移成 chlorite 已证实事实</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>聚合方式</h3>
+          <p>
+            每个 turn 只记录 flag 是否触发。到了 scenario summary 阶段，再把这些 flag 统计成
+            <span class="code">raw_counters</span> 和 <span class="code">rates</span>。
+            所以 hallucination 指标更像“风险画像”，而不是单一最终得分。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>五、评测流线图</h2>
+      <p class="lead">
+        下面这张图展示的是，一个 turn 从“题目声明”到“最终得分和报告”的完整路径。
+      </p>
+
+      <div class="flow-wrap">
+        <div class="flow-grid">
+          <div class="node orange">
+            <span class="step">STEP 01</span>
+            <strong>Scenario JSON</strong>
+            <p>声明 <span class="code">key_terms</span>、<span class="code">forbidden_terms</span>、<span class="code">expected_artifacts</span>、<span class="code">binary_grounding_required</span> 等 turn 要求。</p>
+          </div>
+          <div class="arrow"></div>
+          <div class="node orange">
+            <span class="step">STEP 02</span>
+            <strong>Registry</strong>
+            <p>把一个 turn 展开成 <span class="code">C1 content</span>、<span class="code">C2 trace/artifact</span>、<span class="code">C3 judge</span> 三类 criterion。</p>
+          </div>
+          <div class="arrow"></div>
+          <div class="node green">
+            <span class="step">STEP 03</span>
+            <strong>Runner 执行 turn</strong>
+            <p>上传附件，调用 <span class="code">/api/chat</span>，消费 SSE，读取 history、trace、artifact probe 和 temporary_dir 快照。</p>
+          </div>
+          <div class="arrow"></div>
+          <div class="node blue">
+            <span class="step">STEP 04</span>
+            <strong>Runbook</strong>
+            <p>调用场景自己的 <span class="code">evaluate_turn</span>，得到 <span class="code">content_result</span>、<span class="code">trace_result</span>、<span class="code">artifact_result</span>、<span class="code">llm_job</span>、<span class="code">hallucination_flags</span>。</p>
+          </div>
+          <div class="arrow"></div>
+          <div class="node blue">
+            <span class="step">STEP 05</span>
+            <strong>Judge / Temp Checks</strong>
+            <p>Runner 再调用 judge，并在有配置时叠加 <span class="code">temporary_expectations</span> 检查。</p>
+          </div>
+          <div class="arrow"></div>
+          <div class="node green">
+            <span class="step">STEP 06</span>
+            <strong>Final Score</strong>
+            <p>主分按 <span class="code">content + artifact/trace + judge (+ temp)</span> 取平均，生成 <span class="code">final_turn_score</span>。</p>
+          </div>
+          <div class="arrow"></div>
+          <div class="node orange">
+            <span class="step">STEP 07</span>
+            <strong>Summary & Reports</strong>
+            <p>把 turn 结果写入 JSON，按 scenario 汇总平均分和 hallucination rates，再生成 markdown / html 报告。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>六、当前 final score 是怎么合成的</h2>
+      <p class="lead">
+        当前 runner 的总分合成逻辑比较直接，不是复杂加权模型。
+      </p>
+      <div class="split">
+        <div class="box">
+          <h3>默认主分</h3>
+          <div class="code-block"><pre>final_turn_score =
+  average(
+    content_result.score,
+    artifact_result.score 或 trace_result.score,
+    judge_result.score
+  )</pre></div>
+        </div>
+        <div class="box">
+          <h3>可选附加项</h3>
+          <p>
+            如果某个 turn 配了 <span class="code">temporary_expectations</span>，
+            runner 会再把 temporary dir 检查分也纳入平均值。
+            所以最终得分来自“文本结果 + 过程证据 + 产物真实性 + 补充检查”。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>七、为什么说“LLM judge 目前还是半成品”</h2>
+      <div class="split">
+        <div class="callout">
+          <strong>已经有的部分</strong>
+          <p class="note">
+            每个场景已经实现了 judge prompt builder，会根据 turn 是否涉及 artifact、binary grounding 等情况切换不同 prompt 角色和 focus。
+          </p>
+        </div>
+        <div class="warn">
+          <strong>当前实际评分方式</strong>
+          <p class="note">
+            Runner 现在调用的是 <span class="code">HeuristicJudge</span>。也就是用关键词命中、禁词、工具痕迹、是否提到 <span class="code">memory/</span> 等启发式规则给 judge 分，而不是再发一个真正的大模型裁判请求。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>八、如果你要改指标，通常改哪几层</h2>
+      <div class="triple">
+        <div class="box">
+          <h3>改“考什么”</h3>
+          <p>编辑场景 JSON。增删 <span class="code">key_terms</span>、<span class="code">forbidden_terms</span>、<span class="code">expected_artifacts</span>、focus 描述。</p>
+        </div>
+        <div class="box">
+          <h3>改“怎么扣分”</h3>
+          <p>编辑该场景的 <span class="code">content_checks.py</span>、<span class="code">trace_checks.py</span>、<span class="code">artifact_checks.py</span>、<span class="code">hallucination_checks.py</span>。</p>
+        </div>
+        <div class="box">
+          <h3>改“怎么汇总”</h3>
+          <p>编辑场景 <span class="code">runbook.py</span> 或总控 <span class="code">runner.py</span>，调整 final score 的组合逻辑。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>九、源码文件路径索引</h2>
+      <p class="lead">
+        如果你要顺着代码继续看，下面这些文件就是“指标怎么声明、怎么打分、怎么汇总”的主入口。
+      </p>
+      <div class="split">
+        <div class="box">
+          <ul class="table">
+            <li><span><code>backend/auto_eval/B_questions_and_eval_methods/B_scenario_questions.json</code></span><span>B 场景每个 turn 的评测字段声明。</span></li>
+            <li><span><code>backend/auto_eval/B_questions_and_eval_methods/scenario_B_registry.py</code></span><span>把 turn 展开成 content / trace-or-artifact / judge 三类 criterion。</span></li>
+            <li><span><code>backend/auto_eval/B_questions_and_eval_methods/scenario_B_content_checks.py</code></span><span>关键术语、禁词、prior memory 信号等内容侧扣分规则。</span></li>
+            <li><span><code>backend/auto_eval/B_questions_and_eval_methods/scenario_B_trace_checks.py</code></span><span>读文件、write_file、binary grounding、memory 读取痕迹等 trace 侧规则。</span></li>
+            <li><span><code>backend/auto_eval/B_questions_and_eval_methods/scenario_B_artifact_checks.py</code></span><span>预期文件是否存在、section 是否齐全、frontmatter 是否完整。</span></li>
+          </ul>
+        </div>
+        <div class="box">
+          <ul class="table">
+            <li><span><code>backend/auto_eval/B_questions_and_eval_methods/scenario_B_hallucination_checks.py</code></span><span>幻觉 flags 和 scenario 级风险率汇总。</span></li>
+            <li><span><code>backend/auto_eval/B_questions_and_eval_methods/scenario_B_llm_judges.py</code></span><span>按 turn 类型切换 judge prompt 和结构化输出 schema。</span></li>
+            <li><span><code>backend/auto_eval/B_questions_and_eval_methods/scenario_B_runbook.py</code></span><span>把各类子分数组装成 turn evaluation 结果。</span></li>
+            <li><span><code>backend/auto_eval/runner.py</code></span><span>真实执行 turn，并把 content / artifact-or-trace / judge / temp checks 合成 final_turn_score。</span></li>
+            <li><span><code>backend/auto_eval/judge.py</code></span><span>当前启发式 judge 的实际实现。</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="nav-row">
+        <a class="nav-link" href="auto_eval_intro.html">总介绍页</a>
+        <a class="nav-link" href="auto_eval_metrics_brief.html">汇报版</a>
+      </div>
+    </section>
+
+    <section class="footer">
+      <strong>结论：</strong>
+      auto_eval 的评测指标写法本质上是一套分层设计。
+      JSON 负责声明评测意图，场景 Python 模块负责实现扣分细则，runner 负责把这些局部结果组装成 turn 分数、hallucination 汇总和最终报告。
+    </section>
+  </main>
+</body>
+</html>

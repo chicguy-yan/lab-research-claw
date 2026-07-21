@@ -1,0 +1,104 @@
+{
+  "scenario_id": "scenario_E",
+  "session_id": "scenario_E_session_002_package_read_order",
+  "turn_id": 3,
+  "workspace_id": "eval-scenario_e-260322_1714",
+  "backend_session_id": "4d56400459cd",
+  "assistant_text": "**Context Trace（公开版）**  \n本轮实际调用了 `write_file`：  \n- 已写入 `memory/packs/E_package_read_order.md`  \n- `source_assets` 已绑定：  \n  - `assets/uploads/ced68974_closure_mapping.md`  \n  - `assets/uploads/5ee0c395_test_cases_literature.md`  \n  - `assets/uploads/4abcbbd4_test_cases_experiment.md`  \n\n**Rationale（公开版）**  \n按你的要求，我把本轮内容沉淀成一个 pack，至少包含三节：  \n- `建议读取顺序`  \n- `每一步要确认的对象`  \n- `停止下钻条件`  \n并且按 evaluator / benchmark builder 视角组织，而不是 researcher 视角。\n\n**Deliverable**  \n已落盘文件：`memory/packs/E_package_read_order.md`\n\n文件内容已覆盖以下核心结构：  \n1. **建议读取顺序**  \n   - 先全局 closure registry  \n   - 再 literature / experiment case index  \n   - 再按 baseline → stress → challenge 进入单 case  \n   - 再看结构化 source files  \n   - 仅在触发条件出现时下钻原始资产  \n\n2. **每一步要确认的对象**  \n   - closure family / object_hint / suitable_tests / 风险级别  \n   - case 是否可入 benchmark seed  \n   - 单 case 的 object / input / expected landing / trace spine  \n   - 原始资产里的精确锚点、参数、版本和执行真实性  \n\n3. **停止下钻条件**  \n   - 何时可停在 bridge 层  \n   - 何时可停在 source `.md` 层  \n   - 何时必须离开 bridge 层  \n   - 何时必须回源文件  \n   - 最简执行口令  \n\n**Memory Patch**  \n已完成写入：  \n- `memory/packs/E_package_read_order.md`  \n\n如果你愿意，下一步我可以继续补一个配套文件，做成真正可执行的 benchmark 表：  \n`case_id | family | read_order | stop_layer | must_go_deeper_if | raw_required_for_gold | benchmark_role`。",
+  "attachments_used": [],
+  "trace_events": [
+    {
+      "tool_call_id": "call_U4Wdb72WmQwFKemyxSLCDQ4M",
+      "tool": "write_file",
+      "args": {
+        "content": "# E_package_read_order\n\n> 视角：**evaluator / benchmark builder**，不是 researcher。  \n> 目标：先建立“可判分的读取路径”，再决定哪些 closure 值得下钻原始资产。\n\n## 一、建议读取顺序\n\n### 1. Layer 0：先读全局 closure registry\n**文件：** `assets/uploads/ced68974_closure_mapping.md`\n\n**目的：**\n- 先建立 closure 全景，而不是先理解科研内容\n- 先看有哪些 closure family：`literature_closure / experiment_closure / writing_closure`\n- 先做 benchmark 路由：哪些适合 `context_hit_test / object_landing_test / trace_replay_test / writing_organization_test`\n\n**这一层要确认：**\n- closure family 是什么\n- `research_line` 是什么\n- `object_hint` 指向什么对象\n- `suitable_tests` 对应哪些 evaluator 能力\n- `status` 和 `uncertainty_tags` 是否允许先入 benchmark 池\n- `source_files` 是否存在、是否足以支持后续下钻\n\n---\n\n### 2. Layer 1：再读 family-specific case index\n**文件：**\n1. `assets/uploads/5ee0c395_test_cases_literature.md`\n2. `assets/uploads/4abcbbd4_test_cases_experiment.md`\n\n**目的：**\n- 从 closure 全景切到 benchmark seed 池\n- 确认每个 case 为什么典型、适合测什么\n- 先做 case 选池，不急着开原始件\n\n**推荐顺序：**\n- 先 literature index\n- 再 experiment index\n- 然后按“baseline → stress → challenge”交错读 case\n\n**这一层要确认：**\n- 该 case 是否是 benchmark 候选，而不只是研究素材\n- case 的典型性来自哪里\n- 它更适合做 baseline、stress 还是 challenge\n- 该 case 的测试目标是命中、落对象、trace replay，还是写作组织\n\n---\n\n### 3. Layer 2：进入单个 closure / case\n**推荐 case 顺序：**\n1. **L1 基线机制文献簇**  \n2. **E1 第二阶段性能筛选闭环**  \n3. **L2 Ce-Co3O4 主逻辑迁移簇**  \n4. **E2 第五阶段最小机理闭环**  \n5. **E3 第六阶段高价钴直接证据链**  \n6. **L3 d-band 到聚合路径跨主题综述簇**\n\n**原因：**\n- L1 / E1：最适合做第一批 baseline seed\n- L2 / E2：适合做中等难度 stress cases\n- E3 / L3：更适合做 challenge / boundary cases\n\n**这一层要确认：**\n- 该 closure 对应的具体对象是 literature、experiment，还是 writing pack\n- closure 当前是“已形成可判分对象”，还是“只是概念桥 / 计划草图”\n- 是否已有稳定 trace spine\n- 是否需要继续下钻 `source_files`\n\n---\n\n### 4. Layer 3：优先下钻结构化 source files，而不是原始资产\n**优先级：**\n1. `source_files` 里的结构化 `.md`\n2. 再看是否需要 PDF / PPTX / DOCX / raw outputs\n\n**原则：**\n- evaluator 先要最小可判分锚点，不先追求科研全理解\n- 结构化 `.md` 足够支持 case card 时，不必默认开原始件\n\n**这一层要确认：**\n- object 有没有被钉死\n- 输入上下文、目标输出、trace spine 是否可写成 case card\n- 当前 source 文件说的是 hypothesis、protocol、result，还是 final pack\n- 是否已经足够支持 benchmark 评分\n\n---\n\n### 5. Layer 4：只在触发条件出现时才下钻原始资产\n**可能需要的原始资产：**\n- PDF\n- PPTX\n- DOCX\n- 原始输出 / 图表 / 运行结果\n\n**这一层要确认：**\n- 是否需要精确引用、图号、参数、版本号\n- 是否要判定执行真实性\n- 是否需要核查结构化 md 是否过度压缩或误转述\n\n---\n\n## 二、每一步要确认的对象\n\n### Step A：读 closure mapping 时\n要确认的不是“科学内容是否完整”，而是：\n- **对象家族**：literature / experiment / writing\n- **对象落点**：object_hint 能落到什么对象\n- **测试用途**：适合哪些 evaluator tests\n- **风险级别**：`status` + `uncertainty_tags`\n- **后续入口**：`source_files` 是否清楚\n\n### Step B：读 test case index 时\n要确认：\n- 这个 case 是不是 benchmark seed\n- 它的“典型性”是否足够稳定\n- 它要测的是命中、落对象、trace，还是写作组织\n- 它更适合 baseline / stress / challenge 哪一档\n\n### Step C：读单个 closure / source md 时\n要确认：\n- 具体对象是否已钉死\n- case 的输入上下文是否明确\n- 预期输出 / 正确落点是否明确\n- trace spine 是否真实可复述\n- 当前材料是在描述计划、执行，还是成品\n\n### Step D：读原始资产时\n要确认：\n- 精确证据锚点是否存在\n- 参数、图号、页码、版本信息是否可仲裁\n- bridge 层总结与原始件是否一致\n- case 是否真的达到了可做 hard gold 的程度\n\n---\n\n## 三、停止下钻条件\n\n## 3.1 什么时候说明某个 closure 已经足够清晰，可以停止下钻\n\n### A. 可停在 bridge 层\n满足以下条件时，可停在：\n- `closure_mapping.md`\n- `test_cases_literature.md`\n- `test_cases_experiment.md`\n\n**条件：**\n1. 当前目标只是 **case 选池 / coverage 规划**\n2. closure identity 已经稳定：`research_line`、`object_hint`、case 描述不冲突\n3. `suitable_tests` 已经足以映射 evaluator 任务\n4. `status` 较稳，优先是 `strong_candidate`\n5. `uncertainty_tags = none`\n6. 当前不需要判定执行真实性，也不需要精确 quote / 参数 / 图号\n\n**当前最适合这样停的 closure：**\n- L1 基线机制文献簇\n- E1 第二阶段性能筛选闭环\n\n---\n\n### B. 可停在结构化 source `.md` 层\n满足以下条件时，可停在 `source_files` 对应的结构化 markdown，不继续翻原始件：\n\n**条件：**\n1. 已能写出最小 case card：object / input / expected landing / suitable tests / trace spine\n2. 能分清对象类型：literature、experiment、writing 不混淆\n3. 能分清材料是在讲 hypothesis、protocol、result，还是 final pack\n4. 当前评分标准不要求 quote、图号、参数、页码、版本号\n5. 已足够支持 soft scoring 或 baseline routing\n\n---\n\n## 3.2 什么时候必须离开 bridge 层，不能只停留在 bridge 层\n\n任一条成立，都必须继续往下读：\n\n1. `uncertainty_tags != none`\n   - 如：`needs_manual_review / missing_context / uncertain`\n2. `status` 提示 closure 仍未闭合\n   - 如：`candidate_with_partial_manual_linking`\n   - `candidate_missing_raw_output_files`\n   - `high_value_but_partly_planned`\n   - `conceptual_bridge_candidate`\n   - `versioned_pack_candidate`\n   - `strong_candidate_with_mixed_draft_status`\n3. 你必须区分“计划 / 执行 / 成品”\n4. 你要做 `trace_replay_test`，且需要可仲裁\n5. bridge 层只能给方向，不能给锚点\n6. 你无法明确指出该 closure 的主记录文件或真实对象\n\n**当前必须离开 bridge 层的 closure：**\n- L2 Ce-Co3O4 主逻辑迁移簇\n- E2 第五阶段最小机理闭环\n- E3 第六阶段高价钴直接证据链\n- L3 d-band 到聚合路径跨主题综述簇\n\n---\n\n## 3.3 什么时候必须回源文件，不能只停在 bridge 或 source md\n\n任一条成立，都必须继续到 PDF / PPTX / DOCX / raw outputs：\n\n1. 你要做 **adjudicable hard gold**\n2. 评分涉及 **精确引用 / 图号 / 参数 / 页码 / 版本号**\n3. source `.md` 是摘要转述，而不是证据本体\n4. closure 的核心对象本身就是最终件\n   - 如 `.pptx` / `.docx`\n5. 需要核查 bridge/source 层是否过度压缩、误转述、版本滞后\n6. 需要判定执行真实性，而不是只看 protocol 或组织逻辑\n7. `missing_context` 指向的缺口就在原始输出\n8. 你要防止 benchmark 奖励“脑补式补全”\n\n---\n\n## 3.4 最简执行口令\n\n### 可以停\n**对象清楚、测试清楚、风险低，且当前不判执行真伪。**\n\n### 必须离开 bridge 层\n**只要出现 manual review / missing context / uncertain / partly planned / mixed draft，就别停。**\n\n### 必须回原始资产\n**只要你要判 quote、参数、图号、版本、最终件内容，或者要分清“计划 vs 执行”，就必须开原件。**\n",
+        "cwd": ".",
+        "path": "memory/packs/E_package_read_order.md",
+        "source_assets": [
+          "assets/uploads/ced68974_closure_mapping.md",
+          "assets/uploads/5ee0c395_test_cases_literature.md",
+          "assets/uploads/4abcbbd4_test_cases_experiment.md"
+        ]
+      },
+      "timestamp": "2026-03-22T23:03:58.817265",
+      "status": "completed",
+      "result": "File written successfully: memory/packs/E_package_read_order.md"
+    },
+    {
+      "tool_call_id": "call_U4Wdb72WmQwFKemyxSLCDQ4M",
+      "tool": "write_file",
+      "args": null,
+      "timestamp": "2026-03-22T23:03:58.842193",
+      "status": "completed_unmatched",
+      "result": "File written successfully: memory/packs/E_package_read_order.md"
+    }
+  ],
+  "created_paths": [
+    "memory/packs/E_package_read_order.md"
+  ],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/4d56400459cd",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "E-S002-T03-C1",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中 4 个，达到阈值。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "E-S002-T03-C2",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "artifact_result": {
+    "criterion_id": "E-S002-T03-C2A",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "judge_result": {
+    "criterion_id": "E-S002-T03-C3",
+    "score": 100.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 4 个关键术语",
+      "检测到工具使用: write_file"
+    ],
+    "risks": [],
+    "missing": [],
+    "raw_text": "你是一名擅长把复杂 benchmark 设计收束成可实现协议的系统架构师。请判断这条回答能否作为 bridge/eval closure 的稳定对象：它是否真正形成了 read-order、priority、schema、prompt contract、failure mode 或 handoff 这类可执行对象；是否区分了 scenario/session/turn/criterion 层级；是否兼顾实现成本、覆盖度与可评分性；是否能够被 Codex 直接消费为实现输入。不要用自己的经验替模型补上尚未写出的系统约束，只按现有回答评分。输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_E_session_002_package_read_order\",\n  \"turn_id\": 3,\n  \"user_input\": \"把这轮存成 `memory/packs/E_package_read_order.md`，至少包含：`建议读取顺序`、`每一步要确认的对象`、`停止下钻条件` 三节。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace（公开版）**  \\n本轮实际调用了 `write_file`：  \\n- 已写入 `memory/packs/E_package_read_order.md`  \\n- `source_assets` 已绑定：  \\n  - `assets/uploads/ced68974_closure_mapping.md`  \\n  - `assets/uploads/5ee0c395_test_cases_literature.md`  \\n  - `assets/uploads/4abcbbd4_test_cases_experiment.md`  \\n\\n**Rationale（公开版）**  \\n按你的要求，我把本轮内容沉淀成一个 pack，至少包含三节：  \\n- `建议读取顺序`  \\n- `每一步要确认的对象`  \\n- `停止下钻条件`  "
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [
+    {
+      "artifact_type": "pack",
+      "path": "memory/packs/E_package_read_order.md",
+      "must_exist_after_turn": true,
+      "required_sections": [
+        "建议读取顺序",
+        "每一步要确认的对象",
+        "停止下钻条件"
+      ]
+    }
+  ],
+  "temporary_expectations": null,
+  "provisional_turn_score": 100.0,
+  "final_turn_score": 100.0
+}

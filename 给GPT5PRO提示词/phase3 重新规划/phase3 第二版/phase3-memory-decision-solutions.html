@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 3 Memory Decision 方案对比 — Experimental-Research-OpenClaw</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --orange: #f0883e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  h1 { color: #fff; font-size: 1.8rem; margin-bottom: 0.5rem; }
+  h2 { color: var(--accent); font-size: 1.3rem; margin: 2rem 0 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+  h3 { color: var(--purple); font-size: 1.05rem; margin: 1.2rem 0 0.6rem; }
+  .subtitle { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 2rem; }
+  
+  .callout {
+    background: var(--surface);
+    border-left: 4px solid var(--red);
+    padding: 1rem 1.2rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+  }
+  .callout-title {
+    font-weight: 700;
+    color: var(--red);
+    margin-bottom: 0.5rem;
+  }
+  
+  .solution-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+  
+  .solution-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+  }
+  
+  .solution-card.recommended {
+    border-color: var(--green);
+  }
+  
+  .solution-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .solution-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .badge-short { background: var(--green); color: #fff; }
+  .badge-long { background: var(--purple); color: #fff; }
+  
+  .solution-section {
+    margin: 1rem 0;
+  }
+  
+  .solution-section-title {
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .code-block {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.85rem;
+    overflow-x: auto;
+    margin: 0.5rem 0;
+  }
+  
+  .code-comment {
+    color: var(--text-dim);
+  }
+  
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .pros, .cons {
+    padding: 0.8rem;
+    border-radius: 6px;
+  }
+  
+  .pros {
+    background: #23863622;
+    border: 1px solid var(--green);
+  }
+  
+  .cons {
+    background: #f8514922;
+    border: 1px solid var(--red);
+  }
+  
+  .pros-title, .cons-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .pros-title { color: var(--green); }
+  .cons-title { color: var(--red); }
+  
+  ul {
+    margin-left: 1.2rem;
+    font-size: 0.9rem;
+  }
+  
+  li {
+    margin: 0.3rem 0;
+  }
+  
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+  }
+  
+  .comparison-table th,
+  .comparison-table td {
+    border: 1px solid var(--border);
+    padding: 0.8rem;
+    text-align: left;
+  }
+  
+  .comparison-table th {
+    background: var(--surface);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  
+  .comparison-table tr:nth-child(even) {
+    background: var(--surface);
+  }
+  
+  .check { color: var(--green); font-weight: 700; }
+  .cross { color: var(--red); font-weight: 700; }
+  .neutral { color: var(--yellow); font-weight: 700; }
+  
+  .flow-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    font-family: monospace;
+    font-size: 0.85rem;
+  }
+  
+  .flow-step {
+    margin: 0.5rem 0;
+    padding-left: 1rem;
+  }
+  
+  .flow-arrow {
+    color: var(--text-dim);
+    margin: 0.2rem 0;
+  }
+  
+  .highlight-box {
+    background: #1f6feb22;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+</style>
+</head>
+<body>
+
+<h1>Phase 3 Memory Decision 方案对比</h1>
+<p class="subtitle">Experimental-Research-OpenClaw — 三种 memory_decision 产出方案的详细分析</p>
+
+<div class="callout">
+  <div class="callout-title">⚠️ 核心问题</div>
+  <p><strong>memory_decision</strong> 是 Phase 3 验收的关键字段，但当前设计中<strong>没有任何模块负责产出它</strong>：</p>
+  <ul>
+    <li><strong>PromptBuilder</strong>：明确声明"不负责 memory 决策"</li>
+    <li><strong>TraceWriter</strong>：只负责"接收"并写入，不负责生成</li>
+    <li><strong>ContextOrchestrator</strong>：只负责上下文选择</li>
+    <li><strong>新增文件列表</strong>：没有独立的决策模块</li>
+  </ul>
+  <p style="margin-top: 0.8rem;">这导致 <code>api/chat.py</code> 的集成流程中，Step 4 (LLM 调用) 到 Step 6 (TraceWriter) 之间存在<strong>责任链断裂</strong>。</p>
+</div>
+
+<h2>三种解决方案</h2>
+
+<div class="solution-grid">
+  <!-- 方案 1 -->
+  <div class="solution-card">
+    <div class="solution-header">
+      <div class="solution-title">方案 1：独立规则引擎</div>
+      <span class="badge badge-short">短期推荐</span>
+    </div>
+    
+    <div class="solution-section">
+      <div class="solution-section-title">📍 决策时机</div>
+      <p>在 LLM 调用<strong>之前</strong>，基于用户消息和 intent hint</p>
+    </div>
+    
+    <div class="solution-section">
+      <div class="solution-section-title">🔧 实现方式</div>
+      <p>新增独立模块 <code>MemoryDecisionEngine</code>，在 <code>api/chat.py</code> 的 Step 4-5 之间调用</p>
+    </div>
+    
+    <div class="solution-section">
+      <div class="solution-section-title">💻 代码示例</div>
+      <div class="code-block">
+<span class="code-comment"># Step 4.5: 规则引擎决策</span>
+decision_engine = MemoryDecisionEngine()
+memory_decision = decision_engine.decide(
+    message=message,
+    intent_hint=context_result.intent_hint,
+    workspace_state=workspace_state
+)
+
+<span class="code-comment"># 返回示例</span>
+{
+  "action": "write",
+  "target_layer": "Layer3",
+  "target_type": "Task",
+  "target_path": "memory/tasks/TASK_exp_005.md",
+  "reason": "检测到实验关键词，建议写入实验任务"
+}
+      </div>
+    </div>
+    
+    <div class="solution-section">
+      <div class="solution-section-title">🎯 决策逻辑</div>
+      <ul>
+        <li>关键词匹配：<code>["实验", "XRD", "SEM"]</code> → write Task</li>
+        <li>Intent hint：<code>experiment_closure</code> → write Task</li>
+        <li>Intent hint：<code>stage_progress</code> → write Timeline</li>
+        <li>Intent hint：<code>general_consult</code> → skip</li>
+      </ul>
+    </div>
+    
+    <div class="pros-cons">
+      <div class="pros">
+        <div class="pros-title">✅ 优点</div>
+        <ul>
+          <li>实现简单，纯代码逻辑</li>
+          <li>完全确定性，可控性强</li>
+          <li>符合 phase3-dev-plan 的降级方案</li>
+          <li>可以快速闭环验收</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <div class="cons-title">❌ 缺点</div>
+        <ul>
+          <li>准确性较低（盲猜）</li>
+          <li>无法基于 LLM 实际回答内容</li>
+          <li>规则维护成本高</li>
+          <li>不符合"LLM 软约束下自进化"理念</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 方案 2 -->
+  <div class="solution-card">
+    <div class="solution-header">
+      <div class="solution-title">方案 2：ContextOrchestrator 扩展</div>
+      <span class="badge badge-short">短期备选</span>
+    </div>
+    
+    <div class="solution-section">
+      <div class="solution-section-title">📍 决策时机</div>
+      <p>在 LLM 调用<strong>之前</strong>，与上下文选择同步完成</p>
+    </div>
+    
+    <div class="solution-section">
+      <div class="solution-section-title">🔧 实现方式</div>
+      <p>扩展 <code>ContextOrchestrator.select_context()</code>，在返回的 <code>ContextResult</code> 中新增 <code>memory_suggestion</code> 字段</p>
+    </div>
+    
+    <div class="solution-section">
+      <div class="solution-section-title">💻 代码示例</div>
+      <div class="code-block">
+<span class="code-comment"># ContextResult 新增字段</span>
+@dataclass
+class ContextResult:
+    intent_hint: str
+    context_files: list[ContextFile]
+    budget_report: dict
+    control_context: list[str]
+    memory_suggestion: dict  <span class="code-comment"># ← 新增</span>
+
+<span class="code-comment"># ContextOrchestrator 内部逻辑</span>
+def select_context(self, message, ...):
+    intent_hint = self._detect_intent(message)
+    context_files = self._select_files(intent_hint)
+    
+    <span class="code-comment"># 基于 intent 产出 memory 建议</span>
+    memory_suggestion = self._suggest_memory_action(
+        intent_hint, message
+    )
+    
+    return ContextResult(..., memory_suggestion)
+      </div>
+    </div>
+    
+    <div class="pros-cons">
+      <div class="pros">
+        <div class="pros-title">✅ 优点</div>
+        <ul>
+          <li>不需要新增模块</li>
+          <li>与 intent 识别逻辑复用</li>
+          <li>职责内聚（上下文+决策）</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <div class="cons-title">❌ 缺点</div>
+        <ul>
+          <li>ContextOrchestrator 职责过重</li>
+          <li>仍然是 LLM 调用前的盲猜</li>
+          <li>准确性与方案 1 相同</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 方案 3 -->
+  <div class="solution-card recommended">
+    <div class="solution-header">
+      <div class="solution-title">方案 3：LLM 结构化输出</div>
+      <span class="badge badge-long">长期目标</span>
+    </div>
+    
+    <div class="solution-section">
+      <div class="solution-section-title">📍 决策时机</div>
+      <p>在 LLM 调用<strong>之后</strong>，从 LLM 输出中解析</p>
+    </div>
+    
+    <div class="solution-section">
+      <div class="solution-section-title">🔧 实现方式</div>
+      <p>修改 system prompt，要求 LLM 在回答末尾输出结构化的 <code>&lt;memory_decision&gt;</code> 标签</p>
+    </div>
+    
+    <div class="solution-section">
+      <div class="solution-section-title">💻 Prompt 示例</div>
+      <div class="code-block">
+# System Prompt 新增部分
+在回答用户后，你必须在末尾输出 memory 决策：
+
+&lt;memory_decision&gt;
+{
+  "action": "write" | "skip",
+  "target_layer": "Layer1" | "Layer2" | "Layer3" | null,
+  "target_path": "memory/tasks/TASK_exp_005.md" | null,
+  "reason": "本轮完成了 XRD 表征，需要更新实验任务记录"
+}
+&lt;/memory_decision&gt;
+      </div>
+    </div>
+    
+    <div class="solution-section">
+      <div class="solution-section-title">💻 后端处理</div>
+      <div class="code-block">
+<span class="code-comment"># Step 4: LLM 调用</span>
+response_text = await agent.astream(...)
+
+<span class="code-comment"># Step 4.5: 解析 memory_decision</span>
+memory_decision = extract_memory_decision(response_text)
+clean_response = remove_memory_decision_tag(response_text)
+
+<span class="code-comment"># Step 5: 保存消息（清理后的回答）</span>
+session_manager.save_message(clean_response)
+
+<span class="code-comment"># Step 6: 写入 trace（含 memory_decision）</span>
+trace_writer.write_trace(..., memory_decision)
+      </div>
+    </div>
+    
+    <div class="pros-cons">
+      <div class="pros">
+        <div class="pros-title">✅ 优点</div>
+        <ul>
+          <li><strong>准确性最高</strong>：基于实际回答内容</li>
+          <li>符合 phase3-index 原始设计意图</li>
+          <li>符合"LLM 软约束下自进化"理念</li>
+          <li>为 Phase 4+ 工具调用打基础</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <div class="cons-title">❌ 缺点</div>
+        <ul>
+          <li>需要 prompt 工程</li>
+          <li>LLM 可能不遵守格式</li>
+          <li>需要解析逻辑（正则/JSON）</li>
+          <li>实现复杂度中等</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2>方案对比矩阵</h2>
+
+<table class="comparison-table">
+  <thead>
+    <tr>
+      <th>维度</th>
+      <th>方案 1：独立规则引擎</th>
+      <th>方案 2：ContextOrchestrator 扩展</th>
+      <th>方案 3：LLM 结构化输出</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>决策时机</strong></td>
+      <td>LLM 调用前</td>
+      <td>LLM 调用前</td>
+      <td>LLM 调用后</td>
+    </tr>
+    <tr>
+      <td><strong>决策依据</strong></td>
+      <td>用户消息 + intent hint</td>
+      <td>用户消息 + intent hint</td>
+      <td>LLM 实际生成的回答内容</td>
+    </tr>
+    <tr>
+      <td><strong>准确性</strong></td>
+      <td><span class="neutral">●</span> 中等（规则匹配）</td>
+      <td><span class="neutral">●</span> 中等（规则匹配）</td>
+      <td><span class="check">✓</span> 高（基于回答）</td>
+    </tr>
+    <tr>
+      <td><strong>可控性</strong></td>
+      <td><span class="check">✓</span> 高（纯代码）</td>
+      <td><span class="check">✓</span> 高（纯代码）</td>
+      <td><span class="cross">✗</span> 低（依赖 LLM）</td>
+    </tr>
+    <tr>
+      <td><strong>实现复杂度</strong></td>
+      <td><span class="check">✓</span> 简单</td>
+      <td><span class="check">✓</span> 简单</td>
+      <td><span class="neutral">●</span> 中等</td>
+    </tr>
+    <tr>
+      <td><strong>符合原设计</strong></td>
+      <td><span class="cross">✗</span> 否（降级方案）</td>
+      <td><span class="cross">✗</span> 否（降级方案）</td>
+      <td><span class="check">✓</span> 是（phase3-index 意图）</td>
+    </tr>
+    <tr>
+      <td><strong>维护成本</strong></td>
+      <td><span class="cross">✗</span> 高（规则维护）</td>
+      <td><span class="cross">✗</span> 高（规则维护）</td>
+      <td><span class="neutral">●</span> 中（prompt 调优）</td>
+    </tr>
+    <tr>
+      <td><strong>扩展性</strong></td>
+      <td><span class="cross">✗</span> 低</td>
+      <td><span class="cross">✗</span> 低</td>
+      <td><span class="check">✓</span> 高</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>集成流程对比</h2>
+
+<div class="flow-diagram">
+  <h3 style="color: var(--accent); margin-bottom: 1rem;">方案 1 & 2：规则引擎（LLM 调用前）</h3>
+  <div class="flow-step">Step 1. SessionManager.load_session_for_agent()</div>
+  <div class="flow-step">Step 2. ContextOrchestrator.select_context()</div>
+  <div class="flow-step">Step 3. PromptBuilder.build()</div>
+  <div class="flow-step" style="background: #1f6feb22; padding: 0.5rem; border-radius: 4px;">
+    <strong>Step 4. MemoryDecisionEngine.decide()</strong> ← 新增（方案 1）<br>
+    或 <strong>ContextResult.memory_suggestion</strong> ← 扩展（方案 2）
+  </div>
+  <div class="flow-step">Step 5. AgentManager.astream() — LLM 调用</div>
+  <div class="flow-step">Step 6. SessionManager.save_message()</div>
+  <div class="flow-step">Step 7. TraceWriter.write_trace(memory_decision)</div>
+  <div class="flow-step">Step 8. yield SSE done</div>
+</div>
+
+<div class="flow-diagram">
+  <h3 style="color: var(--accent); margin-bottom: 1rem;">方案 3：LLM 结构化输出（LLM 调用后）</h3>
+  <div class="flow-step">Step 1. SessionManager.load_session_for_agent()</div>
+  <div class="flow-step">Step 2. ContextOrchestrator.select_context()</div>
+  <div class="flow-step">Step 3. PromptBuilder.build() — 注入 memory_decision 要求</div>
+  <div class="flow-step">Step 4. AgentManager.astream() — LLM 调用</div>
+  <div class="flow-step" style="background: #1f6feb22; padding: 0.5rem; border-radius: 4px;">
+    <strong>Step 5. extract_memory_decision(response)</strong> ← 新增解析逻辑<br>
+    <strong>Step 5.5. remove_memory_decision_tag(response)</strong> ← 清理标签
+  </div>
+  <div class="flow-step">Step 6. SessionManager.save_message(clean_response)</div>
+  <div class="flow-step">Step 7. TraceWriter.write_trace(memory_decision)</div>
+  <div class="flow-step">Step 8. yield SSE done</div>
+</div>
+
+<h2>推荐路径</h2>
+
+<div class="highlight-box">
+  <h3 style="color: var(--green); margin-bottom: 0.8rem;">🎯 短期（Phase 3 验收）</h3>
+  <p><strong>采用方案 1：独立规则引擎</strong></p>
+  <ul>
+    <li>新增 <code>graph/memory_decision_engine.py</code></li>
+    <li>在 <code>api/chat.py</code> 的 Step 4-5 之间调用</li>
+    <li>基于 intent hint 和关键词匹配做决策</li>
+    <li>快速闭环，满足验收标准</li>
+  </ul>
+</div>
+
+<div class="highlight-box" style="border-color: var(--purple);">
+  <h3 style="color: var(--purple); margin-bottom: 0.8rem;">🚀 长期（Phase 4+）</h3>
+  <p><strong>迁移到方案 3：LLM 结构化输出</strong></p>
+  <ul>
+    <li>修改 <code>PromptBuilder</code>，注入 memory_decision 要求</li>
+    <li>实现 <code>extract_memory_decision()</code> 解析函数</li>
+    <li>逐步替换规则引擎</li>
+    <li>为工具调用和复杂决策打基础</li>
+  </ul>
+</div>
+
+<h2>实现建议</h2>
+
+<div class="callout" style="border-color: var(--green);">
+  <div class="callout-title" style="color: var(--green);">✅ Phase 3 最小可行方案</div>
+  <p><strong>新增文件</strong>：<code>backend/graph/memory_decision_engine.py</code></p>
+  <div class="code-block" style="margin-top: 0.8rem;">
+class MemoryDecisionEngine:
+    def decide(
+        self,
+        message: str,
+        intent_hint: str,
+        workspace_state: dict
+    ) -> dict:
+        """
+        基于规则判断 memory 写入决策
+        
+        返回:
+        {
+          "action": "write" | "skip",
+          "target_layer": "Layer1" | "Layer2" | "Layer3" | null,
+          "target_path": str | null,
+          "reason": str
+        }
+        """
+        # 规则 1: intent_hint 映射
+        if intent_hint == "experiment_closure":
+            return {
+                "action": "write",
+                "target_layer": "Layer3",
+                "target_type": "Task",
+                "target_path": self._generate_task_path(),
+                "reason": "实验闭环，写入 Task"
+            }
+        
+        # 规则 2: 关键词匹配
+        if any(kw in message for kw in ["阶段汇报", "进度"]):
+            return {
+                "action": "write",
+                "target_layer": "Layer2",
+                "target_path": "memory/timeline/...",
+                "reason": "阶段进度，写入 Timeline"
+            }
+        
+        # 规则 3: 默认 skip
+        return {
+            "action": "skip",
+            "target_layer": null,
+            "target_path": null,
+            "reason": "通用咨询，无需写入 memory"
+        }
+  </div>
+  
+  <p style="margin-top: 1rem;"><strong>修改文件</strong>：<code>backend/api/chat.py</code></p>
+  <div class="code-block" style="margin-top: 0.8rem;">
+<span class="code-comment"># 新增 import</span>
+from graph.memory_decision_engine import MemoryDecisionEngine
+
+<span class="code-comment"># 在 chat 函数中</span>
+context_result = context_orchestrator.select_context(...)
+system_prompt = prompt_builder.build(...)
+
+<span class="code-comment"># ← 新增：Step 4.5</span>
+decision_engine = MemoryDecisionEngine()
+memory_decision = decision_engine.decide(
+    message=message,
+    intent_hint=context_result.intent_hint,
+    workspace_state={...}
+)
+
+<span class="code-comment"># LLM 调用</span>
+async for chunk in agent_manager.astream(...):
+    yield chunk
+
+<span class="code-comment"># 写入 trace（传入 memory_decision）</span>
+trace = trace_writer.write_trace(
+    ...,
+    memory_decision=memory_decision
+)
+  </div>
+</div>
+
+<p style="margin-top: 2rem; color: var(--text-dim); font-size: 0.85rem; text-align: center;">
+  生成时间：2026-03-09 | Phase 3 架构分析文档
+</p>
+
+</body>
+</html>

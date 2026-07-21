@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experimental-Research-OpenClaw — 简历 + 面试 + 项目地图</title>
+<style>
+  :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#c9d1d9;--text-dim:#8b949e;--accent:#58a6ff;--green:#3fb950;--yellow:#d29922;--red:#f85149;--purple:#bc8cff;--orange:#f0883e}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:0;margin:0}
+  .wrap{max-width:1100px;margin:0 auto;padding:2rem}
+  h1{color:#fff;font-size:2rem;margin-bottom:.3rem}
+  h2{color:var(--accent);font-size:1.4rem;margin:3rem 0 1rem;border-bottom:1px solid var(--border);padding-bottom:.5rem}
+  h3{color:var(--purple);font-size:1.05rem;margin:1.5rem 0 .6rem}
+  h4{color:var(--orange);font-size:.95rem;margin:1.2rem 0 .5rem}
+  .sub{color:var(--text-dim);font-size:.9rem;margin-bottom:1.5rem}
+  p,li{font-size:.92rem;margin-bottom:.5rem}
+  ul,ol{padding-left:1.4rem;margin-bottom:.8rem}
+  strong{color:#fff}
+  code{background:#1c2128;padding:2px 6px;border-radius:4px;font-size:.84rem;color:var(--accent)}
+  pre{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;overflow-x:auto;font-size:.82rem;line-height:1.5;margin:1rem 0;color:var(--text)}
+
+  /* Sticky TOC */
+  .toc-bar{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:.6rem 0}
+  .toc-inner{max-width:1100px;margin:0 auto;padding:0 2rem;display:flex;gap:.5rem;flex-wrap:wrap}
+  .toc-inner a{padding:5px 12px;border-radius:6px;font-size:.8rem;color:var(--text-dim);text-decoration:none;transition:all .15s;border:1px solid transparent}
+  .toc-inner a:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* Cards */
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.4rem;margin-bottom:1rem}
+  .card-t{font-weight:600;color:#fff;margin-bottom:.4rem;font-size:.95rem}
+  .lb{display:inline-block;padding:2px 8px;border-radius:12px;font-size:.72rem;font-weight:600;margin-right:6px;vertical-align:middle}
+  .lb-g{background:#238636;color:#fff}.lb-y{background:#9e6a03;color:#fff}.lb-r{background:#da3633;color:#fff}.lb-b{background:#1f6feb;color:#fff}.lb-p{background:#8957e5;color:#fff}
+
+  /* Tables */
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.86rem}
+  th{background:var(--surface);color:var(--accent);text-align:left;padding:10px 12px;border-bottom:2px solid var(--border)}
+  td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+  tr:hover td{background:#1c2128}
+
+  /* Highlight */
+  .hl{background:#1c2128;border-left:3px solid var(--accent);padding:1rem 1.2rem;margin:1rem 0;border-radius:0 6px 6px 0}
+  .hl.w{border-left-color:var(--yellow)}.hl.d{border-left-color:var(--red)}.hl.g{border-left-color:var(--green)}
+  .hl p{margin-bottom:.3rem}
+
+  /* Keyword grid */
+  .kw{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;margin:1rem 0}
+  .kw .card{padding:1rem 1.2rem}
+  .kw .en{color:var(--accent);font-weight:600;font-size:.95rem}
+  .kw .zh{color:var(--text-dim);font-size:.82rem;margin-top:.2rem}
+  .kw .desc{margin-top:.5rem;font-size:.85rem}
+
+  /* Question cards */
+  .q{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:.8rem;overflow:hidden}
+  .q summary{padding:1rem 1.2rem;cursor:pointer;font-weight:600;font-size:.9rem;color:#fff;list-style:none;display:flex;align-items:center;gap:.5rem}
+  .q summary::-webkit-details-marker{display:none}
+  .q summary::before{content:'▸';color:var(--accent);font-size:.8rem;transition:transform .2s}
+  .q[open] summary::before{transform:rotate(90deg)}
+  .q .body{padding:0 1.2rem 1rem;font-size:.88rem}
+  .q .meta{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem}
+
+  /* Section divider */
+  .divider{border:none;border-top:2px solid var(--border);margin:3rem 0}
+
+  /* Responsive */
+  @media(max-width:600px){.wrap{padding:1rem}h1{font-size:1.5rem}h2{font-size:1.2rem}.toc-inner{padding:0 1rem}}
+</style>
+</head>
+<body>
+
+<!-- TOC Bar -->
+<div class="toc-bar"><div class="toc-inner">
+  <a href="#step1">Step 1 项目骨架</a>
+  <a href="#step2">Step 2 架构地图</a>
+  <a href="#step3">Step 3 能力地图</a>
+  <a href="#step4">Step 4 简历文案</a>
+  <a href="#step5">Step 5 面试题库</a>
+</div></div>
+
+<div class="wrap">
+<h1>Experimental-Research-OpenClaw</h1>
+<p class="sub">简历 + 面试 + 项目地图 三合一材料</p>
+
+<!-- ============================================================ -->
+<!--                        STEP 1                                 -->
+<!-- ============================================================ -->
+<hr class="divider" id="step1">
+<h2>Step 1：项目骨架</h2>
+
+<h3>一句话定义</h3>
+<div class="hl"><p>面向实验学科的本地化科研 AI Agent 系统，通过<strong>"文件即记忆 + 技能即插件 + 全链路可追溯"</strong>三大机制，将 180 天实验周期中的文献、实验、机理验证、阶段汇报等高频场景编排为可闭环、可回放、可沉淀的工作流。</p></div>
+
+<h3>它解决的真实问题</h3>
+<p>科研人员（尤其是硕博生）在长周期实验中面临三重压力（来自 <code>项目最终实现效果.md</code> 用户访谈）：</p>
+<div class="card"><span class="lb lb-r">痛点 1</span><span class="card-t">记忆断裂</span><p>实验跨度 180 天，阶段汇报 10+ 次，每次都要从头翻记录、找数据、拼 PPT。导师追问"上次那个对照做了没"时答不上来。</p></div>
+<div class="card"><span class="lb lb-r">痛点 2</span><span class="card-t">证据链断裂</span><p>结论和数据之间缺乏可追溯的锚点。"Ce 加多了峰不稳定"背后到底对应哪个 csv、哪张照片、哪次实验条件？说不清就会被 challenge。</p></div>
+<div class="card"><span class="lb lb-r">痛点 3</span><span class="card-t">认知负担过重</span><p>被导师 challenge 后容易陷入自我怀疑，分不清"是我不行"还是"变量没控好"。缺乏结构化排查框架把不确定性收敛为可验证的步骤。</p></div>
+
+<h3>与普通 AI 助手的核心区别</h3>
+<table>
+<tr><th>维度</th><th>普通 AI 助手</th><th>OpenClaw</th></tr>
+<tr><td>记忆</td><td>单次对话窗口，关掉就忘</td><td>三层文件记忆（Identity/Timeline/AtomNotes），180 天持久化</td></tr>
+<tr><td>证据</td><td>回答基于训练数据，无法引用用户实验文件</td><td>每条结论挂 trace 回指（文件路径 + 用户原话 + 证据类型）</td></tr>
+<tr><td>透明度</td><td>Prompt 拼接是黑盒</td><td>全链路可回放：读了什么文件、为什么读、有没有被裁剪</td></tr>
+<tr><td>技能</td><td>固定能力，不可扩展</td><td>Skills 即 Markdown 说明书，拖入文件夹即用</td></tr>
+<tr><td>交付物</td><td>纯文本回复</td><td>结构化三卡落盘（Evidence/Task/Result），事实区与推断区分离</td></tr>
+</table>
+
+<h3>最核心的产品抽象："三卡落盘"</h3>
+<p>来源：<code>项目最终实现效果.md</code> golden test 剧本</p>
+<div class="card"><span class="lb lb-b">Evidence 卡</span><span class="card-t">memory/evidence/EVD-*.md</span><p>证据锚点——用户原话 + 文件路径 + 数据摘要，只记录事实</p></div>
+<div class="card"><span class="lb lb-b">Task 卡</span><span class="card-t">memory/tasks/TSK-*.md</span><p>任务结构——Claim + Protocol + Run + 事实区/推断区，把模糊需求拆成可执行步骤</p></div>
+<div class="card"><span class="lb lb-b">Result 卡</span><span class="card-t">memory/results/RES-*.md</span><p>交付物——PPT 大纲/SOP/证据链，每条结论挂 trace 回指和 assumptions 声明</p></div>
+<div class="hl"><p><strong>本质</strong>：把不确定的 LLM 行为包进确定的"证据采集 → 结构化输出 → 可追溯落盘"外壳里。</p></div>
+
+<h3>100 字摘要</h3>
+<div class="hl"><p>面向实验学科的本地化科研 AI Agent。三层文件记忆（Identity/Timeline/AtomNotes）管理 180 天实验周期；ContextOrchestrator 智能选择上下文，PromptBuilder 7-Block 结构化拼接，TraceWriter 全链路审计；输出为 Evidence→Task→Result 三卡闭环，事实与推断强制分离，每条结论挂证据回指。Skills 系统支持 Markdown 说明书即插即用。</p></div>
+
+<h3>3 个最关键关键词</h3>
+<div class="kw">
+  <div class="card"><div class="en">File-first Memory</div><div class="zh">文件即记忆</div><div class="desc">三层 Markdown 文件系统替代向量数据库，人类可读可改可追溯</div></div>
+  <div class="card"><div class="en">Evidence-traced Delivery</div><div class="zh">证据链交付</div><div class="desc">每条输出挂 trace 回指，事实与推断强制分离</div></div>
+  <div class="card"><div class="en">Skills-as-Instructions</div><div class="zh">技能即说明书</div><div class="desc">Skill 是教 Agent 如何用工具的 Markdown，非预置函数，拖入即用</div></div>
+</div>
+
+<h3>3 个最大亮点</h3>
+<h4>亮点 1：三层记忆架构解决长周期"记忆断裂"</h4>
+<p>按"可变性"分层，而非简单 RAG 检索：</p>
+<ul>
+  <li><strong>Layer1（Identity）</strong>：项目北极星、判据、实验室约束 —— 几乎不变，每轮必读</li>
+  <li><strong>Layer2（Timeline）</strong>：180 天总览 → 阶段 → 周 → 日 —— 中频更新，按意图选择性注入</li>
+  <li><strong>Layer3（AtomNotes）</strong>：Concept/Task/Pack 原子资产 —— 高频创建，按相关性 Top-K 注入</li>
+</ul>
+<p><code>ContextOrchestrator</code> 按"稳定→变化→本轮相关"优先级自动选择注入文件，并在 trace 的 <code>context_read[]</code> 中记录选择原因和裁剪状态。</p>
+
+<h4>亮点 2：全链路透明可回放</h4>
+<ul>
+  <li><code>context_read[]</code>：本轮读了哪些文件、为什么读、是否被裁剪（path/layer/why/status）</li>
+  <li><code>tool_calls[]</code>：调用了什么工具、输入输出是什么</li>
+  <li><code>prompt</code> 元数据：System Prompt 的 7-Block 完整结构</li>
+</ul>
+<p>Demo 剧本中 Result 卡每条结论后挂 <code>(trace:EVD-20260204-001)</code> 锚点，可追溯到原始数据文件。</p>
+
+<h4>亮点 3：从"回答问题"到"工作台交付"</h4>
+<ul>
+  <li>输入不是"问题"，而是"证据材料"（实验本照片、XRD csv、文献 pdf）</li>
+  <li>输出不是"回答"，而是"结构化交付物"（PPT 大纲 + 每页中心句、实验 SOP + 验收标准）</li>
+  <li>过程不是"一次性生成"，而是"A/B 轻量试探 → 证据采集 → 三卡落盘 → 沉淀为技能"</li>
+</ul>
+
+<h3>3 个最大风险</h3>
+<div class="card" style="border-left:3px solid var(--yellow)"><span class="lb lb-y">风险 1</span><span class="card-t">冷启动成本高</span><p>三层记忆的威力建立在 Identity 层被正确填充的前提上。<code>BOOTSTRAP.md</code> 协议采用轻量试探策略，但实际完成率未经真实用户验证。</p></div>
+<div class="card" style="border-left:3px solid var(--yellow)"><span class="lb lb-y">风险 2</span><span class="card-t">前端未完成</span><p>Phase 1-5.3 后端已完成（92 个 Python 文件、8 个单元测试），但 Phase 6 前端三栏 UI 尚未开发。有基础 <code>frontend/index.html</code> 原型。</p></div>
+<div class="card" style="border-left:3px solid var(--red)"><span class="lb lb-r">风险 3</span><span class="card-t">LLM 指令遵循不稳定</span><p>三卡落盘质量依赖 LLM 能力。通过 SOUL.md 硬约束 + <code>test_system_prompt_contract.py</code> 验证结构，但语义层面仍需人工审查。两条 golden test 覆盖面有限。</p></div>
+
+<!-- ============================================================ -->
+<!--                        STEP 2                                 -->
+<!-- ============================================================ -->
+<hr class="divider" id="step2">
+<h2>Step 2：架构地图</h2>
+
+<h3>总体分层</h3>
+<pre>
+┌─────────────────────────────────────────────────────────────┐
+│                      Control Plane                          │
+│  SOUL.md / IDENTITY.md / AGENTS.md / USER.md / TOOLS.md    │
+│  → 定义 Agent "如何工作"的硬协议，优先级最高                   │
+├─────────────────────────────────────────────────────────────┤
+│                       Data Plane                            │
+│  Layer1: identity/   Layer2: timeline/   Layer3: atoms/     │
+│  → 存放长期事实、时间推进、原子资产，服从 Control Plane         │
+├─────────────────────────────────────────────────────────────┤
+│                      Trace Plane                            │
+│  context_trace/{session_id}.json                            │
+│  → 全链路审计：读了什么、写了什么、缺什么、为什么               │
+└─────────────────────────────────────────────────────────────┘
+</pre>
+
+<h3>Control Plane：定义"Agent 如何工作"</h3>
+<table>
+<tr><th>文件</th><th>职责</th><th>关键内容</th></tr>
+<tr><td><code>SOUL.md</code></td><td>行为准则</td><td>科研三问（What/So what/Now what）、证据标准（硬约束：所有结论必须带证据类型+数据路径+对照+判据）、执行真实性（不脑补执行结果）</td></tr>
+<tr><td><code>IDENTITY.md</code></td><td>身份定义</td><td>Name/Role/Domain/Vibe，"像靠谱师兄+严谨审稿人"</td></tr>
+<tr><td><code>AGENTS.md</code></td><td>Agent 管理协议</td><td>技能协议、记忆协议、工具边界</td></tr>
+<tr><td><code>USER.md</code></td><td>用户信息</td><td>用户偏好与输出约束</td></tr>
+<tr><td><code>TOOLS.md</code></td><td>工具调用约定</td><td>5 个核心工具的使用规范</td></tr>
+<tr><td><code>BOOTSTRAP.md</code></td><td>首次初始化协议</td><td>识别语义边界、引导初始 assets、生成最小 memory 骨架</td></tr>
+</table>
+<div class="hl"><p><strong>产品判断</strong>：Control Plane 的本质是把 LLM 的不确定性关进确定性的笼子里。科研场景对"幻觉"零容忍——SOUL.md 在 Prompt 最高优先级位置注入硬约束，不靠 LLM 自觉。</p></div>
+
+<h3>Data Plane：存放"Agent 知道什么"</h3>
+
+<h4>Layer1：Identity（长期稳定）</h4>
+<pre>
+memory/identity/
+├── user.md           # 用户偏好与输出约束
+├── project.md        # 项目北极星、主线假设、指标、术语表、判据（最关键）
+├── lab_context.md    # 实验室现实约束：仪器/表征/命名/污染风险
+└── context_budget.md # 单回合上下文预算与截断策略
+</pre>
+<p><strong>产品判断</strong>：<code>project.md</code> 是整个记忆系统的锚点。ContextOrchestrator 每次对话都优先注入它，因为"判据"决定了 AI 建议是否靠谱。没有判据的建议就是幻觉。</p>
+
+<h4>Layer2：Timeline（中频更新）</h4>
+<pre>
+memory/timeline/
+├── 180d_index.md              # 180天总览：阶段划分、里程碑、风险雷达
+├── phases/                    # 阶段文档（P01-P05）
+├── weeks/                     # 周报
+├── days/                      # 日志
+└── stage_reports/             # 阶段汇报（R01-R10）
+</pre>
+<p><strong>产品判断</strong>：导师问"这两周做了什么"时，ContextOrchestrator 根据意图自动拉取 time_range 内的 weeks/days + 上一期 stage_report，不需要用户手动指定。</p>
+
+<h4>Layer3：AtomNotes（高频创建）</h4>
+<pre>
+memory/concepts/    # Concept：研究主题容器（你在验证什么）
+memory/tasks/       # Task：验证任务（= Claim + Protocol + Run）
+memory/packs/       # Pack：交付包（PPT/机理证据链/论文写作/图集）
+</pre>
+<p><strong>产品判断</strong>：Concept 驱动 Task，Task 结果汇聚成 Pack。这不是发明的抽象，而是科研工作流的自然结构——以前散落在 Excel/Word/PPT 里，现在被统一建模。</p>
+
+<h3>Trace Plane：记录"Agent 做了什么"</h3>
+<pre>
+// context_trace/{session_id}.json — Envelope Schema
+{
+  "messages": [...],     // SessionManager 读写：OpenAI messages 数组
+  "traces": [...],       // TraceWriter 读写：审计信息数组
+  "prompt": {...}        // PromptBuilder 写入：本轮 System Prompt 元数据
+}
+
+// trace 的 context_read[] 最小字段
+{
+  "path": "memory/identity/project.md",
+  "layer": "memory_identity",
+  "why": "项目北极星与判据，每轮必读",
+  "status": "full"   // full | truncated | skipped
+}
+</pre>
+<div class="hl"><p><strong>产品判断</strong>：Trace 的价值是建立用户信任。ChatGPT 给你答案，你不知道它基于什么。OpenClaw 告诉你"我读了你的 project.md 判据 + 上周实验日志 + XRD csv，基于这些得出结论"。</p></div>
+
+<h3>核心模块职责</h3>
+
+<div class="card">
+  <span class="lb lb-p">编排</span><span class="card-t">ContextOrchestrator — graph/context_orchestrator.py</span>
+  <p>扫描 workspace memory 目录，基于用户消息做意图识别（关键词匹配），按"稳定→变化→本轮相关"排序推荐文件，生成 Memory Map。失败时安全降级为全量默认注入。</p>
+  <p><strong>产品判断</strong>：这是"AI-native 产品"与"套壳 ChatGPT"的分水岭——智能上下文选择，读什么、不读什么、为什么，都有据可查。</p>
+</div>
+
+<div class="card">
+  <span class="lb lb-p">拼接</span><span class="card-t">PromptBuilder — graph/prompt_builder.py</span>
+  <p>将 Control Plane + Memory Map + Skills Snapshot + 工具说明 + 可信元数据拼接为 7-Block System Prompt：Identity → Tooling → Workspace → Metadata → Control Plane → Skills Snapshot → Memory Map。</p>
+  <p><strong>产品判断</strong>：Prompt Engineering 不是写一段好的提示词，而是设计一套可维护、可迭代、可审计的 Prompt 拼接系统。每个 Block 可独立修改和测试。</p>
+</div>
+
+<div class="card">
+  <span class="lb lb-p">追踪</span><span class="card-t">TraceWriter — graph/trace_writer.py</span>
+  <p>每轮对话完成后，将工具调用列表 + Prompt 元数据写入 trace 文件。读取现有 envelope（保留 messages），追加 trace 条目，写回文件。</p>
+</div>
+
+<div class="card">
+  <span class="lb lb-p">技能</span><span class="card-t">SkillLoader — graph/skill_loader.py</span>
+  <p>读取 system/workspace skills registry，生成 SKILLS_SNAPSHOT.md 菜单摘要注入 Prompt。Agent 据此自主决策是否 read_file 读取完整说明书。渐进式披露，避免 Prompt 膨胀。</p>
+  <p><strong>产品判断</strong>：Skill 不是代码插件，是 Markdown 说明书。用户可以自己写，行为可审计，扩展不需要改代码。</p>
+</div>
+
+<div class="card">
+  <span class="lb lb-p">执行</span><span class="card-t">AgentManager — graph/agent.py</span>
+  <p>使用 LangChain <code>create_agent</code>（LangGraph runtime）构建 Agent，流式执行并 yield SSE 事件：token / tool_start / tool_end / new_response / error。</p>
+</div>
+
+<div class="card">
+  <span class="lb lb-p">隔离</span><span class="card-t">WorkspaceRuntimeRegistry — runtime/workspace_registry.py</span>
+  <p>Phase 5.3 核心。SharedAgentResources 共享 LLM + FetchURLTool（进程级单例），WorkspaceRuntime 隔离 SessionManager + workspace-scoped tools（CWD 绑定到 workspace 目录）。</p>
+  <p><strong>产品判断</strong>：用户心智模型是"我有多个课题，每个课题有自己的记忆和文件"。Workspace 隔离解决的是产品问题，不是技术问题。</p>
+</div>
+
+<h3>单次对话完整流线</h3>
+<pre>
+用户发送消息
+    │
+    ▼
+[1] WorkspaceRuntimeRegistry.get_runtime(workspace_id)
+    → 获取对应 workspace 的 SessionManager + Tools
+    │
+    ▼
+[2] SessionManager.load_session(session_id)
+    → 获取历史消息（合并连续 assistant 消息）
+    │
+    ▼
+[3] ContextOrchestrator.generate_memory_map(message, workspace_dir)
+    → 扫描 memory 目录 → 意图识别 → 推荐文件 → 输出 Memory Map
+    │
+    ▼
+[4] SkillLoader.get_snapshot()
+    → 生成 SKILLS_SNAPSHOT.md 菜单
+    │
+    ▼
+[5] PromptBuilder.build(workspace_dir, memory_map, skill_snapshot, tools)
+    → 拼接 7 Block System Prompt
+    │
+    ▼
+[6] AgentManager.astream(messages, system_prompt, tools)
+    → LangChain create_agent → 流式执行
+    → SSE: token / tool_start / tool_end / new_response
+    │
+    ▼
+[7] SessionManager.save_message → 持久化 messages
+    │
+    ▼
+[8] TraceWriter.write_trace → 持久化 traces
+    │
+    ▼
+[9] SSE: done {session_id, trace_path}
+    → done 在 trace 写入完成后才发送（解决竞态条件）
+</pre>
+
+<h3>设计决策与产品判断对照表</h3>
+<table>
+<tr><th>设计决策</th><th>技术实现</th><th>产品判断</th></tr>
+<tr><td>文件即记忆</td><td>三层 Markdown 文件系统</td><td>科研用户需要"看得见、改得了、追得回"的记忆</td></tr>
+<tr><td>Control Plane 优先级最高</td><td>PromptBuilder Block 5 最先注入 workspace 文件</td><td>LLM 行为必须被硬约束控制</td></tr>
+<tr><td>意图识别用关键词+降级</td><td>ContextOrchestrator 简单规则</td><td>MVP 阶段"不出错"比"更智能"重要</td></tr>
+<tr><td>Envelope Schema</td><td>messages + traces 同一文件</td><td>避免两个文件的同步问题</td></tr>
+<tr><td>共享 LLM + 隔离 Tools</td><td>SharedAgentResources + WorkspaceRuntime</td><td>LLM 无状态可共享，文件操作必须绑定 workspace</td></tr>
+<tr><td>Skills 渐进式披露</td><td>菜单摘要注入，Agent 自主 read_file</td><td>避免 Prompt 膨胀，保留 Agent 自主决策</td></tr>
+<tr><td>双文件依赖策略</td><td>requirements.txt（范围）+ .lock（精确）</td><td>开发灵活，部署确定</td></tr>
+<tr><td>Path.relative_to() 路径安全</td><td>resolve_safe_path() 工具函数</td><td>禁止 str.startswith()（可被 Unicode 绕过）</td></tr>
+</table>
+
+<!-- STEP2_END -->
+
+<!-- ============================================================ -->
+<!--                        STEP 3                                 -->
+<!-- ============================================================ -->
+<hr class="divider" id="step3">
+<h2>Step 3：能力地图</h2>
+<p>从 AI 产品经理 / AI Agent 面试视角，抽取本项目体现的六项核心能力。</p>
+
+<!-- 能力1 -->
+<h3>能力 1：场景拆解</h3>
+<div class="card">
+  <span class="lb lb-g">证据</span>
+  <ul>
+    <li>从用户访谈中提炼 2 类托管模式——DDL 型（"今晚组会要交付"）和认知流动型（"被 challenge 到不自信，先搞清楚为什么"），不是拍脑袋分的，而是从用户原话中抽象出来的。</li>
+    <li>PRD §4.6 定义了 7 个高频场景（合成 checklist、实验矩阵、机理证据链审计、表征审计、阶段汇报、写作结构、CSV 作图），每个场景有明确的"读什么→写什么"策略。</li>
+    <li>把科研周期拆成"阶段→周→日"三级粒度，对应 Layer2 的 phases/weeks/days 目录结构——从"导师问你这两周做了什么"这个真实场景倒推。</li>
+  </ul>
+</div>
+<div class="hl g">
+  <p><strong>简历表达</strong>：基于用户访谈提炼 2 类托管模式（DDL 交付型 / 认知探索型）和 7 个高频科研场景，将 180 天实验周期拆解为"阶段→周→日"三级粒度，每个场景定义明确的上下文读写策略，驱动 ContextOrchestrator 的意图识别与文件选择逻辑。</p>
+</div>
+<div class="card">
+  <span class="lb lb-y">面试追问</span>
+  <ul>
+    <li><strong>"你怎么确定这 7 个场景是高频的？"</strong> → 来自用户访谈 + 科研工作流分析。意图识别失败时降级为全量默认注入，确保不漏。</li>
+    <li><strong>"DDL 型和认知流动型的区别在产品层面意味着什么？"</strong> → 不同的上下文选择策略和输出结构。系统通过 A/B 轻量试探让用户自己选，而不是 AI 猜。</li>
+    <li><strong>"如果用户需求不属于这 7 个场景？"</strong> → 降级为通用模式。MVP 不追求 100% 覆盖，确保核心场景体验好，边缘场景不崩。</li>
+  </ul>
+</div>
+
+<!-- 能力2 -->
+<h3>能力 2：产品抽象</h3>
+<div class="card">
+  <span class="lb lb-g">证据</span>
+  <ul>
+    <li><strong>三卡落盘模型</strong>：将科研交互输出抽象为 Evidence/Task/Result 三张卡片，每张有明确 schema。从"用户拿到输出后要做什么"倒推——Evidence 卡存档，Task 卡执行，Result 卡汇报。</li>
+    <li><strong>Concept/Task/Pack 三对象模型</strong>：Concept（你在验证什么）驱动 Task（你怎么验证的），Task 结果汇聚成 Pack（你验证出了什么）。覆盖从文献综述到实验执行到论文写作的完整链路。</li>
+    <li><strong>Control Plane / Data Plane 分离</strong>：借鉴网络架构思想，将"Agent 如何工作"和"Agent 知道什么"解耦。可以在不改变记忆数据的情况下调整 Agent 行为。</li>
+  </ul>
+</div>
+<div class="hl g">
+  <p><strong>简历表达</strong>：设计"Evidence→Task→Result"三卡落盘模型与 Concept/Task/Pack 三对象体系，将科研工作流抽象为可结构化、可追溯、可复用的原子资产。采用 Control Plane / Data Plane 分离架构，实现 Agent 行为规则与记忆数据的解耦，支持独立迭代。</p>
+</div>
+<div class="card">
+  <span class="lb lb-y">面试追问</span>
+  <ul>
+    <li><strong>"三卡落盘和普通结构化输出有什么区别？"</strong> → 区别在于 trace 回指。每条结论不是 AI 生成的文本，而是"带证据锚点的断言"。</li>
+    <li><strong>"Concept/Task/Pack 这个抽象怎么来的？"</strong> → 从科研工作流倒推。我们没有发明新概念，而是把散落在 Excel/Word/PPT 里的隐式结构显式化了。</li>
+    <li><strong>"Control Plane 和 Data Plane 分离的实际好处？"</strong> → Phase 3-5 中多次修改 SOUL.md 的证据标准，用户的 project.md 和实验日志完全不受影响。</li>
+  </ul>
+</div>
+
+<!-- 能力3 -->
+<h3>能力 3：技术理解</h3>
+<div class="card">
+  <span class="lb lb-g">证据</span>
+  <ul>
+    <li><strong>LangChain create_agent + LangGraph runtime</strong>：明确拒绝旧版 AgentExecutor 和 create_react_agent。v1.1.0 API 消失问题定位后锁定 >=1.1.1。</li>
+    <li><strong>SSE 流式架构</strong>：选择 SSE 而非 WebSocket——单向推送足够、HTTP 兼容性好。done 事件在 trace 写入完成后才发送，解决竞态条件。</li>
+    <li><strong>Envelope Schema</strong>：Session 消息和 Trace 审计共用同一 JSON 文件，SessionManager 和 TraceWriter 各管各的字段，避免同步问题。</li>
+    <li><strong>路径安全</strong>：<code>Path.relative_to()</code> 做边界检查，禁止 <code>str.startswith()</code>（可被 Unicode 绕过）。</li>
+    <li><strong>双文件依赖</strong>：<code>requirements.txt</code>（范围约束）+ <code>requirements.lock</code>（精确版本），开发灵活、部署可复现。</li>
+  </ul>
+</div>
+<div class="hl g">
+  <p><strong>简历表达</strong>：基于 LangChain v1.x create_agent（LangGraph runtime）构建 Agent 编排引擎，SSE 流式推送实现实时工具调用展示。设计 Envelope Schema 统一 Session 消息与 Trace 审计存储，解决读写竞态。实现 Path.relative_to() 路径安全检查防御穿越攻击，双文件依赖策略保证环境可复现。</p>
+</div>
+<div class="card">
+  <span class="lb lb-y">面试追问</span>
+  <ul>
+    <li><strong>"为什么选 SSE 而不是 WebSocket？"</strong> → Agent 对话是单向推送场景，SSE 基于 HTTP 天然兼容代理/CDN/负载均衡。WebSocket 在这个场景下是过度设计。</li>
+    <li><strong>"Envelope Schema 会不会有并发写入冲突？"</strong> → 不会。单次对话流程串行：Agent 执行完 → 写 messages → 写 traces → 发送 done。</li>
+    <li><strong>"create_agent 和 create_react_agent 的区别？"</strong> → create_agent 底层 LangGraph runtime，支持更灵活的状态管理和流式执行。我们需要控制 SSE 事件的精确时序。</li>
+  </ul>
+</div>
+
+<!-- 能力4 -->
+<h3>能力 4：评测设计</h3>
+<div class="card">
+  <span class="lb lb-g">证据</span>
+  <ul>
+    <li><strong>Golden Test 剧本</strong>：2 条端到端 Demo（DDL 型 10 轮 + 认知流动型 12 轮），每轮有明确输入和期望输出，可作为回归测试基线。</li>
+    <li><strong>三类闭环测试数据集</strong>：从 1.45GB 真实科研资料构建，定义 literature/experiment/writing 三类闭环测试标准，标注 4 类能力标签（context_hit / object_landing / trace_replay / writing_organization）。</li>
+    <li><strong>Phase 验收矩阵</strong>：每个 Phase 有 PASS/FAIL 状态的结构化验收，不是"跑通了就行"。</li>
+    <li><strong>8 个单元测试</strong>：覆盖 SkillLoader、Chat+WriteFile 流程、System Prompt 契约、5 个核心工具。</li>
+  </ul>
+</div>
+<div class="hl g">
+  <p><strong>简历表达</strong>：设计 2 条 Golden Test 剧本作为端到端回归测试基线，定义三类科研闭环的结构化测试标准与 4 类能力标签。每个开发 Phase 配备验收矩阵，8 个单元测试覆盖核心模块契约。</p>
+</div>
+<div class="card">
+  <span class="lb lb-y">面试追问</span>
+  <ul>
+    <li><strong>"Golden Test 覆盖率够吗？"</strong> → 两条剧本覆盖两种最典型用户模式，追求"最小可验证集"。后续从三类闭环数据集扩展。</li>
+    <li><strong>"怎么评估三卡落盘质量？"</strong> → 结构化检查（Evidence 卡是否含 source + user_sentence，Task 卡是否区分事实/推断，Result 卡是否有 trace 回指）。内容质量依赖人工审查，这是已知局限。</li>
+    <li><strong>"换了 LLM 模型，测试还能用吗？"</strong> → Golden Test 验证输出结构（三卡 schema），不是内容。换模型后结构应一致（SOUL.md 硬约束），内容质量可能变化。</li>
+  </ul>
+</div>
+
+<!-- 能力5 -->
+<h3>能力 5：推进与 debug</h3>
+<div class="card">
+  <span class="lb lb-g">证据</span>
+  <ul>
+    <li><strong>6 个 Phase 迭代推进</strong>：Phase 1（SSE chat）→ Phase 5.3（Workspace 隔离），每个 Phase 有 dev-plan → dev-log → architecture.html 三件套。"最小可用 → 逐步增强"。</li>
+    <li><strong>Phase 5.3 架构重构</strong>：从全局单例 SessionManager 重构为 WorkspaceRuntimeRegistry，涉及 app.py/chat.py/sessions.py/files.py 多文件改造，保持 API 兼容性。</li>
+    <li><strong>Bug 修复记入日志</strong>：Phase 1 Step 10 发现 Session Schema 冲突，立即修正为 Envelope Schema 并记录决策过程。</li>
+    <li><strong>已知限制显式标注</strong>：architecture-summary.md 开头声明"本文档描述目标架构，非当前实现状态"，用表格列出每个模块实现状态。</li>
+    <li><strong>依赖版本快速定位</strong>：LangChain v1.1.0 create_agent 消失问题，通过论坛定位后锁定 >=1.1.1。</li>
+  </ul>
+</div>
+<div class="hl g">
+  <p><strong>简历表达</strong>：主导 6 个 Phase 迭代开发（Phase 1→5.3），每个 Phase 配备 dev-plan/dev-log/architecture.html 三件套。Phase 5.3 完成从全局单例到 WorkspaceRuntimeRegistry 的架构重构，保持 API 兼容性。建立"Bug 修复记入日志 + 已知限制显式标注"的工程纪律。</p>
+</div>
+<div class="card">
+  <span class="lb lb-y">面试追问</span>
+  <ul>
+    <li><strong>"Phase 5.3 重构最大风险？怎么控制的？"</strong> → 风险是破坏已有 chat/session 功能。控制：共享资源抽到 SharedAgentResources 不改行为；workspace-scoped tools CWD 绑定隔离副作用；默认 workspace 行为与重构前一致。</li>
+    <li><strong>"怎么决定什么时候重构、什么时候打补丁？"</strong> → "多 workspace"是产品核心需求，不是技术债。判断标准是"这个改动是为了产品还是为了代码"。</li>
+    <li><strong>"6 个 Phase 开发顺序怎么定的？"</strong> → 基于依赖关系，不是按重要性。Phase 1 是一切基础 → Phase 2 是记忆系统前提 → Phase 3+4 是核心能力 → Phase 5 是扩展性。</li>
+  </ul>
+</div>
+
+<!-- 能力6 -->
+<h3>能力 6：AI-native 开发协作</h3>
+<div class="card">
+  <span class="lb lb-g">证据</span>
+  <ul>
+    <li><strong>CLAUDE.md 驱动开发</strong>：项目级 CLAUDE.md 定义 Phase 开发前置检查流程（扫描进度 → 写开发日志 → 生成架构 HTML），AI 编码助手按规范自主推进开发。</li>
+    <li><strong>提示词工程体系</strong>：给GPT5PRO提示词/ 文件夹包含 Codex 交互提示词、Phase 规划提示词、workspace 生成提示词、数据集构建提示词。不是"用 AI 写代码"，而是"设计 AI 的工作流程"。</li>
+    <li><strong>科研三闭环测试数据集构建提示词</strong>：将 AI 定位为"数据集构建助手"，定义明确的任务边界、执行原则、验收条件。AI-native 开发的典型范式。</li>
+    <li><strong>Workspace 模板即 Prompt 工程</strong>：SOUL.md/IDENTITY.md/BOOTSTRAP.md 本质上是"给 Agent 的 Prompt 组件"，设计过程就是 Prompt Engineering。</li>
+  </ul>
+</div>
+<div class="hl g">
+  <p><strong>简历表达</strong>：建立 CLAUDE.md 驱动的 AI-native 开发流程（Phase 前置检查 → 开发日志 → 架构 HTML 自动生成），设计多层提示词工程体系（Codex 交互 / Phase 规划 / 数据集构建），实现"人定义规范 → AI 按规范执行 → 人审查结果"的协作模式。</p>
+</div>
+<div class="card">
+  <span class="lb lb-y">面试追问</span>
+  <ul>
+    <li><strong>"CLAUDE.md 驱动开发和普通 AI 辅助编码有什么区别？"</strong> → 普通是"我告诉 AI 写什么代码"。CLAUDE.md 驱动是"我定义 AI 的工作规范，AI 按规范自主推进"。CLAUDE.md 就是 AI 的"岗位说明书"。</li>
+    <li><strong>"怎么保证 AI 生成的代码质量？"</strong> → 三层保障：CLAUDE.md 定义代码规范；每个 Phase 有验收矩阵；人工 code review。</li>
+    <li><strong>"提示词工程的 ROI 是什么？"</strong> → 可复现性。数据集构建提示词定义了完整执行步骤和验收条件，换人/换 AI 执行，产出质量可预期。</li>
+  </ul>
+</div>
+
+<!-- STEP3_END -->
+
+<!-- ============================================================ -->
+<!--                        STEP 4                                 -->
+<!-- ============================================================ -->
+<hr class="divider" id="step4">
+<h2>Step 4：简历文案</h2>
+
+<div class="card" style="border-left:3px solid var(--accent)">
+  <p style="color:var(--text-dim);font-size:.82rem;margin-bottom:.8rem">项目名称：Experimental-Research-OpenClaw &nbsp;|&nbsp; 角色：AI 产品设计 + 后端架构 + Prompt 工程 + 迭代推进 &nbsp;|&nbsp; 6 Phase 迭代（Phase 1-5.3 已完成）</p>
+
+  <h3 style="margin-top:0">需求洞察</h3>
+  <ul>
+    <li>针对材料/化学/环境等实验学科硕博生，识别出长周期科研（180 天）中的三重核心痛点：跨阶段记忆断裂（10+ 次阶段汇报无法快速关联历史数据）、结论与证据脱钩（口头描述无法追溯到原始实验文件）、被导师 challenge 后缺乏结构化排查框架。</li>
+    <li>通过用户访谈提炼出 2 类典型托管模式（DDL 交付型 / 认知探索型）和 7 个高频科研场景（合成 checklist、实验矩阵、机理证据链审计、表征审计、阶段汇报、写作结构、CSV 作图拟合），每个场景定义明确的上下文读写策略。</li>
+    <li>明确产品定位差异：不做"更聪明的 ChatGPT"，而是做"带证据链的科研工作台"——输入是实验材料（照片/csv/文献/口头描述），输出是结构化交付物（PPT 大纲/实验 SOP/机理证据链），每条结论区分事实与推断并挂证据回指。</li>
+  </ul>
+
+  <h3>功能设计</h3>
+  <ul>
+    <li>设计三层文件记忆架构（Layer1 身份与规则 / Layer2 时间轴推进 / Layer3 原子资产），以 Markdown 文件系统替代向量数据库，实现 180 天实验周期的持久化记忆，用户可直接查看、编辑、追溯所有记忆内容。</li>
+    <li>抽象 Concept/Task/Pack 三对象模型：Concept 承载研究假设，Task 承载验证过程（Claim + Protocol + Run），Pack 承载阶段交付物（PPT/机理证据链/论文段落），三者形成"假设→验证→交付"的完整闭环。</li>
+    <li>构建 Control Plane / Data Plane / Trace Plane 三面分离架构：Control Plane（SOUL.md/IDENTITY.md 等）定义 Agent 行为硬约束，Data Plane（三层 memory）存放事实数据，Trace Plane 记录全链路决策过程（读了什么文件/为什么读/是否被裁剪/工具调用输入输出）。</li>
+    <li>实现 ContextOrchestrator 智能上下文选择（基于意图识别自动匹配文件，按"稳定→变化→本轮相关"排序注入）、PromptBuilder 7-Block 结构化 Prompt 拼接、SkillLoader 渐进式技能披露（菜单摘要注入 Prompt，Agent 自主决策读取完整说明书）。</li>
+    <li>Phase 5.3 完成从全局单例到 WorkspaceRuntimeRegistry 的架构重构，实现多 workspace 运行时隔离（共享 LLM 实例 + 隔离 workspace-scoped 工具），保持 API 向后兼容。</li>
+  </ul>
+
+  <h3>评测体系</h3>
+  <ul>
+    <li>设计 2 条 Golden Test 剧本（DDL 交付型 10 轮对话 / 认知探索型 12 轮对话）作为端到端回归测试基线，验证三卡落盘（Evidence/Task/Result）的结构完整性与证据回指准确性。</li>
+    <li>定义三类科研闭环测试标准（文献闭环 / 实验闭环 / 写作闭环），从 1.45GB 真实科研资料中构建结构化测试数据集，标注 4 类能力标签（上下文命中 / 对象落点 / trace 回放 / 写作组织）。</li>
+    <li>每个 Phase 配备结构化验收矩阵（PASS/FAIL 状态），8 个单元测试覆盖核心模块契约（SkillLoader 菜单生成、Chat+WriteFile 完整流程、System Prompt 契约、5 个核心工具）。</li>
+    <li>建立 Phase 开发三件套纪律（dev-plan → dev-log → architecture.html），已知限制显式标注，Bug 修复追加记入对应 Phase 日志。</li>
+  </ul>
+</div>
+
+<!-- STEP4_END -->
+
+<!-- ============================================================ -->
+<!--                        STEP 5                                 -->
+<!-- ============================================================ -->
+<hr class="divider" id="step5">
+<h2>Step 5：面试题库</h2>
+
+<h3>一、基础题（20 题）</h3>
+
+<details class="q"><summary><span class="lb lb-b">B01</span> 一句话介绍这个项目是做什么的？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：产品抽象</span><span class="lb lb-p">来源：PRD §一、项目最终实现效果.md</span></div>
+  <p><strong>避坑</strong>：不要说"科研版 ChatGPT"。要强调"本地化工作台 + 文件即记忆 + 证据链交付"三个差异点。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B02</span> 你的目标用户是谁？核心痛点是什么？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：场景拆解</span><span class="lb lb-p">来源：PRD §4.1、Demo 剧本用户人格</span></div>
+  <p><strong>避坑</strong>：不要泛泛说"科研人员"。要具体到"材料/化学/环境等实验学科的硕博生"，痛点落到"180 天记忆断裂 + 证据链脱钩 + 被 challenge 后缺排查框架"。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B03</span> 项目的技术栈是什么？为什么选这些？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解</span><span class="lb lb-p">来源：PRD §一.2、architecture-summary.md 附录 A</span></div>
+  <p><strong>避坑</strong>：不要只列技术名词。要说清选型理由——FastAPI（异步 SSE）、LangChain create_agent（LangGraph runtime，非旧版 AgentExecutor）、本地文件系统（非向量数据库，因为科研用户需要可读可改）。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B04</span> 为什么用文件系统而不是向量数据库做记忆？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：产品抽象 + 技术理解</span><span class="lb lb-p">来源：PRD §一 File-first Memory、SOUL.md</span></div>
+  <p><strong>避坑</strong>：不要说"向量数据库不好"。要说"科研场景需要记忆可读、可改、可追溯，向量数据库是黑盒，用户无法直接查看和修正 AI 记住了什么"。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B05</span> 三层记忆（Layer1/2/3）分别是什么？为什么分三层？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：产品抽象</span><span class="lb lb-p">来源：PRD §4.2、architecture-summary.md §2.3</span></div>
+  <p><strong>避坑</strong>：不要只描述目录结构。要说清分层逻辑——按"可变性"分层（L1 几乎不变 / L2 中频更新 / L3 高频创建），这决定了 ContextOrchestrator 的注入优先级。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B06</span> Concept、Task、Pack 三个对象分别是什么？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：产品抽象</span><span class="lb lb-p">来源：PRD §4.2 Layer3、项目最终实现效果.md</span></div>
+  <p><strong>避坑</strong>：不要抽象解释。用具体例子——Concept 是"Co(IV) 的存在性验证"，Task 是"PMSO 探针实验（含 Claim + Protocol + 3 次 Run）"，Pack 是"第 6 次阶段汇报 PPT 素材包"。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B07</span> 什么是"三卡落盘"？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：产品抽象</span><span class="lb lb-p">来源：项目最终实现效果.md Evidence/Task/Result 卡示例</span></div>
+  <p><strong>避坑</strong>：不要只说"结构化输出"。关键区别是每张卡都有 trace 回指——Evidence 卡锚定用户原话和文件路径，Task 卡区分事实区/推断区，Result 卡每条结论可追溯到证据来源。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B08</span> Control Plane 和 Data Plane 的区别是什么？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解 + 产品抽象</span><span class="lb lb-p">来源：PRD §4.4.0、architecture-summary.md §5.1</span></div>
+  <p><strong>避坑</strong>：不要只说"一个管规则一个管数据"。要说清优先级——Control Plane 优先级最高，与 Data Plane 冲突时以 Control Plane 为准。这是为了确保 LLM 行为被硬约束控制。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B09</span> ContextOrchestrator 做了什么？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解</span><span class="lb lb-p">来源：graph/context_orchestrator.py、PRD §4.4.3</span></div>
+  <p><strong>避坑</strong>：不要说"选文件注入 Prompt"就完了。要说清选择逻辑——意图识别（关键词匹配）→ 按"稳定→变化→本轮相关"排序 → 降级策略（识别失败时全量默认注入）→ trace 记录选择原因。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B10</span> PromptBuilder 的 System Prompt 结构是什么？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解</span><span class="lb lb-p">来源：graph/prompt_builder.py、architecture-summary.md §5.3</span></div>
+  <p><strong>避坑</strong>：要能说出 7 个 Block 的顺序和设计理由——Identity → Tooling → Workspace → Metadata → Control Plane → Skills Snapshot → Memory Map，稳定信息在前、变化信息在后。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B11</span> 为什么选 SSE 而不是 WebSocket？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解</span><span class="lb lb-p">来源：PRD §5.1、api/chat.py</span></div>
+  <p><strong>避坑</strong>：不要说"SSE 更简单"。要说"Agent 对话是单向推送场景，SSE 基于 HTTP 天然兼容代理/CDN/负载均衡，不需要维护长连接状态"。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B12</span> SSE 事件流有哪些事件类型？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解</span><span class="lb lb-p">来源：architecture-summary.md §3.2</span></div>
+  <p><strong>避坑</strong>：要能列出 token/tool_start/tool_end/new_response/done/error，并说清 done 事件在 trace 写入完成后才发送（解决竞态条件）。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B13</span> Skills 系统是怎么工作的？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解 + 产品抽象</span><span class="lb lb-p">来源：PRD §三、graph/skill_loader.py</span></div>
+  <p><strong>避坑</strong>：不要说"调用预置函数"。Skill 是 Markdown 说明书，不是代码。渐进式披露——菜单摘要注入 Prompt，Agent 自主决策是否 read_file 读取完整说明书，然后按说明书调用核心工具执行。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B14</span> 项目有哪些核心工具？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解</span><span class="lb lb-p">来源：tools/ 目录、PRD §二</span></div>
+  <p><strong>避坑</strong>：5 个已实现工具（terminal/python_repl/read_file/write_file/fetch_url），不要把 PRD 中规划但未实现的 search_knowledge_base 和 web_search 说成已完成。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B15</span> 路径安全是怎么做的？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解</span><span class="lb lb-p">来源：graph/path_utils.py、CLAUDE.md</span></div>
+  <p><strong>避坑</strong>：要说清用 <code>Path.relative_to()</code> 做边界检查，明确禁止 <code>str.startswith()</code>（可被 Unicode 路径绕过）。不要只说"做了路径检查"。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B16</span> Session 和 Trace 的存储关系是什么？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解</span><span class="lb lb-p">来源：architecture-summary.md §6.2</span></div>
+  <p><strong>避坑</strong>：同一个文件，Envelope Schema <code>{"messages":[], "traces":[], "prompt":{}}</code>。SessionManager 管 messages，TraceWriter 管 traces，互不污染。不要说成两个文件。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B17</span> 项目经历了几个 Phase？每个 Phase 做了什么？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：推进与 debug</span><span class="lb lb-p">来源：CLAUDE.md Phase 状态表</span></div>
+  <p><strong>避坑</strong>：要能清晰说出依赖关系——Phase 1（SSE chat）→ Phase 2（文件系统 + 路径安全）→ Phase 3+4（Orchestrator + Tools）→ Phase 5（Skills）→ Phase 5.3（Workspace 隔离）。按依赖关系排序，不是按重要性。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B18</span> Phase 5.3 做了什么？为什么需要这次重构？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：推进与 debug</span><span class="lb lb-p">来源：docs/phase5.3-dev-plan.md、runtime/workspace_registry.py</span></div>
+  <p><strong>避坑</strong>：不要说"优化代码结构"。要说"产品需要多 workspace 支持（科研用户同时推进多个课题），全局单例 SessionManager 无法隔离不同课题的记忆和工具"。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B19</span> 你们的开发流程是什么样的？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：推进与 debug + AI-native 协作</span><span class="lb lb-p">来源：CLAUDE.md Phase 开发前置检查流程</span></div>
+  <p><strong>避坑</strong>：不要只说"敏捷开发"。要说清 CLAUDE.md 驱动的流程——每个 Phase 必须执行"扫描进度 → 写开发日志 → 生成架构 HTML"三步，AI 编码助手按规范自主推进。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-b">B20</span> 项目目前的状态是什么？还有什么没做完？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：推进与 debug</span><span class="lb lb-p">来源：CLAUDE.md Phase 状态表、architecture-summary.md</span></div>
+  <p><strong>避坑</strong>：诚实说 Phase 6（前端三栏 UI）未完成，RAG 检索（KnowledgeIndexer）未实现，web_search 工具未实现。不要把目标态说成现状。</p>
+</div></details>
+
+<!-- STEP5_BASIC_END -->
+
+<h3>二、中等深挖题（15 题）</h3>
+
+<details class="q"><summary><span class="lb lb-y">M01</span> 你怎么从用户访谈中提炼出"DDL 型"和"认知流动型"两种模式的？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：场景拆解</span><span class="lb lb-p">来源：项目最终实现效果.md Demo 剧本</span></div>
+  <p><strong>避坑</strong>：不要说"我觉得用户有两种需求"。要说清访谈中的关键发现——用户说"我要先活过今晚"（DDL 型）vs "我想知道到底是哪种问题"（认知流动型），这两句话背后是完全不同的上下文选择策略和输出结构。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-y">M02</span> ContextOrchestrator 的意图识别如果失败了怎么办？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解 + 评测设计</span><span class="lb lb-p">来源：architecture-summary.md §5.2 降级策略</span></div>
+  <p><strong>避坑</strong>：不要说"不会失败"。要说清降级策略——关键词匹配失败时，使用默认全量注入顺序（workspace → skills → L1 → L2 → L3 → uploads）。这是有意为之的安全降级。后续可引入 LLM 意图分类。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-y">M03</span> 如果用户的记忆文件有几百个，上下文窗口装不下怎么办？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解</span><span class="lb lb-p">来源：PRD §4.4.4、context_budget.md</span></div>
+  <p><strong>避坑</strong>：不要说"用 RAG 检索"。要说清裁剪策略——单文件 20,000 字符上限（超出追加 truncated）、总预算按层分配（workspace 固定 → L1 固定 → L2 近邻 → L3 Top-K → uploads 最小化）、任何裁剪都记录到 trace（why + policy）。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-y">M04</span> "事实区"和"推断区"的分离在技术上是怎么实现的？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解 + 产品抽象</span><span class="lb lb-p">来源：SOUL.md 证据标准、项目最终实现效果.md Result 卡</span></div>
+  <p><strong>避坑</strong>：坦诚说这主要靠 Prompt 约束（SOUL.md 硬规则），不是靠代码逻辑。SOUL.md 要求"所有结论必须带证据类型 + 数据路径 + 对照 + 判据"，LLM 在这个约束下会自然区分事实和推断。但遵循率不是 100%，这是已知局限。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-y">M05</span> Workspace 隔离的粒度是什么？共享什么、隔离什么？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解</span><span class="lb lb-p">来源：runtime/workspace_registry.py</span></div>
+  <p><strong>避坑</strong>：要说清边界——共享 LLM 实例和 FetchURLTool（无状态），隔离 SessionManager、terminal/python_repl/read_file/write_file（CWD 绑定到 workspace 目录）。共享 LLM 因为无状态且创建成本高，隔离工具因为文件操作必须限定在 workspace 范围内。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-y">M06</span> 你怎么保证 SOUL.md 的约束真的被 LLM 遵循了？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：评测设计</span><span class="lb lb-p">来源：SOUL.md、tests/test_system_prompt_contract.py</span></div>
+  <p><strong>避坑</strong>：坦诚说没有 100% 保证。三层保障：1) SOUL.md 在 Prompt 最高优先级位置注入；2) System Prompt 契约测试验证结构完整性；3) Golden Test 验证输出结构。但语义层面的遵循率需要人工审查。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-y">M07</span> 三类科研闭环（文献/实验/写作）是怎么定义的？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：场景拆解 + 评测设计</span><span class="lb lb-p">来源：skill_mapping_for_research_loops.md、数据集构建提示词</span></div>
+  <p><strong>避坑</strong>：不要只列名字。要说清每类闭环的链路——文献闭环（主题文献→研究问题→假设/证据链）、实验闭环（实验目标→SOP/Protocol→原始数据→结果解释→下一步）、写作闭环（阶段目标→结果汇总→汇报/Paper 结构）。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-y">M08</span> 如果让你重新设计，你会改什么？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：产品抽象 + 推进与 debug</span><span class="lb lb-p">来源：architecture-summary.md §6 风险分析</span></div>
+  <p><strong>避坑</strong>：不要说"没什么要改的"。可以说：1) Bootstrap 冷启动体验需优化（当前依赖用户填写 project.md）；2) 意图识别应从关键词匹配升级为 LLM 分类；3) 前端应更早启动，与后端并行。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-y">M09</span> 你怎么处理 LLM 调用失败的情况？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解</span><span class="lb lb-p">来源：architecture-summary.md §6.7</span></div>
+  <p><strong>避坑</strong>：坦诚说 MVP 阶段降级策略比较简单——重试 2 次（间隔 1s/3s），超时 60s，失败后发送 SSE error 事件。没有做复杂熔断。这是有意的取舍——MVP 优先保证核心链路跑通。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-y">M10</span> Trace 回放在产品层面的价值是什么？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：产品抽象</span><span class="lb lb-p">来源：PRD §4.3、项目最终实现效果.md</span></div>
+  <p><strong>避坑</strong>：不要说"方便 debug"。Trace 的产品价值是建立用户信任——科研用户需要理解"AI 为什么给出这个建议"才敢用它的输出去面对导师。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-y">M11</span> Skills 系统为什么用 Markdown 说明书而不是代码插件？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：产品抽象 + 技术理解</span><span class="lb lb-p">来源：PRD §三 Skills 范式</span></div>
+  <p><strong>避坑</strong>：不要只说"更灵活"。三个原因：1) 用户可以自己写 Skill，不需要编程；2) Skill 行为可审计（就是文本）；3) 扩展不需要改代码、不需要重启服务。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-y">M12</span> 你怎么决定哪些信息放 Control Plane、哪些放 Data Plane？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：产品抽象</span><span class="lb lb-p">来源：PRD §4.4.0</span></div>
+  <p><strong>避坑</strong>：判断标准是"可变性 + 权威性"。Control Plane 放低频变更、最高权威的硬协议。Data Plane 放允许缓慢演进的事实数据。如果一条信息"与任何记忆冲突时应以它为准"，那它属于 Control Plane。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-y">M13</span> 双文件依赖策略解决什么问题？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解</span><span class="lb lb-p">来源：CLAUDE.md、backend/requirements.txt + .lock</span></div>
+  <p><strong>避坑</strong>：不要只说"锁版本"。两个文件分工——requirements.txt 用范围约束保证开发灵活性，requirements.lock 用精确版本保证部署可复现。解决"在我机器上能跑"问题。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-y">M14</span> 你怎么处理 LangChain v1.1.0 的 create_agent API 消失问题？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：推进与 debug</span><span class="lb lb-p">来源：architecture-summary.md §6.1</span></div>
+  <p><strong>避坑</strong>：要说清定位过程——通过 LangChain 论坛发现 v1.1.0 的 <code>__init__.py</code> 导出缺失，锁定 >=1.1.1，并在 CLAUDE.md 中记录决策。要体现排查过程。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-y">M15</span> 这个项目和市面上的 AI 科研助手（如 Elicit、Consensus）有什么区别？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：产品抽象</span><span class="lb lb-p">来源：PRD §一 核心差异化定位</span></div>
+  <p><strong>避坑</strong>：不要贬低竞品。区别在定位——Elicit/Consensus 聚焦文献检索和摘要，是"搜索增强"。OpenClaw 聚焦实验全周期管理，是"工作台"。它们解决"找到信息"，我们解决"把信息组织成可交付的东西"。且本地化部署，数据不出本地。</p>
+</div></details>
+
+<h3>三、高压挑战题（10 题）</h3>
+
+<details class="q"><summary><span class="lb lb-r">H01</span> 你这个项目本质上不就是给 ChatGPT 套了个文件系统吗？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：产品抽象</span><span class="lb lb-p">来源：ContextOrchestrator + PromptBuilder + TraceWriter 完整链路</span></div>
+  <p><strong>避坑</strong>：不要急着否认。承认底层确实是 LLM，但关键差异在于"确定性外壳"——ContextOrchestrator 的智能上下文选择、PromptBuilder 的 7-Block 结构化拼接、TraceWriter 的全链路审计。类比：数据库引擎也是"套了个文件系统"，但 B+ 树索引和事务管理才是价值所在。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-r">H02</span> 前端都没做完，你怎么证明这个产品有用？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：推进与 debug + 评测设计</span><span class="lb lb-p">来源：Golden Test 剧本、Phase 验收矩阵、8 个单元测试</span></div>
+  <p><strong>避坑</strong>：不要回避。坦诚说前端未完成是事实，但后端核心链路已通过 API 测试和 Golden Test 验证。前端是体验层，不是价值层——价值在于记忆架构和证据链机制，这些已经验证了。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-r">H03</span> 三层记忆听起来很复杂，用户真的需要这么复杂的系统吗？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：场景拆解 + 产品抽象</span><span class="lb lb-p">来源：PRD §4.1 记忆压力源</span></div>
+  <p><strong>避坑</strong>：不要为复杂性辩护。要说清"复杂性对用户是透明的"——用户不需要理解三层架构，只需正常对话。ContextOrchestrator 自动选择注入文件，用户感知到的是"系统记住了我 3 个月前的实验"。复杂性在后端，简单性在前端。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-r">H04</span> 你的意图识别只是关键词匹配，这也太简陋了吧？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解 + 推进与 debug</span><span class="lb lb-p">来源：architecture-summary.md §6.3</span></div>
+  <p><strong>避坑</strong>：不要否认简陋。这是有意的 MVP 决策——关键词匹配覆盖 80% 高频场景，失败时安全降级为全量注入。MVP 阶段"不出错"比"更智能"重要。过早引入复杂意图识别是过度工程。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-r">H05</span> 你说"证据回指"，但 LLM 生成的 trace 本身可能是错的，怎么办？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：评测设计 + 产品抽象</span><span class="lb lb-p">来源：TraceWriter 实现、SOUL.md 证据标准</span></div>
+  <p><strong>避坑</strong>：要区分两种 trace——系统级 trace（ContextOrchestrator 读了哪些文件、工具调用了什么）是确定性的，由代码生成，不会错。LLM 级 trace（Result 卡中的证据回指）确实可能出错。当前缓解是 SOUL.md 硬约束 + Golden Test 验证结构，但语义准确性需人工审查。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-r">H06</span> 180 天的记忆文件会越来越多，系统性能怎么保证？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解</span><span class="lb lb-p">来源：PRD §4.4.4、context_budget.md</span></div>
+  <p><strong>避坑</strong>：不要说"文件系统很快"。两层保障：1) ContextOrchestrator 按意图选择性读取（阶段汇报只读 time_range 内文件）；2) context_budget.md 定义按层分配的预算策略。但文件数量达数千级别时目录扫描会变慢，后续需加索引或缓存。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-r">H07</span> 你这个项目只有你和另一个人做，怎么证明你的个人贡献？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：推进与 debug</span><span class="lb lb-p">来源：zly工作文档.md、CLAUDE.md、Phase dev-log</span></div>
+  <p><strong>避坑</strong>：不要模糊化。要能清晰说出自己负责的部分——比如"我负责产品设计（PRD/TAD）+ 后端架构设计 + Phase 开发流程定义 + Prompt 工程（SOUL.md/IDENTITY.md 等 workspace 模板）"，用 dev-log 中的具体 Step 作为证据。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-r">H08</span> 如果导师说"我不信 AI 的输出"，你的产品怎么应对？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：产品抽象</span><span class="lb lb-p">来源：Trace Plane 设计、三卡落盘事实/推断分离</span></div>
+  <p><strong>避坑</strong>：不要说"AI 很准"。要说"我们的设计就是基于'不信 AI'这个前提的"——三卡落盘强制区分事实和推断，每条结论挂证据回指，Trace 可回放完整决策过程。用户说的不是"AI 说的"，而是"基于这个 csv 数据和这次实验记录，得出的结论是..."。系统的价值是"帮你组织证据"，不是"替你思考"。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-r">H09</span> 你的 Skills 系统和 MCP（Model Context Protocol）有什么区别？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：技术理解 + 产品抽象</span><span class="lb lb-p">来源：PRD §三 Skills 范式</span></div>
+  <p><strong>避坑</strong>：不要说"差不多"。MCP 是工具协议（定义 AI 如何调用外部工具），Skills 是指令协议（定义 AI 如何组合已有工具完成复杂任务）。Skill 是 Markdown 说明书，教 Agent "先 read_file 读数据，再 python_repl 画图，最后 write_file 保存"。MCP 解决"连接什么工具"，Skills 解决"怎么用这些工具完成科研任务"。</p>
+</div></details>
+
+<details class="q"><summary><span class="lb lb-r">H10</span> 这个项目对你申请 AI PM 岗位的价值是什么？你从中学到了什么？</summary><div class="body">
+  <div class="meta"><span class="lb lb-g">考察：全局反思</span><span class="lb lb-p">来源：整个项目</span></div>
+  <p><strong>避坑</strong>：不要说"学到了很多技术"。要从 PM 视角总结：1) 学会了从用户痛点倒推产品抽象（三卡落盘是从"用户拿到输出后要做什么"倒推的）；2) 学会了在 AI 产品中平衡"智能"和"确定性"（LLM 越智能越不可控，所以需要 Control Plane 硬约束）；3) 学会了 AI-native 的开发协作模式（CLAUDE.md 驱动开发，人定义规范、AI 按规范执行）。</p>
+</div></details>
+
+</div>
+</body>
+</html>

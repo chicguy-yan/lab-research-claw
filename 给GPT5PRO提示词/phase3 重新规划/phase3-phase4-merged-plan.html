@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 3+4 合并方案 — Tool-Driven Memory Access</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --orange: #f0883e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  h1 { color: #fff; font-size: 2.2rem; margin-bottom: 0.5rem; }
+  h2 { color: var(--accent); font-size: 1.5rem; margin: 3rem 0 1.2rem; border-bottom: 2px solid var(--border); padding-bottom: 0.6rem; }
+  h3 { color: var(--purple); font-size: 1.2rem; margin: 2rem 0 1rem; }
+  h4 { color: var(--orange); font-size: 1rem; margin: 1.2rem 0 0.6rem; }
+  .subtitle { color: var(--text-dim); font-size: 1.1rem; margin-bottom: 3rem; line-height: 1.8; }
+
+  .hero-box {
+    background: linear-gradient(135deg, #1f6feb22 0%, #3fb95022 100%);
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 2.5rem;
+    margin: 2.5rem 0;
+  }
+  .hero-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1.2rem;
+  }
+  .hero-desc {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    margin: 0.8rem 0;
+  }
+  .callout {
+    background: var(--surface);
+    border-left: 4px solid;
+    padding: 1.5rem 1.8rem;
+    margin: 2rem 0;
+    border-radius: 6px;
+  }
+  .callout-info { border-color: var(--accent); }
+  .callout-success { border-color: var(--green); }
+  .callout-warning { border-color: var(--yellow); }
+  .callout-danger { border-color: var(--red); }
+  .callout-title {
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+  }
+  .callout-info .callout-title { color: var(--accent); }
+  .callout-success .callout-title { color: var(--green); }
+  .callout-warning .callout-title { color: var(--yellow); }
+  .callout-danger .callout-title { color: var(--red); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 1rem;
+    text-align: left;
+  }
+  th {
+    background: var(--surface);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  tr:nth-child(even) {
+    background: var(--surface);
+  }
+  .code-block {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.2rem;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.9rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    line-height: 1.6;
+  }
+  .code-comment { color: var(--text-dim); }
+  .code-keyword { color: var(--purple); }
+  .code-string { color: var(--green); }
+  .code-function { color: var(--yellow); }
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+  .comparison-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+  .comparison-title {
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+  ul {
+    margin-left: 1.8rem;
+    margin-top: 0.6rem;
+  }
+  li {
+    margin: 0.5rem 0;
+  }
+  .check { color: var(--green); font-weight: 700; }
+  .cross { color: var(--red); font-weight: 700; }
+  .arrow { color: var(--accent); font-weight: 700; }
+  .flow-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    font-family: monospace;
+    font-size: 0.9rem;
+  }
+  .flow-step {
+    margin: 0.6rem 0;
+    padding: 0.8rem 1.2rem;
+    background: #0d1117;
+    border-radius: 4px;
+  }
+  .flow-step.highlight {
+    background: #1f6feb22;
+    border: 1px solid var(--accent);
+  }
+  .flow-arrow {
+    color: var(--text-dim);
+    margin: 0.4rem 0;
+    text-align: center;
+    font-size: 1.2rem;
+  }
+</style>
+</head>
+<body>
+
+<h1>Phase 3 + Phase 4 合并方案</h1>
+<p class="subtitle">
+  Tool-Driven Memory Access — 让 LLM 通过工具主动读写 Memory，而非预先注入<br>
+  System Prompt 极简化 + 按需读取 + 工具调用即决策
+</p>
+
+<div class="hero-box">
+  <div class="hero-title">🎯 核心理念：从"预测注入"到"按需读取"</div>
+  <p class="hero-desc">
+    原 Phase 3 设计中，<strong>ContextOrchestrator 需要预测</strong>本轮对话需要哪些 memory 文件，然后注入到 system prompt。
+    这导致两个问题：<strong>① 预测不准确</strong>（可能注入无用文件或遗漏需要的文件），<strong>② Context 过大</strong>（预先注入大量内容）。
+  </p>
+  <p class="hero-desc">
+    新方案采用 <strong>Tool-Driven</strong> 架构：System Prompt 只包含<strong>控制层六大 md</strong>（AGENTS.md, SOUL.md, IDENTITY.md, USER.md, SKILLS_SNAPSHOT.md, project.md），
+    Memory 三层只提供<strong>目录结构</strong>（文件路径列表）。LLM 看到路径列表后，<strong>自己决定</strong>需要读取哪些文件，通过 <code>read_file</code> 工具按需读取。
+    需要写入时，直接通过 <code>write_file</code> 工具写入。<strong>工具调用本身就是 memory 访问的决策和审计</strong>，不需要额外的 memory_decision 字段。
+  </p>
+</div>
+
+<h2>架构对比</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>维度</th>
+      <th>原 Phase 3 设计</th>
+      <th>新方案（Phase 3+4 合并）</th>
+      <th>优势</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>System Prompt</strong></td>
+      <td>控制层 + 选中的 memory 文件<strong>内容</strong></td>
+      <td>仅控制层 + memory <strong>目录列表</strong></td>
+      <td><span class="check">✓</span> Context 更小</td>
+    </tr>
+    <tr>
+      <td><strong>Memory 读取</strong></td>
+      <td>ContextOrchestrator 预先选择并注入</td>
+      <td>LLM 通过 read_file 工具按需读取</td>
+      <td><span class="check">✓</span> 更灵活，不依赖预测</td>
+    </tr>
+    <tr>
+      <td><strong>Memory 写入</strong></td>
+      <td>memory_decision 结构化输出</td>
+      <td>直接通过 write_file 工具</td>
+      <td><span class="check">✓</span> 工具调用即决策</td>
+    </tr>
+    <tr>
+      <td><strong>Context 大小</strong></td>
+      <td>大（预先注入可能用不到的文件）</td>
+      <td>小（只注入控制层）</td>
+      <td><span class="check">✓</span> 节省 token</td>
+    </tr>
+    <tr>
+      <td><strong>灵活性</strong></td>
+      <td>低（依赖 ContextOrchestrator 预测）</td>
+      <td>高（LLM 自主决策）</td>
+      <td><span class="check">✓</span> 更符合 Agent 理念</td>
+    </tr>
+    <tr>
+      <td><strong>架构复杂度</strong></td>
+      <td>高（需要 ContextOrchestrator + memory_decision 解析）</td>
+      <td>低（移除 ContextOrchestrator）</td>
+      <td><span class="check">✓</span> 简化架构</td>
+    </tr>
+    <tr>
+      <td><strong>审计</strong></td>
+      <td>需要 memory_decision 字段</td>
+      <td>工具调用即审计</td>
+      <td><span class="check">✓</span> 自然集成</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- PLACEHOLDER_FOR_MORE_CONTENT -->

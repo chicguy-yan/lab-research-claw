@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Final Project Architecture - Code Derived</title>
+<style>
+  :root {
+    --bg: #0b1016;
+    --bg-soft: #111827;
+    --panel: rgba(17, 24, 39, 0.9);
+    --panel-strong: #161f2d;
+    --line: rgba(148, 163, 184, 0.18);
+    --line-strong: rgba(148, 163, 184, 0.34);
+    --text: #e5edf7;
+    --text-soft: #a9b8ca;
+    --text-dim: #7d8da3;
+    --cyan: #67e8f9;
+    --teal: #5eead4;
+    --amber: #fbbf24;
+    --orange: #fb923c;
+    --green: #4ade80;
+    --red: #f87171;
+    --violet: #c4b5fd;
+    --shadow: 0 28px 80px rgba(0, 0, 0, 0.34);
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --mono: "SFMono-Regular", Consolas, Menlo, monospace;
+    --sans: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(94, 234, 212, 0.14), transparent 26%),
+      radial-gradient(circle at top right, rgba(251, 191, 36, 0.12), transparent 24%),
+      linear-gradient(180deg, #0a0f15 0%, #0b1016 46%, #0f1622 100%);
+  }
+
+  a { color: inherit; }
+
+  .page {
+    width: min(1280px, calc(100vw - 28px));
+    margin: 0 auto;
+    padding: 22px 0 52px;
+  }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 34px;
+    border-radius: 34px;
+    border: 1px solid var(--line);
+    background:
+      linear-gradient(135deg, rgba(16, 24, 36, 0.96), rgba(12, 18, 28, 0.92)),
+      radial-gradient(circle at 82% 18%, rgba(103, 232, 249, 0.12), transparent 24%);
+    box-shadow: var(--shadow);
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    right: -100px;
+    top: -80px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.18), rgba(251, 191, 36, 0));
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.08);
+    color: var(--text-soft);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 18px 0 12px;
+    font-size: clamp(34px, 5vw, 62px);
+    line-height: 0.98;
+    letter-spacing: -0.05em;
+    max-width: 10ch;
+  }
+
+  .hero-copy {
+    max-width: 820px;
+    color: var(--text-soft);
+    font-size: 16px;
+    line-height: 1.75;
+    margin: 0;
+  }
+
+  .meta-row,
+  .pill-row,
+  .section-grid,
+  .stat-grid,
+  .card-grid,
+  .flow-grid,
+  .constraint-grid,
+  .footer-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .meta-row {
+    grid-template-columns: 1.15fr 0.85fr;
+    margin-top: 26px;
+    align-items: start;
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .stat {
+    padding: 18px;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+  }
+
+  .stat strong {
+    display: block;
+    font-size: 28px;
+    line-height: 1;
+    margin-bottom: 7px;
+  }
+
+  .stat span {
+    color: var(--text-dim);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .hero-note {
+    padding: 20px;
+    border-radius: 22px;
+    border: 1px solid rgba(248, 113, 113, 0.22);
+    background: rgba(248, 113, 113, 0.08);
+  }
+
+  .hero-note strong {
+    display: block;
+    color: #ffd6d6;
+    margin-bottom: 8px;
+    font-size: 15px;
+  }
+
+  .hero-note p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .nav {
+    position: sticky;
+    top: 12px;
+    z-index: 8;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 18px 0 22px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(11, 16, 22, 0.78);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav a {
+    text-decoration: none;
+    color: var(--text-soft);
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .nav a:hover { color: var(--text); }
+
+  section {
+    margin-top: 22px;
+    padding: 28px;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.92), rgba(12, 18, 28, 0.92));
+    box-shadow: var(--shadow);
+  }
+
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: baseline;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(25px, 3vw, 38px);
+    letter-spacing: -0.04em;
+  }
+
+  .section-note {
+    margin: 0;
+    max-width: 740px;
+    color: var(--text-soft);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .pill-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .pill,
+  .card,
+  .flow-step,
+  .constraint,
+  .callout,
+  .source-card {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .pill {
+    padding: 18px;
+  }
+
+  .pill .kicker {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .cyan { background: rgba(103, 232, 249, 0.14); color: var(--cyan); }
+  .teal { background: rgba(94, 234, 212, 0.14); color: var(--teal); }
+  .amber { background: rgba(251, 191, 36, 0.14); color: var(--amber); }
+  .orange { background: rgba(251, 146, 60, 0.14); color: var(--orange); }
+  .green { background: rgba(74, 222, 128, 0.14); color: var(--green); }
+  .red { background: rgba(248, 113, 113, 0.14); color: var(--red); }
+  .violet { background: rgba(196, 181, 253, 0.14); color: var(--violet); }
+
+  .pill h3,
+  .card h3,
+  .flow-step h3,
+  .constraint h3,
+  .callout h3,
+  .source-card h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  .pill p,
+  .card p,
+  .flow-step p,
+  .constraint p,
+  .callout p,
+  .source-card p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .pill ul,
+  .card ul,
+  .constraint ul,
+  .callout ul {
+    margin: 12px 0 0;
+    padding-left: 18px;
+    color: var(--text-soft);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+
+  .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .path {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--cyan);
+    font: 12px/1.6 var(--mono);
+    word-break: break-word;
+  }
+
+  .flow-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .flow-step {
+    padding: 18px;
+    position: relative;
+  }
+
+  .flow-step::after {
+    content: "→";
+    position: absolute;
+    right: -11px;
+    top: 22px;
+    color: var(--text-dim);
+    font-size: 20px;
+  }
+
+  .flow-step:last-child::after { display: none; }
+
+  .tree,
+  .ascii,
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .tree,
+  .ascii {
+    padding: 22px;
+    font: 13px/1.7 var(--mono);
+    color: var(--text-soft);
+    white-space: pre;
+    overflow: auto;
+  }
+
+  table th,
+  table td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  table th {
+    background: rgba(148, 163, 184, 0.08);
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  table tr:last-child td { border-bottom: none; }
+
+  code {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--cyan);
+    background: rgba(103, 232, 249, 0.08);
+    padding: 2px 6px;
+    border-radius: 7px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-right: 6px;
+    white-space: nowrap;
+  }
+
+  .constraint-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .constraint {
+    padding: 18px;
+  }
+
+  .callout-wrap {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .callout {
+    padding: 20px;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .source-card {
+    padding: 18px;
+  }
+
+  .muted {
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 1120px) {
+    .meta-row,
+    .stat-grid,
+    .pill-row,
+    .card-grid,
+    .flow-grid,
+    .constraint-grid,
+    .callout-wrap,
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .flow-step::after { display: none; }
+  }
+
+  @media (max-width: 720px) {
+    .page {
+      width: min(100vw - 18px, 100%);
+      padding-top: 10px;
+    }
+
+    .hero,
+    section {
+      padding: 20px;
+      border-radius: 22px;
+    }
+
+    .meta-row,
+    .stat-grid,
+    .pill-row,
+    .card-grid,
+    .flow-grid,
+    .constraint-grid,
+    .callout-wrap,
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .nav {
+      position: static;
+    }
+
+    h1 {
+      max-width: none;
+      font-size: 36px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="eyebrow">Code Derived • 2026-03-16 • No stale docs</div>
+      <h1>Experimental-Research-OpenClaw Final Project Architecture</h1>
+      <p class="hero-copy">
+        这份页面只依据当前代码生成，范围覆盖 <code>backend/</code> 与 <code>frontend/index.html</code>。
+        它描述的是现在真实可运行的系统，不引用已经过时的 phase 文档，不把计划态模块写成已实现。
+      </p>
+
+      <div class="meta-row">
+        <div class="stat-grid">
+          <div class="stat">
+            <strong style="color: var(--teal);">15</strong>
+            <span>HTTP 端点。包含健康检查、会话 CRUD、文件系统、Agent 目录、附件上传与下载。</span>
+          </div>
+          <div class="stat">
+            <strong style="color: var(--cyan);">5</strong>
+            <span>已注册给 LangChain Agent 的工具：<code>terminal</code>、<code>python_repl</code>、<code>read_file</code>、<code>write_file</code>、<code>fetch_url</code>。</span>
+          </div>
+          <div class="stat">
+            <strong style="color: var(--amber);">1</strong>
+            <span>实际前端入口：<code>frontend/index.html</code>。当前不是 Next.js，多数交互靠原生 DOM + fetch + SSE reader。</span>
+          </div>
+          <div class="stat">
+            <strong style="color: var(--violet);">default</strong>
+            <span>运行时 workspace 锚定在 <code>.openclaw/workspace-default</code>。可创建别的 workspace，但当前流程不会切换过去。</span>
+          </div>
+        </div>
+
+        <aside class="hero-note">
+          <strong>当前最重要的真实边界</strong>
+          <p>
+            <code>/api/agents</code> 已能创建和列出多个 workspace，但 <code>SessionManager</code> 与 <code>AgentManager</code>
+            在启动时都绑定到 <code>DEFAULT_WORKSPACE_DIR</code>，前端也没有 Agent 选择器。
+            所以现在的系统本质上是“单运行时 workspace + 可额外建目录”的架构。
+          </p>
+        </aside>
+      </div>
+    </header>
+
+    <nav class="nav">
+      <a href="#overview">总览</a>
+      <a href="#flow">请求流</a>
+      <a href="#topology">目录拓扑</a>
+      <a href="#api">API</a>
+      <a href="#modules">模块职责</a>
+      <a href="#constraints">约束</a>
+      <a href="#deps">依赖图</a>
+      <a href="#sources">依据</a>
+    </nav>
+
+    <section id="overview">
+      <div class="section-head">
+        <h2>1. System Overview</h2>
+        <p class="section-note">
+          当前系统由一个静态研究控制台、一个 FastAPI 后端、一个基于本地文件系统的 workspace、以及一个按请求重建的 LangChain Agent 组成。
+          “记忆层、技能菜单、工具审计、附件溯源” 已经在代码里串成一个闭环。
+        </p>
+      </div>
+
+      <div class="pill-row">
+        <article class="pill">
+          <span class="kicker cyan">Frontend</span>
+          <h3>Research Console</h3>
+          <p>三栏工作台已经落在单文件 HTML 中：</p>
+          <ul>
+            <li>左栏：Workspace Memory 与 Skills 文件树</li>
+            <li>中栏：聊天流、SSE 工具事件、Trace 查看器、附件上传</li>
+            <li>右栏：Concepts / Tasks / Packs 原子笔记树</li>
+            <li>会话切换、后端地址探测、移动端抽屉逻辑都在前端 JS 中完成</li>
+          </ul>
+        </article>
+
+        <article class="pill">
+          <span class="kicker teal">Backend</span>
+          <h3>FastAPI Runtime</h3>
+          <p>后端只暴露已实现能力，不存在 traces/tokens/config 独立路由：</p>
+          <ul>
+            <li><code>app.py</code> 在启动时初始化 workspace、SessionManager、AgentManager</li>
+            <li>聊天接口通过 SSE 持续返回 <code>token</code> / <code>tool_start</code> / <code>tool_end</code> / <code>done</code></li>
+            <li>文件、会话、Agent 目录、附件上传下载均已可用</li>
+          </ul>
+        </article>
+
+        <article class="pill">
+          <span class="kicker amber">Agent Layer</span>
+          <h3>Prompt + Tools + Audit</h3>
+          <p>单轮对话真实链路如下：</p>
+          <ul>
+            <li>ContextOrchestrator 生成 Memory Map 与推荐文件</li>
+            <li>SkillLoader 生成技能菜单快照并同步 system skills 到 workspace</li>
+            <li>PromptBuilder 拼出完整 system prompt</li>
+            <li>AgentManager 基于 <code>create_agent</code> 临时构建 Agent 并执行 5 个工具</li>
+            <li>TraceWriter 把工具调用和 prompt 写回 envelope</li>
+          </ul>
+        </article>
+
+        <article class="pill">
+          <span class="kicker orange">Storage</span>
+          <h3>Workspace as Database</h3>
+          <p>项目当前没有外部数据库，核心状态都落到 workspace 文件系统：</p>
+          <ul>
+            <li><code>context_trace/{session_id}.json</code> 保存消息、trace、prompt</li>
+            <li><code>memory/</code> 保存 L1/L2/L3 研究记忆</li>
+            <li><code>assets/</code> 保存上传附件并自动分类</li>
+            <li><code>skills/</code> 保存 registry、snapshot 与镜像后的 system skills</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="flow">
+      <div class="section-head">
+        <h2>2. End-to-End Request Flow</h2>
+        <p class="section-note">
+          下面的链路只描述当前代码里真实存在的执行步骤。Trace 面板没有独立 API，而是由前端直接读取
+          <code>context_trace/{session_id}.json</code>。
+        </p>
+      </div>
+
+      <div class="flow-grid">
+        <article class="flow-step">
+          <span class="badge cyan">Step 1</span>
+          <h3>Browser Console</h3>
+          <p>
+            用户在 <code>frontend/index.html</code> 中选择会话、可选上传附件、输入消息。
+            <code>route</code> 与额外 <code>prompt_context</code> 取自 URL hash。
+          </p>
+        </article>
+
+        <article class="flow-step">
+          <span class="badge teal">Step 2</span>
+          <h3>POST /api/chat</h3>
+          <p>
+            后端确保 session 存在，随后创建 ContextOrchestrator、SkillLoader、PromptBuilder，
+            组装本轮 prompt payload。
+          </p>
+        </article>
+
+        <article class="flow-step">
+          <span class="badge amber">Step 3</span>
+          <h3>Agent Execution</h3>
+          <p>
+            AgentManager 调用 <code>langchain.agents.create_agent</code>，注册 5 个工具，
+            并把模型流式输出翻译成标准 SSE 事件。
+          </p>
+        </article>
+
+        <article class="flow-step">
+          <span class="badge orange">Step 4</span>
+          <h3>Persistence</h3>
+          <p>
+            <code>api/chat.py</code> 在流结束后写入 user/assistant 消息；
+            TraceWriter 把 <code>tool_calls</code> 与 <code>prompt</code> 写进 session envelope。
+          </p>
+        </article>
+
+        <article class="flow-step">
+          <span class="badge violet">Step 5</span>
+          <h3>Frontend Trace Readback</h3>
+          <p>
+            前端收到 <code>done</code> 后，重新读取
+            <code>/api/files?path=context_trace/{session_id}.json</code>，
+            展示审计摘要与完整 Trace 面板。
+          </p>
+        </article>
+      </div>
+
+      <div class="callout-wrap" style="margin-top: 16px;">
+        <article class="callout">
+          <span class="badge green">SSE Events</span>
+          <h3>流式事件协议</h3>
+          <p>
+            当前前端显式处理 <code>token</code>、<code>tool_start</code>、<code>tool_end</code>、
+            <code>new_response</code>、<code>error</code>、<code>done</code> 六类事件。
+          </p>
+        </article>
+
+        <article class="callout">
+          <span class="badge red">Trace Access</span>
+          <h3>没有独立 Trace API</h3>
+          <p>
+            Trace 回放不是走 <code>/api/traces</code>，而是借用 <code>/api/files</code> 直接读取 JSON 文件。
+            这意味着“文件 API”同时承担了回放接口职责。
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="topology">
+      <div class="section-head">
+        <h2>3. Runtime Topology</h2>
+        <p class="section-note">
+          这是从当前代码反推出来的核心目录。带星号的部分表示系统已经在运行时直接依赖它们，而不是只是预留目录。
+        </p>
+      </div>
+
+      <div class="tree">ResearchAgentPrivateWorkspace/
+├── backend/
+│   ├── app.py                              * FastAPI entrypoint
+│   ├── config.py                           * env + path + runtime config
+│   ├── api/
+│   │   ├── chat.py                         * SSE chat + prompt metadata + trace write
+│   │   ├── sessions.py                     * session CRUD + history
+│   │   ├── files.py                        * file read/write/tree/preview
+│   │   ├── agents.py                       * workspace directory CRUD
+│   │   └── assets.py                       * upload + auto classify + download
+│   ├── graph/
+│   │   ├── agent.py                        * LangChain create_agent wrapper
+│   │   ├── session_manager.py              * envelope persistence
+│   │   ├── path_utils.py                   * workspace boundary enforcement
+│   │   ├── context_orchestrator.py         * memory/assets scan + recommendation
+│   │   ├── prompt_builder.py               * system prompt assembly
+│   │   ├── trace_writer.py                 * append tool calls + prompt
+│   │   └── skill_loader.py                 * registry merge + snapshot + workspace sync
+│   ├── tools/
+│   │   ├── terminal_tool.py                * shell with cwd + timeout + blacklist
+│   │   ├── python_repl_tool.py             * exec Python inside workspace cwd
+│   │   ├── read_file_tool.py               * path-safe text read
+│   │   ├── write_file_tool.py              * path-safe write + source_assets frontmatter
+│   │   └── fetch_url_tool.py               * requests + html2text
+│   ├── workspace-templates/                * copied into default workspace on startup
+│   ├── skills/                             * system registry + source SKILL.md files
+│   └── .openclaw/
+│       ├── workspace-default/              * active runtime workspace
+│       │   ├── memory/                     * L1/L2/L3 research memory
+│       │   ├── assets/                     * uploads/data/figures/ppt_pack
+│       │   ├── context_trace/              * session envelope JSON files
+│       │   └── skills/                     * runtime registry + snapshot + mirrored system skills
+│       └── workspace-{agent_id}/           * creatable, but not switchable in current runtime
+└── frontend/
+    └── index.html                          * static three-column console</div>
+    </section>
+
+    <section id="api">
+      <div class="section-head">
+        <h2>4. API Surface</h2>
+        <p class="section-note">
+          下表只列当前代码里真的注册到 FastAPI 的端点。没有把未实现的 phase 计划接口算进去。
+        </p>
+      </div>
+
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Path</th>
+          <th>Current Role</th>
+          <th>Notes From Code</th>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td><code>/</code></td>
+          <td>健康检查</td>
+          <td>返回 <code>status</code> 与服务名，前端会拿它探测后端地址。</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/api/chat</code></td>
+          <td>SSE 流式对话</td>
+          <td>请求体包含 <code>message</code>、<code>session_id</code>、<code>route</code>、<code>prompt_context</code>、<code>attachments</code>。</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td><code>/api/sessions</code></td>
+          <td>会话列表</td>
+          <td>按 <code>updated_at</code> 倒序返回。</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/api/sessions</code></td>
+          <td>创建会话</td>
+          <td>创建 12 位十六进制 session id。</td>
+        </tr>
+        <tr>
+          <td>PUT</td>
+          <td><code>/api/sessions/{session_id}</code></td>
+          <td>重命名会话</td>
+          <td>只更新 index，不动 envelope 内容。</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td><code>/api/sessions/{session_id}</code></td>
+          <td>删除会话</td>
+          <td>删除 <code>context_trace/{session_id}.json</code> 并更新索引。</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td><code>/api/sessions/{session_id}/history</code></td>
+          <td>读取消息历史</td>
+          <td>返回原始 <code>messages</code> 数组，不包含 trace。</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td><code>/api/files?path=...</code></td>
+          <td>读取文本文件</td>
+          <td>前端也借这个端点读取 <code>context_trace</code> JSON。</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/api/files</code></td>
+          <td>保存文本文件</td>
+          <td>受 <code>resolve_safe_path(..., require_writable=True)</code> 限制。</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td><code>/api/files/tree</code></td>
+          <td>目录树</td>
+          <td>会隐藏 dotfiles，且隐藏大多数下划线目录，但保留 <code>skills/_system</code>。</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td><code>/api/files/preview</code></td>
+          <td>文本预览</td>
+          <td>当前前端主流程没有显式使用它。</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td><code>/api/agents</code></td>
+          <td>列出 workspace</td>
+          <td>从 <code>.openclaw/workspace-*</code> 读取元信息。</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/api/agents</code></td>
+          <td>创建 workspace</td>
+          <td>复制 <code>workspace-templates</code> 并写入 <code>IDENTITY.md</code>。</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/api/assets/upload</code></td>
+          <td>上传附件</td>
+          <td>支持自动分类、SHA8 文件名前缀、轻量摘要。</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td><code>/api/assets/download</code></td>
+          <td>下载或预览二进制附件</td>
+          <td>只允许读取 <code>assets/</code> 下的文件。</td>
+        </tr>
+      </table>
+    </section>
+
+    <section id="modules">
+      <div class="section-head">
+        <h2>5. Core Module Responsibilities</h2>
+        <p class="section-note">
+          这里按“运行时职责”划分，而不是按 phase。只有当前代码里参与主链路的模块会出现在这里。
+        </p>
+      </div>
+
+      <div class="card-grid">
+        <article class="card">
+          <span class="badge cyan">Bootstrap</span>
+          <h3>app.py</h3>
+          <span class="path">backend/app.py</span>
+          <p>启动时负责三件事：确保默认 workspace 存在，迁移模板新增文件，初始化 SessionManager 和 AgentManager，并注册所有 API router。</p>
+        </article>
+
+        <article class="card">
+          <span class="badge teal">Persistence</span>
+          <h3>SessionManager</h3>
+          <span class="path">backend/graph/session_manager.py</span>
+          <p>把会话 envelope 存到 <code>context_trace</code>，维护 <code>_sessions_index.json</code>，并在给 Agent 加载历史时合并连续 assistant 消息。</p>
+        </article>
+
+        <article class="card">
+          <span class="badge amber">Prompt Context</span>
+          <h3>ContextOrchestrator</h3>
+          <span class="path">backend/graph/context_orchestrator.py</span>
+          <p>扫描 L1/L2/L3 目录与 assets 文件级清单，并用关键词给出推荐文件。当前没有复杂预算器或检索排序器，就是轻量扫描器。</p>
+        </article>
+
+        <article class="card">
+          <span class="badge violet">Skill Plane</span>
+          <h3>SkillLoader</h3>
+          <span class="path">backend/graph/skill_loader.py</span>
+          <p>合并 system/workspace registry，镜像 system skills 到 workspace，生成 <code>SKILLS_SNAPSHOT.md</code>，但不做自动匹配与路由决策。</p>
+        </article>
+
+        <article class="card">
+          <span class="badge orange">Prompt Assembly</span>
+          <h3>PromptBuilder</h3>
+          <span class="path">backend/graph/prompt_builder.py</span>
+          <p>组装 Tooling、Workspace、Inbound Context、Control Plane、Skills Menu、Execution Contract、Memory Map 七个块，并注入附件与 route 元数据。</p>
+        </article>
+
+        <article class="card">
+          <span class="badge green">Agent Runtime</span>
+          <h3>AgentManager</h3>
+          <span class="path">backend/graph/agent.py</span>
+          <p>按请求重建 Agent，包装 LangChain 流式消息，把模型 chunk 转成前端可消费的标准 SSE 事件；<code>done</code> 事件不在这里发。</p>
+        </article>
+
+        <article class="card">
+          <span class="badge red">Trace Audit</span>
+          <h3>TraceWriter</h3>
+          <span class="path">backend/graph/trace_writer.py</span>
+          <p>把工具调用数组追加到 envelope 的 <code>traces</code> 字段，并写入最终传给模型的 <code>prompt</code> 载荷。</p>
+        </article>
+
+        <article class="card">
+          <span class="badge cyan">Static UI</span>
+          <h3>frontend/index.html</h3>
+          <span class="path">frontend/index.html</span>
+          <p>当前前端不是组件化框架，而是单文件控制台：会话恢复、文件树、消息流、附件上传、Trace 展示、移动端抽屉都在原生 JS 里完成。</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>6. Tooling and Data Contracts</h2>
+        <p class="section-note">
+          工具层已经是这个项目的核心能力，不只是补充。它决定了 Agent 能否真正改文件、读记忆、跑实验脚本、抓网页。
+        </p>
+      </div>
+
+      <table>
+        <tr>
+          <th>Tool</th>
+          <th>File</th>
+          <th>Current Contract</th>
+          <th>Guardrail</th>
+        </tr>
+        <tr>
+          <td><code>terminal</code></td>
+          <td><code>backend/tools/terminal_tool.py</code></td>
+          <td>参数是 <code>command</code> + <code>cwd</code> + <code>timeout</code></td>
+          <td>黑名单、workspace cwd 限制、300 秒以内、输出 10000 字截断</td>
+        </tr>
+        <tr>
+          <td><code>python_repl</code></td>
+          <td><code>backend/tools/python_repl_tool.py</code></td>
+          <td>执行任意 Python 代码，workspace 自动注入 <code>sys.path</code></td>
+          <td>cwd 必须在 workspace 内，异常转字符串返回</td>
+        </tr>
+        <tr>
+          <td><code>read_file</code></td>
+          <td><code>backend/tools/read_file_tool.py</code></td>
+          <td>按 <code>path</code> + <code>cwd</code> 读取文本</td>
+          <td>路径安全、UTF-8 优先、GBK 回退、20000 字截断</td>
+        </tr>
+        <tr>
+          <td><code>write_file</code></td>
+          <td><code>backend/tools/write_file_tool.py</code></td>
+          <td>写文本，支持 <code>source_assets</code></td>
+          <td>只允许写可写前缀；写入 <code>memory/</code> 时会自动注入溯源 frontmatter</td>
+        </tr>
+        <tr>
+          <td><code>fetch_url</code></td>
+          <td><code>backend/tools/fetch_url_tool.py</code></td>
+          <td>拉取 HTTP(S) 网页并转 Markdown</td>
+          <td>仅允许 http/https，10 秒超时，html2text 转换，20000 字截断</td>
+        </tr>
+      </table>
+    </section>
+
+    <section id="constraints">
+      <div class="section-head">
+        <h2>7. Current Constraints and Architectural Truths</h2>
+        <p class="section-note">
+          这些不是建议，而是当前代码表现出来的事实。新页面必须把它们写清楚，否则后续开发很容易在错误假设上继续堆功能。
+        </p>
+      </div>
+
+      <div class="constraint-grid">
+        <article class="constraint">
+          <span class="badge red">Workspace Truth</span>
+          <h3>多目录，不是多运行时</h3>
+          <p>尽管可以通过 <code>/api/agents</code> 创建多个 <code>workspace-{agent_id}</code>，但 app 启动后只把默认 workspace 注入到 app state。聊天、文件、附件都仍然操作 default workspace。</p>
+        </article>
+
+        <article class="constraint">
+          <span class="badge amber">Trace Truth</span>
+          <h3>会话文件与审计文件合并</h3>
+          <p>当前 session 历史、tool traces、prompt payload 都保存在同一个 envelope JSON 中，而不是拆成多份存储。</p>
+        </article>
+
+        <article class="constraint">
+          <span class="badge cyan">Frontend Truth</span>
+          <h3>路由上下文来自 URL hash</h3>
+          <p><code>route</code> 和其他 prompt metadata 不是靠表单，而是由前端从 <code>location.hash</code> 提取后注入请求体。</p>
+        </article>
+
+        <article class="constraint">
+          <span class="badge green">Attachment Truth</span>
+          <h3>附件已进入主链路</h3>
+          <p>附件上传结果会成为 <code>ChatRequest.attachments</code>，既进入 metadata，也会在保存 user message 前被拼接进消息文本。</p>
+        </article>
+
+        <article class="constraint">
+          <span class="badge violet">Skill Truth</span>
+          <h3>SkillLoader 只做披露，不做匹配</h3>
+          <p>技能决定权仍在 Agent 本身。后端没有做 trigger 命中、route 排序或自动读取完整 SKILL.md。</p>
+        </article>
+
+        <article class="constraint">
+          <span class="badge orange">UI Truth</span>
+          <h3>Trace 回放依赖文件接口</h3>
+          <p>前端通过 <code>/api/files</code> 读取 envelope，再自己提取 <code>traces</code>。这会让文件 API 成为审计展示的隐式依赖。</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>8. Security and Boundary Controls</h2>
+        <p class="section-note">
+          当前安全边界主要体现在路径解析、shell 工具限制、资产下载目录限制，以及 memory 文件的来源追踪。
+        </p>
+      </div>
+
+      <div class="callout-wrap">
+        <article class="callout">
+          <span class="badge green">Path Safety</span>
+          <h3><code>relative_to()</code> 是主边界</h3>
+          <p><code>graph/path_utils.py</code> 用 <code>Path.relative_to()</code> 做 workspace 越界检查，避免了字符串前缀误判。可写目录白名单只有 <code>memory/</code>、<code>assets/</code>、<code>context_trace/</code>、<code>skills/</code>。</p>
+        </article>
+
+        <article class="callout">
+          <span class="badge amber">Terminal Safety</span>
+          <h3>Shell 能跑，但不是无限制</h3>
+          <p><code>terminal_tool.py</code> 限制 cwd 在 workspace 内，带命令黑名单、超时、输出截断。它仍然很强，因此它是整个 runtime 的关键风险点之一。</p>
+        </article>
+
+        <article class="callout">
+          <span class="badge cyan">Asset Safety</span>
+          <h3>下载仅开放 assets/</h3>
+          <p><code>/api/assets/download</code> 会在路径解析后再次验证相对路径前缀必须是 <code>assets/</code>，不允许借下载端点读取 memory 或 trace。</p>
+        </article>
+
+        <article class="callout">
+          <span class="badge violet">Traceability</span>
+          <h3>知识文件可追溯回附件</h3>
+          <p>当 Agent 用 <code>write_file</code> 往 <code>memory/</code> 写入内容且附带 <code>source_assets</code> 时，工具会自动注入 frontmatter，确保研究结论可以追溯到原始资产。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="deps">
+      <div class="section-head">
+        <h2>9. Dependency Graph</h2>
+        <p class="section-note">
+          这个 ASCII 图强调的是当前真实依赖，而不是理想分层。尤其是前端依赖文件 API 读取 Trace、运行时依赖 default workspace 这两点。
+        </p>
+      </div>
+
+      <div class="ascii">frontend/index.html
+  ├─ fetch("/")                               -> backend/app.py root()
+  ├─ fetch("/api/sessions...")                -> api/sessions.py -> SessionManager
+  ├─ fetch("/api/files/tree...")              -> api/files.py -> path_utils.py
+  ├─ fetch("/api/files?path=...")             -> api/files.py -> path_utils.py
+  ├─ fetch("/api/assets/upload")              -> api/assets.py -> path_utils.py
+  └─ fetch("/api/chat")                       -> api/chat.py
+                                                 ├─ ContextOrchestrator
+                                                 ├─ SkillLoader
+                                                 ├─ PromptBuilder
+                                                 ├─ SessionManager.load_session_for_agent()
+                                                 ├─ AgentManager.astream()
+                                                 │    ├─ TerminalTool
+                                                 │    ├─ PythonREPLTool
+                                                 │    ├─ ReadFileTool
+                                                 │    ├─ WriteFileTool
+                                                 │    └─ FetchURLTool
+                                                 ├─ SessionManager.save_message()
+                                                 └─ TraceWriter.write_trace()
+
+backend/app.py startup
+  ├─ ensure_default_workspace()
+  │    ├─ copy workspace-templates/ -> .openclaw/workspace-default/
+  │    └─ normalize workspace skills registry
+  ├─ SessionManager(DEFAULT_WORKSPACE_DIR)
+  └─ AgentManager.initialize(DEFAULT_WORKSPACE_DIR)
+
+Current architectural center of gravity:
+  .openclaw/workspace-default/
+    ├─ memory/
+    ├─ assets/
+    ├─ context_trace/
+    └─ skills/</div>
+    </section>
+
+    <section id="sources">
+      <div class="section-head">
+        <h2>10. Source Basis</h2>
+        <p class="section-note">
+          这份页面不是从旧文档回填出来的，而是从当前代码直接归纳。下面列出这次重建架构页时实际读取的关键文件。
+        </p>
+      </div>
+
+      <div class="footer-grid">
+        <article class="source-card">
+          <span class="badge cyan">Entrypoint</span>
+          <h3>Runtime Boot</h3>
+          <p><code>backend/app.py</code><br><code>backend/config.py</code></p>
+        </article>
+
+        <article class="source-card">
+          <span class="badge teal">API</span>
+          <h3>HTTP Layer</h3>
+          <p><code>backend/api/chat.py</code><br><code>backend/api/sessions.py</code><br><code>backend/api/files.py</code><br><code>backend/api/agents.py</code><br><code>backend/api/assets.py</code></p>
+        </article>
+
+        <article class="source-card">
+          <span class="badge amber">Graph</span>
+          <h3>Prompt / Session / Skill</h3>
+          <p><code>backend/graph/agent.py</code><br><code>backend/graph/session_manager.py</code><br><code>backend/graph/context_orchestrator.py</code><br><code>backend/graph/prompt_builder.py</code><br><code>backend/graph/trace_writer.py</code><br><code>backend/graph/skill_loader.py</code><br><code>backend/graph/path_utils.py</code></p>
+        </article>
+
+        <article class="source-card">
+          <span class="badge violet">Tools</span>
+          <h3>Execution Surface</h3>
+          <p><code>backend/tools/terminal_tool.py</code><br><code>backend/tools/python_repl_tool.py</code><br><code>backend/tools/read_file_tool.py</code><br><code>backend/tools/write_file_tool.py</code><br><code>backend/tools/fetch_url_tool.py</code></p>
+        </article>
+
+        <article class="source-card">
+          <span class="badge orange">Frontend</span>
+          <h3>Actual UI</h3>
+          <p><code>frontend/index.html</code></p>
+        </article>
+
+        <article class="source-card">
+          <span class="badge red">Scope</span>
+          <h3>Excluded on Purpose</h3>
+          <p class="muted">所有已过时的 architecture / phase 文档都没有作为事实来源使用。</p>
+        </article>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

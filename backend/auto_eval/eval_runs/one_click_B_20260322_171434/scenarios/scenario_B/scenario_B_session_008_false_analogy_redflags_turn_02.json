@@ -1,0 +1,107 @@
+{
+  "scenario_id": "scenario_B",
+  "session_id": "scenario_B_session_008_false_analogy_redflags",
+  "turn_id": 2,
+  "workspace_id": "eval-scenario_b-260322_1714",
+  "backend_session_id": "af5f020966ad",
+  "assistant_text": "## Context Trace\n本轮实际调用并读取了这些文件：\n\n- `memory/concepts/B_sentence_safety.md`（读取 2 次）\n- `memory/concepts/B_dband_bridge.md`\n- `memory/concepts/B_ce_transferability.md`\n- `memory/concepts/B_baseline_compare.md`\n\n---\n\n## Rationale\n这次你的需求不是再做一次文献总结，而是要一个**问答时自动踩刹车的句式模板**。  \n我主要依据这 4 份已读卡片做收束：\n\n- `B_sentence_safety.md`：明确区分“可直接写 / 必须加限定词 / 现在不能写”\n- `B_dband_bridge.md`：明确 **d-band/PMS** 只能迁移“框架”，不能直接迁移“控制律”\n- `B_ce_transferability.md`：明确 **Ce / 稀土 / oxo-wall** 目前更多是**设计动机与讨论旁证**\n- `B_baseline_compare.md`：明确 **chlorite 主线** 有自己的 `Co(IV)=O / ClO2 / pH` 分流复杂性，不能被 PMS/Fenton 模板覆盖\n\n所以这份“负面清单”的核心不是看名词，而是看一句话里有没有发生这三步危险跳跃：\n\n1. **从外部体系起步**\n2. **用强连接词直接迁移**\n3. **落到 chlorite 主线确定性结论**\n\n只要一句话同时具备这三个特征，我就应该先提醒你：  \n**“这是 analogical support，不是 chlorite 直接证据。”**\n\n---\n\n## Deliverable\n\n# 负面清单：一出现就该先提醒\n> 提醒语统一版：  \n> **“先停一下：这句话目前属于 analogical support（类比支持/旁证），不是 chlorite 体系内的直接证据。”**\n\n---\n\n## A. 一键触发规则\n以后你问我类似问题时，只要句子同时出现下面 3 类信号中的 2–3 类，我就应该先预警。\n\n### 1) 外部来源词\n- PMS\n- Fenton-like / 类芬顿\n- VOC 深氧化\n- SAC / 单原子\n- membrane / lamellar membrane\n- oxo-wall\n- d-band center\n- eg occupancy\n- antibonding occupancy\n- La–O–Co / Ce-Co TCPP\n- review 里说\n- 文献普遍认为\n\n### 2) 强迁移连接词\n- 因此本体系也……\n- 所以 chlorite 中也……\n- 说明我们这里……\n- 证明了本体系……\n- 可直接迁移\n- 可以等同\n- 本质上一样\n- 沿用同一机制\n- 同样适用\n- 可以照搬\n- 已经表明\n- 足以说明\n\n### 3) chlorite 主线结论词\n- chlorite / 亚氯酸盐体系\n- Co3O4/chlorite\n- ClO2 生成\n- Co(IV)=O\n- 高价 Co\n- OAT / PCET\n- 低配位 Co\n- Ce 促进高价 Co\n- 主导机制\n- 物种归因\n- 路径分流\n\n---\n\n## B. 重点红旗句式\n下面这些句式，**一出现就应该默认先降级为“类比支持，不是直接证据”**。\n\n| 红旗句式 | 为什么要立刻警报 | 应自动提醒的话 |\n|---|---|---|\n| **“PMS 体系中……因此 chlorite 中也……”** | 跨氧化剂直接平移 | 这是 PMS→chlorite 的类比，不是 chlorite 直接证据 |\n| **“文献中 d-band center/eg occupancy……说明我们体系也……”** | 把描述符直接当成 chlorite 控制律 | 这是设计启发，不等于你的体系已服从同一规律 |\n| **“Ce 文献证明了……所以本体系 Ce 也会……”** | 把 Ce 旁支先例升级成 chlorite 事实 | 这是 Ce 相关旁证，不是 Ce–Co3O4/chlorite 内证 |\n| **“既然都提到 Co(IV)=O / OAT / PCET，所以机制本质一样”** | 同名术语误导 | 名词相似不等于反应网络相同 |\n| **“review 说 high-valent metal-oxo 常见……因此我们体系具有……”** | 把综述共性写成当前体系事实 | review 给的是判别框架，不是你体系的实证 |\n| **“某 probe/某个 XPS 变化证明了 Co(IV)=O”** | 单一支持证据被升级成主证 | 这最多是支持，不能替代 chlorite 主线的多证据闭环 |\n| **“低配位 Co 是主因，因为 OV/PMS/膜体系里如此”** | 跨位点/跨材料硬套 | 这是位点启发，不是本体系已坐实的活性位判定 |\n| **“Ce 打破了本体系 oxo-wall”** | 把外部概念框架写成当前事实 | oxo-wall 在这里最多是概念类比，不是已证机制 |\n| **“La–O–Co / Ce-Co 膜体系的结果可直接说明 Co3O4/chlorite”** | 跨材料、跨反应器、跨位点三重迁移 | 这是外部先例，不能直接当本体系证据 |\n| **“既然外部体系选择性氧化/抗干扰强，所以 chlorite 里也应如此”** | 把 high-valent 共性套成现成结果 | chlorite 多了 ClO2 / 氯氧分支，不能直接照搬 |\n\n---\n\n## C. 我建议你固定盯住的 10 个“危险触发词”\n如果一句话里出现这些词，我默认就该先加一句保留声明：\n\n- **因此本体系也**\n- **说明我们这里**\n- **证明了**\n- **已经证实**\n- **可直接迁移**\n- **等同于**\n- **本质上一样**\n- **沿用同一机制**\n- **主导机制就是**\n- **可归因于**\n\n### 最稳的自动插入提醒\n> **“注意：这一步目前仍属于 analogical support，只能作为设计动机或讨论旁证，不能替代 chlorite 体系内的直接证据。”**\n\n---\n\n## D. 按内容类型分组的“负面句式模板”\n\n### 1) 跨氧化剂平移型\n这些句式一出现，我就该先打断：\n\n- “PMS 中已经证明……因此 chlorite 中也……”\n- “类芬顿体系表明……所以亚氯酸盐体系同样……”\n- “PMS 的 Co(IV)=O 主导机制可以直接迁移到 chlorite”\n- “Fenton-like 的规律说明 chlorite 也是这个路径”\n\n**标准提醒：**  \n这是**跨氧化剂类比**。PMS / Fenton-like 只能提供机制启发，不能直接证明 chlorite 中的物种、分流或主导步骤。\n\n---\n\n### 2) 跨描述符硬套型\n- “d-band center 降低说明 chlorite 活化也一定增强”\n- “eg occupancy 最优，所以本体系高价 Co 形成也一定更容易”\n- “Co–O antibonding occupancy 的变化证明本体系高价 Co 增多”\n- “外部文献的描述符方向可直接作为 chlorite 控制律”\n\n**标准提醒：**  \n这是**描述符迁移过界**。描述符可以作为设计变量，但不能直接当成 chlorite 体系已验证的控制规律。\n\n---\n\n### 3) Ce / 稀土因果升级型\n- “Ce 有利于高价 Co 生成”\n- “Ce 已促进本体系 Co(IV)=O 的形成”\n- “Ce 通过轨道耦合直接驱动 chlorite 路径”\n- “Ce 打破 oxo-wall，因此本体系形成高价 Co”\n- “Ce 导致低配位 Co，并直接提高 chlorite 活化”\n\n**标准提醒：**  \n这是**Ce 旁证被升级为本体系因果事实**。目前最多能说“Ce 可能重塑局部电子结构并影响高价 Co 相关步骤”。\n\n---\n\n### 4) 同名机理词误判型\n- “都提到 Co(IV)=O，所以两套机制是一样的”\n- “都说 OAT / PCET，因此可以沿用同一机理框架”\n- “只要出现 ClO2 或 Co(IV)=O，就说明机制与外部文献一致”\n- “名字相同，说明反应路径相同”\n\n**标准提醒：**  \n这是**术语相似造成的假等价**。chlorite 体系还要单独区分 `ClO2` 分支、pH 分流、probe 干扰等问题。\n\n---\n\n### 5) 综述共性直落本体系型\n- “review 说 high-valent metal-oxo 具有选择性氧化，所以我们体系也是”\n- “review 说抗干扰强，因此 chlorite 里一定耐受 HCO3−/Cl−”\n- “review 说 pH 敏感，因此我们已经说明了 pH 机制”\n- “综述普遍认为……所以本体系已证实……”\n\n**标准提醒：**  \n这是**综述共性→本体系事实**的越级。review 提供的是判别框架，不是你样品的直接证据。\n\n---\n\n### 6) 单一证据升级型\n- “probe 结果证明了 Co(IV)=O”\n- “某个淬灭实验足以说明主导物种”\n- “反应前后 XPS 变化证明 Ce 促进了高价 Co”\n- “DFT 说明了机制已经成立”\n\n**标准提醒：**  \n这是**支持证据被错写成主证**。在 chlorite 主线里，物种和机理要看多证据会聚，尤其要防 probe 被 chlorite / ClO2 干扰。\n\n---\n\n### 7) 跨位点 / 跨材料 / 跨反应器平移型\n- “单原子 Co 的规律可直接用于 Co3O4”\n- “膜体系中的结论可直接套到粉体 chlorite”\n- “La–O–Co 的轨道耦合就等于 Ce–Co3O4 里也成立”\n- “OV-Co3O4 的位点逻辑就等于 pristine Co3O4 的基线逻辑”\n\n**标准提醒：**  \n这是**位点家族或反应器构型不一致**导致的假类比。最多是外部启发，不能直接当同构证据。\n\n---\n\n## E. 一个可直接复用的“自检模板”\n你以后问我类似问题时，可以先把自己的句子过一遍这个模板。\n\n### 自检 1：这句话是不是从外部体系起步？\n- 是否引用了 PMS / Fenton-like / VOC / SAC / membrane / review / La–O–Co / oxo-wall？\n\n如果 **是**，继续问：\n\n### 自检 2：这句话有没有强迁移词？\n- 是否用了“因此本体系也”“说明我们这里”“证明了”“可直接迁移”“同样适用”“主导机制就是”？\n\n如果 **是**，继续问：\n\n### 自检 3：这句话是不是已经落到了 chlorite 结论？\n- 是否已经在说 `Co(IV)=O`、`ClO2`、`Ce 促进高价 Co`、`主导机制`、`路径分流`、`低配位 Co`？\n\n如果 **也是**，那就必须先插入这句：\n\n> **“这里目前是 analogical support，不是 chlorite 直接证据；最多可作为设计动机、讨论旁证或待验证假说。”**\n\n---\n\n## F. 我建议你以后固定让我执行的“回答前置动作”\n你可以直接要求我遵守下面这个规则：\n\n### 规则版\n> **凡是我提到 PMS、d-band、Ce、oxo-wall、review、单原子、膜体系、Fenton-like 来支持 chlorite 结论时，必须先明确标注：**\n> 1. 这是类比支持还是 chlorite 直接证据  \n> 2. 能支持到哪一层  \n> 3. 还缺哪一类 chlorite 内证\n\n### 简写版\n> **“先判定 support 类型：analogical support 还是 chlorite direct evidence。”**\n\n---\n\n## G. 最后给你一个极简版“红旗提示卡”\n以后只要你说出下面任一句，我都应该先提醒你：\n\n1. **“因此本体系也……”**\n2. **“说明 chlorite 中……”**\n3. **“证明了 Ce 会……”**\n4. **“可直接迁移到亚氯酸盐……”**\n5. **“机制本质一样……”**\n6. **“主导机制就是……”**\n7. **“已经证实……”**\n8. **“可归因于……”**\n\n这 8 个短语，基本就是**假类比升级**最常见的入口。\n\n---\n\n## Memory Patch\n本轮未调用 `write_file`，以下仅为建议写入，不是已落盘事实。\n\n建议新增：\n- `memory/concepts/B_analogy_redflag_prompt.md`\n\n建议包含 3 个区块：\n1. `红旗触发词`\n2. `一出现就先降级的句式`\n3. `自动提醒模板（analogical support / direct evidence / missing evidence）`\n\n如果你愿意，我下一步可以直接把这份内容压缩成一页超好用版本：\n\n- **版本 A：问答自检卡（10 行以内）**\n- **版本 B：给我当系统规则的 prompt 卡**\n- **版本 C：论文写作时的“禁句→安全改写”对照表**",
+  "attachments_used": [],
+  "trace_events": [
+    {
+      "tool_call_id": "call_sT0vVkDG71HjiaVijEvMr74I",
+      "tool": "read_file",
+      "args": {
+        "cwd": ".",
+        "path": "memory/concepts/B_sentence_safety.md"
+      },
+      "timestamp": "2026-03-22T18:03:55.107511",
+      "status": "completed",
+      "result": "---\nsource_assets:\n  - assets/uploads/2e43ce66_1-s2.0-S0926337324011780-main.pdf\n  - assets/uploads/9c4ca55a_Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf\n  - assets/uploads/72774bba_2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md\n  - assets/uploads/454ae4c8_（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md\ncreated: 2026-03-22\n---\n\n# B / Ce–Co3O4 相关句式安全卡\n> 用途：约束“Ce 有利于高价钴生成”这类表述的强度，避免把跨体系启发写成 Ce–Co3O4/chlorite 体系内已被证明的事实。\n## 结论总则\n- 现在最稳的上限不是“Ce 已促进高价钴生成”，而是：**Ce 的引入可能重塑 Co 位点的局部配位环境与电子结构，从而影响高价钴相关步骤。**\n- 原因是三类来源分别支持了不同层级的信息：\n  - Ce-Co3O4 深氧化文献：支持 **Ce 会调电子结构/电子传输与氧空位**；\n  - oxo-wall 文献：支持 **Ce 在另一类体系中可帮助 Co(IV)=O 可达**；\n  - chlorite 基线笔记：支持 **Co3O4/chlorite 体系中高价 Co / Co(IV)=O 与 ClO2 路线成立，且受局域结构影响**。\n- 但它们**还没有共同直接证明**：在 **Ce–Co3O4/chlorite** 条件下，Ce 一定促进了高价钴生成。\n## 可直接写\n### 安全句式\n1. **已有研究表明，Ce 的引入能够调节 Co 基材料的局域电子结构与电子传输行为，从而为氧化反应活性位点的重构提供基础。**\n2. **Ce 相关调控可能改变 Co 位点的局部配位环境与电子态分布，这为后续高氧化态反应路径的讨论提供了材料基础。**\n3. **在 Co 基催化体系中，Ce 更适合作为电子结构调节因子来讨论，而不宜直接等同于某一具体高价物种的已证实促进剂。**\n### 理由\n- Ce-Co3O4 深氧化文献直接支持的是 **Co→O→Ce 电子迁移、Co3+/氧空位增加、反应路径改变**。\n- 这一层级是“**Ce 会调位点环境**”而不是“**Ce 已在本体系促进 Co(IV)=O 生成**”。\n- 因此在导论或开题里，把 Ce 写成“电子结构调节因子”是安全的。\n## 必须加限定词\n### 推荐限定词\n- 可能\n- 提示\n- 有望\n- 或与……相关\n- 值得推测\n- 仍需验证\n- 具有体系依赖性\n### 安全句式\n1. **结合 Ce 对 Co 位点电子结构的调控作用及相关高价钴研究先例，可以推测 Ce 的引入可能提高 Co 位点参与高氧化态反应过程的倾向，但这一作用仍具有明显的体系依赖性。**\n2. **外部 Ce-Co 与 oxo-wall 研究提示，Ce 相关电子调控可能提高价钴相关路径的可达性，但该判断尚不能替代 Ce–Co3O4/chlorite 体系内的直接证据。**\n3. **在 chlorite 活化场景下，Ce 是否有利于高价钴相关步骤，目前更适合作为基于跨体系会聚得到的工作假设，而非既成事实。**\n### 理由\n- oxo-wall 文献证明的是：在 **Ce-Co TCPP/PMS** 体系里，Ce(IV)-based linkers 可通过长程电子调制降低 Co–O antibonding occupancy，从而有利于 **Co(IV)=O**。\n- chlorite 基线文献证明的是：在 **Co3O4/chlorite** 与 **OV-Co3O4/chlorite** 中，高价 Co/Co(IV)=O 路线存在，且受低配位/局域结构影响。\n- 因而“**Ce 可能有利于高价钴相关步骤**”有跨体系启发基础，但**必须保留限定词**，因为氧化剂、位点类型和反应网络都不同。\n## 现在不能写\n### 禁写句式\n1. **Ce 有利于"
+    },
+    {
+      "tool_call_id": "call_4xir60t5ZEWi6VCjR1iOpdTD",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T18:03:55.115492",
+      "status": "completed_unmatched",
+      "result": "---\nsource_assets:\n  - assets/uploads/2e43ce66_1-s2.0-S0926337324011780-main.pdf\n  - assets/uploads/9c4ca55a_Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf\n  - assets/uploads/72774bba_2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md\n  - assets/uploads/454ae4c8_（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md\ncreated: 2026-03-22\n---\n\n# B / Ce–Co3O4 相关句式安全卡\n> 用途：约束“Ce 有利于高价钴生成”这类表述的强度，避免把跨体系启发写成 Ce–Co3O4/chlorite 体系内已被证明的事实。\n## 结论总则\n- 现在最稳的上限不是“Ce 已促进高价钴生成”，而是：**Ce 的引入可能重塑 Co 位点的局部配位环境与电子结构，从而影响高价钴相关步骤。**\n- 原因是三类来源分别支持了不同层级的信息：\n  - Ce-Co3O4 深氧化文献：支持 **Ce 会调电子结构/电子传输与氧空位**；\n  - oxo-wall 文献：支持 **Ce 在另一类体系中可帮助 Co(IV)=O 可达**；\n  - chlorite 基线笔记：支持 **Co3O4/chlorite 体系中高价 Co / Co(IV)=O 与 ClO2 路线成立，且受局域结构影响**。\n- 但它们**还没有共同直接证明**：在 **Ce–Co3O4/chlorite** 条件下，Ce 一定促进了高价钴生成。\n## 可直接写\n### 安全句式\n1. **已有研究表明，Ce 的引入能够调节 Co 基材料的局域电子结构与电子传输行为，从而为氧化反应活性位点的重构提供基础。**\n2. **Ce 相关调控可能改变 Co 位点的局部配位环境与电子态分布，这为后续高氧化态反应路径的讨论提供了材料基础。**\n3. **在 Co 基催化体系中，Ce 更适合作为电子结构调节因子来讨论，而不宜直接等同于某一具体高价物种的已证实促进剂。**\n### 理由\n- Ce-Co3O4 深氧化文献直接支持的是 **Co→O→Ce 电子迁移、Co3+/氧空位增加、反应路径改变**。\n- 这一层级是“**Ce 会调位点环境**”而不是“**Ce 已在本体系促进 Co(IV)=O 生成**”。\n- 因此在导论或开题里，把 Ce 写成“电子结构调节因子”是安全的。\n## 必须加限定词\n### 推荐限定词\n- 可能\n- 提示\n- 有望\n- 或与……相关\n- 值得推测\n- 仍需验证\n- 具有体系依赖性\n### 安全句式\n1. **结合 Ce 对 Co 位点电子结构的调控作用及相关高价钴研究先例，可以推测 Ce 的引入可能提高 Co 位点参与高氧化态反应过程的倾向，但这一作用仍具有明显的体系依赖性。**\n2. **外部 Ce-Co 与 oxo-wall 研究提示，Ce 相关电子调控可能提高价钴相关路径的可达性，但该判断尚不能替代 Ce–Co3O4/chlorite 体系内的直接证据。**\n3. **在 chlorite 活化场景下，Ce 是否有利于高价钴相关步骤，目前更适合作为基于跨体系会聚得到的工作假设，而非既成事实。**\n### 理由\n- oxo-wall 文献证明的是：在 **Ce-Co TCPP/PMS** 体系里，Ce(IV)-based linkers 可通过长程电子调制降低 Co–O antibonding occupancy，从而有利于 **Co(IV)=O**。\n- chlorite 基线文献证明的是：在 **Co3O4/chlorite** 与 **OV-Co3O4/chlorite** 中，高价 Co/Co(IV)=O 路线存在，且受低配位/局域结构影响。\n- 因而“**Ce 可能有利于高价钴相关步骤**”有跨体系启发基础，但**必须保留限定词**，因为氧化剂、位点类型和反应网络都不同。\n## 现在不能写\n### 禁写句式\n1. **Ce 有利于"
+    },
+    {
+      "tool_call_id": "call_O9OkqDNQrOTVeacuePfoInL2",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T18:03:55.115492",
+      "status": "completed_unmatched",
+      "result": "---\nsource_assets:\n  - assets/uploads/44a9f338_2024-SACs&taloring D band-high-valent metal-oxo species - 文献笔记.md\n  - assets/uploads/4f5e4269_2024-SACs&taloring D band-high-valent metal-oxo species.pdf\n  - assets/uploads/34efc7a9_High-valent metal-oxo species in catalytic oxidations for environmental.pdf\n  - assets/uploads/454ae4c8_（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md\ncreated: 2026-03-22\n---\n\n# B / d-band 文献到 chlorite 体系的桥接卡\n> 用途：把 2024 d-band / high-valent metal-oxo 文献与 2024 high-valent metal-oxo review 收束成一张“可迁移但不硬套”的概念卡，服务于 Co3O4 / chlorite 主线的后续机制设计与证据表达。\n## 可迁移的设计变量\n### 1) 局域电子结构是上游变量，不要只看“是不是 Co”\n- d-band 文献的核心不是单纯比较金属种类，而是把 **active-site electronic structure** 当作上游控制变量。\n- 对 chlorite 体系，可迁移的问题应写成：\n  - 哪类 Co 位点更容易形成或稳定高价 Co-oxo？\n  - Ce 掺杂、氧空位、低配位、载体耦合是否会改变 Co 位点电子态与反应性？\n- **可说法：** 电子结构调控值得作为 chlorite 体系的设计维度。\n- **不可升级为既有结果：** 目前不能说 chlorite 体系已经由 d-band center 决定。\n### 2) 氧化剂与活性位的结合强度是关键中间变量\n- d-band 文献给出的主线是：\n  - `d-band center → PMS binding strength → high-valent metal-oxo reactivity → reaction outcome`\n- 可迁移到 chlorite 的不是“PMS 的具体规律”，而是这个中介框架：\n  - `局域电子结构 → chlorite 吸附/活化方式 → Co(IV)/Co=O 与 ClO2 的生成和分流`\n- 对 chlorite 体系，值得优先思考：\n  - ClO2- 的吸附构型\n  - Co 位点电子贫/富程度\n  - 表面 O / OH / Cl 相关中间体是否改变 OAT 或 ET/PCET 路径\n### 3) pH 是机制分流变量，而不只是优化条件\n- review 明确指出 high-valent metal-oxo 体系 **高度受 pH 影响**。\n- chlorite 相关文献笔记也提示：pH 会改变 Co(IV) 与 ClO2 的相对贡献，以及氯物种相关路径。\n- 因此在 chlorite 体系中，pH 应作为一级变量考察：\n  - 低/中/高 pH 下主导氧化物种是否切换？\n  - pH 改变的是 chlorite 活化、Co(IV)=O 稳定性，还是 ClO2 生成/逸散？\n### 4) 底物电子性质可以作为判别性探针维度\n- d-band 文献说明高价 metal-oxo 的氧化能力与底物反应去向相关。\n- 对 chlorite 体系，可迁移的不是 polymerization 结论本身，而是实验设计思路：\n  - 用给电子/吸电子底物比较反应差异，测试体系是否表现出高价 Co-oxo 式选择性氧化特征。\n- 这类变量适合进入后续实验矩阵，而不宜直接写成已有规律。\n### 5) “选择性氧化/抗干扰/pH 敏感”可作为 high-valent 路线判别框架\n- review 将 high-valent metal-oxo 的共性概括为：\n  - selective oxidation\n  - strong anti-interference ability\n  - highly affected by solution pH\n- 对 chlorite 体系，这三点适合转成待验证问题：\n  - 是否偏选择性氧化而非自由基泛攻击？\n "
+    },
+    {
+      "tool_call_id": "call_qFwPNSMG6E31dNQECHDEn8MJ",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T18:03:55.115492",
+      "status": "completed_unmatched",
+      "result": "---\nsource_assets:\n  - assets/uploads/2e43ce66_1-s2.0-S0926337324011780-main.pdf\n  - assets/uploads/91550f0f_Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf\n  - assets/uploads/9c4ca55a_Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf\n  - assets/uploads/44a9f338_2024-SACs&taloring D band-high-valent metal-oxo species - 文献笔记.md\n  - assets/uploads/454ae4c8_（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md\n  - assets/uploads/72774bba_2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md\ncreated: 2026-03-22\n---\n\n# B / Ce 与电子结构文献向 chlorite 主线的迁移卡\n> 用途：为 Ce / 电子结构相关外部文献在 Co3O4 / chlorite 故事中的使用边界提供一个可直接调用的分层卡，避免把“外部先例”误写成“本体系已证实机制”。\n## 使用原则\n- 这张卡只回答：**哪些外部信息可直接作为正文引文、哪些只能作旁证、哪些仍需本体系自己补证据。**\n- 按 `memory/identity/project.md` 的判据，凡涉及 **ClO2 生成**、**Co(IV) / Co=O 参与**、**OAT / PCET** 的正文结论，都不能由外部 Ce / PMS / VOC 文献替代证明。\n- 因此这里的“可直接援引”指的是：**可直接作为背景、设计逻辑或讨论起点引用**，不等于可直接升级为“本体系已成立事实”。\n## 文献对象\n1. `assets/uploads/2e43ce66_1-s2.0-S0926337324011780-main.pdf`\n   - Ce modified Co3O4 用于 VOC 深氧化\n   - 关键词：Ce modification、internal electron transport、Co→O→Ce、oxygen vacancies、oxidation pathway\n2. `assets/uploads/91550f0f_Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf`\n   - 4f–2p–3d gradient orbital coupling 的类芬顿论文\n   - 实际是 **La–O–Co** 界面，不是 Ce–O–Co\n   - 关键词：eg occupancy、PMS adsorption、Bader charge transfer、Co(IV)=O barrier\n3. `assets/uploads/9c4ca55a_Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf`\n   - Ce-Co lamellar membrane / oxo-wall / Co(IV)=O\n   - 关键词：Ce(IV)-based linkers、long-range electronic modulation、Co–O antibonding occupancy、oxo-wall\n## 可直接援引\n### 1) Ce 在 Co 基体系"
+    },
+    {
+      "tool_call_id": "call_qFwPNSMG6E31dNQECHDEn8MJ",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-22T18:03:55.115492",
+      "status": "completed_unmatched",
+      "result": "---\nsource_assets:\n  - assets/uploads/7ed830e3_（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf\n  - assets/uploads/3c972c4c_【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf\n  - assets/uploads/454ae4c8_（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md\n  - assets/uploads/72774bba_2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md\ncreated: 2026-03-22\n---\n\n# B / Co3O4 活化亚氯酸盐基线机制对照卡\n\n> 用途：给组会/写作快速回答“2023 EST 与 2024 PNAS 在 Co3O4 活化亚氯酸盐机制上有哪些共同主线、关键差异、当前证据边界”。\n\n## 共同机制\n\n1. **共同主线：先形成高价 Co(IV)=O，再推动 ClO2 生成。**  \n   - 2023 EST 将该过程拆成两步：**OAT during Co(IV) formation** 与 **Co(IV)-mediated ClO2 generation**。  \n   - 2024 PNAS 则从位点角度表述：chlorite 在低配位 Co 位点附近发生 O-Cl 裂解，O 原子转移到 Co 上形成 `≡Co(IV)=O`，随后促进 `ClO2` 形成。  \n   - **判断级别：高。**\n\n2. **Co(IV)=O 与 ClO2 都不是旁观者，而是都参与后续有机物氧化。**  \n   - 2023 EST 明确支持双物种共同贡献，且贡献会随 pH 变化。  \n   - 2024 PNAS 的 SI 也给出 `R_ClO2` 与 `R_≡Co(IV)=O` 的贡献分摊框架。  \n   - **判断级别：高。**\n\n3. **质子/酸性条件对 chlorite 活化具有促进作用。**  \n   - 2023 EST 将其概括为 **proton enhancement effect**，并用于解释 Co(IV) 与 ClO2 的更快生成。  \n   - 2024 PNAS/SI 也沿用这一方向解释 pH 对体系活化和降解表现的影响。  \n   - **判断级别：高，但 2024 的重点不在这里。**\n\n## 关键差异\n\n### 1) 研究重心不同\n- **2023 EST：化学步骤逻辑。**  \n  核心是把基线体系讲清楚：OAT、PCET、质子增强、pH 如何改变 Co(IV)=O / ClO2 的表观贡献。\n- **2024 PNAS：结构-位点起源。**  \n  核心是说明为什么引入氧空位（OV）后，会产生更适合活化 chlorite 的低配位 Co 位点，从而强化同一条主线。\n\n### 2) 对 PCET 的强调程度不同\n- **2023 EST：明确把 ClO2 生成步骤表述为 Co(IV)-mediated PCET。**\n- **2024 PNAS：本轮已核对材料更直接强调 electron extraction / 位点电子结构调控，并未像 2023 EST 那样把 PCET 作为标题级标签反复展开。**\n- **使用建议：** 讲基线机制时可把 PCET 作为 **2023 EST 的原文主张**；讲 2024 PNAS 时更适合说“其结果与该主线相兼容，但论文创新点更偏低配位 Co 与 OV”。\n\n### 3) 对低配位 Co 的处理不同\n- **2023 EST：** 不以“低配位 Co”作为核心前提。\n- **2024 PNAS：** 低配位 Co 是核心结构起点；OV 诱导的低配位 Co 被用于解释 chlorite 锚定、O 原子捕获与 `≡Co(IV)=O` 快速形成。\n- **结论：** “低配位 Co”是 **2024 的强化解释**，不是当前已被 2023 EST "
+    }
+  ],
+  "created_paths": [],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/af5f020966ad",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "B-S008-T02-C1",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中 4 个，达到阈值。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "B-S008-T02-C2",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "artifact_result": null,
+  "judge_result": {
+    "criterion_id": "B-S008-T02-C3",
+    "score": 100.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 4 个关键术语",
+      "检测到工具使用: read_file"
+    ],
+    "risks": [],
+    "missing": [],
+    "raw_text": "你是一名长期从事环境催化、亚氯酸盐活化、高价金属氧物种机理研究的评审专家。请只依据【用户问题】【上传文件列表】【assistant 回复】【trace 摘要】【预期 focus】进行评分，不要凭领域常识替模型补答案。你要重点检查五件事：第一，回答是否严格区分论文原文、个人笔记、以及从旁支体系借来的启发；第二，是否真正抓住 Co3O4/chlorite 基线机制的 OAT、PCET、ClO2/Co(IV)=O 双物种与 pH/质子增强等关键关系；第三，是否把 selective oxidation、PMS/Fenton-like、Ce 电子结构论文的迁移边界说清楚；第四，是否在证据不足时主动保留限定词；第五，是否围绕用户要求的对象（概念卡、对照表、handoff）组织内容。请输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_B_session_008_false_analogy_redflags\",\n  \"turn_id\": 2,\n  \"user_input\": \"再给我一个负面清单：以后如果我问你类似问题，哪些句式一出现你就应该先提醒‘这是 analogical support，不是 chlorite 直接证据’？我想把这当成问答时的自检模板。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"## Context Trace\\n本轮实际调用并读取了这些文件：\\n\\n- `memory/concepts/B_sentence_safety.md`（读取 2 次）\\n- `memory/concepts/B_dband_bridge.md`\\n- `memory/concepts/B_ce_transferability.md`\\n- `memory/concepts/B_baseline_compare.md`\\n\\n---\\n\\n## Rationale\\n这次你的需求不是再做一次文献总结，而是要一个**问答时自动踩刹车的句式模板**。  \\n我主要依据这 4 份已读卡片做收束：\\n\\n- `B_sen"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [
+      "已经证明",
+      "直接说明"
+    ],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": true
+  },
+  "expected_artifacts": [],
+  "temporary_expectations": null,
+  "provisional_turn_score": 100.0,
+  "final_turn_score": 100.0
+}

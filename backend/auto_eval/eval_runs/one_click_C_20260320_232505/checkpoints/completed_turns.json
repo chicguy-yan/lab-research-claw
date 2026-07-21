@@ -1,0 +1,82 @@
+{
+  "run_id": "one_click_C_20260320_232505",
+  "completed_turns": [
+    "scenario_C/scenario_C_session_001_bootstrap/turn_1",
+    "scenario_C/scenario_C_session_001_bootstrap/turn_2",
+    "scenario_C/scenario_C_session_001_bootstrap/turn_3",
+    "scenario_C/scenario_C_session_002_stage2_checklist/turn_1",
+    "scenario_C/scenario_C_session_002_stage2_checklist/turn_2",
+    "scenario_C/scenario_C_session_002_stage2_checklist/turn_3",
+    "scenario_C/scenario_C_session_003_screening_matrix/turn_1",
+    "scenario_C/scenario_C_session_003_screening_matrix/turn_2",
+    "scenario_C/scenario_C_session_003_screening_matrix/turn_3",
+    "scenario_C/scenario_C_session_004_why_co3o4/turn_1",
+    "scenario_C/scenario_C_session_004_why_co3o4/turn_2",
+    "scenario_C/scenario_C_session_004_why_co3o4/turn_3",
+    "scenario_C/scenario_C_session_005_pmso_clo2/turn_1",
+    "scenario_C/scenario_C_session_005_pmso_clo2/turn_2",
+    "scenario_C/scenario_C_session_005_pmso_clo2/turn_3",
+    "scenario_C/scenario_C_session_006_epr_strategy/turn_1",
+    "scenario_C/scenario_C_session_006_epr_strategy/turn_2",
+    "scenario_C/scenario_C_session_006_epr_strategy/turn_3",
+    "scenario_C/scenario_C_session_007_quencher_matrix/turn_1",
+    "scenario_C/scenario_C_session_007_quencher_matrix/turn_2",
+    "scenario_C/scenario_C_session_007_quencher_matrix/turn_3",
+    "scenario_C/scenario_C_session_008_ce_task_board/turn_1",
+    "scenario_C/scenario_C_session_008_ce_task_board/turn_2",
+    "scenario_C/scenario_C_session_008_ce_task_board/turn_3",
+    "scenario_C/scenario_C_session_009_chapter_dependency/turn_1",
+    "scenario_C/scenario_C_session_009_chapter_dependency/turn_2",
+    "scenario_C/scenario_C_session_009_chapter_dependency/turn_3",
+    "scenario_C/scenario_C_session_010_handoff/turn_1",
+    "scenario_C/scenario_C_session_010_handoff/turn_2",
+    "scenario_C/scenario_C_session_010_handoff/turn_3"
+  ],
+  "scenario_states": {
+    "scenario_C": {
+      "workspace_id": "eval-scenario_c-260320_2325",
+      "session_backend_ids": {
+        "scenario_C_session_001_bootstrap": {
+          "backend_session_id": "__bootstrap__",
+          "trace_count": 0
+        },
+        "scenario_C_session_002_stage2_checklist": {
+          "backend_session_id": "6dcb9009c5de",
+          "trace_count": 21
+        },
+        "scenario_C_session_003_screening_matrix": {
+          "backend_session_id": "6d599d16a5ee",
+          "trace_count": 11
+        },
+        "scenario_C_session_004_why_co3o4": {
+          "backend_session_id": "c160e23096f9",
+          "trace_count": 14
+        },
+        "scenario_C_session_005_pmso_clo2": {
+          "backend_session_id": "017ec24b908b",
+          "trace_count": 16
+        },
+        "scenario_C_session_006_epr_strategy": {
+          "backend_session_id": "9ee610d403e5",
+          "trace_count": 18
+        },
+        "scenario_C_session_007_quencher_matrix": {
+          "backend_session_id": "f368dc373b7b",
+          "trace_count": 21
+        },
+        "scenario_C_session_008_ce_task_board": {
+          "backend_session_id": "d12279c7e99f",
+          "trace_count": 14
+        },
+        "scenario_C_session_009_chapter_dependency": {
+          "backend_session_id": "17349ec31669",
+          "trace_count": 15
+        },
+        "scenario_C_session_010_handoff": {
+          "backend_session_id": "d200034c4edf",
+          "trace_count": 28
+        }
+      }
+    }
+  }
+}

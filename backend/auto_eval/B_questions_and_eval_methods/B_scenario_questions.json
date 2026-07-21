@@ -1,0 +1,1073 @@
+[
+  {
+    "scenario_id": "scenario_B",
+    "scenario_name": "文献与Concept闭环评测",
+    "scenario_description": "围绕 Co3O4/亚氯酸盐基线机制、Ce-Co3O4 迁移、high-valent metal-oxo/selective oxidation bridge 构造的 literature closure benchmark，重点评测 source-layer 区分、概念沉淀、跨文献迁移边界与反幻觉能力。",
+    "benchmark_focus": [
+      "基线文献对比（EST vs PNAS）",
+      "d-band / selective oxidation 文献向 chlorite 主线的安全迁移",
+      "Ce / electronic structure 文献的旁证与禁区",
+      "高价钴证明方法的证据分层",
+      "长期 workspace memory 下的 concept/pack 沉淀与 handoff"
+    ],
+    "source_package_root": "B_文献与Concept",
+    "session_reset_semantics": "每个新 session 代表清空对话上下文，但沿用同一个 workspace，因此同 workspace 下的 memory/concepts/tasks/packs 仍可被后续 session 读取和复用。",
+    "workspace_init": {
+      "workspace_display_name_template": "[EVAL][B] literature_concept benchmark {run_id}",
+      "workspace_description": "围绕 Co3O4/亚氯酸盐基线机制、Ce-Co3O4 迁移、high-valent metal-oxo/selective oxidation bridge 构造的 literature closure benchmark，重点评测 source-layer 区分、概念沉淀、跨文献迁移边界与反幻觉能力。",
+      "workspace_kind": "literature_concept",
+      "bootstrap_required": true,
+      "bootstrap_route": "bootstrap",
+      "bootstrap_session_id": "__bootstrap__",
+      "create_agent_semantics": "通过 bootstrap session 完成 workspace 初始化与 seed pack 写入；不要求修改后端 create_agent 逻辑。",
+      "recommended_artifact_namespace": {
+        "concepts": "memory/concepts",
+        "tasks": "memory/tasks",
+        "packs": "memory/packs"
+      }
+    },
+    "file_coverage_assertion": {
+      "must_upload_all_files_at_least_once": true,
+      "all_source_files": [
+        "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf",
+        "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf",
+        "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species - 文献笔记.md",
+        "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species.pdf",
+        "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf",
+        "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260305和师兄探讨过的主逻辑参考文献/Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf",
+        "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf",
+        "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/High-valent metal-oxo species in catalytic oxidations for environmental.pdf",
+        "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md",
+        "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md"
+      ]
+    },
+    "sessions": [
+      {
+        "session_id": "scenario_B_session_001_bootstrap",
+        "session_title": "[EVAL][B] bootstrap literature concept workspace",
+        "session_type": "bootstrap",
+        "offset_hours": 0,
+        "route": "bootstrap",
+        "notes": "该 session 必须复用 __bootstrap__，并在完成后可被重命名为 [EVAL][B][BOOTSTRAP]。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "先做一个 bootstrap 目标澄清。我的当前研究目标还是围绕 Co3O4/亚氯酸盐主线，先把这个 workspace 搭成一个能承接 literature/concept 闭环的容器。背景信息是：后面我还会继续推进基线机制、Ce/电子结构迁移、以及 high-valent metal-oxo / selective oxidation bridge 这几条线，所以这里必须先把容器职责、来源层级和后续阅读入口定清楚。你先根据这些目标和背景，复述你理解的 workspace 职责、优先承接对象，以及你准备怎么避免把它做成泛泛文献总结。",
+            "user_upload": [],
+            "key_terms": [
+              "研究目标",
+              "背景信息",
+              "literature/concept 容器",
+              "来源层级",
+              "不是泛泛文献总结"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须先接住用户给出的研究目标、背景信息和 workspace 边界，明确这是 literature/concept 容器，而不是泛泛文献总结入口。",
+            "trace_focus": "这一轮重点是 bootstrap scope alignment，可以不急着大量读文件，但要明确后续会如何进入阅读与证据分层。",
+            "llm_focus": "判断模型是否先理解容器职责与背景，再进入后续具体 literature 问题。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "bootstrap",
+            "eval_tags": [
+              "bootstrap_goal_alignment",
+              "scope_seed"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "这个 workspace 我想定义成一个`文献/Concept 容器`，核心不是做实验排期，而是先把亚氯酸盐活化主线的 literature closure 搭起来。你先根据我上传的两份文献笔记 + 一份 2024 PNAS 的 SI，判断这个容器应该先从“基线机制梳理”还是“Ce / 电子结构迁移”起手，并说明你会把`论文原文`和`我的笔记`分别放在什么证据层级。",
+            "user_upload": [
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf"
+            ],
+            "key_terms": [
+              "文献/Concept 容器",
+              "基线机制",
+              "论文原文",
+              "我的笔记",
+              "证据层级",
+              "亚氯酸盐活化"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 workspace 定义成 literature/concept 容器，并明确论文原文与笔记是两个不同证据层级。",
+            "trace_focus": "bootstrap 阶段至少应读取上传的 markdown；如果引用 SI 细节，应体现对 PDF 的进一步解析，不能只凭文件名猜测。",
+            "llm_focus": "判断回答是否真正围绕 literature closure 的对象定义，而不是把它误导成实验 task 或写作 pack。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "bootstrap_scope_alignment",
+              "source_layering"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "再加一个限制：这个容器的第一目标不是把所有文献都“总结一遍”，而是先形成一个可靠的阅读入口。请告诉我：此刻应该先读什么、暂时不要读什么、为什么，并且提醒我哪些结论如果只看笔记很容易被你讲过头。",
+            "user_upload": [],
+            "key_terms": [
+              "先读什么",
+              "暂时不要读什么",
+              "为什么",
+              "只看笔记容易讲过头",
+              "阅读入口"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须输出 selective reading 策略，并指出只看笔记可能导致的过度外推。",
+            "trace_focus": "本轮应体现 skip-by-design，不应默认生成大篇 thesis/experiment 产物。",
+            "llm_focus": "判断模型是否理解 bootstrap 阶段的任务是建立阅读入口，而不是全面总结。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "bootstrap_minimalism",
+              "anti_over_summary"
+            ]
+          },
+          {
+            "turn_id": 4,
+            "user_input": "可以，确认初始化。完成后请把 seed pack 存成 `memory/packs/PACK_bootstrap_kickoff.md`，至少包含三段：`这个包测什么`、`当前最值得优先追的来源`、`下一步先读哪一组文件`。",
+            "user_upload": [],
+            "key_terms": [
+              "确认初始化",
+              "这个包测什么",
+              "当前最值得优先追的来源",
+              "下一步先读哪一组文件",
+              "PACK_bootstrap_kickoff"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要完成 bootstrap，并写出服务 literature closure 的 seed pack。",
+            "trace_focus": "应写入 memory/packs/PACK_bootstrap_kickoff.md，并尽量携带 source_assets frontmatter。",
+            "llm_focus": "判断生成的 seed pack 是否真正服务 benchmark 初始化，而不是泛泛的项目简介。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/PACK_bootstrap_kickoff.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "这个包测什么",
+                  "当前最值得优先追的来源",
+                  "下一步先读哪一组文件"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "bootstrap_completion",
+              "artifact_generation"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_B_session_002_baseline_compare",
+        "session_title": "[EVAL][B] 2023 EST vs 2024 PNAS baseline mechanism",
+        "session_type": "normal",
+        "offset_hours": 12,
+        "route": "default",
+        "notes": "比较基线 paper pair，并产出第一张核心 concept 卡。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我现在要把“Co3O4 活化亚氯酸盐”的基线机制讲清楚。请你结合 2023 EST 和 2024 PNAS，把这两篇里关于 OAT、PCET、质子增强、低配位 Co、ClO2 / Co(IV)=O 双物种贡献的关系，整理成一个`同与不同`对照表。不要只写结论，要提醒我哪些点来自论文，哪些点只是我笔记里的压缩表述。",
+            "user_upload": [
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md"
+            ],
+            "key_terms": [
+              "2023 EST",
+              "2024 PNAS",
+              "OAT",
+              "PCET",
+              "质子增强",
+              "低配位 Co",
+              "ClO2",
+              "Co(IV)=O",
+              "同与不同"
+            ],
+            "forbidden_terms": [
+              "PMS直接活化",
+              "芬顿主线"
+            ],
+            "content_focus": "必须完成两篇基线文献的同异对照，并清楚区分 paper claim 与 note claim。",
+            "trace_focus": "应读取至少一份 note，并对 PDF 做适度核对；深度机制对比不能只靠 quick_summary。",
+            "llm_focus": "判断比较是否抓住 chlorite 体系真正的公共骨架与差异，而不是简单堆术语。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "baseline_compare",
+              "paper_note_separation"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "如果我要在组会上写一句“为什么这里不是简单照搬 PMS 体系”，你帮我写成一个三句短段落：第一句讲亚氯酸盐基线，第二句讲和 PMS/Fenton-like 类体系的相似处，第三句讲不能直接套用的边界。每句后面都标一下更偏向`原文`还是`笔记推演`。",
+            "user_upload": [],
+            "key_terms": [
+              "不是简单照搬 PMS 体系",
+              "亚氯酸盐基线",
+              "相似处",
+              "不能直接套用的边界",
+              "原文",
+              "笔记推演"
+            ],
+            "forbidden_terms": [
+              "已经完全证明 Ce 一定促进高价钴"
+            ],
+            "content_focus": "必须写出一个边界清晰的三句短段落，并显式标注原文/推演来源。",
+            "trace_focus": "本轮可复用上轮已读取资料，也可复读 memory；不应凭空新增未支持的体系比较。",
+            "llm_focus": "判断回答能否在迁移与克制之间保持平衡，避免将 analogies 说成 established fact。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "safe_transfer_sentence",
+              "boundary_control"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮沉淀成一张概念卡，保存到 `memory/concepts/B_baseline_compare.md`。至少要有：`共同机制`、`关键差异`、`还不能下结论的点` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "概念卡",
+              "共同机制",
+              "关键差异",
+              "还不能下结论的点",
+              "B_baseline_compare"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把基线机制比较沉淀成可复用的 concept card。",
+            "trace_focus": "应写入 memory/concepts/B_baseline_compare.md，且内容要与本 session 的上传来源绑定。",
+            "llm_focus": "判断 concept card 是否既可复用，又保留了不确定性边界。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "concept",
+                "path": "memory/concepts/B_baseline_compare.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "共同机制",
+                  "关键差异",
+                  "还不能下结论的点"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "concept_card"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_B_session_003_dband_bridge",
+        "session_title": "[EVAL][B] d-band and chlorite bridge",
+        "session_type": "normal",
+        "offset_hours": 24,
+        "route": "default",
+        "notes": "测试从 selective oxidation / d-band 文献向 chlorite 问题迁移时的边界意识。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我接下来想看一篇讲 d-band center 和高价 metal-oxo 的文献，但我最担心的是你把它直接硬套到亚氯酸盐。请结合这篇 d-band 文献、对应笔记、以及那篇 high-valent metal-oxo review，告诉我：哪些设计变量是值得迁移到 chlorite 体系思考的，哪些结论只能停留在“启发”，绝对不能当作我的既有结果来讲。",
+            "user_upload": [
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species - 文献笔记.md",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/High-valent metal-oxo species in catalytic oxidations for environmental.pdf"
+            ],
+            "key_terms": [
+              "d-band center",
+              "high-valent metal-oxo",
+              "设计变量",
+              "值得迁移",
+              "只能停留在启发",
+              "chlorite 体系"
+            ],
+            "forbidden_terms": [
+              "已经证明适用于亚氯酸盐"
+            ],
+            "content_focus": "必须把 d-band 文献拆成可迁移设计变量与不可直接套用的结论两层。",
+            "trace_focus": "应读取笔记并对 PDF/review 做核对；若给出具体证据强弱，应体现 trace 中存在 read_file / binary parse 行为。",
+            "llm_focus": "判断回答是否真正理解 literature bridge 的边界，而不是把 selective oxidation 结果误写成 chlorite 证据。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "bridge_design_variables",
+              "anti_false_transfer"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再进一步：如果我只想从 review 里抽出三类“以后可以拿来证明 Co(IV)=O 的方法学”，你帮我排一个强弱顺序，并说清楚在我们这个 chlorite 语境里，哪一类更像主证、哪一类只能算支持证据。",
+            "user_upload": [],
+            "key_terms": [
+              "review",
+              "三类方法学",
+              "证明 Co(IV)=O",
+              "强弱顺序",
+              "主证",
+              "支持证据"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须给出方法学强弱排序，并贴合 chlorite 体系来解释主证/支持证据。",
+            "trace_focus": "本轮可复用前述 review 读取结果，也可读取之前概念卡；不要凭空列出未被资料支撑的方法。",
+            "llm_focus": "判断排序是否合理、是否符合环境催化中高价金属氧物种的证据分层。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "method_ranking",
+              "evidence_strength"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮收束成 `memory/concepts/B_dband_bridge.md`，至少分成：`可迁移的设计变量`、`不可直接套用的边界`、`候选证明手段` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "可迁移的设计变量",
+              "不可直接套用的边界",
+              "候选证明手段",
+              "B_dband_bridge"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 d-band bridge 的可迁移内容和边界一起沉淀下来。",
+            "trace_focus": "应写入 memory/concepts/B_dband_bridge.md，并优先附带 source_assets。",
+            "llm_focus": "判断产物是否把 bridge 和 boundary 同时保存，而非只留下鼓舞性结论。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "concept",
+                "path": "memory/concepts/B_dband_bridge.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "可迁移的设计变量",
+                  "不可直接套用的边界",
+                  "候选证明手段"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "bridge_concept_card"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_B_session_004_ce_transferability",
+        "session_title": "[EVAL][B] Ce-Co3O4 transferability",
+        "session_type": "normal",
+        "offset_hours": 36,
+        "route": "default",
+        "notes": "测试 Ce-Co3O4 / gradient orbital coupling / oxo-wall 三条旁支如何回到 chlorite 主线。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我手里现在有三篇 Ce / 电子结构相关文献：一篇是 Ce-Co3O4 深氧化 VOC，一篇是 4f–2p–3d orbital coupling 的类芬顿论文，一篇是最近讲 Ce-Co lamellar membrane 打破 oxo-wall 的高价 Co 论文。你先别帮我下结论，先做一张`迁移分层表`：哪些信息可以直接援引到我的 chlorite 故事里，哪些只能算间接旁证，哪些目前根本不该写进正文。",
+            "user_upload": [
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260305和师兄探讨过的主逻辑参考文献/Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf"
+            ],
+            "key_terms": [
+              "Ce-Co3O4",
+              "4f–2p–3d",
+              "oxo-wall",
+              "迁移分层表",
+              "直接援引",
+              "间接旁证",
+              "目前不该写"
+            ],
+            "forbidden_terms": [
+              "已经在我的体系中证明"
+            ],
+            "content_focus": "必须对三篇 Ce/电子结构文献做迁移分层，而不是给出笼统的鼓舞性结论。",
+            "trace_focus": "三篇都是 PDF；如果回答涉及具体机理或表征，trace 应体现对二进制文件的进一步解析或谨慎限定。",
+            "llm_focus": "判断回答是否能把 direct support / indirect support / speculation 区分清楚。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "ce_transferability",
+              "source_strength_partition"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "如果我想把一句话写得相对安全一点，比如“Ce 相关调控可能通过低配位 / 电子再分布 / 抗键占据变化，提高高价钴形成概率”，你帮我拆成一个`最小证据链`：每一环需要什么证据、哪一环现在还缺失。",
+            "user_upload": [],
+            "key_terms": [
+              "最小证据链",
+              "低配位",
+              "电子再分布",
+              "抗键占据变化",
+              "提高高价钴形成概率",
+              "哪一环现在还缺失"
+            ],
+            "forbidden_terms": [
+              "已经直接证明"
+            ],
+            "content_focus": "要把安全句子拆成最小证据链，并明确当前缺口。",
+            "trace_focus": "应复用上轮解析结果，必要时也可引用已有 concept card；不能忽视 chlorite 场景中的缺口。",
+            "llm_focus": "判断回答是否把 speculative leap 还原成可执行的证据需求。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "evidence_chain_decomposition",
+              "safe_claim_writing"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "请把这轮沉淀到 `memory/concepts/B_ce_transferability.md`，至少包含：`可直接援引`、`只能作为旁证`、`本体系仍缺的实验` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "可直接援引",
+              "只能作为旁证",
+              "本体系仍缺的实验",
+              "B_ce_transferability"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要生成一张专门处理 Ce 迁移边界的 concept card。",
+            "trace_focus": "应写入 memory/concepts/B_ce_transferability.md，并与本轮 PDF 来源建立 source_assets 关联。",
+            "llm_focus": "判断产物能否在支持与猜想之间保持清晰层次。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "concept",
+                "path": "memory/concepts/B_ce_transferability.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "可直接援引",
+                  "只能作为旁证",
+                  "本体系仍缺的实验"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "ce_concept_card"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_B_session_005_proof_methods",
+        "session_title": "[EVAL][B] proof methods for high-valent cobalt",
+        "session_type": "normal",
+        "offset_hours": 48,
+        "route": "default",
+        "notes": "测试 proof-of-Co(IV)=O 的证据分层与最小可行闭环。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "现在只聚焦“怎么证明高价钴”。请你把 EST、oxo-wall 论文、以及 high-valent metal-oxo review 里涉及到的证明手段分成`直接证据`、`高可信间接证据`、`背景支持证据`三层，并给我一个排序理由。重点提醒我：哪些方法在 chlorite 体系里最像主证，哪些方法最容易被滥用成‘看起来像证明’。",
+            "user_upload": [
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/High-valent metal-oxo species in catalytic oxidations for environmental.pdf"
+            ],
+            "key_terms": [
+              "直接证据",
+              "高可信间接证据",
+              "背景支持证据",
+              "排序理由",
+              "chlorite 体系",
+              "最容易被滥用"
+            ],
+            "forbidden_terms": [
+              "任何表征单独就足够"
+            ],
+            "content_focus": "需要围绕高价钴证明方法做三层分级，并指出滥用风险。",
+            "trace_focus": "涉及 review + PDF 细节，trace 中应看到对原始文件的读取/解析，而非单纯凭印象回答。",
+            "llm_focus": "判断证据分级是否符合材料化学中 high-valent cobalt 的证明逻辑。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "proof_method_layering",
+              "anti_single_evidence"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "如果只给你 7 天窗口做一个“最小证明闭环”，你会怎么排：PMSO / 同位素 / EPR / 反应选择性 / 其他支持证据？请给一个先后顺序，并说清楚每一步要回答的问句是什么。",
+            "user_upload": [],
+            "key_terms": [
+              "7天窗口",
+              "最小证明闭环",
+              "PMSO",
+              "同位素",
+              "EPR",
+              "反应选择性",
+              "先后顺序",
+              "要回答的问句"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把证明闭环排成时间顺序，并说明每一步的核心问句。",
+            "trace_focus": "本轮应复用上轮的证据分层，也可引用已有 memory/concepts；不要把不具备条件的方法硬塞进最小闭环。",
+            "llm_focus": "判断方案是否真正最小可行，而不是把所有方法都堆进去。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "minimal_proof_closure",
+              "prioritization"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "请把结论收进 `memory/concepts/B_proof_methods.md`，至少要有：`直接证据`、`间接证据`、`最小闭环组合` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "直接证据",
+              "间接证据",
+              "最小闭环组合",
+              "B_proof_methods"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把高价钴证明方法沉淀成后续可复用的概念卡。",
+            "trace_focus": "应写入 memory/concepts/B_proof_methods.md，并保证 sections 完整。",
+            "llm_focus": "判断 concept card 是否对后续实验/写作都可复用。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "concept",
+                "path": "memory/concepts/B_proof_methods.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "直接证据",
+                  "间接证据",
+                  "最小闭环组合"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "proof_methods_card"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_B_session_006_ce_sentence_safety",
+        "session_title": "[EVAL][B] safety of Ce-promotes-high-valent-Co sentence",
+        "session_type": "normal",
+        "offset_hours": 60,
+        "route": "default",
+        "notes": "该 session 主测 claim calibration 和 anti-hallucination。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我现在最怕的是把一句‘Ce 有利于高价钴生成’说得过满。请你根据 Ce-Co3O4 深氧化、oxo-wall 论文、以及我前面基线 chlorite 笔记的内容，把这句话拆成三栏：`已建立`、`可推测但必须加限定词`、`现在不能写`。每一栏都要给一个理由。",
+            "user_upload": [
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md"
+            ],
+            "key_terms": [
+              "Ce 有利于高价钴生成",
+              "已建立",
+              "可推测但必须加限定词",
+              "现在不能写",
+              "理由"
+            ],
+            "forbidden_terms": [
+              "已经在 chlorite 体系直接证实"
+            ],
+            "content_focus": "必须把一句危险表述拆成 established / qualified speculation / forbidden 三层。",
+            "trace_focus": "若回答引用 oxo-wall 或 Ce-Co3O4 的具体表征，应体现对 PDF 的进一步处理或明确不确定边界。",
+            "llm_focus": "判断模型是否能把危险一句话拆成安全表述层级。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "sentence_safety",
+              "claim_tiering"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "你再直接帮我改写成三句可以放进开题或论文导论里的版本：第一句最保守，第二句中等推进，第三句明确标为待验证假说。不要把三句写成同一个强度。",
+            "user_upload": [],
+            "key_terms": [
+              "最保守",
+              "中等推进",
+              "待验证假说",
+              "不要同一个强度"
+            ],
+            "forbidden_terms": [
+              "已经证明",
+              "必然导致"
+            ],
+            "content_focus": "需要输出三种不同强度的可写句式，并清楚区分断言强度。",
+            "trace_focus": "应复用本 session 或既有 concept card；不应新增无来源的实验条件。",
+            "llm_focus": "判断改写是否真的做到了强度分层，而不是只换词不换逻辑。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "claim_rewrite",
+              "strength_control"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮保存成 `memory/concepts/B_sentence_safety.md`，至少分成：`可直接写`、`必须加限定词`、`现在不能写` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "可直接写",
+              "必须加限定词",
+              "现在不能写",
+              "B_sentence_safety"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要生成一个专门管控危险句式的 concept card。",
+            "trace_focus": "应写入 memory/concepts/B_sentence_safety.md，并保留风险边界。",
+            "llm_focus": "判断产物是否真正可在后续写作中当作安全护栏使用。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "concept",
+                "path": "memory/concepts/B_sentence_safety.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "可直接写",
+                  "必须加限定词",
+                  "现在不能写"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "safety_card"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_B_session_007_reading_queue",
+        "session_title": "[EVAL][B] reading queue for upcoming group meeting",
+        "session_type": "normal",
+        "offset_hours": 72,
+        "route": "default",
+        "notes": "测试多文献情境下的优先级判断与对象化沉淀。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "下周我要和老师过一轮文献逻辑。请你从这几份材料里给我排一个 7 天阅读队列：先补基线机制，再补电子结构迁移，再补证明方法。不要只给顺序，要说明每天读完后应该产出什么对象（比如 concept card / 对照表 / 红旗清单）。",
+            "user_upload": [
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/High-valent metal-oxo species in catalytic oxidations for environmental.pdf"
+            ],
+            "key_terms": [
+              "7天阅读队列",
+              "基线机制",
+              "电子结构迁移",
+              "证明方法",
+              "每天读完产出什么对象"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须输出按天排布的 reading queue，并把阅读产物对象化。",
+            "trace_focus": "多 PDF 上传下，trace 至少要体现文件识别与有选择的读取，不应假装通读每一页。",
+            "llm_focus": "判断 reading queue 是否真正服务后续 literature closure，而非泛泛列书单。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "reading_queue",
+              "objectification"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再帮我把这个队列改成‘组会前 30 分钟复习版’：每一篇最后应该记住哪三个锚点？其中至少一个锚点必须是“不能讲过头的边界”。",
+            "user_upload": [],
+            "key_terms": [
+              "组会前 30 分钟复习版",
+              "三个锚点",
+              "不能讲过头的边界"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把阅读队列压缩成复习锚点，并保留边界提醒。",
+            "trace_focus": "应复用本轮与前序 memory/concepts，不需要重新做重型生成。",
+            "llm_focus": "判断回答是否抓住‘能讲什么 / 不能讲什么’的组会复习价值。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "review_anchors",
+              "meeting_readiness"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "请把这个阅读队列存成 `memory/packs/B_reading_queue.md`，至少包含：`优先级`、`每篇读完后要产出的对象`、`可以后读的文件` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "优先级",
+              "每篇读完后要产出的对象",
+              "可以后读的文件",
+              "B_reading_queue"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把阅读队列整理成 pack 形式，便于之后直接查看。",
+            "trace_focus": "应写入 memory/packs/B_reading_queue.md，并且最好引用前序生成的 concept card。",
+            "llm_focus": "判断 pack 是否具有执行性和复用性，而不是普通摘要。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/B_reading_queue.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "优先级",
+                  "每篇读完后要产出的对象",
+                  "可以后读的文件"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "reading_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_B_session_008_false_analogy_redflags",
+        "session_title": "[EVAL][B] false analogy red flags",
+        "session_type": "normal",
+        "offset_hours": 84,
+        "route": "default",
+        "notes": "此 session 重点压测类比迁移时的 hallucination 控制。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "你帮我专门做一个“危险类比排雷表”。输入是 d-band / PMS / Ce 这些旁支材料，输出是：当我把它们往 chlorite 主线迁移时，最危险的三类假类比是什么？每类都要给一个‘为什么像、为什么其实不一样’。",
+            "user_upload": [
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260305和师兄探讨过的主逻辑参考文献/Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md"
+            ],
+            "key_terms": [
+              "危险类比排雷表",
+              "chlorite 主线",
+              "为什么像",
+              "为什么其实不一样",
+              "假类比"
+            ],
+            "forbidden_terms": [
+              "可以直接类推"
+            ],
+            "content_focus": "必须列出最危险的跨体系假类比，并解释像与不像各自的理由。",
+            "trace_focus": "涉及旁支 PDF 与基线 note 的混用，trace 应显示至少对文本笔记和部分二进制做过核对。",
+            "llm_focus": "判断回答是否真正识别了跨体系迁移的幻觉来源。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "false_analogy",
+              "hallucination_redflags"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再给我一个负面清单：以后如果我问你类似问题，哪些句式一出现你就应该先提醒‘这是 analogical support，不是 chlorite 直接证据’？我想把这当成问答时的自检模板。",
+            "user_upload": [],
+            "key_terms": [
+              "负面清单",
+              "analogical support",
+              "不是 chlorite 直接证据",
+              "自检模板"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "要给出能直接复用的问答自检模板，用于提前拦截过度迁移。",
+            "trace_focus": "本轮可以复用前序 concept card 与本 session 的排雷表，不应新增脱离资料的例子。",
+            "llm_focus": "判断输出是否具有实操价值，能作为后续对话时的防错护栏。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "self_check_template",
+              "guardrail_prompting"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把它收成 `memory/concepts/B_false_analogy_redflags.md`，至少要有：`最危险类比`、`需要补证据才可类比`、`安全表述模板` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "最危险类比",
+              "需要补证据才可类比",
+              "安全表述模板",
+              "B_false_analogy_redflags"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把危险类比和安全模板一起沉淀下来。",
+            "trace_focus": "应写入 memory/concepts/B_false_analogy_redflags.md。",
+            "llm_focus": "判断产物是否足够明确，后续可以直接拿来约束模型回答。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "concept",
+                "path": "memory/concepts/B_false_analogy_redflags.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "最危险类比",
+                  "需要补证据才可类比",
+                  "安全表述模板"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "redflag_card"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_B_session_009_master_outline",
+        "session_title": "[EVAL][B] literature master outline",
+        "session_type": "normal",
+        "offset_hours": 96,
+        "route": "default",
+        "notes": "总收束 session，要求能复用前序 concepts 并形成主线化 pack。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我准备把文献部分收束成一个 thesis/group-meeting 都能复用的 master outline。请你把三条线整理成一个总纲：① Co3O4 活化 chlorite 的基线机制；② Ce / 电子结构 / 低配位这条迁移线；③ high-valent metal-oxo / selective oxidation 的桥接线。每条线都要注明更偏向`原文证据`还是`概念迁移`。",
+            "user_upload": [
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species - 文献笔记.md",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/High-valent metal-oxo species in catalytic oxidations for environmental.pdf"
+            ],
+            "key_terms": [
+              "master outline",
+              "Co3O4 活化 chlorite",
+              "Ce / 电子结构 / 低配位",
+              "high-valent metal-oxo / selective oxidation",
+              "原文证据",
+              "概念迁移"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 literature 主线整理成可复用的总纲，并标注原文证据 vs 概念迁移。",
+            "trace_focus": "应充分利用前面已经生成的 concept artifacts，也可以复读 notes/review 来校正边界。",
+            "llm_focus": "判断 outline 是否真正形成一套可讲述的 literature closure，而不是三个孤立列表。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "master_outline",
+              "multi_line_synthesis"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "我还想额外加一列：`不能混写的来源边界`。比如哪些地方必须说“这来自 review / 这来自我的笔记 / 这只是从旁支材料借来的思路”。你帮我把这列也补上。",
+            "user_upload": [],
+            "key_terms": [
+              "不能混写的来源边界",
+              "来自 review",
+              "来自我的笔记",
+              "从旁支材料借来的思路"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须补齐来源边界列，防止 outline 在后续写作中混源。",
+            "trace_focus": "应复用前序 redflags/safety cards；不应遗漏 source provenance。",
+            "llm_focus": "判断是否真正识别了后续写作最容易混源的节点。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "source_boundary_column",
+              "anti_source_confusion"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这份总纲保存到 `memory/packs/B_master_outline.md`，至少包含：`主线一`、`主线二`、`主线三`、`不要混写的来源边界` 四节。",
+            "user_upload": [],
+            "key_terms": [
+              "主线一",
+              "主线二",
+              "主线三",
+              "不要混写的来源边界",
+              "B_master_outline"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要将 literature master outline 固化为可浏览的 pack。",
+            "trace_focus": "应写入 memory/packs/B_master_outline.md，最好引用前序 concept 名称以便 later frontend 查看。",
+            "llm_focus": "判断 pack 是否已经具备 handoff / 写作复用价值。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/B_master_outline.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "主线一",
+                  "主线二",
+                  "主线三",
+                  "不要混写的来源边界"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "outline_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_B_session_010_handoff",
+        "session_title": "[EVAL][B] literature concept handoff",
+        "session_type": "normal",
+        "offset_hours": 108,
+        "route": "default",
+        "notes": "最终 handoff session，用于评测长期 memory 与 anti-hallucination 收束能力。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "最后请你站在‘我要把这个 literature workspace 交给另一个模型’的角度，做一个 handoff：这几个 PDF / note 里，哪些已经被前面的概念卡吃透了，哪些还必须回原文再核。请尽量按“已稳定 / 半稳定 / 未稳定”来分。",
+            "user_upload": [
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf"
+            ],
+            "key_terms": [
+              "handoff",
+              "已稳定",
+              "半稳定",
+              "未稳定",
+              "必须回原文再核"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要对整个 literature workspace 的理解成熟度做 handoff 分层。",
+            "trace_focus": "应复用前序 artifacts，同时识别哪些 PDF 虽上传过但仍未被充分消化。",
+            "llm_focus": "判断 handoff 是否真实反映了 workspace 中已沉淀与未沉淀的边界。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "handoff_maturity",
+              "workspace_state"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再补一个‘后续问答禁区清单’：以后如果我再问 literature closure 问题，你有哪些类型的问题会先要求我回原文 / 回 SI / 回 review，而不是直接给出肯定句？",
+            "user_upload": [],
+            "key_terms": [
+              "后续问答禁区清单",
+              "回原文",
+              "回 SI",
+              "回 review",
+              "不是直接给出肯定句"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "要生成一个禁区清单，用来约束后续 literature QA 的断言边界。",
+            "trace_focus": "应结合已有 redflag / safety / proof cards，而不是临时拍脑袋列规则。",
+            "llm_focus": "判断禁区是否覆盖了最常见的 hallucination 源头。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "qa_guardrails",
+              "hallucination_prevention"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "请把最后的 handoff 存成 `memory/packs/B_handoff.md`，至少包含：`已经稳定的结论`、`仍需回原文核对`、`后续问答禁区` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "已经稳定的结论",
+              "仍需回原文核对",
+              "后续问答禁区",
+              "B_handoff"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 literature workspace 的 handoff 收束成最终 pack。",
+            "trace_focus": "应写入 memory/packs/B_handoff.md，并且最好引用已有卡片/pack 的路径。",
+            "llm_focus": "判断最终 handoff 是否能直接交给另一个模型接手，不至于重复犯错。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/B_handoff.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "已经稳定的结论",
+                  "仍需回原文核对",
+                  "后续问答禁区"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "final_handoff"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,65 @@
+{
+  "scenario_id": "scenario_E",
+  "session_id": "scenario_E_session_010_handoff",
+  "turn_id": 2,
+  "workspace_id": "eval-scenario_e-260320_2325",
+  "backend_session_id": "8d0afe04fd7c",
+  "assistant_text": "**Context Trace**\n\n本轮未调用工具。  \n以下内容基于上一轮已提炼出的四份材料约束与你当前的系统设计问题，属于**规则建议**，不是已写入文件的既成事实。\n\n---\n\n**Rationale**\n\n你现在要的不是“再来一份 prompt”，而是一个能交给 Codex 落代码的**系统级防自欺规则**。  \n对 bridge/eval 来说，最危险的不是模型“胡说一句”，而是整条链路在不同环节默默把“不知道”加工成“看起来合理”：\n\n- loader 会把缺字段补齐成伪结构化事实  \n- runner 会把“候选对象”自动升级为“已确认对象”  \n- llm-judge 会把“写得像真的”当“证据充分”  \n- 报告器 会把“风险/待核对”抛光成“结论/建议”\n\n所以护栏要优先埋在：  \n**source anchoring、unknown 保留、字段冻结、判分依据显式化、报告降噪但不降真。**\n\n---\n\n## Deliverable\n\n# bridge evaluator anti-hallucination 规则清单\n\n下面这份清单按四层来给：\n\n1. **全局硬规则**  \n2. **loader 护栏**  \n3. **runner 护栏**  \n4. **llm-judge 护栏**  \n5. **报告器护栏**  \n6. **系统层最小必埋机制**\n\n---\n\n# 一、全局硬规则（所有模块共用）\n\n## G1. 未观测到的字段，默认必须是 `unknown/null`，不能“合理补全”\n最危险的自欺不是乱编大结论，而是把这些偷偷补掉：\n\n- page no.\n- fig no.\n- section no.\n- 作者意图\n- 实验条件\n- 图文对应关系\n- 章节归属\n- object type\n- closure status\n\n**系统护栏**\n- schema 层强制支持 `unknown / null / unresolved`\n- 禁止用默认值伪装缺失，例如：\n  - `\"page_no\": 1`\n  - `\"section\": \"Introduction\"`\n  - `\"status\": \"confirmed\"`\n\n---\n\n## G2. 每条结论必须区分：`observed / inferred / proposed / missing`\n很多系统不是 hallucination 在内容，而是 hallucination 在**语气等级**。\n\n**系统护栏**\n- 所有 claim 必须带 `claim_status`\n- 建议固定四档：\n  - `observed`\n  - `inferred`\n  - `proposed`\n  - `missing`\n- 没有来源锚点的内容，最高只能是 `proposed`\n\n---\n\n## G3. Source 是一等公民，不是备注\n如果 source 只是文本备注，后面一定会被忽略。\n\n**系统护栏**\n每个可评估对象都强制挂：\n- `source_asset_path`\n- `source_unit_id`\n- `source_span` 或 `quote`\n- `extraction_method`\n- `confidence`\n\n没有 source，就不能进入“已支持”区。\n\n---\n\n## G4. “漂亮完整”不能替代“证据充分”\nbridge/eval 最容易奖励看起来完整的输出。\n\n**系统护栏**\n评分拆开：\n- completeness\n- factuality\n- evidence coverage\n- uncertainty honesty\n- overreach risk\n\n禁止用一个总分掩盖“写得顺但没证据”。\n\n---\n\n## G5. 缺口不是失败，伪闭环才是失败\n系统常见自欺：为了显得能干，把 gap 自动补平。\n\n**系统护栏**\n- 明确把 `gap recall` 作为正向指标\n- 能识别 “不知道 / 待核对 / 缺 source” 的系统，分数应高于“写满但错”的系统\n\n---\n\n## G6. 不允许 silent repair（静默修复）\n任何自动纠错、自动映射、自动归类，都可能把错误洗白。\n\n**系统护栏**\n所有修正必须有日志：\n- 原值\n- 新值\n- 修正原因\n- 修正来源\n- 是否人工确认\n\n---\n\n## G7. 不允许把上游输出当下游事实\n上游模型的输出只能是**候选输入**，不能天然升级为“真相”。\n\n**系统护栏**\n- loader 输出是 `parsed_candidate`\n- runner 输出是 `derived_candidate`\n- judge 只能依据 source 和 rubric 判，不得默认信任上游文案\n\n---\n\n# 二、Loader 最容易自我欺骗的地方\n\n## L1. 从文件名/标题脑补语义\n例如：\n- 文件名里有“第六阶段”，就自动认为是正式阶段文档\n- 文件名里有“最终版”，就默认内容是最终可信版本\n\n**护栏**\n- 文件名只能作为 `weak hint`\n- 不可直接写入 `semantic_scope / status / authority_level`\n- 如果字段来源于标题，必须标：\n  - `derived_from_filename: true`\n\n---\n\n## L2. 把 markdown 层级当真实论证层级\n文档中的标题结构不一定等于研究对象结构。\n\n**护栏**\n- 保留原始 heading\n- 单独生成 `interpreted_structure`\n- 不能覆盖 raw structure\n\n---\n\n## L3. 清洗/OCR/格式标准化时改写原意\n最常见：\n- 删掉“不确定、可能、待核对”\n- 合并换行时拼错句义\n- 把脚注并入正文\n\n**护栏**\n同时保留三层文本：\n- `raw_text`\n- `normalized_text`\n- `extracted_units`\n\n且必须可回溯。\n\n---\n\n## L4. chunk 切分后丢失上下文边界\n比如把“待核对”切到上一块，把结论切到下一块，导致结论看起来像既成事实。\n\n**护栏**\n- chunk 必须记录：\n  - `chunk_id`\n  - `source_start`\n  - `source_end`\n  - `parent_heading`\n- 评估时支持回看相邻 chunk\n\n---\n\n## L5. 把“示例/模板话术”误识别为当前项目事实\n0305 文档这种写作指令里，很多内容是“输出格式要求”，不是研究事实。\n\n**护栏**\nloader 必须先分层标注：\n- `instruction`\n- `evidence`\n- `plan`\n- `fact`\n- `template_text`\n\n不分类，后面必乱。\n\n---\n\n## L6. 合并相似段落时把不同对象合并成一个\n例如“高价钴证据链”和“苯酚活性图”被错误并成单一 claim。\n\n**护栏**\n- entity/section merge 必须保留 merge log\n- merge 前后都要保留原单元 id\n- 合并置信度低时宁可分裂，不要硬并\n\n---\n\n# 三、Runner 最容易自我欺骗的地方\n\n## R1. 自动把 candidate 升格成 confirmed object\nbridge 最危险的幻觉点之一。\n\n例如：\n- 输入只是“stage6 主线草案”\n- runner 却输出“confirmed PackSpec / confirmed TaskSpec”\n\n**护栏**\n对象生命周期分层：\n- `candidate`\n- `draft`\n- `confirmed`\n\n默认只能到 `draft`，除非满足确认条件。\n\n---\n\n## R2. object landing 过度自信\n明明是 mixed object，却被硬塞成 pack 或 task，只因为模板更好填。\n\n**护栏**\n- landing 必须返回：\n  - `predicted_type`\n  - `alternative_types`\n  - `decision_basis`\n  - `rejected_evidence`\n- 如果 pack/task 分数接近，强制输出 `mixed`\n\n---\n\n## R3. 用模板空位自动补“合理内容”\n比如 page spec 缺 `source_scope`，runner 自动补成“主文献原图”。\n\n**护栏**\n- 模板允许空位\n- 空位必须显式显示 `missing`\n- 禁止为满足 schema 完整性而填虚值\n\n---\n\n## R4. 把“下一步建议”写成“已识别缺口”\n建议和识别是两回事。\n\n**护栏**\n分开两个字段：\n- `detected_gaps`\n- `proposed_next_actions`\n\n不能混写。\n\n---\n\n## R5. 把多个来源拼接成一条无缝故事线\n这最像“高级 hallucination”。\n\n**护栏**\n每一段 narrative 必须附：\n- 支撑 source 列表\n- 中间是否有推断跳跃\n- 哪一句是桥接句\n\n如果桥接句无 source，只能标 `inferred/proposed`。\n\n---\n\n## R6. 复用历史结果时丢失来源代际\n例如 runner 引用上一次中间对象，却不保留它来自哪些 asset。\n\n**护栏**\n任何继承对象都必须带：\n- `derived_from_object_ids`\n- `upstream_source_assets`\n\n---\n\n## R7. 为了通过 eval 而向 rubric 对齐，不向 source 对齐\n这会让系统越来越“会考试”，越来越不真实。\n\n**护栏**\n- runner 不得读取 judge rubric 的隐藏答案版本\n- 只允许读取公开 schema，不允许读取标注 gold\n\n---\n\n# 四、LLM-Judge 最容易自我欺骗的地方\n\n## J1. 奖励“像专家写的”而不是“被证据支持的”\n这是最常见的问题。\n\n**护栏**\njudge prompt 必须强制：\n- 先列 source coverage\n- 再评结论\n- 最后才评表达质量\n\n顺序不能反。\n\n---\n\n## J2. 用自己的常识替补输入缺失\n比如 judge 知道某类 AOP 常见机理，就把输出里的跳跃当合理。\n\n**护栏**\njudge 必须遵守：\n- **只按输入证据与 schema 判**\n- 外部常识只能用于“是否过界”提醒，不能用于补证\n\n---\n\n## J3. 因为输出自洽，就默认为真\n自洽 ≠ 有证据。\n\n**护栏**\n评分中单列：\n- `internal_consistency`\n- `evidence_grounding`\n\n且 grounding 权重大于 consistency。\n\n---\n\n## J4. 惩罚诚实的 abstain / unknown\n如果 judge 不鼓励保留未知，系统后面就会越来越爱编。\n\n**护栏**\nrubric 里明确奖励：\n- 正确保留 unknown\n- 正确标记待核对\n- 正确拒绝过界结论\n\n---\n\n## J5. 把“缺 source”误判成“小问题”\n对 bridge/eval 来说，source 缺失不是小问题，是红线。\n\n**护栏**\n设置 hard fail 项：\n- 若 claim 无 source anchor，相关 factuality 分不得超过阈值\n- 若报告把无 source 内容写成 supported，直接 fail\n\n---\n\n## J6. 泄露参考答案，导致 judge 变成“找相似措辞”\n特别在 case-based eval 里很危险。\n\n**护栏**\n- reference answer 与 judge 分离\n- judge 只看 rubric + source + candidate output\n- 如需 gold，仅用于结构比对，不提供完整标准文案\n\n---\n\n## J7. 把“覆盖面广”误当“识别准”\n尤其在 gap audit 里，judge 容易高估长清单。\n\n**护栏**\ngap 评分拆分：\n- precision\n- recall\n- severity ranking\n- traceability\n\n---\n\n# 五、报告器最容易自我欺骗的地方\n\n## P1. 把风险提示润色成结论\n比如：\n- 原始：`可能对应第一章主证据，但待核对`\n- 报告器：`可作为第一章主证据`\n\n**护栏**\n报告生成要保留原始模态词：\n- 可能\n- 待核对\n- 建议\n- 不足以支持\n- 暂不能判断\n\n禁止语气升级。\n\n---\n\n## P2. 为了“好读”删掉不确定性\n最危险的报告通常最好读。\n\n**护栏**\n报告固定四段，不准省略：\n1. Supported\n2. Unsupported\n3. Missing / To verify\n4. Suggested next actions\n\n---\n\n## P3. 把 gap 汇总成模糊大词\n例如“需要补实验”“需要补文献”，这对落代码没意义。\n\n**护栏**\ngap 必须结构化：\n- gap_type\n- object_scope\n- missing_field\n- why_it_blocks\n- source_anchor\n\n---\n\n## P4. 标题党\nheadline 比正文更容易 hallucinate。\n\n**护栏**\n所有标题必须可追溯到正文中的 supported statement。  \n禁止标题超出正文证据级别。\n\n---\n\n## P5. 忽略失败样本或边界条件\n只报通过，不报失败，系统很快会自我感觉良好。\n\n**护栏**\n报告必须包含：\n- fail cases\n- abstain cases\n- unresolved cases\n- known blind spots\n\n---\n\n## P6. 把 judge 分数直接叙述成客观事实\n如“系统已稳定完成 stage6 映射”。\n\n**护栏**\n报告中所有性能表述必须带：\n- test set 范围\n- case 数量\n- 判分维度\n- 当前限制\n\n---\n\n# 六、系统层最小必埋机制\n\n下面这些不是“加分项”，而是建议第一版就埋。\n\n## S1. Immutable Raw Layer\n原始输入必须不可改写保存：\n- raw asset\n- raw text\n- raw parse result\n\n后续所有加工都只能派生，不能覆盖 raw。\n\n---\n\n## S2. 统一 Provenance ID\n每个对象都要能追到：\n- asset\n- chunk\n- extracted unit\n- derived object\n- report item\n\n建议统一 id：\n- `asset_id`\n- `chunk_id`\n- `unit_id`\n- `object_id`\n- `report_item_id`\n\n---\n\n## S3. Unknown-preserving Schema\nschema 设计时就允许缺失，不要靠 prompt 勉强兜。\n\n建议所有关键字段都支持：\n- `null`\n- `unknown`\n- `to_verify`\n- `not_applicable`\n\n---\n\n## S4. Transformation Log\n任何跨层变化都写 log：\n- from\n- to\n- reason\n- module\n- timestamp\n- confidence\n\n这是防“静默洗白”的核心。\n\n---\n\n## S5. Evidence-first Validator\n在 runner/judge/report 前统一过一层 validator：\n\n检查：\n- 是否所有 supported claims 都有 source\n- 是否 unknown 被偷改成具体值\n- 是否有 source orphan\n- 是否 narrative 超出 evidence span\n\n---\n\n## S6. Hard-fail Rules\n建议直接写死几条：\n\n### hard fail 1\n无 source 的 supported claim\n\n### hard fail 2\n把 `unknown` 改成具体事实且无修正来源\n\n### hard fail 3\n报告标题强于正文证据等级\n\n### hard fail 4\njudge 使用输入外知识替补证据\n\n### hard fail 5\nrunner 把 candidate 默认升级为 confirmed\n\n---\n\n## S7. Adversarial Test Set\n专门造“会骗系统”的案例，不要只用干净样本。\n\n至少包括：\n- 标题很像结论，正文其实是计划\n- 模板话术很多，真实事实很少\n- 多对象混在一个文档里\n- source 缺失但语言很顺\n- stage note 与 writing note 混排\n\n---\n\n## S8. Abstain Channel\n系统必须有合法的“不下结论”出口。\n\n如果没有这个出口，所有模块都会倾向编。\n\n建议统一字段：\n- `abstain_reason`\n- `insufficient_evidence`\n- `requires_human_check`\n\n---\n\n## S9. Dual Output: machine-readable + human-readable\n只输出自然语言报告，最后一定失真。\n\n建议每次都出两份：\n1. JSON 结构结果\n2. Markdown 人读摘要\n\n最终判定以 JSON 为准，Markdown 只是展示层。\n\n---\n\n## S10. Separate Policy from Generation\n把规则写成代码/validator，不要全押在 prompt 里。\n\n优先写死的：\n- source 必填约束\n- claim_status 枚举\n- hard fail\n- unknown-preserving\n- report section order\n\n---\n\n# 七、建议直接落成代码的“红线检查表”\n\n如果你要交给 Codex，我建议先把下面 12 条做成 validator：\n\n1. `supported` claim 必须有 `source_asset_path`\n2. `supported` claim 必须有 `source_unit_id` 或 `quote`\n3. `unknown/null` 不允许在无依据情况下被具体化\n4. `candidate` 不允许自动升格为 `confirmed`\n5. `instruction/template_text` 不允许直接进入事实层\n6. narrative 中每句都要能追溯到 source 或标 `inferred`\n7. report 标题不得高于正文证据等级\n8. judge 不得因“表达流畅”给 factuality 加分\n9. abstain/unknown 不得默认扣成低分\n10. gap 列表必须有 `gap_type + why_it_blocks`\n11. 上游对象复用必须保留 provenance\n12. 所有自动修正必须写 transformation log\n\n---\n\n# 八、如果只先实现最值钱的 5 条\n\n如果你现在只想先埋最关键护栏，我建议优先这五条：\n\n## Top 1\n**unknown-preserving schema**\n\n## Top 2\n**supported claim 必须强制 source anchor**\n\n## Top 3\n**candidate/draft/confirmed 生命周期分层**\n\n## Top 4\n**judge 奖励 honest abstain，不奖励伪完整**\n\n## Top 5\n**报告固定四段：supported / unsupported / missing / next actions**\n\n这 5 条做了，系统至少不容易“看起来越来越好，实际上越来越会编”。\n\n---\n\n# 九、给 Codex 的一句话实现原则\n\n**宁可多输出 `unknown / to_verify`，也不要为了结构完整偷偷补齐；宁可让报告显得不圆满，也不要让证据链显得比真实更完整。**\n\n---\n\n**Memory Patch**\n\n本轮未实际写文件。  \n如果你要把这套规则正式交给 Codex，我建议后续新增两个文件：\n\n1. `memory/packs/PACK_bridge_evaluator_anti_hallucination_rules.md`  \n   - 内容：全局规则、模块级护栏、hard fail、最小实现优先级  \n   - 建议 `source_assets`：沿用上一轮那 4 份素材\n\n2. `temporary_dir/<session_id>/bridge_validator_rules_v1.json`  \n   - 内容：可直接给工程实现的 rule schema  \n   - 例如：\n     - claim status enum\n     - required provenance fields\n     - hard fail list\n     - judge constraints\n\n如果你愿意，我下一条可以直接把这份内容改写成**Codex 可直接开工的 JSON/YAML 规则草案**。",
+  "attachments_used": [],
+  "trace_events": [],
+  "created_paths": [],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/8d0afe04fd7c",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "E-S010-T02-C1",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中 5 个，达到阈值。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "E-S010-T02-C2",
+    "score": 85.0,
+    "verdict": "pass",
+    "reasons": [
+      "该 turn 依赖 prior workspace memory，但 trace 中缺少明显 memory 读取痕迹。"
+    ]
+  },
+  "artifact_result": null,
+  "judge_result": {
+    "criterion_id": "E-S010-T02-C3",
+    "score": 93.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 5 个关键术语"
+    ],
+    "risks": [
+      "缺失关键术语: ['系统层护栏']"
+    ],
+    "missing": [
+      "系统层护栏"
+    ],
+    "raw_text": "你是一名长期设计 benchmark、evaluator、数据集包架构与科研智能体协议的系统评审专家。请只依据【用户问题】【上传文件列表】【assistant 回复】【trace 摘要】【预期 focus】评分，不要替模型补系统设计。你要重点检查：回答是否真正站在 bridge/eval 视角而不是研究内容视角；是否清楚区分 package architecture、closure mapping、ecosystem map、test cases 与 downstream representative assets 的角色；是否把 loader / runner / scorer / llm-judge / report 等对象说清楚；是否明确哪些是 runtime 必须字段、哪些只是 analyst 注释；是否避免泛泛而谈的“平台化建议”。请输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_E_session_010_handoff\",\n  \"turn_id\": 2,\n  \"user_input\": \"再给我一个`bridge evaluator anti-hallucination 规则清单`：以后无论是 loader、runner、llm-judge 还是报告器，哪些地方最容易自我欺骗，应该提前在系统层埋什么护栏。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace**\\n\\n本轮未调用工具。  \\n以下内容基于上一轮已提炼出的四份材料约束与你当前的系统设计问题，属于**规则建议**，不是已写入文件的既成事实。\\n\\n---\\n\\n**Rationale**\\n\\n你现在要的不是“再来一份 prompt”，而是一个能交给 Codex 落代码的**系统级防自欺规则**。  \\n对 bridge/eval 来说，最危险的不是模型“胡说一句”，而是整条链路在不同环节默默把“不知道”加工成“看起来合理”：\\n\\n- loader 会把缺字段补齐成伪结构化事实  \\n- runn"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [],
+  "temporary_expectations": null,
+  "provisional_turn_score": 90.0,
+  "final_turn_score": 92.67
+}

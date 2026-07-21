@@ -1,0 +1,1040 @@
+[
+  {
+    "scenario_id": "scenario_D",
+    "scenario_name": "写作与Pack闭环评测",
+    "scenario_description": "围绕 thesis workdoc、proposal 多版本、group meeting deck、layout 示例与高价钴/选择性氧化写作桥接构造的 writing closure benchmark，重点评测 pack-quality、版本权威性判断、二进制文档 grounding、图组/章节组织与写作反幻觉。",
+    "benchmark_focus": [
+      "thesis gap map 与 storyline master",
+      "高价钴主证链 storyboard",
+      "group meeting 交付件复盘",
+      "proposal 多版本 revision reasoning",
+      "figure/layout 规则抽取与 writing handoff"
+    ],
+    "source_package_root": "D_写作与Pack",
+    "session_reset_semantics": "每个新 session 代表清空对话上下文，但沿用同一个 workspace，因此同 workspace 下的 memory/concepts/tasks/packs 仍可被后续 session 读取和复用。",
+    "workspace_init": {
+      "workspace_display_name_template": "[EVAL][D] writing_pack benchmark {run_id}",
+      "workspace_description": "围绕 thesis workdoc、proposal 多版本、group meeting deck、layout 示例与高价钴/选择性氧化写作桥接构造的 writing closure benchmark，重点评测 pack-quality、版本权威性判断、二进制文档 grounding、图组/章节组织与写作反幻觉。",
+      "workspace_kind": "writing_pack",
+      "bootstrap_required": true,
+      "bootstrap_route": "bootstrap",
+      "bootstrap_session_id": "__bootstrap__",
+      "create_agent_semantics": "通过 bootstrap session 完成 workspace 初始化与 seed pack 写入；不要求修改后端 create_agent 逻辑。",
+      "recommended_artifact_namespace": {
+        "concepts": "memory/concepts",
+        "tasks": "memory/tasks",
+        "packs": "memory/packs"
+      }
+    },
+    "file_coverage_assertion": {
+      "must_upload_all_files_at_least_once": true,
+      "all_source_files": [
+        "科研obsidian/0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/高价钴框架/【PACK】高价钴氧物种生成机理链.md",
+        "科研obsidian/0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/高价钴框架/高价钴证明实验.pptx",
+        "科研obsidian/0-毕业论文安排20251230/20251230【进度规划】.md",
+        "科研obsidian/0-毕业论文安排20251230/Ce掺杂Co3O4亚氯酸盐高级氧化.pptx",
+        "科研obsidian/0-毕业论文安排20251230/【毕业论文】工作文档0305.md",
+        "科研obsidian/0-毕业论文安排20251230/开题/开题报告-颜雍颀-V3.pptx",
+        "科研obsidian/0-毕业论文安排20251230/文章图片排版【机密】.pptx",
+        "科研obsidian/0-毕业论文安排20251230/材料表征/20260307同步辐射分析/Angew Chem Int Ed - 2022 - Song - Overturned Loading of Inert CeO2 to Active Co3O4 for Unusually Improved Catalytic.pdf",
+        "科研obsidian/0-毕业论文安排20251230/聚合框架/【gpt文献调研：高价钴氧物种生成+聚合证据链】.md",
+        "科研obsidian/0-毕业论文安排20251230/选择性氧化框架/0327大组会-颜雍颀.pptx",
+        "科研obsidian/0-毕业论文安排20251230/选择性氧化框架/reaction-pathway-tuning-between-electron-transfer-mediated-degradation-and-polymerization-in-fe-mos2-based-persulfate.pdf",
+        "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/1-开题报告准备-重构/【开题报告】.md",
+        "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/1-开题报告准备-重构/【开题报告准备脉路】.md",
+        "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/1-开题报告范本/【开题报告】.md",
+        "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/1-开题报告范本/开题报告final-20251229/开题报告-颜雍颀(1).docx",
+        "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/20260305大组会-颜雍颀-v5_最终交付.pptx",
+        "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/literature_report_FINAL_v2-1.pptx",
+        "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/【20260305大组会】工作文档.md",
+        "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/示例ppt.pdf"
+      ]
+    },
+    "sessions": [
+      {
+        "session_id": "scenario_D_session_001_bootstrap",
+        "session_title": "[EVAL][D] bootstrap writing pack workspace",
+        "session_type": "bootstrap",
+        "offset_hours": 0,
+        "route": "bootstrap",
+        "notes": "该 session 必须复用 __bootstrap__。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "先做一个 bootstrap 目标澄清。我的当前目标不是重写整套论文或实验，而是先把这个 workspace 搭成一个能组织交付件的 writing/pack 容器。背景信息是：后面我会继续推进 thesis、proposal、group meeting、以及 figure/layout 这些交付件，所以这里必须先把容器职责、权威来源和可复用 pack 的范围定清楚。你先根据这些目标和背景，复述你理解的 workspace 职责、优先承接的交付对象，以及你准备怎么避免把它做成普通写作摘要。",
+            "user_upload": [],
+            "key_terms": [
+              "当前目标",
+              "背景信息",
+              "writing/pack 容器",
+              "交付件",
+              "不是普通写作摘要"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须先接住用户给出的目标、背景信息和 workspace 边界，明确这是 writing/pack 容器，而不是普通写作摘要入口。",
+            "trace_focus": "这一轮重点是 bootstrap scope alignment，可以先做交付范围与 authority 规划，不要求立即展开大量文件读取。",
+            "llm_focus": "判断模型是否先理解 writing/pack 容器的职责，再进入后续具体写作与交付问题。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "bootstrap",
+            "eval_tags": [
+              "bootstrap_goal_alignment",
+              "pack_scope_seed"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "这个 workspace 我想定义成一个 `写作/Pack 容器`。它的职责不是重新读完所有实验和文献，而是先把‘哪些交付件最值得整理成 pack’判断出来。你先根据高价钴 pack、毕业论文工作文档、和进度规划，判断这个容器应该先从`章节主线`、`图组缺口`还是`组会交付件`起手。",
+            "user_upload": [
+              "科研obsidian/0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/高价钴框架/【PACK】高价钴氧物种生成机理链.md",
+              "科研obsidian/0-毕业论文安排20251230/【毕业论文】工作文档0305.md",
+              "科研obsidian/0-毕业论文安排20251230/20251230【进度规划】.md"
+            ],
+            "key_terms": [
+              "写作/Pack 容器",
+              "哪些交付件最值得整理成 pack",
+              "章节主线",
+              "图组缺口",
+              "组会交付件"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 workspace 定义成 writing/pack 容器，并选出最合适的起手交付对象。",
+            "trace_focus": "bootstrap 阶段至少应读取三个 markdown 来源，并避免误转成实验 task 容器。",
+            "llm_focus": "判断回答是否真正围绕交付件组织，而不是回到研究综述。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "bootstrap_scope_alignment",
+              "pack_object_selection"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "再加一个限制：这个容器不是用来重写论文全文的，而是要先判断`哪个 pack 最有复用价值`、`哪个文件是权威来源`、`哪个只能当参考素材`。请你直接给我一个起步策略。",
+            "user_upload": [],
+            "key_terms": [
+              "哪个 pack 最有复用价值",
+              "哪个文件是权威来源",
+              "哪个只能当参考素材",
+              "起步策略"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要给出 pack-first 的启动策略，并区分 authority vs reference。",
+            "trace_focus": "本轮应体现 selective organization，不应默认生成大段正文。",
+            "llm_focus": "判断模型是否理解 writing closure 的对象是交付件及其权威层级。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "authority_ranking",
+              "bootstrap_minimalism"
+            ]
+          },
+          {
+            "turn_id": 4,
+            "user_input": "可以，确认初始化。请把 seed pack 存成 `memory/packs/PACK_bootstrap_kickoff.md`，至少写清楚：`这个包测什么`、`优先整理哪类交付件`、`哪些文件只是参考`。",
+            "user_upload": [],
+            "key_terms": [
+              "确认初始化",
+              "这个包测什么",
+              "优先整理哪类交付件",
+              "哪些文件只是参考",
+              "PACK_bootstrap_kickoff"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要完成 writing workspace 的 bootstrap，并写出 seed pack。",
+            "trace_focus": "应写入 memory/packs/PACK_bootstrap_kickoff.md。",
+            "llm_focus": "判断 seed pack 是否为 writing closure 提供了清晰的组织入口。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/PACK_bootstrap_kickoff.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "这个包测什么",
+                  "优先整理哪类交付件",
+                  "哪些文件只是参考"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "bootstrap_completion",
+              "artifact_generation"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_D_session_002_thesis_gapmap",
+        "session_title": "[EVAL][D] thesis figure and evidence gap map",
+        "session_type": "normal",
+        "offset_hours": 12,
+        "route": "default",
+        "notes": "主测 thesis 组织与图组缺口识别。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我现在最需要的是一张 thesis gap map。请你结合毕业论文工作文档、进度规划、以及 0305 大组会工作文档，把我现在手里的图组/证据/逻辑缺口整理成一张表：哪些已经能写、哪些有数据但逻辑还没串、哪些根本还缺实验。",
+            "user_upload": [
+              "科研obsidian/0-毕业论文安排20251230/【毕业论文】工作文档0305.md",
+              "科研obsidian/0-毕业论文安排20251230/20251230【进度规划】.md",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/【20260305大组会】工作文档.md"
+            ],
+            "key_terms": [
+              "thesis gap map",
+              "哪些已经能写",
+              "哪些有数据但逻辑还没串",
+              "哪些根本还缺实验"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 thesis 当前状态拆成图组/证据/逻辑缺口三层。",
+            "trace_focus": "应读取三份 markdown，并尽量把 gap map 对应到具体图组或章节。",
+            "llm_focus": "判断 gap map 是否真能指导 thesis 收束，而不是空泛待办清单。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": false,
+            "route": "default",
+            "eval_tags": [
+              "thesis_gapmap",
+              "evidence_inventory"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "你再进一步，把这些缺口按`最先补会影响最大的`顺序排一下。不是简单按难度，而是按‘一旦补上，会同时解锁多少后续写作/汇报工作’来排。",
+            "user_upload": [],
+            "key_terms": [
+              "最先补会影响最大的",
+              "同时解锁多少后续写作/汇报工作",
+              "排序"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要按解锁效应而非难度对 thesis 缺口重新排序。",
+            "trace_focus": "应复用上轮 gap map 结果，不应脱离已有文件随意加任务。",
+            "llm_focus": "判断排序逻辑是否体现交付导向，而不仅是实验导向。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "unlock_priority",
+              "delivery_impact"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮保存成 `memory/packs/D_thesis_gapmap.md`，至少包含：`已有图组`、`缺口`、`优先补的实验` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "已有图组",
+              "缺口",
+              "优先补的实验",
+              "D_thesis_gapmap"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 thesis gap map 沉淀成 pack。",
+            "trace_focus": "应写入 memory/packs/D_thesis_gapmap.md。",
+            "llm_focus": "判断 pack 是否可以直接用于后续 thesis 管理。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/D_thesis_gapmap.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "已有图组",
+                  "缺口",
+                  "优先补的实验"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "gapmap_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_D_session_003_two_week_plan",
+        "session_title": "[EVAL][D] progress plan into two-week execution",
+        "session_type": "normal",
+        "offset_hours": 24,
+        "route": "default",
+        "notes": "主测把进度规划翻译成交付件排期。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "请你把我现在的进度规划，转成一个接下来两周的`交付件导向排期`。输入是进度规划、0305 大组会工作文档、以及 Ce 掺杂 Co3O4 的那份 PPT。我要看到每天/每两天应完成什么交付件，不只是实验动作，还包括图、表、pack、PPT 页面这种写作产物。",
+            "user_upload": [
+              "科研obsidian/0-毕业论文安排20251230/20251230【进度规划】.md",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/【20260305大组会】工作文档.md",
+              "科研obsidian/0-毕业论文安排20251230/Ce掺杂Co3O4亚氯酸盐高级氧化.pptx"
+            ],
+            "key_terms": [
+              "两周交付件导向排期",
+              "每天/每两天",
+              "图",
+              "表",
+              "pack",
+              "PPT 页面"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 progress plan 转成交付件导向的两周排期，而不是只列实验动作。",
+            "trace_focus": "包含 pptx；若回答涉及 Ce deck 里的具体内容，trace 应体现对二进制的解析或明确限定。",
+            "llm_focus": "判断排期是否真正以交付件推进为核心。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "two_week_plan",
+              "deliverable_scheduling"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再补一个‘日复盘模板’：每天结束时，我最少应该检查哪几项，才能知道这天到底是在推进 thesis / 组会 / proposal，而不是忙了一堆互相不连的碎活。",
+            "user_upload": [],
+            "key_terms": [
+              "日复盘模板",
+              "推进 thesis / 组会 / proposal",
+              "碎活"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要给出日复盘模板，让 daily work 与交付件保持对齐。",
+            "trace_focus": "应承接上轮排期，不要脱离具体交付件。",
+            "llm_focus": "判断模板是否真正帮助 researcher 做交付闭环，而不是空泛效率建议。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "daily_review_template",
+              "closure_tracking"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮存成 `memory/packs/D_two_week_plan.md`，至少包含：`按天排期`、`交付件`、`风险与回退` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "按天排期",
+              "交付件",
+              "风险与回退",
+              "D_two_week_plan"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把两周排期固化成 pack。",
+            "trace_focus": "应写入 memory/packs/D_two_week_plan.md。",
+            "llm_focus": "判断 pack 是否已经是 researcher 可直接执行的排期板。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/D_two_week_plan.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "按天排期",
+                  "交付件",
+                  "风险与回退"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "schedule_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_D_session_004_hvco_storyboard",
+        "session_title": "[EVAL][D] high-valent cobalt evidence storyboard",
+        "session_type": "normal",
+        "offset_hours": 36,
+        "route": "default",
+        "notes": "主测高价钴主证链在写作场景中的对象化。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我想把‘高价钴证明’这条线讲成一个能上 thesis / group meeting 的 storyboard。请你结合高价钴 pack、高价钴证明实验 PPT、以及 Angew 那篇 CeO2/Co3O4 文献，帮我列出：这条故事里每一页/每一图最想回答什么，哪些算主证，哪些只是支持证据，哪些背景材料只适合放在前言或讨论。",
+            "user_upload": [
+              "科研obsidian/0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/高价钴框架/【PACK】高价钴氧物种生成机理链.md",
+              "科研obsidian/0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/高价钴框架/高价钴证明实验.pptx",
+              "科研obsidian/0-毕业论文安排20251230/材料表征/20260307同步辐射分析/Angew Chem Int Ed - 2022 - Song - Overturned Loading of Inert CeO2 to Active Co3O4 for Unusually Improved Catalytic.pdf"
+            ],
+            "key_terms": [
+              "高价钴证明",
+              "storyboard",
+              "每一页/每一图最想回答什么",
+              "主证",
+              "支持证据",
+              "背景材料"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把高价钴 story 拆成 page/figure-level storyboard，并区分证据层级。",
+            "trace_focus": "包含 pptx/pdf；若引用具体页/表征，trace 应体现对二进制的解析。",
+            "llm_focus": "判断 storyboard 是否真的可用于 thesis / meeting 叙事，而不是简单摘要。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "hvco_storyboard",
+              "evidence_layering"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "请再补一列`不能越界的表述`。比如哪些表征只能说明更容易形成高价钴，哪些不能直接说“已经证明 Co(IV)=O”。我想把它当讲稿脚注。",
+            "user_upload": [],
+            "key_terms": [
+              "不能越界的表述",
+              "更容易形成高价钴",
+              "不能直接说已经证明 Co(IV)=O",
+              "讲稿脚注"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 high-valent cobalt 叙事中的危险表述单独抽出来。",
+            "trace_focus": "应承接上轮 storyboard 结果，不应新增无来源断言。",
+            "llm_focus": "判断危险表述列表是否具有真实的 anti-overclaim 价值。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "overclaim_guard",
+              "presentation_notes"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮保存成 `memory/packs/D_hvco_storyboard.md`，至少有：`主证链`、`辅助证据`、`不能越界的表述` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "主证链",
+              "辅助证据",
+              "不能越界的表述",
+              "D_hvco_storyboard"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把高价钴 storyboard 固化为 pack。",
+            "trace_focus": "应写入 memory/packs/D_hvco_storyboard.md。",
+            "llm_focus": "判断 pack 是否能直接支撑 group meeting/thesis 的讲述设计。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/D_hvco_storyboard.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "主证链",
+                  "辅助证据",
+                  "不能越界的表述"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "storyboard_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_D_session_005_group_meeting_replay",
+        "session_title": "[EVAL][D] 20260305 group meeting replay",
+        "session_type": "normal",
+        "offset_hours": 48,
+        "route": "default",
+        "notes": "主测从 pack 成品反向归纳组织逻辑。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我想把 20260305 这次大组会反向拆解一下：请你结合那份工作文档、最终交付 PPT、literature_report_FINAL、以及示例 PDF，告诉我这套交付件最终采用了什么结构、信息密度和讲述节奏。我要的是‘复盘为什么它长成这样’，不是只描述它讲了什么。",
+            "user_upload": [
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/【20260305大组会】工作文档.md",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/20260305大组会-颜雍颀-v5_最终交付.pptx",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/literature_report_FINAL_v2-1.pptx",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/示例ppt.pdf"
+            ],
+            "key_terms": [
+              "大组会反向拆解",
+              "最终采用了什么结构",
+              "信息密度",
+              "讲述节奏",
+              "为什么它长成这样"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须对 group meeting 交付件做结构与节奏复盘，而非内容摘要。",
+            "trace_focus": "涉及多个 ppt/pdf；trace 应体现对二进制的解析，避免虚构页面结构。",
+            "llm_focus": "判断复盘是否真正抓住了 pack-quality 交付件的组织逻辑。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "group_meeting_replay",
+              "binary_pack_grounding"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "如果让我今天重做这套组会包，你再帮我给出一个`第一轮 revision checklist`：哪些地方最该先改，哪些地方虽然不完美但暂时可以接受，哪些地方属于只会越改越乱。",
+            "user_upload": [],
+            "key_terms": [
+              "第一轮 revision checklist",
+              "最该先改",
+              "暂时可以接受",
+              "只会越改越乱"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要给出 revision 优先级，而不是泛泛建议。",
+            "trace_focus": "应承接上轮对 pack 结构的复盘，不应离开具体交付件。",
+            "llm_focus": "判断 revision checklist 是否有真实的编辑价值。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "revision_checklist",
+              "editing_priority"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把结论存成 `memory/packs/D_group_meeting_replay.md`，至少包含：`结构复盘`、`做得好的地方`、`如果重做先改什么` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "结构复盘",
+              "做得好的地方",
+              "如果重做先改什么",
+              "D_group_meeting_replay"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 group meeting 复盘整理成 pack。",
+            "trace_focus": "应写入 memory/packs/D_group_meeting_replay.md。",
+            "llm_focus": "判断 pack 是否可直接用于下一次组会准备。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/D_group_meeting_replay.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "结构复盘",
+                  "做得好的地方",
+                  "如果重做先改什么"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "replay_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_D_session_006_proposal_revision",
+        "session_title": "[EVAL][D] proposal revision matrix",
+        "session_type": "normal",
+        "offset_hours": 60,
+        "route": "default",
+        "notes": "主测 proposal 多版本二进制材料的比较与 revision reasoning。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我想把开题报告的多版本演化梳理清楚。请你结合 proposal 的准备脉路、重构版 markdown、V3 PPT、范本 markdown、以及 final docx，给我做一张`版本修订矩阵`：每个版本主要在补什么、删什么、收紧了什么科学主张。",
+            "user_upload": [
+              "科研obsidian/0-毕业论文安排20251230/开题/开题报告-颜雍颀-V3.pptx",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/1-开题报告准备-重构/【开题报告】.md",
+              "科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/1-开题报告准备-重构/【开题报告准备脉路】.md",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/1-开题报告范本/【开题报告】.md",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/1-开题报告范本/开题报告final-20251229/开题报告-颜雍颀(1).docx"
+            ],
+            "key_terms": [
+              "版本修订矩阵",
+              "补什么",
+              "删什么",
+              "收紧了什么科学主张",
+              "proposal"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须比较 proposal 多版本的演化，并总结每次修订的功能。",
+            "trace_focus": "含 pptx/docx；若回答涉及版本差异，trace 应体现对二进制的解析，不可凭名称猜内容。",
+            "llm_focus": "判断矩阵是否真实反映了 proposal 的收束过程。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "proposal_revision",
+              "version_comparison"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "你再给我标一列：哪些地方是‘写得更锋利了’，哪些地方其实只是‘删掉了含糊表述’，哪些地方仍然存在逻辑跳跃。我要的是 revision sense，不是简单 diff。",
+            "user_upload": [],
+            "key_terms": [
+              "写得更锋利了",
+              "删掉了含糊表述",
+              "仍然存在逻辑跳跃",
+              "revision sense"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要对 proposal 修订做质量层面的判断，而不仅是逐字差异。",
+            "trace_focus": "应承接上轮版本矩阵，不应脱离版本证据做空泛评论。",
+            "llm_focus": "判断 revision sense 是否准确、细腻，符合真实学术写作迭代。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "revision_quality",
+              "logic_tightening"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮保存成 `memory/packs/D_proposal_revision_matrix.md`，至少包含：`版本差异`、`增强项`、`仍需修补` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "版本差异",
+              "增强项",
+              "仍需修补",
+              "D_proposal_revision_matrix"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要形成一份 proposal revision pack。",
+            "trace_focus": "应写入 memory/packs/D_proposal_revision_matrix.md。",
+            "llm_focus": "判断 pack 是否能直接支持后续开题/论文写作修订。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/D_proposal_revision_matrix.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "版本差异",
+                  "增强项",
+                  "仍需修补"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "proposal_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_D_session_007_figure_layout_rules",
+        "session_title": "[EVAL][D] figure layout rules",
+        "session_type": "normal",
+        "offset_hours": 72,
+        "route": "default",
+        "notes": "主测二进制排版样例向规则 pack 的转译。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我想把‘文章图片排版【机密】’里的经验抽出来，变成自己 thesis / 汇报都能用的图文排版规则。请你结合那份排版 PPT、毕业论文工作文档、以及 Ce 掺杂 Co3O4 的汇报 PPT，帮我总结：图-文比例、脚注、图题、信息层级、页内逻辑流应该怎么定。",
+            "user_upload": [
+              "科研obsidian/0-毕业论文安排20251230/文章图片排版【机密】.pptx",
+              "科研obsidian/0-毕业论文安排20251230/【毕业论文】工作文档0305.md",
+              "科研obsidian/0-毕业论文安排20251230/Ce掺杂Co3O4亚氯酸盐高级氧化.pptx"
+            ],
+            "key_terms": [
+              "图文排版规则",
+              "图-文比例",
+              "脚注",
+              "图题",
+              "信息层级",
+              "页内逻辑流"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须从排版素材中抽出可复用的 figure/layout 规则。",
+            "trace_focus": "包含 pptx；如果引用具体版式，应体现对二进制内容的解析或承认不确定边界。",
+            "llm_focus": "判断回答是否真正抽到了可执行的 layout 规则，而不是泛泛审美建议。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "figure_layout_rules",
+              "binary_layout_grounding"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再给我一个`常见错误清单`：哪些页看起来很努力，但实际上信息密度失衡、图和结论不匹配、脚注不够、或者根本不适合口头讲。",
+            "user_upload": [],
+            "key_terms": [
+              "常见错误清单",
+              "信息密度失衡",
+              "图和结论不匹配",
+              "脚注不够",
+              "不适合口头讲"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "要输出反面规则清单，以避免 layout 类交付件中的典型问题。",
+            "trace_focus": "应承接上轮 layout 规律，不应离开具体交付语境。",
+            "llm_focus": "判断错误清单是否对 researcher 真有纠偏作用。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "negative_examples",
+              "presentation_fit"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把这轮整理成 `memory/packs/D_figure_layout_rules.md`，至少有：`排版规则`、`图注脚注规则`、`常见错误` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "排版规则",
+              "图注脚注规则",
+              "常见错误",
+              "D_figure_layout_rules"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 layout 经验沉淀成可复用 pack。",
+            "trace_focus": "应写入 memory/packs/D_figure_layout_rules.md。",
+            "llm_focus": "判断 pack 是否具备跨 thesis / PPT 复用价值。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/D_figure_layout_rules.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "排版规则",
+                  "图注脚注规则",
+                  "常见错误"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "layout_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_D_session_008_selective_oxidation_bridge",
+        "session_title": "[EVAL][D] selective oxidation and polymerization bridge",
+        "session_type": "normal",
+        "offset_hours": 84,
+        "route": "default",
+        "notes": "主测旁支文献到 writing discussion 的安全桥接。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "我想把 selective oxidation / polymerization 这条旁支写成 thesis 里的‘讨论桥’，但又不想讲过头。请你结合聚合证据链调研、0327 大组会 PPT、reaction-pathway-tuning 那篇 PDF、以及 Ce-Co3O4 PPT，告诉我：哪些内容适合作为 discussion bridge，哪些只能写成启发，哪些现在根本不该进正文。",
+            "user_upload": [
+              "科研obsidian/0-毕业论文安排20251230/聚合框架/【gpt文献调研：高价钴氧物种生成+聚合证据链】.md",
+              "科研obsidian/0-毕业论文安排20251230/选择性氧化框架/0327大组会-颜雍颀.pptx",
+              "科研obsidian/0-毕业论文安排20251230/选择性氧化框架/reaction-pathway-tuning-between-electron-transfer-mediated-degradation-and-polymerization-in-fe-mos2-based-persulfate.pdf",
+              "科研obsidian/0-毕业论文安排20251230/Ce掺杂Co3O4亚氯酸盐高级氧化.pptx"
+            ],
+            "key_terms": [
+              "selective oxidation",
+              "polymerization",
+              "discussion bridge",
+              "只能写成启发",
+              "现在不该进正文"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须把 selective oxidation / polymerization 内容分为 discussion bridge / inspiration / forbidden 三层。",
+            "trace_focus": "涉及 md+pptx+pdf；trace 应体现对二进制与文本的联合读取，不可臆造图页信息。",
+            "llm_focus": "判断回答是否真正处理好了旁支写作的边界。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "discussion_bridge",
+              "anti_over_bridge"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "顺手再给我做一个`风险语句清单`：以后如果我在写作里问到类似桥接问题，哪些说法你应该自动降级成‘可能相关/可启发/待验证’，而不是直接写成我的体系已经观察到。",
+            "user_upload": [],
+            "key_terms": [
+              "风险语句清单",
+              "自动降级",
+              "可能相关",
+              "可启发",
+              "待验证",
+              "已经观察到"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要形成桥接写作时的风险语句清单。",
+            "trace_focus": "应承接上轮 bridge 分层结果，不应新增脱离来源的强断言。",
+            "llm_focus": "判断清单是否足够严格，能有效降低写作幻觉。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "risk_sentences",
+              "bridge_guardrails"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "把它沉淀成 `memory/concepts/D_selective_oxidation_bridge.md`，至少分成：`可进入写作的桥`、`只适合作讨论的桥`、`风险语句` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "可进入写作的桥",
+              "只适合作讨论的桥",
+              "风险语句",
+              "D_selective_oxidation_bridge"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要将旁支桥接逻辑沉淀为 concept card。",
+            "trace_focus": "应写入 memory/concepts/D_selective_oxidation_bridge.md。",
+            "llm_focus": "判断 concept card 是否能在写作时真实约束过度桥接。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "concept",
+                "path": "memory/concepts/D_selective_oxidation_bridge.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "可进入写作的桥",
+                  "只适合作讨论的桥",
+                  "风险语句"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "bridge_concept"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_D_session_009_thesis_storyline",
+        "session_title": "[EVAL][D] thesis storyline master",
+        "session_type": "normal",
+        "offset_hours": 96,
+        "route": "default",
+        "notes": "主测 thesis 全局 storyline 收束能力。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "现在请你把 thesis 的主线真正收起来。结合 Ce 掺杂 Co3O4 PPT、高价钴 pack、毕业论文工作文档、以及 0327 那份选择性氧化 PPT，帮我写一个`thesis storyline master`：每一章主要回答什么问题、各章之间靠什么逻辑接起来、每章最关键的图组是什么。",
+            "user_upload": [
+              "科研obsidian/0-毕业论文安排20251230/Ce掺杂Co3O4亚氯酸盐高级氧化.pptx",
+              "科研obsidian/0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/高价钴框架/【PACK】高价钴氧物种生成机理链.md",
+              "科研obsidian/0-毕业论文安排20251230/【毕业论文】工作文档0305.md",
+              "科研obsidian/0-毕业论文安排20251230/选择性氧化框架/0327大组会-颜雍颀.pptx"
+            ],
+            "key_terms": [
+              "thesis storyline master",
+              "每一章主要回答什么问题",
+              "各章之间靠什么逻辑接起来",
+              "每章最关键的图组是什么"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须形成 thesis 的总主线，并把章节问题和关键图组对应起来。",
+            "trace_focus": "应结合前序 packs/concepts 与本轮上传素材，不可只给通用论文大纲。",
+            "llm_focus": "判断 storyline 是否足够具体，能指导后续 thesis 收束。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "thesis_storyline",
+              "chapter_figure_mapping"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再帮我补上`缺口`这一列：每章如果现在就写，会缺哪类图、哪类对照、哪类解释。尤其哪些缺口会导致章节之间接不起来。",
+            "user_upload": [],
+            "key_terms": [
+              "缺口",
+              "会缺哪类图",
+              "哪类对照",
+              "哪类解释",
+              "章节之间接不起来"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 storyline 与 gap map 再次合并，指出章节连接处的断点。",
+            "trace_focus": "应复用 thesis gap map 与当前 storyline，不应遗失交叉章节依赖。",
+            "llm_focus": "判断是否真正发现了影响 thesis 连贯性的关键缺口。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "storyline_gaps",
+              "cross_chapter_links"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "请把它保存到 `memory/packs/D_thesis_storyline_master.md`，至少包含：`章节主线`、`图组映射`、`缺口` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "章节主线",
+              "图组映射",
+              "缺口",
+              "D_thesis_storyline_master"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 thesis 主线总收束成 pack。",
+            "trace_focus": "应写入 memory/packs/D_thesis_storyline_master.md。",
+            "llm_focus": "判断最终 storyline pack 是否已经具备 thesis 级别的组织价值。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/D_thesis_storyline_master.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "章节主线",
+                  "图组映射",
+                  "缺口"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "storyline_pack"
+            ]
+          }
+        ]
+      },
+      {
+        "session_id": "scenario_D_session_010_handoff",
+        "session_title": "[EVAL][D] writing pack handoff",
+        "session_type": "normal",
+        "offset_hours": 108,
+        "route": "default",
+        "notes": "最终 handoff session，主测版本权威性判断与写作防幻觉规则。",
+        "dialogue": [
+          {
+            "turn_id": 1,
+            "user_input": "最后请你站在‘我要把这个 writing workspace 交给另一个模型’的角度，做一个 handoff：proposal、thesis、group meeting、literature report 这几类交付里，哪些文件是权威来源，哪些是版本中间态，哪些只是排版/风格参考。",
+            "user_upload": [
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/【20260305大组会】工作文档.md",
+              "科研obsidian/0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/高价钴框架/【PACK】高价钴氧物种生成机理链.md",
+              "科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/1-开题报告范本/开题报告final-20251229/开题报告-颜雍颀(1).docx",
+              "科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/20260305大组会-颜雍颀-v5_最终交付.pptx",
+              "科研obsidian/0-毕业论文安排20251230/Ce掺杂Co3O4亚氯酸盐高级氧化.pptx"
+            ],
+            "key_terms": [
+              "writing workspace handoff",
+              "权威来源",
+              "版本中间态",
+              "排版/风格参考"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "必须按 authority level 对 writing workspace 中的文件做 handoff 分层。",
+            "trace_focus": "应复用前序 packs 并结合本轮上传文件，不可忽略 docx/pptx 的权威性差异。",
+            "llm_focus": "判断 handoff 是否真的能帮助下一个模型少走弯路。",
+            "expected_artifacts": [],
+            "binary_grounding_required": true,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "handoff_authority",
+              "workspace_transfer"
+            ]
+          },
+          {
+            "turn_id": 2,
+            "user_input": "再补一个`后续写作 anti-hallucination 清单`：如果以后我要你读 PPTX / DOCX / PDF 去帮我写内容，哪些情况下你应该先提醒‘需要回原文页 / 需要回版本源文件 / 需要确认这是不是最终稿’？",
+            "user_upload": [],
+            "key_terms": [
+              "后续写作 anti-hallucination 清单",
+              "需要回原文页",
+              "需要回版本源文件",
+              "需要确认是不是最终稿"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "要生成跨 pptx/docx/pdf 的写作防幻觉规则。",
+            "trace_focus": "应结合本 scenario 里多版本、多二进制来源的经验总结规则。",
+            "llm_focus": "判断清单是否针对 writing closure 的真实痛点，而不是通用套话。",
+            "expected_artifacts": [],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "writing_guardrails",
+              "version_honesty"
+            ]
+          },
+          {
+            "turn_id": 3,
+            "user_input": "请把最后的 handoff 存成 `memory/packs/D_handoff.md`，至少包含：`权威来源排序`、`仍有冲突的点`、`后续写作禁区` 三节。",
+            "user_upload": [],
+            "key_terms": [
+              "权威来源排序",
+              "仍有冲突的点",
+              "后续写作禁区",
+              "D_handoff"
+            ],
+            "forbidden_terms": [],
+            "content_focus": "需要把 writing workspace 的 handoff 收束为最终 pack。",
+            "trace_focus": "应写入 memory/packs/D_handoff.md。",
+            "llm_focus": "判断 handoff pack 是否适合直接交给另一个模型继续写作。",
+            "expected_artifacts": [
+              {
+                "artifact_type": "pack",
+                "path": "memory/packs/D_handoff.md",
+                "must_exist_after_turn": true,
+                "required_sections": [
+                  "权威来源排序",
+                  "仍有冲突的点",
+                  "后续写作禁区"
+                ]
+              }
+            ],
+            "binary_grounding_required": false,
+            "requires_workspace_memory_from_prior_sessions": true,
+            "route": "default",
+            "eval_tags": [
+              "artifact_generation",
+              "final_handoff"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

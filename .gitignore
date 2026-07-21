@@ -1,0 +1,77 @@
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+
+# Local assistant / workspace metadata
+.claude/
+
+# Secrets / environment files
+.env
+.env.*
+*.env
+!.env.example
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+~$*
+test_data/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pytype/
+.coverage
+.coverage.*
+htmlcov/
+dist/
+build/
+pip-wheel-metadata/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Node / Next.js artifacts
+node_modules/
+.next/
+out/
+.vercel/
+*.tsbuildinfo
+
+# Runtime data for this project
+backend/.openclaw/
+backend/.venv/
+
+# Archives and generated bundles
+*.zip
+*.tar
+*.tar.gz
+!/给GPT5PRO提示词/生成workspace提示词/openclaw_templates.zip
+闭环测试集/
+# Nested repos managed separately
+Researchloop-v1/
+v0-researchloop/
+*repomix*.md
+*repomix*.xml
+backend/auto_eval/tests/

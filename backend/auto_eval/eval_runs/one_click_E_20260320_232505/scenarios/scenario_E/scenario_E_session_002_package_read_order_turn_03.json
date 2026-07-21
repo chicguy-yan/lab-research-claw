@@ -1,0 +1,139 @@
+{
+  "scenario_id": "scenario_E",
+  "session_id": "scenario_E_session_002_package_read_order",
+  "turn_id": 3,
+  "workspace_id": "eval-scenario_e-260320_2325",
+  "backend_session_id": "be61aa1271b6",
+  "assistant_text": "**Context Trace**\n\n本轮实际调用并读取了：\n- `assets/uploads/ced68974_closure_mapping.md`\n- `assets/uploads/5ee0c395_test_cases_literature.md`\n- `assets/uploads/4abcbbd4_test_cases_experiment.md`\n\n本轮实际写入了：\n- `memory/packs/E_package_read_order.md`\n\n---\n\n**Rationale**\n\n你要求把这一轮沉淀成一个 Pack，核心内容至少包括：\n- 建议读取顺序\n- 每一步要确认的对象\n- 停止下钻条件\n\n我基于已读的 closure 索引与 literature / experiment test cases，把前两轮给出的 evaluator 视角规则整理成了一个可复用 Pack，并按 memory 写入规则带上了 source assets。\n\n---\n\n**Deliverable**\n\n已落盘文件：\n- `memory/packs/E_package_read_order.md`\n\n文件内容包含：\n1. **建议读取顺序**\n2. **每一步要确认的对象**\n3. **停止下钻条件**\n4. 补充了：\n   - 必须回源文件的条件\n   - 最小充分回源原则\n   - 各 closure 的执行建议\n   - evaluator 默认执行口径\n\n如果你愿意，下一步我可以继续补两个配套文件之一：\n\n- **A. `memory/packs/E_benchmark_intake_sheet.md`**  \n  做成 intake 模板，方便你逐个 closure 打标入池\n\n- **B. `memory/packs/E_closure_decision_table.md`**  \n  做成表格版：`L1/L2/L3/E1/E2/E3` 的  \n  `是否可停在 bridge / 最小回源文件 / 停止条件 / 风险标签`\n\n---\n\n**Memory Patch**\n\n本轮已实际写入：\n- `memory/packs/E_package_read_order.md`\n\n来源资产：\n- `assets/uploads/ced68974_closure_mapping.md`\n- `assets/uploads/5ee0c395_test_cases_literature.md`\n- `assets/uploads/4abcbbd4_test_cases_experiment.md`\n\n如继续沉淀，建议下一步写入其一：\n- `memory/packs/E_benchmark_intake_sheet.md`\n- `memory/packs/E_closure_decision_table.md`",
+  "attachments_used": [],
+  "trace_events": [
+    {
+      "tool_call_id": "call_C2Ju8pGUETiU6RXqlcHN2ZNc",
+      "tool": "read_file",
+      "args": {
+        "cwd": ".",
+        "path": "assets/uploads/ced68974_closure_mapping.md"
+      },
+      "timestamp": "2026-03-21T17:24:02.609919",
+      "status": "completed",
+      "result": "# Closure Mapping\n\n## literature_closure\n### 亚氯酸盐活化基线机制：Co3O4 -> Co(IV) + ClO2\n- research_line: `RL1_chlorite_activation_high_valent_cobalt`\n- object_hint: `亚氯酸盐活化下的 Co(IV)=O / ClO2 双活性物种机制`\n- reason: 文献 PDF 与对应文献笔记同目录共现，且笔记中明确把 OAT、质子增强、ClO2 与 Co(IV) 的贡献区分作为研究目的。\n- suitable_tests: `context_hit_test`, `object_landing_test`, `trace_replay_test`\n- uncertainty_tags: `none`\n- status: `strong_candidate`\n- source_files:\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md`\n\n### Ce-Co3O4 与氧空位/界面电子结构调控\n- research_line: `RL2_ce_co3o4_heterojunction`\n- object_hint: `CeO2/Co3O4 界面调控如何促进高价钴生成`\n- reason: 文献目录名、第四阶段笔记和后续高价钴证明目录共同围绕 Ce、氧空位、d 带/梯度轨道耦合展开。\n- suitable_tests: `context_hit_test`, `object_landing_test`\n- uncertainty_tags: `needs_manual_review`\n- status: `candidate_with_partial_manual_linking`\n- source_files:\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260305和师兄探讨过的主逻辑参考文献/Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf`\n  - `科研obsidian/1-主逻辑树-自上而下（脉络）+自"
+    },
+    {
+      "tool_call_id": "call_wm00kOiwbQlqPABW7UtnMPZF",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T17:24:02.616909",
+      "status": "completed_unmatched",
+      "result": "# Closure Mapping\n\n## literature_closure\n### 亚氯酸盐活化基线机制：Co3O4 -> Co(IV) + ClO2\n- research_line: `RL1_chlorite_activation_high_valent_cobalt`\n- object_hint: `亚氯酸盐活化下的 Co(IV)=O / ClO2 双活性物种机制`\n- reason: 文献 PDF 与对应文献笔记同目录共现，且笔记中明确把 OAT、质子增强、ClO2 与 Co(IV) 的贡献区分作为研究目的。\n- suitable_tests: `context_hit_test`, `object_landing_test`, `trace_replay_test`\n- uncertainty_tags: `none`\n- status: `strong_candidate`\n- source_files:\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md`\n\n### Ce-Co3O4 与氧空位/界面电子结构调控\n- research_line: `RL2_ce_co3o4_heterojunction`\n- object_hint: `CeO2/Co3O4 界面调控如何促进高价钴生成`\n- reason: 文献目录名、第四阶段笔记和后续高价钴证明目录共同围绕 Ce、氧空位、d 带/梯度轨道耦合展开。\n- suitable_tests: `context_hit_test`, `object_landing_test`\n- uncertainty_tags: `needs_manual_review`\n- status: `candidate_with_partial_manual_linking`\n- source_files:\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf`\n  - `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260305和师兄探讨过的主逻辑参考文献/Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf`\n  - `科研obsidian/1-主逻辑树-自上而下（脉络）+自"
+    },
+    {
+      "tool_call_id": "call_EeW3mK57eXKqZmhDA92jiXxb",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T17:24:02.616909",
+      "status": "completed_unmatched",
+      "result": "# Literature Closure Test Cases\n\n## L1 基线机制文献簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md`\n- 为什么典型: 同一主题下同时有原始 PDF、文献笔记和方法外延，最适合测试 Concept 落点。\n- 适合测试: `context_hit_test`, `object_landing_test`, `trace_replay_test`\n\n## L2 Ce-Co3O4 主逻辑迁移簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260305和师兄探讨过的主逻辑参考文献/Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf`; `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第四阶段/【第四阶段实验脉络】Ce-Co3O4机理主线搭建.md`\n- 为什么典型: 适合测试系统能否从“材料结构调控文献”命中文献，再连接到实验脉络。\n- 适合测试: `context_hit_test`, `object_landing_test`\n\n## L3 d-band 到聚合路径的跨主题综述簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species - 文献笔记.md`; `科研obsidian/0-毕业论文安排20251230/聚合框架/【gpt文献调研：高价钴氧物种生成+聚合证据链】.md`; `科研obsidian/0-毕业论文安排20251230/选择性氧化框架/reaction-pathway-tuning-between-electron-transfer-mediate"
+    },
+    {
+      "tool_call_id": "call_EeW3mK57eXKqZmhDA92jiXxb",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T17:24:02.616909",
+      "status": "completed_unmatched",
+      "result": "# Experiment Closure Test Cases\n\n## E1 第二阶段性能筛选闭环\n- 关联文件: `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第二阶段/【第二阶段实验记录：M-Co3O4亚氯酸盐活化选择性降解污染物】.md`; `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/2-材料合成方法/【第二阶段】材料合成方法汇总.md`; `科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/3-节点外工具/【Graphpad】性能体系：性能+动力学.md`\n- 为什么典型: 从性能筛选一路走到“是否生成高价 Co/ClO2”的机制发问，闭环起点清晰。\n- 适合测试: `trace_replay_test`, `object_landing_test`\n\n## E2 第五阶段最小机理闭环\n- 关联文件: `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第五阶段：最小机理闭环/【第五阶段】ClO2的EPR测试方法建模.md`; `科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【第五阶段实验sop】·OH、1O2、O2-掩蔽动力学（淬灭）.md`; `科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【第五阶段实验sop】·OH、1O2、O2-的EPR测试.md`; `科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【亚氯酸盐AOPs活性物种测试】PMSO探针和ClO2显色.md`\n- 为什么典型: 协议、测试条件、显色/EPR 方法都在，特别适合验证 Task 的 protocol/evidence 组织。\n- 适合测试: `context_hit_test`, `trace_replay_test`\n\n## E3 第六阶段高价钴直接证据链\n- 关联文件: `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第六阶段0305/【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md`; `科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【第六阶段】亚氯酸盐体系！CeO2合成&淬灭实验sop.md`; `科研obsidian/0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/高价钴框架/【PACK】高价钴氧物种生成机理链.md`; `科研obsidian/0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/高价钴框架/高价钴证明实验.pptx`\n- 为什么典型: Claim 明确、证据工具明确、写作落点明确，是最适合做 trace 回放的候选。\n- 适合测试: `object_landing_test`, `trace_replay_test`, `writing_organization_test`\n\n"
+    },
+    {
+      "tool_call_id": "call_4BiTQbGhNgom94YXdNZDNlWT",
+      "tool": "write_file",
+      "args": {
+        "content": "# E_package_read_order\n\n## Purpose\n为 benchmark evaluator 提供一个 **closure package 的读取顺序与下钻阈值**。目标不是像 researcher 一样先读内容细节，而是先判断：\n- 哪些 closure 值得入池\n- 先读哪层索引\n- 每一步要确认什么对象\n- 什么时候停止下钻\n- 什么时候必须回源文件\n\n---\n\n## 建议读取顺序\n\n### Step 1：先读总索引层\n**先读：** `closure_mapping.md`\n\n**目的：**\n- 识别 closure family：`literature_closure / experiment_closure / writing_closure`\n- 识别每个 closure 的 `object_hint / suitable_tests / uncertainty_tags / status / source_files`\n- 先做 evaluator shortlist，而不是先做内容理解\n\n**建议输出：**\n- A 档：benchmark 骨架候选\n- B 档：扩展题/高价值题\n- C 档：边界题/压力题\n\n**本轮建议分档：**\n- A 档：`L1`、`E1`\n- B 档：`L2`、`E3`\n- C 档：`L3`、`E2`\n\n---\n\n### Step 2：再读 case catalog 层\n**先读：** `test_cases_literature.md`\n\n**原因：**\n- literature case 更适合先校准 `context_hit_test / object_landing_test`\n- 对原始输出文件依赖更低，适合先把 benchmark schema 立住\n\n**再读：** `test_cases_experiment.md`\n\n**原因：**\n- experiment case 更依赖 protocol / evidence / trace / 状态判断\n- 适合在第一版评测框架形成后再引入\n\n---\n\n### Step 3：按 closure 优先级进入分组阅读\n\n#### Literature closure\n推荐顺序：`L1 → L2 → L3`\n\n- `L1 基线机制文献簇`\n  - 最适合做 literature benchmark 骨架\n  - 适合测试：`context_hit_test`, `object_landing_test`, `trace_replay_test`\n- `L2 Ce-Co3O4 主逻辑迁移簇`\n  - 适合做主线迁移与 object landing 扩展题\n- `L3 跨主题迁移簇`\n  - 适合做边界题、hard case、over-retrieval 检测\n\n#### Experiment closure\n推荐顺序：`E1 → E3 → E2`\n\n- `E1 第二阶段性能筛选闭环`\n  - 最适合做 experiment benchmark 骨架\n  - 适合测试：`trace_replay_test`, `object_landing_test`\n- `E3 第六阶段高价钴直接证据链`\n  - 高价值，但带部分计划态，适合第二批扩展\n- `E2 第五阶段最小机理闭环`\n  - 更适合做 missing-context / protocol-rich case\n\n---\n\n### Step 4：最后才决定是否下钻原始资产\n默认原则：\n- **先索引，后目录；先 closure，后 raw；先强候选，后困难题。**\n- 不默认读所有原始 PDF / PPT / SOP\n- 只对最终入选 closure 做最小充分回源\n\n**原始资产下钻优先级：**\n1. 先读 md 笔记 / 实验记录\n2. 再读 SOP / 工作文档\n3. 最后才读 PDF / PPT / docx 原件\n\n---\n\n## 每一步要确认的对象\n\n### Step 1：总索引层要确认的对象\n在 `closure_mapping.md` 中先确认：\n- 这是哪一类 closure：`literature / experiment / writing`\n- `research_line` 是否清楚\n- `object_hint` 是否足以判断对象落点\n- `suitable_tests` 是否足以确定 benchmark lane\n- `status / uncertainty_tags` 是否提示风险\n- `source_files` 是否给出了最小回源路径\n\n**此步的对象不是事实内容，而是：**\n- `closure identity`\n- `评测用途`\n- `风险等级`\n\n---\n\n### Step 2：case catalog 层要确认的对象\n在 `test_cases_literature.md` / `test_cases_experiment.md` 中确认：\n- 为什么这个 case 典型\n- 更适合测哪类测试\n- 该 case 更像 `Concept / Task / Pack` 中的哪类工作对象\n- 是否值得进入第一批 benchmark\n\n**此步的对象是：**\n- `case worthiness`\n- `object landing expectation`\n- `difficulty tier`\n\n---\n\n### Step 3：closure 层要确认的对象\n进入某个具体 closure 时，确认：\n- closure 边界是否唯一\n- 与邻近 closure 是否容易混淆\n- 该 closure 的主对象是 `Concept`、`Task` 还是 `Pack`\n- 是否需要细化到 trace skeleton\n- 当前是否已经足够做 benchmark case card\n\n**推荐主对象判断：**\n- `L1`：偏 `Concept`\n- `L2`：`Concept` 向实验主线桥接\n- `L3`：偏 `Concept/Pack` 边界测试\n- `E1`：偏 `Task`\n- `E2`：偏 `Task`，但需审计 evidence 缺口\n- `E3`：`Task + Pack` 联动\n\n---\n\n### Step 4：raw 层要确认的对象\n只有在决定回源后，才确认：\n- 该 closure 的 gold anchor 是哪份原始资产\n- 是否存在“计划态 / 草图态 / 完成态”混淆\n- 是否真有证据链，而不只是 bridge 层组织得漂亮\n- trace 顺序是否有唯一或近唯一的最小路径\n\n**此步的对象是：**\n- `gold evidence anchor`\n- `state validation`\n- `minimal trace path`\n\n---\n\n## 停止下钻条件\n\n### A. 可以停止下钻的条件\n当以下条件大部分成立时，可以停在 bridge 层，不继续翻更多原始资产：\n\n1. 已能唯一确定 closure 身份\n2. 已能判断其适合的测试类型\n3. 已能判断主对象应落 `Concept / Task / Pack` 中哪类\n4. `status` 稳定，且 `uncertainty_tags` 不提示明显风险\n5. 当前 benchmark 只做骨架设计，不做证据级答案键\n6. 当前不需要判定“计划态 vs 完成态”\n\n**经验性规则：**\n以下 6 项里满足 5 项以上，通常可停：\n- closure 名称和边界唯一\n- object_hint 足以确定对象落点\n- suitable_tests 已清楚\n- status/uncertainty 无明显风险\n- source_files 已足够描述最小路径\n- 当前 benchmark 不要求证据级 gold label\n\n---\n\n### B. 必须回源文件的条件\n出现以下任一条，就不能只停留在 bridge 层：\n\n1. `uncertainty_tags` 或 `status` 带风险信号，例如：\n   - `needs_manual_review`\n   - `missing_context`\n   - `uncertain`\n   - `candidate_with_partial_manual_linking`\n   - `high_value_but_partly_planned`\n2. 需要制作可判分的 gold answer / gold anchor\n3. 需要区分“计划态 / 草图态 / 已完成态”\n4. bridge 层无法唯一决定对象落点\n5. 需要评估细粒度 `trace_replay_test`\n6. bridge 层信息之间存在张力，无法自行消解\n\n---\n\n### C. 最小充分回源原则\n回源不等于全量读完所有原始资产，只做 **最小充分回源**。\n\n#### literature case\n优先顺序：\n1. 文献笔记 md\n2. 1 篇核心 PDF\n\n若已能确认主题边界、机制对象和纳入理由，就停止。\n\n#### experiment case\n优先顺序：\n1. 实验记录 / 阶段脉络 md\n2. 1 份关键 SOP 或方法 md\n3. 必要时再看 Pack / PPT / 原始输出\n\n若已能确认任务目标、实验链条、状态边界，就停止。\n\n---\n\n## closure 级执行建议\n\n### 可先停在 bridge 层的 closure\n- `L1`：适合先做 literature benchmark 骨架\n- `E1`：适合先做 experiment benchmark 骨架\n\n### 默认应回源的 closure\n- `L2`：带 `needs_manual_review`，且涉及文献到实验主线桥接\n- `L3`：带 `uncertain`，适合边界题，但不能长期停在 bridge 层\n- `E2`：带 `missing_context`，要判断 protocol-rich 还是 evidence-complete\n- `E3`：带 `high_value_but_partly_planned`，必须区分计划态与完成态\n\n---\n\n## 最终执行口径\n\n### evaluator 的默认顺序\n1. `closure_mapping.md`\n2. `test_cases_literature.md`\n3. `test_cases_experiment.md`\n4. 第一批：`L1`, `E1`\n5. 第二批：`L2`, `E3`\n6. 第三批：`L3`, `E2`\n7. 仅对最终入选 closure 做最小充分回源\n\n### evaluator 的默认停手原则\n> 能在 bridge 层唯一回答“它是什么、测什么、对象落哪、是否值得入池”时，就停止下钻；\n> 一旦要回答“证据锚点是什么、状态是否完成、trace 是否真实”，就必须回源文件。\n",
+        "cwd": ".",
+        "path": "memory/packs/E_package_read_order.md",
+        "source_assets": [
+          "assets/uploads/ced68974_closure_mapping.md",
+          "assets/uploads/5ee0c395_test_cases_literature.md",
+          "assets/uploads/4abcbbd4_test_cases_experiment.md"
+        ]
+      },
+      "timestamp": "2026-03-21T17:24:51.275015",
+      "status": "completed",
+      "result": "File written successfully: memory/packs/E_package_read_order.md"
+    },
+    {
+      "tool_call_id": "call_4BiTQbGhNgom94YXdNZDNlWT",
+      "tool": "write_file",
+      "args": null,
+      "timestamp": "2026-03-21T17:24:51.295788",
+      "status": "completed_unmatched",
+      "result": "File written successfully: memory/packs/E_package_read_order.md"
+    }
+  ],
+  "created_paths": [
+    "memory/packs/E_package_read_order.md"
+  ],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/be61aa1271b6",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "E-S002-T03-C1",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中 4 个，达到阈值。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "E-S002-T03-C2",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "artifact_result": {
+    "criterion_id": "E-S002-T03-C2A",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "judge_result": {
+    "criterion_id": "E-S002-T03-C3",
+    "score": 100.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 4 个关键术语",
+      "检测到工具使用: read_file, write_file"
+    ],
+    "risks": [],
+    "missing": [],
+    "raw_text": "你是一名擅长把复杂 benchmark 设计收束成可实现协议的系统架构师。请判断这条回答能否作为 bridge/eval closure 的稳定对象：它是否真正形成了 read-order、priority、schema、prompt contract、failure mode 或 handoff 这类可执行对象；是否区分了 scenario/session/turn/criterion 层级；是否兼顾实现成本、覆盖度与可评分性；是否能够被 Codex 直接消费为实现输入。不要用自己的经验替模型补上尚未写出的系统约束，只按现有回答评分。输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_E_session_002_package_read_order\",\n  \"turn_id\": 3,\n  \"user_input\": \"把这轮存成 `memory/packs/E_package_read_order.md`，至少包含：`建议读取顺序`、`每一步要确认的对象`、`停止下钻条件` 三节。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace**\\n\\n本轮实际调用并读取了：\\n- `assets/uploads/ced68974_closure_mapping.md`\\n- `assets/uploads/5ee0c395_test_cases_literature.md`\\n- `assets/uploads/4abcbbd4_test_cases_experiment.md`\\n\\n本轮实际写入了：\\n- `memory/packs/E_package_read_order.md`\\n\\n---\\n\\n**Rationale**\\n\\n你要求把这一轮沉淀成一个 Pack，核心内容至少包括：\\n- 建议读取顺序\\n- 每一步要确认的对象\\n- 停止下钻条件\\n\\n我基于已读的 closure 索引与 literature / experiment test cases，把前两轮给出"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [
+    {
+      "artifact_type": "pack",
+      "path": "memory/packs/E_package_read_order.md",
+      "must_exist_after_turn": true,
+      "required_sections": [
+        "建议读取顺序",
+        "每一步要确认的对象",
+        "停止下钻条件"
+      ]
+    }
+  ],
+  "temporary_expectations": null,
+  "provisional_turn_score": 100.0,
+  "final_turn_score": 100.0
+}

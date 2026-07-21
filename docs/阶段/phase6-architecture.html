@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 6 Architecture — React Frontend + Bootstrap Gate + Test Suite</title>
+<style>
+:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2128;--border:#30363d;--text:#e6edf3;--text2:#8b949e;--accent:#58a6ff;--green:#3fb950;--yellow:#d29922;--red:#f85149;--purple:#bc8cff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding:32px;max-width:1200px;margin:0 auto}
+h1{font-size:28px;margin-bottom:8px}
+h2{font-size:20px;margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3{font-size:16px;margin:20px 0 10px;color:var(--accent)}
+p,li{font-size:14px;color:var(--text2)}
+a{color:var(--accent);text-decoration:none}
+table{width:100%;border-collapse:collapse;margin:12px 0}
+th,td{padding:8px 12px;border:1px solid var(--border);font-size:13px;text-align:left}
+th{background:var(--bg2);color:var(--text);font-weight:600}
+td{color:var(--text2)}
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
+.badge-done{background:rgba(63,185,80,.15);color:var(--green)}
+.badge-phase6{background:rgba(88,166,255,.15);color:var(--accent)}
+.badge-later{background:rgba(139,148,158,.15);color:var(--text2)}
+.badge-pass{background:rgba(63,185,80,.15);color:var(--green)}
+.badge-pending{background:rgba(210,153,34,.15);color:var(--yellow)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;margin:8px 0}
+.card-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px}
+.card-body{font-size:13px;color:var(--text2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin:12px 0}
+.callout{border-left:3px solid var(--accent);background:var(--bg2);padding:12px 16px;margin:12px 0;border-radius:0 6px 6px 0}
+.callout-title{font-weight:600;color:var(--accent);margin-bottom:4px;font-size:13px}
+.callout-body{font-size:13px;color:var(--text2)}
+pre{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px;font-size:12px;overflow-x:auto;color:var(--text2);margin:8px 0}
+.file-tree{font-family:monospace;font-size:13px;line-height:1.8}
+.file-tree .new{color:var(--green)}
+.file-tree .phase1{color:var(--text2)}
+.file-tree .modified{color:var(--yellow)}
+.subtitle{color:var(--text2);font-size:14px;margin-bottom:24px}
+</style>
+</head>
+<body>
+
+<h1>Phase 6 Architecture</h1>
+<p class="subtitle">React + Vite + TypeScript Frontend · Bootstrap Gate · Workspace-Aware API Client · Test Suite</p>
+
+<!-- 1. Phase 目标与验收 -->
+<h2>1. Phase 目标与验收</h2>
+<table>
+<tr><th>#</th><th>验证项</th><th>状态</th></tr>
+<tr><td>1</td><td>前端迁移到 React + Vite + TypeScript</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>2</td><td>所有请求自动带 X-Workspace-Id</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>3</td><td>pending/failed workspace 无法进入普通 chat</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>4</td><td>workspace 切换后 session/tree/trace 不串</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>5</td><td>chat SSE 可显示 token 与工具事件</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>6</td><td>支持附件上传</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>7</td><td>支持 trace envelope 查看</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>8</td><td>npm run build 通过</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>9</td><td>npm run test:run 通过（5 files, 6 tests）</td><td><span class="badge badge-pass">PASS</span></td></tr>
+<tr><td>10</td><td>Playwright smoke 通过</td><td><span class="badge badge-pending">待验证</span></td></tr>
+</table>
+
+<!-- 2. 文件清单 -->
+<h2>2. 文件清单</h2>
+<div class="file-tree">
+frontend/<br>
+├── <span class="new">index.html</span><br>
+├── <span class="new">package.json</span><br>
+├── <span class="modified">vite.config.ts</span> (defineConfig from vitest/config, exclude tests/)<br>
+├── <span class="modified">tsconfig.json</span> (ES2022)<br>
+├── <span class="modified">tsconfig.node.json</span> (ES2022 + bundler + skipLibCheck)<br>
+├── <span class="new">playwright.config.ts</span><br>
+├── src/<br>
+│   ├── <span class="new">main.tsx</span><br>
+│   ├── <span class="new">styles.css</span> (540 行全局 CSS)<br>
+│   ├── <span class="new">vite-env.d.ts</span><br>
+│   ├── app/<br>
+│   │   ├── <span class="new">App.tsx</span> (主布局 + query/mutation 装配)<br>
+│   │   ├── <span class="new">App.test.tsx</span><br>
+│   │   └── <span class="new">queryClient.ts</span><br>
+│   ├── features/<br>
+│   │   ├── app/<br>
+│   │   │   ├── <span class="new">store.ts</span> (Zustand + persist)<br>
+│   │   │   └── <span class="new">store.test.ts</span><br>
+│   │   ├── workspace/<br>
+│   │   │   ├── <span class="new">BootstrapGate.tsx</span><br>
+│   │   │   ├── <span class="new">BootstrapGate.test.tsx</span><br>
+│   │   │   └── <span class="new">WorkspaceDialogs.tsx</span><br>
+│   │   ├── chat/<br>
+│   │   │   └── <span class="new">ChatPanel.tsx</span> (SSE + attachments + audit)<br>
+│   │   ├── files/<br>
+│   │   │   └── <span class="new">FileTreePanel.tsx</span><br>
+│   │   └── trace/<br>
+│   │       └── <span class="new">TracePanel.tsx</span><br>
+│   ├── shared/<br>
+│   │   ├── api/<br>
+│   │   │   ├── <span class="new">client.ts</span> (workspace-aware API client)<br>
+│   │   │   ├── <span class="new">client.test.ts</span><br>
+│   │   │   ├── <span class="new">sse.ts</span> (SSE stream parser)<br>
+│   │   │   └── <span class="new">sse.test.ts</span><br>
+│   │   ├── types/<br>
+│   │   │   └── <span class="new">api.ts</span> (18 types/interfaces)<br>
+│   │   └── utils/<br>
+│   │       ├── <span class="new">format.ts</span><br>
+│   │       └── <span class="new">storage.ts</span><br>
+│   └── test/<br>
+│       ├── <span class="new">setup.ts</span> (MSW lifecycle)<br>
+│       └── <span class="new">server.ts</span><br>
+└── tests/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="new">smoke.spec.ts</span> (Playwright E2E)<br>
+</div>
+
+<!-- 3. API 端点 -->
+<h2>3. API 端点</h2>
+<table>
+<tr><th>Method</th><th>Path</th><th>Phase</th><th>说明</th></tr>
+<tr><td>GET</td><td>/</td><td>1</td><td>Health check / probe</td></tr>
+<tr><td>POST</td><td>/api/chat</td><td>1 → 5.3</td><td>SSE streaming chat (workspace-aware)</td></tr>
+<tr><td>GET</td><td>/api/sessions</td><td>1 → 5.3</td><td>List sessions (scoped by workspace)</td></tr>
+<tr><td>POST</td><td>/api/sessions</td><td>1 → 5.3</td><td>Create session</td></tr>
+<tr><td>PUT</td><td>/api/sessions/{id}</td><td>1 → 5.3</td><td>Rename session</td></tr>
+<tr><td>DELETE</td><td>/api/sessions/{id}</td><td>1 → 5.3</td><td>Delete session</td></tr>
+<tr><td>GET</td><td>/api/sessions/{id}/history</td><td>1 → 5.3</td><td>Get message history</td></tr>
+<tr><td>GET</td><td>/api/files</td><td>2 → 5.3</td><td>Read file</td></tr>
+<tr><td>POST</td><td>/api/files</td><td>2 → 5.3</td><td>Save file</td></tr>
+<tr><td>GET</td><td>/api/files/tree</td><td>2 → 5.3</td><td>Directory tree</td></tr>
+<tr><td>GET</td><td>/api/files/preview</td><td>2 → 5.3</td><td>File preview</td></tr>
+<tr><td>POST</td><td>/api/assets/upload</td><td>3+4 → 5.3</td><td>Upload asset</td></tr>
+<tr><td>GET</td><td>/api/assets/download</td><td>5.2 → 5.3</td><td>Download asset</td></tr>
+<tr><td>GET</td><td>/api/workspaces</td><td>5.3</td><td>List all workspaces</td></tr>
+<tr><td>POST</td><td>/api/workspaces</td><td>5.3</td><td>Provision new workspace</td></tr>
+<tr><td>PUT</td><td>/api/workspaces/{id}</td><td>5.3</td><td>Rename workspace</td></tr>
+<tr><td>GET</td><td>/api/workspaces/{id}/manifest</td><td>5.3</td><td>Read manifest</td></tr>
+<tr><td>POST</td><td>/api/workspaces/{id}/bootstrap/start</td><td>5.3</td><td>Start bootstrap runner</td></tr>
+</table>
+<p>Phase 6 未新增后端 API。所有端点由前端 apiClient 统一封装调用。</p>
+
+<!-- 4. 核心模块职责 -->
+<h2>4. 核心模块职责</h2>
+<div class="grid">
+<div class="card"><div class="card-title">App.tsx</div><div class="card-body">主布局组件。顶部控制栏（workspace/session 选择器）+ 三栏工作台。装配 10+ useQuery 和 4 useMutation，根据 bootstrap_status 条件渲染 BootstrapGate 或 ChatPanel。</div></div>
+<div class="card"><div class="card-title">apiClient (client.ts)</div><div class="card-body">workspace-aware API 客户端工厂。所有请求自动注入 X-Workspace-Id header。封装 probe/workspaces/sessions/files/assets/chat 全部后端接口。</div></div>
+<div class="card"><div class="card-title">streamSse (sse.ts)</div><div class="card-body">独立 SSE 解析模块。从 ReadableStream 逐行解析 event/data，分发 token/tool_start/tool_end/new_response/done/error 事件。</div></div>
+<div class="card"><div class="card-title">store.ts (Zustand)</div><div class="card-body">UI 状态管理。apiBase/connection/currentWorkspaceId/currentSessionId/preview/tracePanelOpen。persist 中间件持久化关键字段到 localStorage。resetWorkspaceScope() 防止跨 workspace 状态串联。</div></div>
+<div class="card"><div class="card-title">BootstrapGate.tsx</div><div class="card-body">Bootstrap 拦截组件。pending/failed/running 状态下阻止进入普通 chat，显示对应文案和操作按钮（开始初始化/重试/刷新状态）。</div></div>
+<div class="card"><div class="card-title">ChatPanel.tsx</div><div class="card-body">聊天面板。历史消息渲染 + 实时流式消息（liveTurn 状态机）。SSE token 追加、tool 审计记录、附件上传队列、route 参数 hash 解析。</div></div>
+<div class="card"><div class="card-title">FileTreePanel.tsx</div><div class="card-body">文件树面板（左右栏复用）。递归 TreeNodeView 渲染目录/文件，分 section 展示（Control Plane/Identity/Timeline/Skills/Concepts/Tasks/Packs）。点击文件触发预览。</div></div>
+<div class="card"><div class="card-title">TracePanel.tsx</div><div class="card-body">Trace 审计浮层。固定定位，展示 trace envelope 中的工具调用记录，按时间倒序排列，显示工具名/状态/参数/结果。</div></div>
+<div class="card"><div class="card-title">types/api.ts</div><div class="card-body">前端类型定义层。18 个 TypeScript 类型/接口，与后端 Pydantic 模型一一对应。StreamEvent 联合类型覆盖全部 SSE 事件。</div></div>
+</div>
+
+<!-- 5. 请求流程 -->
+<h2>5. 请求流程</h2>
+<h3>5.1 前端启动 → 三栏工作台</h3>
+<pre>
+Browser                          Frontend (React)                    Backend
+  │                                  │                                  │
+  │  load index.html                 │                                  │
+  ├─────────────────────────────────►│                                  │
+  │                                  │  GET / (probe)                   │
+  │                                  ├─────────────────────────────────►│
+  │                                  │◄─────────────────────────────────┤ {status:"ok"}
+  │                                  │  connection → "online"           │
+  │                                  │                                  │
+  │                                  │  GET /api/workspaces             │
+  │                                  ├─────────────────────────────────►│
+  │                                  │◄─────────────────────────────────┤ [{workspace_id, bootstrap_status}]
+  │                                  │                                  │
+  │                                  │  GET /api/workspaces/{id}/manifest
+  │                                  ├─────────────────────────────────►│
+  │                                  │◄─────────────────────────────────┤
+  │                                  │                                  │
+  │  if bootstrap_status=completed:  │                                  │
+  │    render 三栏工作台              │                                  │
+  │  else:                           │                                  │
+  │    render BootstrapGate          │                                  │
+</pre>
+
+<h3>5.2 Chat SSE 流程</h3>
+<pre>
+ChatPanel                        apiClient                          Backend
+  │                                  │                                  │
+  │  handleSend()                    │                                  │
+  │  uploadPendingFiles()            │  POST /api/assets/upload         │
+  │  ────────────────────────────────├─────────────────────────────────►│
+  │                                  │◄─────────────────────────────────┤ UploadResult
+  │                                  │                                  │
+  │  streamChat(body, onEvent)       │  POST /api/chat                  │
+  │  ────────────────────────────────├─────────────────────────────────►│
+  │                                  │  X-Workspace-Id: {wsId}          │
+  │                                  │                                  │
+  │  onEvent({type:"token"})         │◄── event: token ─────────────────┤
+  │  setLiveTurn(prev + content)     │                                  │
+  │                                  │                                  │
+  │  onEvent({type:"tool_start"})    │◄── event: tool_start ────────────┤
+  │  toolEvents.push(...)            │                                  │
+  │                                  │                                  │
+  │  onEvent({type:"tool_end"})      │◄── event: tool_end ──────────────┤
+  │  toolEvents.push(...)            │                                  │
+  │                                  │                                  │
+  │  onEvent({type:"done"})          │◄── event: done ──────────────────┤
+  │  onAfterStream() → invalidate   │                                  │
+  │  queries (history/trace/sessions)│                                  │
+</pre>
+
+<!-- 6. 关键决策记录 -->
+<h2>6. 关键决策记录</h2>
+<div class="callout"><div class="callout-title">决策 1：React + Vite + TypeScript，不用 Next.js</div><div class="callout-body">项目是纯 SPA 对接后端 API，无 SSR 需求。Vite 提供最快的 HMR 和构建速度，React 18 生态成熟。</div></div>
+<div class="callout"><div class="callout-title">决策 2：Zustand 管理 UI 状态，TanStack Query 管理服务端状态</div><div class="callout-body">workspace/session/history/tree/manifest 等服务端数据由 React Query 管理（自动缓存/失效/重试）。apiBase/connection/preview 等纯 UI 状态由 Zustand 管理。职责清晰，避免 Context 嵌套地狱。</div></div>
+<div class="callout"><div class="callout-title">决策 3：apiClient 工厂模式，不用全局单例</div><div class="callout-body">createApiClient() 接收 baseUrl 和 getWorkspaceId 回调，每次调用时动态读取当前 workspace。避免 store 变更后 client 引用过期。</div></div>
+<div class="callout"><div class="callout-title">决策 4：SSE 解析独立为 sse.ts 模块</div><div class="callout-body">从 ChatPanel 中抽离 SSE 解析逻辑，使其可独立测试。后续扩展 bootstrap stream / retrieval stream 时只需复用同一解析器。</div></div>
+<div class="callout"><div class="callout-title">决策 5：全局 CSS 而非 CSS Modules</div><div class="callout-body">Phase 6 优先保证功能完整和测试覆盖，CSS 模块化留给后续迭代。当前 540 行全局 CSS 在组件数量有限时可控。⚠️ 已标记为技术债。</div></div>
+<div class="callout"><div class="callout-title">决策 6：Vitest 排除 Playwright 测试目录</div><div class="callout-body">tests/ 目录下的 Playwright spec 使用 @playwright/test 运行时，与 vitest 不兼容。通过 test.exclude 隔离，两套测试各自独立执行。</div></div>
+
+<!-- 7. 模块依赖关系 -->
+<h2>7. 模块依赖关系</h2>
+<pre>
+┌─────────────────────────────────────────────────────┐
+│                    main.tsx                           │
+│  ReactDOM.createRoot → QueryClientProvider → App     │
+└──────────────────────┬──────────────────────────────┘
+                       │
+                       ▼
+┌──────────────────────────────────────────────────────┐
+│                     App.tsx                            │
+│  useQuery × 7  ·  useMutation × 4  ·  条件渲染       │
+│  ┌──────────┐  ┌──────────┐  ┌──────────────────┐    │
+│  │ topbar   │  │ workspace│  │ workspace-grid   │    │
+│  │ controls │  │ dialogs  │  │ ┌────┬─────┬───┐ │    │
+│  └──────────┘  └──────────┘  │ │Left│Chat/│Rt │ │    │
+│                              │ │Tree│Gate │Tree│ │    │
+│                              │ └────┴─────┴───┘ │    │
+│                              └──────────────────┘    │
+└───────┬──────────┬──────────┬──────────┬─────────────┘
+        │          │          │          │
+        ▼          ▼          ▼          ▼
+   FileTree    ChatPanel  Bootstrap  TracePanel
+   Panel.tsx   .tsx       Gate.tsx   .tsx
+        │          │
+        │          ├──► sse.ts (stream parser)
+        │          │
+        └──────────┴──► client.ts (API client)
+                            │
+                            ├──► X-Workspace-Id injection
+                            └──► store.ts (Zustand)
+                                    │
+                                    └──► localStorage (persist)
+</pre>
+
+<!-- 8. Phase 路线图 -->
+<h2>8. Phase 路线图</h2>
+<table>
+<tr><th>Phase</th><th>内容</th><th>状态</th></tr>
+<tr><td>Phase 1</td><td>后端基础骨架：SSE chat + 会话 CRUD</td><td><span class="badge badge-done">DONE</span></td></tr>
+<tr><td>Phase 2</td><td>文件系统 API + Agent CRUD + 路径安全</td><td><span class="badge badge-done">DONE</span></td></tr>
+<tr><td>Phase 3+4</td><td>Context Orchestrator + PromptBuilder + TraceWriter + 5 核心工具 + Assets</td><td><span class="badge badge-done">DONE</span></td></tr>
+<tr><td>Phase 5</td><td>Skills 渐进式披露（SkillLoader + Agent 自主读取）</td><td><span class="badge badge-done">DONE</span></td></tr>
+<tr><td>Phase 5.3</td><td>Workspace Runtime Switch + Naming + Bootstrap Lifecycle</td><td><span class="badge badge-done">DONE</span></td></tr>
+<tr><td>Phase 6</td><td>React 前端重构 + Bootstrap Gate + 测试体系</td><td><span class="badge badge-phase6">CURRENT</span></td></tr>
+<tr><td>Phase 7</td><td>Bootstrap Runner 完整实现 + Route 选择器 + 技能面板</td><td><span class="badge badge-later">NEXT</span></td></tr>
+</table>
+
+<!-- 9. Phase 衔接表 -->
+<h2>9. Phase 衔接表</h2>
+<table>
+<tr><th>Phase 6 产出</th><th>后续 Phase 依赖</th><th>备注</th></tr>
+<tr><td>BootstrapGate 组件</td><td>Phase 7: bootstrap runner 完整实现后自动放行</td><td>当前 start 只做状态流转</td></tr>
+<tr><td>apiClient + X-Workspace-Id</td><td>Phase 7: bootstrap 对话也通过同一 client</td><td></td></tr>
+<tr><td>SSE parser (sse.ts)</td><td>Phase 7: bootstrap stream / retrieval stream 复用</td><td></td></tr>
+<tr><td>ChatPanel route hash 解析</td><td>Phase 7: route 选择器 UI</td><td>当前仅内部读取</td></tr>
+<tr><td>App.tsx ~430 行</td><td>建议拆分 custom hooks</td><td>⚠️ 可维护但已接近上限</td></tr>
+<tr><td>全局 CSS 540 行</td><td>建议迁移 CSS Modules 或 Tailwind</td><td>⚠️ 类名冲突风险</td></tr>
+<tr><td>ChatPanel 纯文本渲染</td><td>建议加 react-markdown</td><td>⚠️ 科研输出需格式化</td></tr>
+<tr><td>Playwright smoke.spec.ts</td><td>需后端运行环境配合</td><td>未纳入 CI</td></tr>
+</table>

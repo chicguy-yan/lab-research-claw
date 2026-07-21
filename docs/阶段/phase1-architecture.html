@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 1 Architecture — Experimental-Research-OpenClaw</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --orange: #f0883e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  h1 { color: #fff; font-size: 1.8rem; margin-bottom: 0.5rem; }
+  h2 { color: var(--accent); font-size: 1.3rem; margin: 2rem 0 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+  h3 { color: var(--purple); font-size: 1.05rem; margin: 1.2rem 0 0.6rem; }
+  .subtitle { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 2rem; }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 12px;
+    font-size: 0.75rem; font-weight: 600; margin-left: 6px;
+  }
+  .badge-done { background: #238636; color: #fff; }
+  .badge-phase1 { background: #1f6feb; color: #fff; }
+  .badge-later { background: var(--border); color: var(--text-dim); }
+
+  /* Cards */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem 1.2rem; position: relative;
+  }
+  .card-title { font-weight: 600; color: #fff; margin-bottom: 0.4rem; font-size: 0.95rem; }
+  .card-path { font-family: monospace; font-size: 0.8rem; color: var(--accent); margin-bottom: 0.6rem; }
+  .card-desc { font-size: 0.85rem; color: var(--text-dim); }
+  .card-methods { margin-top: 0.6rem; }
+  .method {
+    font-family: monospace; font-size: 0.78rem; color: var(--green);
+    padding: 2px 0; border-bottom: 1px solid var(--border);
+  }
+  .method:last-child { border-bottom: none; }
+
+  /* Flow diagram */
+  .flow-container {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1.5rem; overflow-x: auto;
+  }
+  .flow-box {
+    display: inline-block; padding: 8px 14px; border-radius: 6px;
+    font-family: monospace; font-size: 0.82rem; margin: 4px;
+    vertical-align: middle;
+  }
+  .flow-api { background: #1f6feb33; border: 1px solid var(--accent); color: var(--accent); }
+  .flow-graph { background: #bc8cff22; border: 1px solid var(--purple); color: var(--purple); }
+  .flow-storage { background: #3fb95022; border: 1px solid var(--green); color: var(--green); }
+  .flow-arrow {
+    display: inline-block; font-size: 1.2rem; color: var(--text-dim);
+    margin: 0 4px; vertical-align: middle;
+  }
+  .flow-row { white-space: nowrap; margin: 0.6rem 0; }
+
+  /* SSE timeline */
+  .sse-timeline { position: relative; padding-left: 24px; }
+  .sse-event {
+    position: relative; margin-bottom: 0.6rem; padding: 6px 12px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    font-family: monospace; font-size: 0.82rem;
+  }
+  .sse-event::before {
+    content: ''; position: absolute; left: -18px; top: 14px;
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .sse-event.token::before { background: var(--green); }
+  .sse-event.tool::before { background: var(--yellow); }
+  .sse-event.done::before { background: var(--accent); }
+  .sse-event.error::before { background: var(--red); }
+  .sse-event-name { font-weight: 700; }
+  .sse-event-name.token { color: var(--green); }
+  .sse-event-name.tool { color: var(--yellow); }
+  .sse-event-name.done { color: var(--accent); }
+  .sse-event-name.error { color: var(--red); }
+
+  /* File tree */
+  .file-tree {
+    font-family: monospace; font-size: 0.82rem; line-height: 1.8;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem 1.2rem; overflow-x: auto;
+  }
+  .file-tree .dir { color: var(--accent); font-weight: 600; }
+  .file-tree .file { color: var(--text); }
+  .file-tree .new { color: var(--green); }
+  .file-tree .comment { color: var(--text-dim); font-style: italic; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { text-align: left; padding: 8px 12px; background: var(--surface); border-bottom: 2px solid var(--border); color: var(--accent); }
+  td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  tr:hover td { background: #1c2128; }
+
+  /* Two-column layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* Decision callout */
+  .callout {
+    border-left: 3px solid; padding: 0.8rem 1rem; margin: 0.8rem 0;
+    border-radius: 0 6px 6px 0; font-size: 0.85rem;
+  }
+  .callout-info { border-color: var(--accent); background: #1f6feb11; }
+  .callout-warn { border-color: var(--yellow); background: #d2992211; }
+  .callout-fix { border-color: var(--green); background: #3fb95011; }
+</style>
+</head>
+<body>
+
+<h1>Phase 1 Architecture</h1>
+<p class="subtitle">Experimental-Research-OpenClaw — 后端基础骨架 | 最后更新: 2026-03-07</p>
+
+<!-- ===== Section 1: Overview ===== -->
+<h2>1. Phase 1 目标与验收</h2>
+
+<div class="callout callout-info">
+  <strong>Phase 1 目标</strong>：<code>curl POST /api/chat</code> → 收到 SSE token 流 + 会话持久化
+</div>
+
+<table>
+  <tr><th>验证项</th><th>状态</th><th>说明</th></tr>
+  <tr><td>服务启动（无 API key 也不崩溃）</td><td><span class="badge badge-done">PASS</span></td><td>AgentManager 加入 key 判空保护</td></tr>
+  <tr><td>会话 CRUD（5 个端点）</td><td><span class="badge badge-done">PASS</span></td><td>create / list / rename / delete / history</td></tr>
+  <tr><td>SSE token 逐字流式</td><td><span class="badge badge-done">PASS</span></td><td>修复 stream_mode + node_name 后正常</td></tr>
+  <tr><td>done 事件仅发送一次</td><td><span class="badge badge-done">PASS</span></td><td>由 api/chat.py 统一发送</td></tr>
+  <tr><td>对话持久化</td><td><span class="badge badge-done">PASS</span></td><td>messages 数组 + _sessions_index.json</td></tr>
+</table>
+
+<!-- ===== Section 2: File Map ===== -->
+<h2>2. Phase 1 文件清单（10 个文件）</h2>
+
+<div class="file-tree">
+<span class="dir">backend/</span><br>
+├── <span class="new">app.py</span> <span class="comment"># FastAPI 入口，启动初始化</span><br>
+├── <span class="new">config.py</span> <span class="comment"># 环境变量 + config.json 读写</span><br>
+├── <span class="new">.env.example</span> <span class="comment"># 环境变量模板</span><br>
+├── <span class="new">requirements.txt</span> <span class="comment"># 依赖（pin 范围）</span><br>
+├── <span class="dir">api/</span><br>
+│   ├── <span class="new">__init__.py</span><br>
+│   ├── <span class="new">chat.py</span> <span class="comment"># POST /api/chat (SSE 流式)</span><br>
+│   └── <span class="new">sessions.py</span> <span class="comment"># 会话 CRUD (5 个端点)</span><br>
+└── <span class="dir">graph/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="new">__init__.py</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="new">agent.py</span> <span class="comment"># AgentManager (create_agent)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="new">session_manager.py</span> <span class="comment"># SessionManager (JSON 持久化)</span>
+</div>
+
+<!-- ===== Section 3: Module Cards ===== -->
+<h2>3. 核心模块职责</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <div class="card-title">app.py <span class="badge badge-phase1">Phase 1</span></div>
+    <div class="card-path">backend/app.py</div>
+    <div class="card-desc">FastAPI 入口。启动时：① 从 workspace-templates 初始化 workspace-default ② 创建 SessionManager + AgentManager ③ 注册 API 路由</div>
+    <div class="card-methods">
+      <div class="method">ensure_default_workspace() → shutil.copytree</div>
+      <div class="method">on_startup() → 初始化所有 Manager</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">config.py <span class="badge badge-phase1">Phase 1</span></div>
+    <div class="card-path">backend/config.py</div>
+    <div class="card-desc">全局配置。读取 .env 环境变量，定义路径常量（BASE_DIR / OPENCLAW_DIR / WORKSPACE_TEMPLATES_DIR），提供 config.json 读写</div>
+    <div class="card-methods">
+      <div class="method">load_config() → dict (rag_mode 等)</div>
+      <div class="method">save_config(config) → config.json</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">AgentManager <span class="badge badge-phase1">Phase 1</span></div>
+    <div class="card-path">backend/graph/agent.py</div>
+    <div class="card-desc">LangChain Agent 构建与流式调用。使用 <code>create_agent()</code>（LangGraph runtime），每次请求重建以确保 workspace 编辑即时生效</div>
+    <div class="card-methods">
+      <div class="method">initialize() → 创建 ChatOpenAI</div>
+      <div class="method">_build_agent(system_prompt) → CompiledStateGraph</div>
+      <div class="method">astream(msg, history, prompt) → yield SSE events</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">SessionManager <span class="badge badge-phase1">Phase 1</span></div>
+    <div class="card-path">backend/graph/session_manager.py</div>
+    <div class="card-desc">JSON 会话持久化。消息存储在 <code>context_trace/{session_id}.json</code>（envelope schema: <code>{"messages": [...], "traces": []}</code>），元数据存储在 <code>_sessions_index.json</code></div>
+    <div class="card-methods">
+      <div class="method">create_session(title) → Session</div>
+      <div class="method">list_sessions() → sorted by updated_at</div>
+      <div class="method">load_session_for_agent(id) → 合并连续 assistant</div>
+      <div class="method">save_message(id, role, content) → 追加消息</div>
+      <div class="method">rename_session / delete_session</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">chat.py (API) <span class="badge badge-phase1">Phase 1</span></div>
+    <div class="card-path">backend/api/chat.py</div>
+    <div class="card-desc">POST /api/chat — SSE 流式对话端点。加载历史 → 流式调用 Agent → 持久化消息 → 统一发送 done 事件</div>
+    <div class="card-methods">
+      <div class="method">chat(body: ChatRequest) → StreamingResponse</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">sessions.py (API) <span class="badge badge-phase1">Phase 1</span></div>
+    <div class="card-path">backend/api/sessions.py</div>
+    <div class="card-desc">会话管理 5 个端点：list / create / rename / delete / history。所有操作通过 SessionManager 完成</div>
+    <div class="card-methods">
+      <div class="method">GET  /api/sessions → 列表</div>
+      <div class="method">POST /api/sessions → 创建</div>
+      <div class="method">PUT  /api/sessions/{id} → 重命名</div>
+      <div class="method">DELETE /api/sessions/{id} → 删除</div>
+      <div class="method">GET  /api/sessions/{id}/history → 历史</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Section 4: Request Flow ===== -->
+<h2>4. POST /api/chat 请求流程</h2>
+
+<div class="flow-container">
+  <h3>完整链路（Phase 1 简化版）</h3>
+
+  <div class="flow-row">
+    <span class="flow-box flow-api">curl POST /api/chat</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-box flow-api">chat.py</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-box flow-graph">SessionManager<br>.load_session_for_agent()</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-box flow-storage">context_trace/<br>{session_id}.json</span>
+  </div>
+
+  <div class="flow-row">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="flow-box flow-api">chat.py</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-box flow-graph">AgentManager<br>._build_agent()</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-box flow-graph">create_agent(<br>model, tools, prompt)</span>
+  </div>
+
+  <div class="flow-row">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="flow-box flow-graph">agent.astream()<br>stream_mode="messages"</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-box flow-api">SSE: token × N</span>
+  </div>
+
+  <div class="flow-row">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="flow-box flow-api">chat.py（流结束后）</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-box flow-graph">SessionManager<br>.save_message()</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-box flow-api">SSE: done</span>
+  </div>
+</div>
+
+<!-- ===== Section 5: SSE Events ===== -->
+<h2>5. SSE 事件序列</h2>
+
+<div class="two-col">
+  <div>
+    <h3>普通模式（Phase 1）</h3>
+    <div class="sse-timeline">
+      <div class="sse-event token">
+        <span class="sse-event-name token">event: token</span> × N<br>
+        <code>data: {"content": "..."}</code><br>
+        <span style="color:var(--text-dim)">逐 token 推送文字内容</span>
+      </div>
+      <div class="sse-event done">
+        <span class="sse-event-name done">event: done</span> × 1<br>
+        <code>data: {"session_id": "..."}</code><br>
+        <span style="color:var(--text-dim)">流结束 + 消息已持久化</span>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3>带工具调用（Phase 4+）</h3>
+    <div class="sse-timeline">
+      <div class="sse-event token">
+        <span class="sse-event-name token">event: token</span> × N
+      </div>
+      <div class="sse-event tool">
+        <span class="sse-event-name tool">event: tool_start</span><br>
+        <code>data: {"tool": "...", "input": "..."}</code>
+      </div>
+      <div class="sse-event tool">
+        <span class="sse-event-name tool">event: tool_end</span><br>
+        <code>data: {"tool": "...", "output": "..."}</code>
+      </div>
+      <div class="sse-event token">
+        <span class="sse-event-name token">event: new_response</span><br>
+        <span style="color:var(--text-dim)">工具调用后的新 assistant 气泡</span>
+      </div>
+      <div class="sse-event token">
+        <span class="sse-event-name token">event: token</span> × N
+      </div>
+      <div class="sse-event done">
+        <span class="sse-event-name done">event: done</span> × 1
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Section 6: Data Persistence ===== -->
+<h2>6. 数据持久化结构</h2>
+
+<div class="two-col">
+  <div>
+    <h3>会话消息文件</h3>
+    <div class="file-tree">
+<span class="comment"># context_trace/{session_id}.json</span><br>
+<span class="comment"># 纯 OpenAI messages 数组</span><br>
+[<br>
+&nbsp;&nbsp;{"role": "user", "content": "..."},<br>
+&nbsp;&nbsp;{"role": "assistant", "content": "..."},<br>
+&nbsp;&nbsp;...<br>
+]
+    </div>
+  </div>
+  <div>
+    <h3>会话索引文件</h3>
+    <div class="file-tree">
+<span class="comment"># context_trace/_sessions_index.json</span><br>
+{<br>
+&nbsp;&nbsp;"sessions": [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"id": "ca3335c66327",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"title": "Kimi SSE Test",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"created_at": "2026-03-07T...",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"updated_at": "2026-03-07T..."<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;]<br>
+}
+    </div>
+  </div>
+</div>
+
+<!-- ===== Section 7: Key Decisions ===== -->
+<h2>7. 关键决策记录</h2>
+
+<div class="callout callout-fix">
+  <strong>Bug Fix</strong>：<code>stream_mode</code> + <code>node_name</code> 修正<br>
+  原代码使用 <code>stream_mode="updates"</code> + <code>node_name == "agent"</code>，但 <code>create_agent</code> 返回的节点名为 <code>"model"</code>，且 updates 模式不支持逐 token 流式。<br>
+  修正为 <code>stream_mode="messages"</code>，返回 <code>(AIMessageChunk, metadata)</code> 元组，实现真正的逐 token SSE。
+</div>
+
+<div class="callout callout-info">
+  <strong>决策</strong>：done 事件归属<br>
+  AgentManager 只产出 token / tool_start / tool_end / new_response / error。<br>
+  <code>done</code> 由 <code>api/chat.py</code> 在 Agent 流结束 + 消息落盘后统一发送，避免重复。
+</div>
+
+<div class="callout callout-info">
+  <strong>决策</strong>：Session 消息 vs 元数据分离<br>
+  <code>context_trace/{session_id}.json</code> = envelope schema <code>{"messages": [...], "traces": []}</code>（Step 10 修正，兼容旧版纯数组格式）。<br>
+  <code>context_trace/_sessions_index.json</code> = 会话元数据（title / created_at / updated_at）。
+</div>
+
+<div class="callout callout-warn">
+  <strong>注意</strong>：依赖版本兼容性<br>
+  LangChain v1.1.3 的 <code>create_agent</code> 节点名为 <code>"model"</code>（非 <code>"agent"</code>）。<br>
+  若未来版本改名，需同步更新 <code>graph/agent.py</code> 中的判断逻辑。
+</div>
+
+<!-- ===== Section 8: Dependency Map ===== -->
+<h2>8. 模块依赖关系</h2>
+
+<div class="flow-container">
+<pre style="font-family:monospace;font-size:0.82rem;color:var(--text);line-height:1.8;">
+  ┌─────────────┐
+  │   app.py     │  FastAPI 入口
+  │  (启动初始化) │
+  └──┬──────┬───┘
+     │      │
+     ▼      ▼
+┌─────────┐  ┌──────────────┐
+│ chat.py │  │ sessions.py  │   API 路由层
+└──┬──┬───┘  └──────┬───────┘
+   │  │             │
+   │  │     ┌───────▼────────┐
+   │  └────►│ SessionManager │   graph/ 核心逻辑层
+   │        │  (JSON 持久化)  │
+   │        └────────────────┘
+   │
+   ▼
+┌──────────────┐
+│ AgentManager │   graph/ 核心逻辑层
+│ (create_agent│
+│  + astream)  │
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│  ChatOpenAI  │   langchain_openai
+│ (Kimi / 兼容) │
+└──────────────┘
+       │
+       ▼
+┌──────────────────────────┐
+│  config.py               │   全局配置
+│  (.env + config.json)    │
+└──────────────────────────┘
+</pre>
+</div>
+
+<!-- ===== Section 9: Phase Roadmap ===== -->
+<h2>9. Phase 路线图</h2>
+
+<table>
+  <tr><th>Phase</th><th>内容</th><th>状态</th></tr>
+  <tr>
+    <td><strong>Phase 1</strong></td>
+    <td>后端基础骨架：config + AgentManager + SessionManager + SSE chat + 会话 CRUD</td>
+    <td><span class="badge badge-done">DONE</span></td>
+  </tr>
+  <tr>
+    <td>Phase 2</td>
+    <td>文件系统 + Workspace 初始化 + Agent CRUD</td>
+    <td><span class="badge badge-later">Next</span></td>
+  </tr>
+  <tr>
+    <td>Phase 3</td>
+    <td>Context Orchestrator + PromptBuilder + TraceWriter</td>
+    <td><span class="badge badge-later">Later</span></td>
+  </tr>
+  <tr>
+    <td>Phase 4</td>
+    <td>6 个核心工具 + Skills 扫描</td>
+    <td><span class="badge badge-later">Later</span></td>
+  </tr>
+  <tr>
+    <td>Phase 5</td>
+    <td>RAG (KnowledgeIndexer) + 资产上传</td>
+    <td><span class="badge badge-later">Later</span></td>
+  </tr>
+  <tr>
+    <td>Phase 6</td>
+    <td>前端三栏 UI + 集成</td>
+    <td><span class="badge badge-later">Later</span></td>
+  </tr>
+</table>
+
+<!-- ===== Section 10: Workspace Template ===== -->
+<h2>10. workspace-templates 目录结构</h2>
+
+<div class="file-tree">
+<span class="dir">workspace-templates/</span> <span class="comment"># 启动时 copytree → .openclaw/workspace-default/</span><br>
+├── <span class="file">SOUL.md</span> <span class="comment"># Agent 灵魂协议</span><br>
+├── <span class="file">IDENTITY.md</span> <span class="comment"># Agent 身份定义</span><br>
+├── <span class="file">USER.md</span> <span class="comment"># 用户偏好模板</span><br>
+├── <span class="file">AGENTS.md</span> <span class="comment"># 技能 + 记忆协议</span><br>
+├── <span class="file">BOOTSTRAP.md</span> <span class="comment"># 启动引导</span><br>
+├── <span class="file">MEMORY.md</span> <span class="comment"># 记忆协议</span><br>
+├── <span class="file">TOOLS.md</span> <span class="comment"># 工具说明</span><br>
+├── <span class="file">README.md</span><br>
+├── <span class="dir">memory/</span><br>
+│   ├── <span class="dir">identity/</span> <span class="comment"># Layer 1 — 身份与规则</span><br>
+│   │   ├── <span class="file">user.md</span><br>
+│   │   ├── <span class="file">project.md</span><br>
+│   │   ├── <span class="file">lab_context.md</span><br>
+│   │   └── <span class="file">context_budget.md</span><br>
+│   ├── <span class="dir">timeline/</span> <span class="comment"># Layer 2 — 时间轴</span><br>
+│   │   ├── <span class="file">180d_index.md</span><br>
+│   │   ├── <span class="dir">phases/</span> P01~P05<br>
+│   │   ├── <span class="dir">weeks/</span> _WEEK_TEMPLATE.md<br>
+│   │   ├── <span class="dir">days/</span> _DAY_TEMPLATE.md<br>
+│   │   └── <span class="dir">stage_reports/</span> _STAGE_REPORT_TEMPLATE.md<br>
+│   ├── <span class="dir">concepts/</span> <span class="comment"># Layer 3 — Concept</span><br>
+│   │   └── <span class="file">CONCEPT_TEMPLATE.md</span><br>
+│   ├── <span class="dir">tasks/</span> <span class="comment"># Layer 3 — Task</span><br>
+│   │   └── <span class="file">TASK_TEMPLATE.md</span><br>
+│   └── <span class="dir">packs/</span> <span class="comment"># Layer 3 — Pack</span><br>
+│       └── <span class="file">PACK_TEMPLATE.md</span><br>
+├── <span class="dir">assets/</span><br>
+│   ├── <span class="dir">data/</span> README.md<br>
+│   ├── <span class="dir">figures/</span> README.md<br>
+│   └── <span class="dir">ppt_pack/</span> README.md<br>
+└── <span class="dir">context_trace/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">README.md</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="file">TRACE_TEMPLATE.json</span>
+</div>
+
+<div class="callout callout-warn" style="margin-top:1rem;">
+  <strong>缺失项</strong>：<code>assets/uploads/</code> 目录在模板中不存在（PRD §4.8.3 要求）。需在 Phase 2 补充。
+</div>
+
+</body>
+</html>

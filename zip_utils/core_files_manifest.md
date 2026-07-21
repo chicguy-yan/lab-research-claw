@@ -1,0 +1,219 @@
+# Core File Bundle Manifest
+
+Archive target: `D:\ai_software\yyq_project\zip_utils\core_files_bundle.zip`
+Repository root: `D:\ai_software\yyq_project`
+Included files: `198`
+
+## Selection Rules
+- `backend_python`: All Python source files from the backend's application, runtime, tools, skills, scripts, and tests. (90 files)
+- `workspace_templates`: Markdown and JSON files under backend/workspace-templates that define prompts, memory, context trace, and workspace scaffolding. (31 files)
+- `backend_support`: Non-Python backend files that help explain dependencies, skill behavior, and bundle generation. (51 files)
+- `frontend_core`: Frontend source and key configs that explain how the UI talks to the backend and renders the workspace flow. (26 files)
+
+## Included Files
+
+### backend_python (90)
+- `backend/api/__init__.py`
+- `backend/api/agents.py`
+- `backend/api/assets.py`
+- `backend/api/chat.py`
+- `backend/api/files.py`
+- `backend/api/runtime_context.py`
+- `backend/api/sessions.py`
+- `backend/api/workspaces.py`
+- `backend/app.py`
+- `backend/config.py`
+- `backend/graph/__init__.py`
+- `backend/graph/agent.py`
+- `backend/graph/context_orchestrator.py`
+- `backend/graph/path_utils.py`
+- `backend/graph/prompt_builder.py`
+- `backend/graph/session_manager.py`
+- `backend/graph/skill_loader.py`
+- `backend/graph/trace_writer.py`
+- `backend/runtime/__init__.py`
+- `backend/runtime/bootstrap_runner.py`
+- `backend/runtime/workspace_registry.py`
+- `backend/scripts/create_skill.py`
+- `backend/scripts/create_skill_from_config.py`
+- `backend/skills/docx/scripts/__init__.py`
+- `backend/skills/docx/scripts/accept_changes.py`
+- `backend/skills/docx/scripts/comment.py`
+- `backend/skills/docx/scripts/office/helpers/__init__.py`
+- `backend/skills/docx/scripts/office/helpers/merge_runs.py`
+- `backend/skills/docx/scripts/office/helpers/simplify_redlines.py`
+- `backend/skills/docx/scripts/office/pack.py`
+- `backend/skills/docx/scripts/office/soffice.py`
+- `backend/skills/docx/scripts/office/unpack.py`
+- `backend/skills/docx/scripts/office/validate.py`
+- `backend/skills/docx/scripts/office/validators/__init__.py`
+- `backend/skills/docx/scripts/office/validators/base.py`
+- `backend/skills/docx/scripts/office/validators/docx.py`
+- `backend/skills/docx/scripts/office/validators/pptx.py`
+- `backend/skills/docx/scripts/office/validators/redlining.py`
+- `backend/skills/literature-review/scripts/generate_pdf.py`
+- `backend/skills/literature-review/scripts/search_databases.py`
+- `backend/skills/literature-review/scripts/verify_citations.py`
+- `backend/skills/pdf/scripts/check_bounding_boxes.py`
+- `backend/skills/pdf/scripts/check_fillable_fields.py`
+- `backend/skills/pdf/scripts/convert_pdf_to_images.py`
+- `backend/skills/pdf/scripts/create_validation_image.py`
+- `backend/skills/pdf/scripts/extract_form_field_info.py`
+- `backend/skills/pdf/scripts/extract_form_structure.py`
+- `backend/skills/pdf/scripts/fill_fillable_fields.py`
+- `backend/skills/pdf/scripts/fill_pdf_form_with_annotations.py`
+- `backend/skills/pptx/scripts/__init__.py`
+- `backend/skills/pptx/scripts/add_slide.py`
+- `backend/skills/pptx/scripts/clean.py`
+- `backend/skills/pptx/scripts/office/helpers/__init__.py`
+- `backend/skills/pptx/scripts/office/helpers/merge_runs.py`
+- `backend/skills/pptx/scripts/office/helpers/simplify_redlines.py`
+- `backend/skills/pptx/scripts/office/pack.py`
+- `backend/skills/pptx/scripts/office/soffice.py`
+- `backend/skills/pptx/scripts/office/unpack.py`
+- `backend/skills/pptx/scripts/office/validate.py`
+- `backend/skills/pptx/scripts/office/validators/__init__.py`
+- `backend/skills/pptx/scripts/office/validators/base.py`
+- `backend/skills/pptx/scripts/office/validators/docx.py`
+- `backend/skills/pptx/scripts/office/validators/pptx.py`
+- `backend/skills/pptx/scripts/office/validators/redlining.py`
+- `backend/skills/pptx/scripts/thumbnail.py`
+- `backend/skills/skill-creator/eval-viewer/generate_review.py`
+- `backend/skills/skill-creator/scripts/__init__.py`
+- `backend/skills/skill-creator/scripts/aggregate_benchmark.py`
+- `backend/skills/skill-creator/scripts/generate_report.py`
+- `backend/skills/skill-creator/scripts/improve_description.py`
+- `backend/skills/skill-creator/scripts/package_skill.py`
+- `backend/skills/skill-creator/scripts/quick_validate.py`
+- `backend/skills/skill-creator/scripts/run_eval.py`
+- `backend/skills/skill-creator/scripts/run_loop.py`
+- `backend/skills/skill-creator/scripts/utils.py`
+- `backend/tests/test_bootstrap_runner.py`
+- `backend/tests/test_chat_write_file_flow.py`
+- `backend/tests/test_fetch_url_tool.py`
+- `backend/tests/test_python_repl_tool.py`
+- `backend/tests/test_read_file_tool.py`
+- `backend/tests/test_skill_loader.py`
+- `backend/tests/test_system_prompt_contract.py`
+- `backend/tests/test_terminal_tool.py`
+- `backend/tests/test_write_file_tool.py`
+- `backend/tools/__init__.py`
+- `backend/tools/fetch_url_tool.py`
+- `backend/tools/python_repl_tool.py`
+- `backend/tools/read_file_tool.py`
+- `backend/tools/terminal_tool.py`
+- `backend/tools/write_file_tool.py`
+
+### workspace_templates (31)
+- `backend/workspace-templates/AGENTS.md`
+- `backend/workspace-templates/assets/data/README.md`
+- `backend/workspace-templates/assets/figures/README.md`
+- `backend/workspace-templates/assets/ppt_pack/README.md`
+- `backend/workspace-templates/assets/uploads/README.md`
+- `backend/workspace-templates/BOOTSTRAP.md`
+- `backend/workspace-templates/context_trace/README.md`
+- `backend/workspace-templates/context_trace/TRACE_TEMPLATE.json`
+- `backend/workspace-templates/IDENTITY.md`
+- `backend/workspace-templates/memory/concepts/CONCEPT_TEMPLATE.md`
+- `backend/workspace-templates/memory/identity/context_budget.md`
+- `backend/workspace-templates/memory/identity/lab_context.md`
+- `backend/workspace-templates/memory/identity/project.md`
+- `backend/workspace-templates/memory/identity/user.md`
+- `backend/workspace-templates/memory/packs/PACK_TEMPLATE.md`
+- `backend/workspace-templates/memory/tasks/TASK_TEMPLATE.md`
+- `backend/workspace-templates/memory/timeline/180d_index.md`
+- `backend/workspace-templates/memory/timeline/days/_DAY_TEMPLATE.md`
+- `backend/workspace-templates/memory/timeline/phases/P01_bootstrap.md`
+- `backend/workspace-templates/memory/timeline/phases/P02_material_screening.md`
+- `backend/workspace-templates/memory/timeline/phases/P03_parameter_optimization.md`
+- `backend/workspace-templates/memory/timeline/phases/P04_mechanism_closure.md`
+- `backend/workspace-templates/memory/timeline/phases/P05_writing_submission.md`
+- `backend/workspace-templates/memory/timeline/stage_reports/_STAGE_REPORT_TEMPLATE.md`
+- `backend/workspace-templates/memory/timeline/weeks/_WEEK_TEMPLATE.md`
+- `backend/workspace-templates/MEMORY.md`
+- `backend/workspace-templates/README.md`
+- `backend/workspace-templates/skills/registry.json`
+- `backend/workspace-templates/SOUL.md`
+- `backend/workspace-templates/TOOLS.md`
+- `backend/workspace-templates/USER.md`
+
+### backend_support (51)
+- `backend/.env.example`
+- `backend/requirements.lock`
+- `backend/requirements.txt`
+- `backend/scripts/README_SKILL_CREATOR.md`
+- `backend/skills/README.md`
+- `backend/skills/REVIEW.md`
+- `backend/skills/_skill_template/SKILL.md`
+- `backend/skills/docx/LICENSE.txt`
+- `backend/skills/docx/SKILL.md`
+- `backend/skills/docx/scripts/templates/comments.xml`
+- `backend/skills/docx/scripts/templates/commentsExtended.xml`
+- `backend/skills/docx/scripts/templates/commentsExtensible.xml`
+- `backend/skills/docx/scripts/templates/commentsIds.xml`
+- `backend/skills/docx/scripts/templates/people.xml`
+- `backend/skills/figure_claim_anchoring/SKILL.md`
+- `backend/skills/literature-review/SKILL.md`
+- `backend/skills/literature-review/assets/review_template.md`
+- `backend/skills/literature-review/references/citation_styles.md`
+- `backend/skills/literature-review/references/database_strategies.md`
+- `backend/skills/mechanism_mapping/BINDING.md`
+- `backend/skills/mechanism_mapping/SKILL.md`
+- `backend/skills/mechanism_mapping/eval_prompts.md`
+- `backend/skills/mechanism_mapping/examples/example_1.md`
+- `backend/skills/mechanism_mapping/examples/example_2.md`
+- `backend/skills/multi_evidence_mechanism_judgment/SKILL.md`
+- `backend/skills/oxidant_route_comparison/BINDING.md`
+- `backend/skills/oxidant_route_comparison/SKILL.md`
+- `backend/skills/oxidant_route_comparison/eval_prompts.md`
+- `backend/skills/oxidant_route_comparison/examples/example_1.md`
+- `backend/skills/oxidant_route_comparison/examples/example_2.md`
+- `backend/skills/pdf/LICENSE.txt`
+- `backend/skills/pdf/SKILL.md`
+- `backend/skills/pdf/forms.md`
+- `backend/skills/pdf/reference.md`
+- `backend/skills/pptx/LICENSE.txt`
+- `backend/skills/pptx/SKILL.md`
+- `backend/skills/pptx/editing.md`
+- `backend/skills/pptx/pptxgenjs.md`
+- `backend/skills/reactive_species_evidence_matrix/SKILL.md`
+- `backend/skills/registry.json`
+- `backend/skills/results_to_report_structuring/SKILL.md`
+- `backend/skills/skill-creator/LICENSE.txt`
+- `backend/skills/skill-creator/SKILL.md`
+- `backend/skills/skill-creator/agents/analyzer.md`
+- `backend/skills/skill-creator/agents/comparator.md`
+- `backend/skills/skill-creator/agents/grader.md`
+- `backend/skills/skill-creator/assets/eval_review.html`
+- `backend/skills/skill-creator/eval-viewer/viewer.html`
+- `backend/skills/skill-creator/references/schemas.md`
+- `backend/skills/spectroscopy_joint_interpretation/SKILL.md`
+- `zip_utils/core_file_zip.py`
+
+### frontend_core (26)
+- `frontend/index.html`
+- `frontend/package.json`
+- `frontend/playwright.config.ts`
+- `frontend/src/app/App.tsx`
+- `frontend/src/app/queryClient.ts`
+- `frontend/src/features/app/store.ts`
+- `frontend/src/features/chat/AuditDisclosure.tsx`
+- `frontend/src/features/chat/ChatPanel.tsx`
+- `frontend/src/features/chat/audit.ts`
+- `frontend/src/features/files/DocumentPreviewOverlay.tsx`
+- `frontend/src/features/files/FileTreePanel.tsx`
+- `frontend/src/features/files/skillSnapshot.ts`
+- `frontend/src/features/trace/TracePanel.tsx`
+- `frontend/src/features/workspace/BootstrapGate.tsx`
+- `frontend/src/features/workspace/WorkspaceDialogs.tsx`
+- `frontend/src/main.tsx`
+- `frontend/src/shared/api/client.ts`
+- `frontend/src/shared/api/sse.ts`
+- `frontend/src/shared/types/api.ts`
+- `frontend/src/shared/utils/format.ts`
+- `frontend/src/shared/utils/storage.ts`
+- `frontend/src/styles.css`
+- `frontend/src/vite-env.d.ts`
+- `frontend/tsconfig.json`
+- `frontend/tsconfig.node.json`
+- `frontend/vite.config.ts`

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 5.3 Reflection</title>
+<style>
+  :root {
+    --bg: #f3efe6;
+    --paper: #fbf7f0;
+    --ink: #1e1a16;
+    --muted: #6a6259;
+    --line: #d8cfc2;
+    --accent: #9a3412;
+    --accent-soft: #f4d7c8;
+    --green: #166534;
+    --blue: #1d4ed8;
+    --shadow: 0 24px 60px rgba(54, 42, 30, 0.12);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --sans: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --mono: "SFMono-Regular", Consolas, Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    color: var(--ink);
+    background:
+      radial-gradient(circle at top left, rgba(154, 52, 18, 0.08), transparent 28%),
+      linear-gradient(180deg, #efe7da 0%, var(--bg) 46%, #f8f4ec 100%);
+  }
+
+  .page {
+    width: min(1120px, calc(100vw - 32px));
+    margin: 0 auto;
+    padding: 28px 0 56px;
+  }
+
+  .hero,
+  section {
+    background: rgba(251, 247, 240, 0.92);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+  }
+
+  .hero {
+    padding: 34px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    right: -80px;
+    top: -80px;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(154, 52, 18, 0.12), transparent 68%);
+  }
+
+  .eyebrow,
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .eyebrow {
+    padding: 8px 12px;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  h1 {
+    margin: 18px 0 10px;
+    font-size: clamp(34px, 5vw, 60px);
+    line-height: 0.96;
+    letter-spacing: -0.05em;
+    max-width: 10ch;
+  }
+
+  p,
+  li {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .hero-grid,
+  .stats,
+  .grid-3,
+  .grid-2,
+  .timeline {
+    display: grid;
+    gap: 16px;
+  }
+
+  .hero-grid { grid-template-columns: 1.3fr 0.7fr; margin-top: 24px; }
+  .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .stat,
+  .card,
+  .timeline-item,
+  .callout {
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 20px;
+  }
+
+  .stat strong {
+    display: block;
+    font-size: 30px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  nav {
+    position: sticky;
+    top: 12px;
+    z-index: 4;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 18px 0 22px;
+    padding: 12px;
+    background: rgba(251, 247, 240, 0.84);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    backdrop-filter: blur(8px);
+  }
+
+  nav a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(154, 52, 18, 0.06);
+  }
+
+  section {
+    margin-top: 22px;
+    padding: 28px;
+  }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(26px, 3vw, 38px);
+    letter-spacing: -0.04em;
+  }
+
+  h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .badge {
+    padding: 4px 10px;
+    background: rgba(29, 78, 216, 0.1);
+    color: var(--blue);
+  }
+
+  .callout {
+    border-left: 4px solid var(--accent);
+    background: linear-gradient(180deg, rgba(154, 52, 18, 0.08), rgba(154, 52, 18, 0.02));
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .timeline {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-left: 26px;
+  }
+
+  .timeline-item::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 28px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.95em;
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: rgba(30, 26, 22, 0.06);
+    color: var(--ink);
+  }
+
+  .source {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .good { color: var(--green); }
+  .warn { color: var(--accent); }
+
+  @media (max-width: 900px) {
+    .hero-grid,
+    .stats,
+    .grid-3,
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+
+    .page {
+      width: min(100vw - 18px, 1120px);
+    }
+
+    section,
+    .hero {
+      padding: 22px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="eyebrow">Source: Phase 5.3</div>
+      <h1>开发反思：从功能缺口推到 Bootstrap</h1>
+      <p>
+        这份复盘来源于 <code>docs/phase5.3-dev-plan.md</code> 的推进过程。
+        它记录的不是“改了什么”，而是问题如何一步步从前端缺口上升为 runtime、workspace 语义和 bootstrap 生命周期问题。
+      </p>
+      <div class="hero-grid">
+        <div class="stats">
+          <div class="stat">
+            <strong>4 层</strong>
+            <span>功能缺口 → runtime 绑定 → workspace 定义 → bootstrap 入口</span>
+          </div>
+          <div class="stat">
+            <strong>2 条线</strong>
+            <span>技术作用域和产品语义作用域被明确拆开</span>
+          </div>
+          <div class="stat">
+            <strong>1 个控制点</strong>
+            <span>最终把很多问题统一收敛到 <code>BOOTSTRAP</code> 的职责重定义</span>
+          </div>
+        </div>
+        <div class="callout">
+          <h3>核心判断</h3>
+          <p>
+            对开发者最有价值的，不是想到某个新功能，而是能从局部 bug 一路追到真正的系统控制点，
+            再把范围收回来，决定“这期先做哪一层”。
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <nav>
+      <a href="#path">思维路径</a>
+      <a href="#lessons">值得学习</a>
+      <a href="#risks">值得警惕</a>
+      <a href="#developer">开发者启发</a>
+      <a href="#summary">一句话总结</a>
+    </nav>
+
+    <section id="path">
+      <div class="section-head">
+        <h2>思维路径</h2>
+        <span class="badge">来自 Phase 5.3</span>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <h3>1. 先追问概念边界</h3>
+          <p>
+            起点不是直接实现 Agent / Workspace 切换，而是先把 <code>runtime</code>、
+            <code>workspace</code>、<code>agent</code> 这些词的含义问清楚。
+            这一步让问题从“功能缺少一个按钮”升级为“概念可能混用”。
+          </p>
+        </div>
+        <div class="timeline-item">
+          <h3>2. 从表面缺口追到运行时绑定</h3>
+          <p>
+            真正的卡点不是 <code>/api/agents</code> 只能建目录，而是整个系统在启动时就把
+            <code>SessionManager</code> 和 <code>AgentManager</code> 固定绑定到了
+            <code>workspace-default</code>。
+            也就是说，问题先被识别为 runtime routing 问题，而不是 UI 问题。
+          </p>
+        </div>
+        <div class="timeline-item">
+          <h3>3. 再追到 workspace 的双重含义</h3>
+          <p>
+            对照官方 OpenClaw 之后，意识到官方的 workspace 更偏技术工作范围，
+            而当前项目里的 workspace 同时承担技术隔离单元和研究语义容器两层含义。
+            这一刀把“技术作用域”和“产品语义作用域”拆开了。
+          </p>
+        </div>
+        <div class="timeline-item">
+          <h3>4. 最后把问题前移到 bootstrap</h3>
+          <p>
+            当 workspace 不再被默认理解为完整 180 天主线时，系统就不能靠模板硬编码其语义边界。
+            于是 BOOTSTRAP 的职责被上升成：
+            用“用户意图 + 初始材料”共同定义 workspace 的最小边界，再生成与之相称的初始化骨架。
+          </p>
+        </div>
+        <div class="timeline-item">
+          <h3>5. 但阶段边界没有失控</h3>
+          <p>
+            即使问题已经推到了 bootstrap，最终仍把 <code>Phase 5.3</code> 收敛回
+            <code>workspace runtime routing + naming</code>，
+            并把 bootstrap 明确成下一层生命周期能力。这一步说明抽象能力和范围控制同时存在。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="lessons">
+      <div class="section-head">
+        <h2>值得学习</h2>
+        <span class="badge">开发者视角</span>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <h3>先定义问题，再定义方案</h3>
+          <p>
+            不是一上来改接口，而是先问“系统里这些词到底是什么意思”。
+            对复杂系统来说，概念清晰度通常比代码实现速度更重要。
+          </p>
+        </div>
+        <div class="card">
+          <h3>识别真正的控制点</h3>
+          <p>
+            表面看是前端不能切 workspace，深层是 runtime 固定绑定，继续往上是
+            workspace 的语义边界不应由模板默认。问题被一步步收敛到更高层的入口。
+          </p>
+        </div>
+        <div class="card">
+          <h3>能把很多问题收成一个入口</h3>
+          <p>
+            最终很多分散问题都统一到了 <code>BOOTSTRAP</code>：
+            它不只是填模板，而是初始化协议和边界识别器。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <div class="section-head">
+        <h2>值得警惕</h2>
+        <span class="badge">架构副作用</span>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3 class="warn">1. 容易过早升维</h3>
+          <p>
+            抽象能力强的人，很容易把本期问题一路推到下一层模型问题。
+            这次的好处是最终收住了：5.3 先只做 runtime routing，不把 bootstrap 全吞进去。
+          </p>
+        </div>
+        <div class="card">
+          <h3 class="warn">2. 文档可能先于实现膨胀</h3>
+          <p>
+            一旦进入 scope / plan / summary 这些中间概念，协议会自然长大。
+            开发者要持续追问：这些结构是执行必须，还是分析时有帮助但不一定要落盘。
+          </p>
+        </div>
+      </div>
+      <div class="callout" style="margin-top:16px;">
+        <h3>一个典型提醒</h3>
+        <p>
+          “想清楚了”不等于“现在就该做”。好的架构推进不是把所有正确的事一次做完，
+          而是把正确的事分层做完。
+        </p>
+      </div>
+    </section>
+
+    <section id="developer">
+      <div class="section-head">
+        <h2>对开发者的启发</h2>
+        <span class="badge">可迁移的方法</span>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <h3>区分技术作用域和产品语义作用域</h3>
+          <p>
+            同一个对象常常同时承担两层含义。只要这两层没拆开，系统就会出现“代码能跑，但产品语义混乱”的情况。
+          </p>
+        </div>
+        <div class="card">
+          <h3>状态流比字段更重要</h3>
+          <p>
+            最后收敛到 <code>provision → bootstrap → active</code>，说明真正重要的是生命周期，而不是先堆更多字段。
+          </p>
+        </div>
+        <div class="card">
+          <h3>模板不应该绑架产品模型</h3>
+          <p>
+            旧模板默认 workspace 是完整科研主线，这其实是模板在定义产品。
+            正确顺序应该是产品先定义边界，再让模板服从边界。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="summary">
+      <div class="section-head">
+        <h2>一句话总结</h2>
+        <span class="badge">Source: Phase 5.3</span>
+      </div>
+      <div class="callout">
+        <p class="good">
+          这条思维路径最值得学习的地方，不是“想到 bootstrap”，而是能从一个功能缺口一路追到概念定义、
+          生命周期入口和系统控制点，最后还能把阶段范围收回来。
+        </p>
+        <p class="source" style="margin-top: 10px;">
+          来源说明：本页内容整理自 <code>docs/phase5.3-dev-plan.md</code> 的推导过程，
+          并与 <code>docs/boostrap-index.md</code> 中的 BOOTSTRAP 升维思路做了对照。
+        </p>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

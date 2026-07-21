@@ -1,0 +1,139 @@
+{
+  "scenario_id": "scenario_E",
+  "session_id": "scenario_E_session_008_benchmark_prioritization",
+  "turn_id": 1,
+  "workspace_id": "eval-scenario_e-260320_2325",
+  "backend_session_id": "9e422cf8af9e",
+  "assistant_text": "**Context Trace（公开版）**\n\n本回合实际调用并读取了：\n- `assets/uploads/5ee0c395_test_cases_literature.md`（实际发生了重复读取）\n- `assets/uploads/4abcbbd4_test_cases_experiment.md`\n- `assets/uploads/45307a7c_test_cases_writing.md`\n- `assets/uploads/35e2103c_PRO_PROMPT_PACKAGE_ARCHITECTURE.md`\n\n未调用 `write_file`；以下仅为基于已读文件的筛选建议，不是已落盘配置。\n\n---\n\n**Rationale（公开版）**\n\n我按两个原则做精简：\n1. **单个 session 尽量同时覆盖多种能力**，避免“每项能力单开一题”导致 benchmark 太散。  \n2. **优先保留跨层桥接案例**，因为它们更能测出真实系统差异：  \n   - 文献 → Concept  \n   - 实验 → Task  \n   - 写作 → Pack  \n   - 跨 session 记忆 / 版本延续  \n   - guardrails（不把计划当结果、不把 SOP 当结论、不乱读无关上下文）\n\n另外，三份 test case 列表里**没有显式的 bootstrap case**，所以为了满足你要求的五类能力全覆盖，我建议从三类 test case 中**合成 1 个 bootstrap session 类型**；这不是新增素材，而是把已有代表性资产用于“首次进入 workspace”的初始化场景。\n\n---\n\n## Deliverable\n\n## 推荐方案：做 **10 个 session 类型**\n这是我认为最稳的“精简但不失真”版本。\n\n### A. 必选 8 个核心 session\n这 8 个已经能覆盖你要求的 5 类能力。\n\n| 优先级 | Session 类型 | 来源 | 为什么必须留 | 重点能力 |\n|---|---|---|---|---|\n| 1 | **B0 混合初始资产 bootstrap**（派生型） | 由 L1 + E2 + W1 代表资产组合而成 | 三类素材混合最适合测 workspace scope 判断、primary object 选择、最小 memory 骨架生成 | **bootstrap**, artifact 写入, guardrails |\n| 2 | **L1 基线机制文献簇 → Concept 落点** | literature L1 | 同主题下有 PDF + 文献笔记，最适合测“从原始文献到 Concept” | **binary 解析**, artifact 写入, guardrails |\n| 3 | **L2 Ce-Co3O4 主逻辑迁移簇** | literature L2 | 最能测“文献命中后，能否桥接到实验主线” | **跨 session memory**, 文献→实验桥接 |\n| 4 | **L3 跨主题综述簇：d-band 到聚合路径** | literature L3 | 最适合测“该读什么 / 不该读什么”，是 guardrails 高价值题 | **hallucination guardrails**, 上下文选择 |\n| 5 | **E2 第五阶段最小机理闭环** | experiment E2 | 协议、测试条件、显色/EPR 都在，最适合测 Task 组织 | artifact 写入, **guardrails**, trace |\n| 6 | **E3 第六阶段高价钴直接证据链** | experiment E3 | Claim 清楚、证据工具清楚、还能连到写作交付 | **binary 解析**, 跨 session memory, artifact 写入 |\n| 7 | **W1 20260305 大组会 Pack** | writing W1 | 最标准的“工作文档 → PPT 最终件”写作落点 | **binary 解析**, artifact 写入, Pack 能力 |\n| 8 | **W2 毕业论文章节反推 Pack** | writing W2 | 最适合测“做了但还没写进去”的缺口识别，guardrails 价值高 | **hallucination guardrails**, 跨 session memory, 写作组织 |\n\n### B. 扩展 2 个补强 session\n如果你能做到 10 个，我建议再加这两个。\n\n| 优先级 | Session 类型 | 来源 | 补强点 | 重点能力 |\n|---|---|---|---|---|\n| 9 | **E1 第二阶段性能筛选闭环** | experiment E1 | 给 benchmark 一个更早期、更“任务起点型”的实验 session | Task kickoff, artifact 写入 |\n| 10 | **W3 开题报告版本演化 Pack** | writing W3 | 最适合测版本选择、时间推进、docx/pptx 兼容 | **binary 解析**, 跨 session memory |\n\n---\n\n## 为什么这 10 个最代表性\n它们基本覆盖了你要的五类能力，而且不是平均分配，而是**高密度覆盖**：\n\n### 1) bootstrap\n- **B0 混合初始资产 bootstrap**  \n  这是唯一建议显式加入的“派生型 session”。  \n  原因：现有三类 test cases 本身都偏 closure，不足以直接测 first-run 初始化。\n\n### 2) binary 解析\n优先保留这些，因为它们天然带二进制资产关联：\n- **L1**：PDF + 文献笔记\n- **E3**：PPTX 证据包\n- **W1**：PPTX 最终交付\n- **W3**：PPTX + DOCX 版本演化\n\n### 3) artifact 写入\n最适合要求 agent 实际产物落盘的：\n- **B0**：`workspace_scope.md` / `project.md`\n- **L1**：`CONCEPT_*.md`\n- **E2 / E3**：`TASK_*.md`\n- **W1 / W2**：`PACK_*.md`\n\n### 4) 跨 session memory\n最能测“上次读过什么，这次怎么续上”的：\n- **L2**：文献 → 实验主线迁移\n- **E3**：实验 → 写作证据包\n- **W2**：结果 → 论文章节反推\n- **W3**：多版本写作演化\n\n### 5) hallucination guardrails\n最值得保留的 guardrails 题：\n- **L3**：别把相关但不在主线内的文献硬串成结论\n- **E2**：别把 SOP / 计划态内容当成已完成实验事实\n- **W2**：别把“应该写进去”说成“已经写进去了”\n- **B0**：别在 bootstrap 阶段过度定义 workspace 边界\n\n---\n\n## 如果你只能做 **8 个**，我建议砍掉这两个\n优先删：\n- **E1**\n- **W3**\n\n保留的 8 个就是：\n1. B0 混合初始资产 bootstrap  \n2. L1 基线机制文献簇  \n3. L2 Ce-Co3O4 主逻辑迁移簇  \n4. L3 d-band 到聚合路径综述簇  \n5. E2 第五阶段最小机理闭环  \n6. E3 第六阶段高价钴直接证据链  \n7. W1 20260305 大组会 Pack  \n8. W2 毕业论文章节反推 Pack  \n\n这是我认为**最小但完整**的一版。\n\n---\n\n## 一个更实用的“能力覆盖矩阵”\n用来检查有没有漏测。\n\n| Session | bootstrap | binary 解析 | artifact 写入 | 跨 session memory | guardrails |\n|---|---:|---:|---:|---:|---:|\n| B0 bootstrap | ✓ |  | ✓ |  | ✓ |\n| L1 |  | ✓ | ✓ |  | ✓ |\n| L2 |  |  |  | ✓ |  |\n| L3 |  |  |  |  | ✓ |\n| E2 |  |  | ✓ |  | ✓ |\n| E3 |  | ✓ | ✓ | ✓ |  |\n| W1 |  | ✓ | ✓ |  |  |\n| W2 |  |  | ✓ | ✓ | ✓ |\n| E1（可选） |  |  | ✓ |  |  |\n| W3（可选） |  | ✓ |  | ✓ |  |\n\n---\n\n## 我建议的 benchmark 编排顺序\n为了让失败点更可解释，顺序不要乱：\n\n1. **B0 bootstrap**\n2. **L1 文献 → Concept**\n3. **L2 文献 → 实验桥接**\n4. **E2 实验 Task 组织**\n5. **E3 实验证据链 → 写作桥接**\n6. **W1 Pack 组装**\n7. **W2 写作缺口审计**\n8. **L3 guardrails：该读/不该读**\n9. （可选）**E1 早期实验起点**\n10. （可选）**W3 版本演化**\n\n这个顺序的好处是：  \n先测初始化，再测单对象落点，再测跨对象桥接，最后用 guardrails 和版本题拉开差距。\n\n---\n\n## 我对“精简 benchmark”的一句话结论\n如果你想在**样本数不大**的情况下仍保留区分度，**最佳 sweet spot 是 10 个 session**；  \n如果更紧，只保留 **8 个核心 session** 也够，但一定要把 **B0/L3/W2** 留住，否则 bootstrap 和 guardrails 会明显偏弱。\n\n---\n\n**Memory Patch**\n\n本回合未实际写入文件。  \n如你要，我下一步可以直接帮你输出其中一种可落盘版本：\n\n1. **`benchmark_session_shortlist.md`**：8/10 个 session 的最终清单  \n2. **`benchmark_coverage_matrix.md`**：能力覆盖矩阵  \n3. **`benchmark_eval_order.md`**：建议执行顺序 + 每题预期产物  \n\n如果你愿意，我下一条可以直接给你一版**“10 个 session 的正式 benchmark spec 表”**，字段做到可直接交给评测同学执行。",
+  "attachments_used": [
+    {
+      "saved_path": "assets/uploads/5ee0c395_test_cases_literature.md",
+      "file_type": "md",
+      "summary": ".md 文件, 3KB",
+      "source_path": "D:\\ai_software\\yyq_project\\给GPT5PRO提示词\\闭环测试集\\测试集上传的文件\\E_跨闭环桥接\\outputs\\test_cases_literature.md",
+      "reused_from_cache": true
+    },
+    {
+      "saved_path": "assets/uploads/4abcbbd4_test_cases_experiment.md",
+      "file_type": "md",
+      "summary": ".md 文件, 3KB",
+      "source_path": "D:\\ai_software\\yyq_project\\给GPT5PRO提示词\\闭环测试集\\测试集上传的文件\\E_跨闭环桥接\\outputs\\test_cases_experiment.md",
+      "reused_from_cache": true
+    },
+    {
+      "saved_path": "assets/uploads/45307a7c_test_cases_writing.md",
+      "file_type": "md",
+      "summary": ".md 文件, 2KB",
+      "source_path": "D:\\ai_software\\yyq_project\\给GPT5PRO提示词\\闭环测试集\\测试集上传的文件\\E_跨闭环桥接\\outputs\\test_cases_writing.md",
+      "reused_from_cache": true
+    },
+    {
+      "saved_path": "assets/uploads/35e2103c_PRO_PROMPT_PACKAGE_ARCHITECTURE.md",
+      "file_type": "md",
+      "summary": ".md 文件, 8KB",
+      "source_path": "D:\\ai_software\\yyq_project\\给GPT5PRO提示词\\闭环测试集\\测试集上传的文件\\E_跨闭环桥接\\outputs\\pro_dataset_expanded_20260317\\PRO_PROMPT_PACKAGE_ARCHITECTURE.md",
+      "reused_from_cache": true
+    }
+  ],
+  "trace_events": [
+    {
+      "tool_call_id": "call_8g3MTXsfcpWc8UGaJZYHPyKo",
+      "tool": "read_file",
+      "args": {
+        "cwd": ".",
+        "path": "assets/uploads/5ee0c395_test_cases_literature.md"
+      },
+      "timestamp": "2026-03-21T18:00:00.653772",
+      "status": "completed",
+      "result": "# Literature Closure Test Cases\n\n## L1 基线机制文献簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md`\n- 为什么典型: 同一主题下同时有原始 PDF、文献笔记和方法外延，最适合测试 Concept 落点。\n- 适合测试: `context_hit_test`, `object_landing_test`, `trace_replay_test`\n\n## L2 Ce-Co3O4 主逻辑迁移簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260305和师兄探讨过的主逻辑参考文献/Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf`; `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第四阶段/【第四阶段实验脉络】Ce-Co3O4机理主线搭建.md`\n- 为什么典型: 适合测试系统能否从“材料结构调控文献”命中文献，再连接到实验脉络。\n- 适合测试: `context_hit_test`, `object_landing_test`\n\n## L3 d-band 到聚合路径的跨主题综述簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species - 文献笔记.md`; `科研obsidian/0-毕业论文安排20251230/聚合框架/【gpt文献调研：高价钴氧物种生成+聚合证据链】.md`; `科研obsidian/0-毕业论文安排20251230/选择性氧化框架/reaction-pathway-tuning-between-electron-transfer-mediate"
+    },
+    {
+      "tool_call_id": "call_98gwPAnWZDVJeYYG5CVYAd5k",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T18:00:00.667304",
+      "status": "completed_unmatched",
+      "result": "# Literature Closure Test Cases\n\n## L1 基线机制文献簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/【SI】2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/2024-PNAS-UV-induced-OV-Co3O4- OV-induced low coordinated Co& anchor Cl to produce 三Co(IV)=O👉ClO2.md`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/中文关键词搜索关联度max/（相关度高）2023-EST-Co3O4-OAT during Co(IV) in the Co3O4 chlorite process&PCET in Co(IV)mediated ClO2 generation-pH对Cl形态影响.md`\n- 为什么典型: 同一主题下同时有原始 PDF、文献笔记和方法外延，最适合测试 Concept 落点。\n- 适合测试: `context_hit_test`, `object_landing_test`, `trace_replay_test`\n\n## L2 Ce-Co3O4 主逻辑迁移簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260222大组会文献Ce-Co3O4与掺杂/1-s2.0-S0926337324011780-main.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/Breaking the oxo-wall for Co(IV)-oxo species and their nanoconfined catalytic performance within Ce-Co lamellar membrane.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260305和师兄探讨过的主逻辑参考文献/Optimized the e occupancy of Co active site through 4f–2p–3d gradient orbital coupling for efficient Fenton-like catalysis.pdf`; `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第四阶段/【第四阶段实验脉络】Ce-Co3O4机理主线搭建.md`\n- 为什么典型: 适合测试系统能否从“材料结构调控文献”命中文献，再连接到实验脉络。\n- 适合测试: `context_hit_test`, `object_landing_test`\n\n## L3 d-band 到聚合路径的跨主题综述簇\n- 关联文件: `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species.pdf`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/2024-SACs&taloring D band-high-valent metal-oxo species - 文献笔记.md`; `科研obsidian/0-毕业论文安排20251230/聚合框架/【gpt文献调研：高价钴氧物种生成+聚合证据链】.md`; `科研obsidian/0-毕业论文安排20251230/选择性氧化框架/reaction-pathway-tuning-between-electron-transfer-mediate"
+    },
+    {
+      "tool_call_id": "call_rMtJvARfKzb0cOgOm8ubDLkq",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T18:00:00.667304",
+      "status": "completed_unmatched",
+      "result": "# Experiment Closure Test Cases\n\n## E1 第二阶段性能筛选闭环\n- 关联文件: `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第二阶段/【第二阶段实验记录：M-Co3O4亚氯酸盐活化选择性降解污染物】.md`; `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/2-材料合成方法/【第二阶段】材料合成方法汇总.md`; `科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/3-节点外工具/【Graphpad】性能体系：性能+动力学.md`\n- 为什么典型: 从性能筛选一路走到“是否生成高价 Co/ClO2”的机制发问，闭环起点清晰。\n- 适合测试: `trace_replay_test`, `object_landing_test`\n\n## E2 第五阶段最小机理闭环\n- 关联文件: `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第五阶段：最小机理闭环/【第五阶段】ClO2的EPR测试方法建模.md`; `科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【第五阶段实验sop】·OH、1O2、O2-掩蔽动力学（淬灭）.md`; `科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【第五阶段实验sop】·OH、1O2、O2-的EPR测试.md`; `科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【亚氯酸盐AOPs活性物种测试】PMSO探针和ClO2显色.md`\n- 为什么典型: 协议、测试条件、显色/EPR 方法都在，特别适合验证 Task 的 protocol/evidence 组织。\n- 适合测试: `context_hit_test`, `trace_replay_test`\n\n## E3 第六阶段高价钴直接证据链\n- 关联文件: `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第六阶段0305/【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md`; `科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/2-逻辑节点/【第六阶段】亚氯酸盐体系！CeO2合成&淬灭实验sop.md`; `科研obsidian/0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/高价钴框架/【PACK】高价钴氧物种生成机理链.md`; `科研obsidian/0-毕业论文安排20251230/0305大组会指导自己实验，精读并梳理出激励链条（数据量+逻辑确定））/高价钴框架/高价钴证明实验.pptx`\n- 为什么典型: Claim 明确、证据工具明确、写作落点明确，是最适合做 trace 回放的候选。\n- 适合测试: `object_landing_test`, `trace_replay_test`, `writing_organization_test`\n\n"
+    },
+    {
+      "tool_call_id": "call_2r3xVsIJ8MgmZ5fdijH2V2BE",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T18:00:00.667304",
+      "status": "completed_unmatched",
+      "result": "# Writing Closure Test Cases\n\n## W1 20260305 大组会 Pack\n- 关联文件: `科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/【20260305大组会】工作文档.md`; `科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/20260305大组会-颜雍颀-v5_最终交付.pptx`; `科研obsidian/3-sop库：主逻辑-逻辑节点-节点外工具-节点外求助/20260305大组会/literature_report_FINAL_v2-1.pptx`\n- 为什么典型: 适合测试 Pack 从工作文档到最终交付的组织与回放。\n- 适合测试: `writing_organization_test`, `trace_replay_test`\n\n## W2 毕业论文章节反推 Pack\n- 关联文件: `科研obsidian/0-毕业论文安排20251230/【毕业论文】工作文档0305.md`; `科研obsidian/0-毕业论文安排20251230/Ce掺杂Co3O4亚氯酸盐高级氧化.pptx`; `科研obsidian/0-毕业论文安排20251230/文章图片排版【机密】.pptx`; `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/第六阶段0305/【第六阶段】Co(IV)=O的选择性生成（第一章）+苯酚活性图&淬灭实验（第二章）.md`\n- 为什么典型: 适合测试系统是否能发现“做了但还没写进去”的断裂。\n- 适合测试: `writing_organization_test`, `object_landing_test`\n\n## W3 开题报告版本演化 Pack\n- 关联文件: `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/1-开题报告准备-重构/【开题报告】.md`; `科研obsidian/1-主逻辑树-自上而下（脉络）+自下而上（结果）/1-开题报告准备-重构/【开题报告准备脉路】.md`; `科研obsidian/0-毕业论文安排20251230/开题/开题报告-颜雍颀-V3.pptx`; `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/1-开题报告范本/开题报告final-20251229/开题报告-颜雍颀(1).docx`\n- 为什么典型: 适合测试版本选择、时间推进和写作组织。\n- 适合测试: `trace_replay_test`, `writing_organization_test`\n\n"
+    },
+    {
+      "tool_call_id": "call_2r3xVsIJ8MgmZ5fdijH2V2BE",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T18:00:00.667304",
+      "status": "completed_unmatched",
+      "result": "# Pro Prompt Package Architecture\n\n这个文件用于解释增强版数据集压缩包的文件架构、分包原由，以及如何据此给 `GPT-5 Pro` 写提示词。\n\n## 一句话定位\n\n这个增强版包不是“原始科研资料全集”，而是一个围绕 `Concept / Task / Pack` 与 `literature_closure / experiment_closure / writing_closure` 组织出来的高价值测试子集。\n\n它的目标是：\n- 让 `GPT-5 Pro` 快速理解这套数据能测什么\n- 让 `GPT-5 Pro` 按包读取，而不是无差别扫所有文件\n- 让 `GPT-5 Pro` 能区分 `原始资产`、`结构化转译结果`、`写作交付件`\n\n## 总体架构\n\n增强版包可以理解成 5 个逻辑包：\n\n1. `A_转译索引包`\n2. `B_文献与 Concept 包`\n3. `C_实验与 Task 包`\n4. `D_写作与 Pack 包`\n5. `E_跨闭环桥接包`\n\n下面的“包”是逻辑分组，不是磁盘上的单独目录。实际文件仍然来自原始 `科研obsidian/` 路径与 `outputs/` 路径。\n\n## A_转译索引包\n\n### 代表文件\n- `outputs/archive_manifest.md`\n- `outputs/archive_manifest.csv`\n- `outputs/closure_mapping.md`\n- `outputs/closure_mapping.json`\n- `outputs/concepts_candidates.json`\n- `outputs/tasks_candidates.json`\n- `outputs/packs_candidates.json`\n- `outputs/test_cases_literature.md`\n- `outputs/test_cases_experiment.md`\n- `outputs/test_cases_writing.md`\n- `outputs/assets_to_memory_plan.md`\n- `outputs/manual_review_points.md`\n- `outputs/research_os_ecosystem_map.md`\n\n### 原由\n- 这是整个数据集的“译后索引层”。\n- 如果 `GPT-5 Pro` 先读这一层，就能先理解对象设计、闭环样例和不确定项，再决定是否下钻原始文件。\n- 这层最适合作为提示词中的“先验上下文”。\n\n### 对 `GPT-5 Pro` 的作用\n- 快速建立 ResearchLoop-OpenClaw 的对象视角\n- 避免 `GPT-5 Pro` 一开始陷入文件海\n- 明确哪些是 `high confidence`，哪些是 `needs_manual_review`\n\n## B_文献与 Concept 包\n\n### 代表主题\n- `亚氯酸盐活化下的 Co(IV)=O / ClO2 双活性物种机制`\n- `CeO2/Co3O4 界面电子耦合与氧空位促进高价钴生成`\n- `d-band / 高价 metal-oxo 与选择性氧化-聚合路径`\n- `高价钴证明方法学库`\n\n### 代表文件\n- `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250912-亚氯酸盐活化框架搭建/...`\n- `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献笔记/20250912-亚氯酸盐活化框架搭建/...`\n- `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20260309高价钴物种证明/...`\n- `科研obsidian/2-主逻辑树-现实照应-文献搜集与文献笔记/文献/20250930-Co3O4顶层设计-大组会/...`\n\n### 原由\n- 这一包负责提供“研究问题是怎么从文献里长出来的”。\n- 它最适合测试：\n  - `literature_closure`\n  - `context_hit_test`\n  - `object_landing_test`\n\n### 使用建议\n- 如果提示词目标是“抽 Concept”“重建研究主题”“测试系统该读哪些文献”，先读这包。\n- 不要让 `GPT-5 Pro` 直接从文献跳到实验结论；中间要经过 Task 或 Pack 的证据层。\n\n## C_实验与 Task 包\n\n### 代表主题\n- `M-Co3O4 亚氯酸盐活化性能筛选`\n- `Ce-Co3O4 机理主线搭建与活性物种测试`\n- `第五阶段最小机理闭环：PMSO / ClO2 / EP"
+    }
+  ],
+  "created_paths": [],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/9e422cf8af9e",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "E-S008-T01-C1",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中 6 个，达到阈值。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "E-S008-T01-C2",
+    "score": 85.0,
+    "verdict": "pass",
+    "reasons": [
+      "该 turn 依赖 prior workspace memory，但 trace 中缺少明显 memory 读取痕迹。"
+    ]
+  },
+  "artifact_result": null,
+  "judge_result": {
+    "criterion_id": "E-S008-T01-C3",
+    "score": 93.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 6 个关键术语",
+      "检测到工具使用: read_file"
+    ],
+    "risks": [
+      "缺失关键术语: ['8-12 个最代表性的 session 类型']"
+    ],
+    "missing": [
+      "8-12 个最代表性的 session 类型"
+    ],
+    "raw_text": "你是一名长期设计 benchmark、evaluator、数据集包架构与科研智能体协议的系统评审专家。请只依据【用户问题】【上传文件列表】【assistant 回复】【trace 摘要】【预期 focus】评分，不要替模型补系统设计。你要重点检查：回答是否真正站在 bridge/eval 视角而不是研究内容视角；是否清楚区分 package architecture、closure mapping、ecosystem map、test cases 与 downstream representative assets 的角色；是否把 loader / runner / scorer / llm-judge / report 等对象说清楚；是否明确哪些是 runtime 必须字段、哪些只是 analyst 注释；是否避免泛泛而谈的“平台化建议”。请输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_E_session_008_benchmark_prioritization\",\n  \"turn_id\": 1,\n  \"user_input\": \"如果我只能先做一版精简 benchmark，你帮我从 literature / experiment / writing 三类 test cases 里挑出 8-12 个最代表性的 session 类型。要求必须覆盖 bootstrap、binary 解析、artifact 写入、跨 session memory、以及 hallucination guardrails 这五类能力。\",\n  \"user_upload\": [\n    \"outputs/test_cases_literature.md\",\n    \"outputs/test_cases_experiment.md\",\n    \"outputs/test_cases_writing.md\",\n    \"outputs/pro_dataset_expanded_20260317/PRO_PROMPT_PACKAGE_ARCHITECTURE.md\"\n"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [],
+  "temporary_expectations": null,
+  "provisional_turn_score": 90.0,
+  "final_turn_score": 92.67
+}

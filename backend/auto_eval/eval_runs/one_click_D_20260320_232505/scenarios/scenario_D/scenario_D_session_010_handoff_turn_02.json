@@ -1,0 +1,100 @@
+{
+  "scenario_id": "scenario_D",
+  "session_id": "scenario_D_session_010_handoff",
+  "turn_id": 2,
+  "workspace_id": "eval-scenario_d-260320_2325",
+  "backend_session_id": "7095549c079b",
+  "assistant_text": "**Context Trace（本轮真实工具调用）**\n\n本轮实际读取了：\n- `memory/identity/workspace_scope.md`\n- `memory/packs/D_proposal_revision_matrix.md`\n- `memory/packs/D_figure_layout_rules.md`\n\n本轮未调用 `write_file`，以下仅为基于已读文件与当前请求整理的补充清单。\n\n---\n\n## Rationale\n\n这份 `anti-hallucination 清单` 主要基于两类已读依据：\n\n1. `D_proposal_revision_matrix.md`\n   - 明确显示同一类交付会同时存在：\n     - 准备便签\n     - 模板骨架\n     - 重构稿\n     - PPT 答辩稿\n     - final docx  \n   - 所以以后只要我从 PPTX / DOCX / PDF 帮你写内容，就**不能默认当前拿到的就是最终口径**。\n\n2. `D_figure_layout_rules.md`\n   - 明确强调：\n     - 标题可能比证据更强\n     - 示意图不能替代证据图\n     - 图只支持局部现象时，标题不能写成总体结论\n   - 所以以后只要我从页内标题、示意图、截图去提炼文字，就要警惕**“排版结论强于原始证据”**。\n\n---\n\n## Deliverable｜后续写作 anti-hallucination 清单\n\n下面这份可以当成“以后我帮你读 PPTX / DOCX / PDF 写内容时的默认提醒协议”。\n\n---\n\n# 一、我应先提醒的 3 类话\n\n## A. 需要回原文页\n适用于：我怀疑当前提炼只看到了“讲法/摘要”，没看到真正证据页或上下文页。\n\n我应该先提醒：\n- **这句话需要回原文页确认。**\n- **请给我对应页码/截图/相邻前后页。**\n- **我现在只能提炼表述，不能替代原页证据判读。**\n\n## B. 需要回版本源文件\n适用于：我怀疑你给我的不是原始源文件，而是导出件、摘录件、转述件、截图件。\n\n我应该先提醒：\n- **这一步最好回版本源文件确认。**\n- **如果有原始 PPTX / DOCX，请优先给源文件而不是 PDF 截图。**\n- **当前版本可能丢失批注、备注、修订痕迹、隐藏页或动画层信息。**\n\n## C. 需要确认这是不是最终稿\n适用于：我怀疑同一交付存在多个版本，而当前文件名/内容看不出是否 final。\n\n我应该先提醒：\n- **请先确认这是不是最终稿。**\n- **如果不是 final，我可以帮你提炼“当前版本口径”，但不会默认它代表最终立场。**\n- **若存在 final 和中间稿冲突，应以 final 为准。**\n\n---\n\n# 二、哪些情况下必须先提醒“需要回原文页”\n\n## 1. 我只看到标题结论，没看到支撑图或正文\n高风险信号：\n- 你给的是单页标题、目录页、summary 页\n- 或只给我一句 slide title / caption\n\n我应提醒：\n- **标题可能写得比证据更满，需回原文页看图和脚注。**\n\n---\n\n## 2. 页内有“support / suggest / indicate”与“prove / demonstrate”混用\n高风险信号：\n- 标题像强结论\n- 图里其实只是相关性、趋势、单点比较\n\n我应提醒：\n- **这页可能存在“标题强于证据”的风险，需回原页核对图与限定条件。**\n\n---\n\n## 3. 机理页主要是示意图，没有看到原始证据图\n高风险信号：\n- 只有 mechanism scheme\n- 没有对应 quenching / probe / spectra / kinetics 页\n\n我应提醒：\n- **示意图只能做收束，不能替代证据页；需要回原文证据页。**\n\n---\n\n## 4. 图页缺脚注、条件、样品定义\n高风险信号：\n- 没有浓度、pH、投加量、反应时间\n- 样品缩写未解释\n- 不知道是哪个条件下的数据\n\n我应提醒：\n- **缺条件脚注时，我不能把图上观察直接写成可泛化结论；需回原页或相邻页补条件。**\n\n---\n\n## 5. 一页里同时讲结构、活性、机理、应用\n高风险信号：\n- 信息很满\n- 我无法判断哪一块是主结论，哪一块只是辅助说明\n\n我应提醒：\n- **这类页容易误读，最好回到拆分后的原始论证页逐页确认。**\n\n---\n\n## 6. 我只能看到截图、裁剪图、转述文本\n高风险信号：\n- 不是整页\n- 没有页码\n- 看不到页脚来源和上下文\n\n我应提醒：\n- **截图不够做可靠写作抽取，需回整页或原文件。**\n\n---\n\n## 7. 引用文献图但没看到文献来源页\n高风险信号：\n- PPT 内嵌了文献图\n- 但来源不清楚，或者可能是二次转引\n\n我应提醒：\n- **这类内容需要回原始文献页，而不是只信 PPT 中的二手搬运。**\n\n---\n\n# 三、哪些情况下必须先提醒“需要回版本源文件”\n\n## 1. 你给的是 PDF 导出件，但原文件本来是 PPTX / DOCX\n高风险原因：\n- PDF 常丢失：\n  - 备注页\n  - 批注\n  - 修订痕迹\n  - 隐藏页\n  - 动画分步呈现\n\n我应提醒：\n- **若要精确续写或改稿，最好回 PPTX / DOCX 源文件。**\n\n---\n\n## 2. 你给的是截图、转存文本、OCR 结果\n高风险原因：\n- OCR 可能错字\n- 版式层级消失\n- 表格/公式/图注位置错乱\n\n我应提醒：\n- **OCR/截图只能做粗提炼，关键表述需回源文件核对。**\n\n---\n\n## 3. DOCX 里可能存在“修订模式 / 批注 / 不同版本痕迹”\n高风险原因：\n- final wording 可能藏在修订接受/拒绝前后\n- 导出 PDF 后看不见作者意图\n\n我应提醒：\n- **若要替你写正式稿，建议给带修订信息的源 docx 或确认已 clean 的 final 版。**\n\n---\n\n## 4. PPTX 可能存在隐藏页、备用页、备答页\n高风险原因：\n- 讲稿和正式投影版不一定等价\n- 有时 final 叙事在备注或隐藏页里\n\n我应提醒：\n- **若我要复刻你的讲法或答辩逻辑，最好回原始 pptx，而不是只看导出 pdf。**\n\n---\n\n## 5. PDF 可能只是汇编件，不是原始写作母本\n高风险原因：\n- 拼接 PDF 常混入旧页、占位页、外部文献页\n- 看起来完整，实际上不是版本源头\n\n我应提醒：\n- **这份 PDF 可能是展示包，不一定是母本；如要续写，请确认源头文件。**\n\n---\n\n# 四、哪些情况下必须先提醒“需要确认这是不是最终稿”\n\n## 1. 文件名里出现这些词\n高风险标记：\n- `v1 / v2 / v3`\n- `修订`\n- `final_v2`\n- `最终版-再改`\n- `备份`\n- `整理`\n- `工作文档`\n- `准备脉路`\n- `模板`\n- `汇总`\n\n我应提醒：\n- **这些命名不能自动等于 final，需要你确认版本地位。**\n\n---\n\n## 2. 同一主题同时存在 PPT、DOCX、MD 多个版本\n高风险原因：\n- PPT 可能是答辩口径\n- DOCX 可能是书面口径\n- MD 可能只是中间整理稿\n\n我应提醒：\n- **请先指定哪一个是 source of truth。**\n\n---\n\n## 3. 内容里出现明显“计划态/待补态”语句\n高风险信号：\n- “后续补图”\n- “待确认”\n- “此处再改”\n- “先占位”\n- “可考虑”\n- “后续补文献”\n\n我应提醒：\n- **这更像中间稿，不应直接当最终口径。**\n\n---\n\n## 4. 页内与页内之间口径冲突\n高风险信号：\n- 前文写“support”\n- 后文写“prove”\n- 一处说“假设”\n- 另一处说“已证实”\n\n我应提醒：\n- **版本可能未收口，需先确认 final 口径。**\n\n---\n\n## 5. 同类交付存在已知版本链\n结合本 workspace 已读信息，像 proposal 已经明确有：\n- 准备便签\n- 模板骨架\n- 重构版 markdown\n- V3 PPT\n- final docx\n\n我应提醒：\n- **这类交付不能只拿到一个文件就默认是最终稿，必须先确认它在版本链中的位置。**\n\n---\n\n# 五、我应该主动停下来、不直接代写的高风险情形\n\n## 1. 你让我“按这页 PPT 直接写论文结论”\n但我没看到：\n- 原图大图\n- 条件脚注\n- 样品定义\n- 对照组\n\n我应先停下并提醒：\n- **当前证据不足，不能直接升格为论文结论。**\n\n---\n\n## 2. 你让我“按 PDF 直接补机制段”\n但 PDF 里只有：\n- 综述式示意图\n- 二手转引图\n- 没有原始实验页/原始文献页\n\n我应先提醒：\n- **需要回原文页或原始文献源页。**\n\n---\n\n## 3. 你让我“沿用这个 docx 的写法继续往下写”\n但我不知道：\n- 这是不是 final\n- 有没有更新版\n- 有没有导师修订版\n\n我应先提醒：\n- **需要先确认版本源文件与最终稿地位。**\n\n---\n\n## 4. 你让我“按照这个 PPT 的故事改 thesis”\n但 PPT 可能只是口头压缩版，thesis 要求更谨慎、更完整\n\n我应先提醒：\n- **答辩讲法不一定等于 thesis 书面口径，需要确认目标文体与权威版本。**\n\n---\n\n## 5. 你让我“引用这个文献图里的话”\n但我看到的是：\n- 你 PPT 里贴的一张图\n- 不是文献原页\n- 没有上下文\n\n我应先提醒：\n- **需要回原始文献页，避免二次转述失真。**\n\n---\n\n# 六、以后我默认会问你的 8 个确认问题\n\n如果你让我基于 PPTX / DOCX / PDF 写内容，我应优先确认：\n\n1. **这是最终稿、当前稿，还是中间稿？**\n2. **这个文件在版本链里是什么位置？**\n3. **有没有更高权威的源文件？**\n4. **我要按口头汇报口径写，还是按书面正式稿口径写？**\n5. **文中的结论是否都能回到具体页码/图号？**\n6. **是否需要保留原作者的谨慎措辞上限？**\n7. **这份材料里有没有隐藏页、备注、批注、修订痕迹？**\n8. **如果不同版本冲突，以哪个文件为准？**\n\n---\n\n# 七、可直接执行的“提醒触发器”\n\n你可以把下面当成我的默认触发规则：\n\n## 我一看到这些词，就先提醒“确认 final”\n- 工作文档\n- 准备脉路\n- 模板\n- 草稿\n- 修订\n- v1/v2/v3\n- final_v2\n- 整理版\n- 汇总版\n\n## 我一遇到这些材料形态，就先提醒“回源文件”\n- 截图\n- OCR 文本\n- 导出 PDF\n- 裁剪图\n- 二次搬运图\n- 转述版 markdown\n\n## 我一遇到这些内容类型，就先提醒“回原文页”\n- 机制示意图\n- 总结页\n- 目录页\n- 单独标题页\n- 只有结论没有条件的图页\n- 只有文献图没有来源的页\n\n---\n\n# 八、给“另一个模型”的一句话操作规范\n\n如果将来你把这个 workspace 交给另一个模型，我建议加这条规则：\n\n> **凡是从 PPTX / DOCX / PDF 提炼写作内容时，不得默认“当前文件 = 最终口径”；必须先判断：是否需要回原文页、是否需要回版本源文件、是否需要确认 final。**\n\n---\n\n## Memory Patch（建议写入，未实际落盘）\n\n建议后续新增一份固定规则文件：\n\n- `memory/packs/D_writing_anti_hallucination_checklist.md`\n\n建议包含字段：\n- `when_to_return_to_original_page`\n- `when_to_return_to_source_file`\n- `when_to_confirm_final_version`\n- `default_questions_before_writing`\n- `conflict_resolution_order`\n\n如果你要，我下一步可以把这份清单直接整理成**可落盘的 handoff 文件版 markdown**。",
+  "attachments_used": [],
+  "trace_events": [
+    {
+      "tool_call_id": "call_A4n1CQqx1rOsYthYtMQafS5O",
+      "tool": "read_file",
+      "args": {
+        "cwd": ".",
+        "path": "memory/identity/workspace_scope.md"
+      },
+      "timestamp": "2026-03-21T17:17:10.732280",
+      "status": "completed",
+      "result": "# Workspace Scope\n\n## Workspace Purpose\nThis workspace is initialized as a `literature` research container.\n\n## Semantic Scope\nliterature\n\n## Time Mode\nlong_horizon\n\n## Primary Work Object\nconcept_first\n\n## Exclusions\n- 不负责实验排期推进\n- 不负责跨 workspace 素材整合\n\n## Initialization Evidence Basis\n- user_statement\n- workspace_manifest\n- initial_assets\n- parse_handoff\n- parse_handoff: used"
+    },
+    {
+      "tool_call_id": "call_N8UBO9JRAMLX6UbjAlRSlhM4",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T17:17:10.739728",
+      "status": "completed_unmatched",
+      "result": "# Workspace Scope\n\n## Workspace Purpose\nThis workspace is initialized as a `literature` research container.\n\n## Semantic Scope\nliterature\n\n## Time Mode\nlong_horizon\n\n## Primary Work Object\nconcept_first\n\n## Exclusions\n- 不负责实验排期推进\n- 不负责跨 workspace 素材整合\n\n## Initialization Evidence Basis\n- user_statement\n- workspace_manifest\n- initial_assets\n- parse_handoff\n- parse_handoff: used"
+    },
+    {
+      "tool_call_id": "call_yMAkErWRgazIbYlnivAH2uTl",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T17:17:10.740727",
+      "status": "completed_unmatched",
+      "result": "---\nsource_assets:\n  - assets/uploads/f1494f0d_【开题报告准备脉路】.md\n  - assets/uploads/ae04a4a8_【开题报告】.md\n  - assets/uploads/b807daff_【开题报告】.md\n  - assets/ppt_pack/76bb19d2_开题报告-颜雍颀-V3.pptx\n  - assets/uploads/fde1237c_开题报告-颜雍颀(1).docx\ncreated: 2026-03-21\n---\n\n# Proposal Revision Matrix\n\n## 版本差异\n\n### 1) 版本序列与定位\n\n| 版本 | 文件 | 版本定位 | 这一版主要在做什么 |\n|---|---|---|---|\n| 准备脉路 | `assets/uploads/f1494f0d_【开题报告准备脉路】.md` | 前期筹备便签 / 工作流草图 | 先定义开题准备流程：文献意群检索、分章节推进、最后汇总成 PPT |\n| 范本 markdown | `assets/uploads/b807daff_【开题报告】.md` | 学院/组内模板骨架 | 给开题报告提供标准结构：背景、进展、内容、路线、方法、进度、进展 |\n| 重构版 markdown | `assets/uploads/ae04a4a8_【开题报告】.md` | 研究叙事模板 | 把模板改造成真正可写的 scientific story，强调“事实 + 空白 → 研究目的/路线” |\n| V3 PPT | `assets/ppt_pack/76bb19d2_开题报告-颜雍颀-V3.pptx` | 答辩版故事压缩 | 将主线压缩为可讲述的项目故事，锁定 chlorite-based AOPs、Co3O4、抗生素选择性氧化与机制问题 |\n| final docx | `assets/uploads/fde1237c_开题报告-颜雍颀(1).docx` | 正式书面 proposal | 将答辩故事回填为规范、可提交、可审查的正式文本 |\n\n### 2) revision sense 视角下的版本推进\n\n| 版本 | 主要在补什么 | 主要在删什么/弱化什么 | 科学主张如何收紧 |\n|---|---|---|---|\n| 准备脉路 | 补“怎么开始做开题”：文献意群、章节拆分、时间线 | 基本未进入具体 scientific claim | 还没有真正的科学主张，只是把任务收紧为“先搭框架再写” |\n| 范本 markdown | 补标准开题格式骨架 | 删除前期脑暴的开放性，强制回到学院结构 | 主张只收紧到“必须把问题、内容、路线写齐”，仍未锁定具体体系 |\n| 重构版 markdown | 补完整研究叙事：对象性质—污染风险—技术全景—主线工艺—材料设计—研究目的/路线 | 弱化模板式填空，不再让“时间安排/工作进展”主导主线 | 从“开题要写什么”收紧为“每一节都要通向一个可研究空白” |\n| V3 PPT | 补具体课题：antibiotics → chlorite-based AOPs → heterogeneous route → Co3O4 → doped Co3O4；补 selective oxidation、reactive species、matrix、已有进展、PMSO/DPD/DFT 等机制工具 | 删掉大量泛综述枝杈与大而全铺垫 | 从“要做某种 AOP”收紧为“研究 Co3O4 活化 chlorite 对抗生素的选择性氧化及其机理” |\n| final docx | 补规范章节、文献回顾、研究目标/内容/方法/表征/理论/进度，并把已有结果写成正式 proposal 语言 | 弱化 PPT 式口头感和过强判断 | 从“我大概知道机制是什么”收紧为“我要阐明 dominant sites / reactive species / selective oxidation mechanism / matrix effect / application closure” |\n\n## 增强项\n\n### A. 哪些地方是“写得更锋利了”\n\n1. **从任务语言变成问题语言**\n   - 准备脉路阶段关注的是“怎么搜、怎么分章节、怎么汇总”。\n   - 到重构版 markdown 开始，文本开始回答“为什么这个问题值得做、现有研究哪里不够”。\n\n2. **从技术全景变成主线路线**\n   - 范本与重构版仍带有综述/模板属性。\n   - 到 V3 PPT，路线明显聚焦为 `chlorite-based AOPs`，这是一次真正的聚焦化修订。\n\n3. **从泛催化剂讨论变"
+    },
+    {
+      "tool_call_id": "call_yMAkErWRgazIbYlnivAH2uTl",
+      "tool": "read_file",
+      "args": null,
+      "timestamp": "2026-03-21T17:17:10.740727",
+      "status": "completed_unmatched",
+      "result": "---\nsource_assets:\n  - assets/ppt_pack/09f99410_文章图片排版【机密】.pptx\n  - assets/uploads/99550dc7_【毕业论文】工作文档0305.md\n  - assets/ppt_pack/75315785_Ce掺杂Co3O4亚氯酸盐高级氧化.pptx\ncreated: 2026-03-21\n---\n\n# D figure layout rules\n## 目的\n基于以下 3 份素材，提炼一套可复用到 thesis / 组会汇报的图文排版规则，重点回答：\n- 图-文比例怎么定\n- 图注与脚注怎么写\n- 信息层级与页内逻辑流怎么组织\n- 哪些页面虽然“做得很满”，但实际上不利于口头讲述与结论传达\n## 来源素材\n- `assets/ppt_pack/09f99410_文章图片排版【机密】.pptx`\n- `assets/uploads/99550dc7_【毕业论文】工作文档0305.md`\n- `assets/ppt_pack/75315785_Ce掺杂Co3O4亚氯酸盐高级氧化.pptx`\n## 适用范围\n- thesis 图版组织\n- 组会 / 开题 / 阶段汇报 PPT\n- 结果页、机理页、应用页的统一版式规范\n---\n## 排版规则\n### 1. 总原则\n- 一页只服务 **1 个主 claim**，不要同时承担“结构 + 活性 + 机理 + 应用”四个任务。\n- 标题负责写结论，图负责给证据，脚注负责给边界。\n- 页面优先顺序不是“我先做了什么实验”，而是“读者应该先看懂什么”。\n- 真正有效的页应做到：**一眼能看出主图，10 秒能明白主旨，30 秒能讲完主逻辑。**\n### 2. 图-文比例\n#### 2.1 结果汇报页\n- 推荐视觉比例：**图 65–75% / 文字 15–25% / 脚注与留白 5–10%**。\n- 主图区应占页面中上部约 2/3。\n- 一页优选 **2–4 个 panel**；超过 4 个 panel 通常说明应拆页。\n#### 2.2 背景/综述页\n- 推荐视觉比例：**图 50–60% / 文字 25–35% / 脚注 10% 左右**。\n- 可适当增加解释性文字，但仍应以图先行，不建议做成大段正文页。\n#### 2.3 thesis 图版\n- 推荐视觉比例：**图 80–90% / 图内文字 5–10%**。\n- 图版尽量只保留 panel 标号、坐标轴、图例、必要峰标与箭头。\n- 详细解释放在 caption 与正文，不要把 PPT 式长句直接塞进图里。\n### 3. 信息层级\n建议固定为 4 层：\n#### Level 1：页标题 / 主 claim\n- 一页只能有 1 个。\n- 标题应是结论句，而非方法名。\n- 例如：\n  - 好：`Ce0.5-Co3O4 shows the highest chlorite activation activity`\n  - 差：`Performance Evaluation`\n#### Level 2：panel 组标题\n- 用于标记证据分组，如 `SEM`、`XRD`、`Quenching`、`PMSO probe`。\n- 只做分组，不抢主标题的位置。\n#### Level 3：图内关键标注\n- 只标最关键的 1–3 处：峰位、箭头、关键样品、趋势方向。\n- 不要把每一个峰、每一个点都标满。\n#### Level 4：脚注 / 来源 / 条件\n- 放页底，统一弱化呈现。\n- 承担最小可复现信息，而不是承担主结论。\n### 4. 页内逻辑流\n建议所有结果页都按：\n**标题（题眼） → 中部图证据 → 一句结论 → 底部脚注**\n#### 4.1 表征页\n- 推荐顺序：**形貌/相结构 → 界面证据 → 局域电子态/缺陷证据 → 一句结构结论**\n- 结构页只说“提供结构基础”，不要直接越级到“因此已证明高价钴生成”。\n#### 4.2 活性页\n- 推荐顺序：**主动力学曲线 → 定量比较（kobs/柱状图） → 必要对照 → 条件脚注**\n- 标题要回答“谁最好、强多少”，而不是“做了活性评价”。\n#### 4.3 机理页\n- 推荐顺序：**先排除 → 再支持 → 最后综合**。\n- 可按：淬灭/排除证据 → PMSO/EPR 等支持证据 → 机制示意图 summary。\n- 机制示意图只能做收束，不能替代证据图。\n#### 4.4 应用/边界页\n- 推荐顺序：**参数窗口 → 抗干扰/实际水体 → 稳定性/浸出**。\n- 结论应写“适用窗口与边界”，不要轻易拔高为“普适应用”。\n### 5. thesis 与汇报的统一规则\n#### 共用部分\n- 共用同一条证据主线。\n- 共"
+    }
+  ],
+  "created_paths": [],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/7095549c079b",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "D-S010-T02-C1",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中 3 个，达到阈值。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "D-S010-T02-C2",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "artifact_result": null,
+  "judge_result": {
+    "criterion_id": "D-S010-T02-C3",
+    "score": 93.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 3 个关键术语",
+      "检测到工具使用: read_file"
+    ],
+    "risks": [
+      "缺失关键术语: ['需要确认是不是最终稿']"
+    ],
+    "missing": [
+      "需要确认是不是最终稿"
+    ],
+    "raw_text": "你是一名长期指导博士论文、开题答辩、组会汇报与科研写作 pack 设计的导师型评审。请只依据【用户问题】【上传文件列表】【assistant 回复】【trace 摘要】【预期 focus】评分，不要替模型补写作结构。你要重点检查：回答是否真正围绕 pack-quality 交付件组织；是否区分最终稿、工作文档、中间版本、排版示例、背景论文等不同 authority level；是否能够把 thesis / proposal / group meeting / storyboard / layout rule 转成可复用的交付对象；是否在二进制 PPTX/DOCX/PDF 信息不足时保持诚实；是否避免把版本草稿说成稳定结论。请输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_D_session_010_handoff\",\n  \"turn_id\": 2,\n  \"user_input\": \"再补一个`后续写作 anti-hallucination 清单`：如果以后我要你读 PPTX / DOCX / PDF 去帮我写内容，哪些情况下你应该先提醒‘需要回原文页 / 需要回版本源文件 / 需要确认这是不是最终稿’？\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace（本轮真实工具调用）**\\n\\n本轮实际读取了：\\n- `memory/identity/workspace_scope.md`\\n- `memory/packs/D_proposal_revision_matrix.md`\\n- `memory/packs/D_figure_layout_rules.md`\\n\\n本轮未调用 `write_file`，以下仅为基于已读文件与当前请求整理的补充清单。\\n\\n---\\n\\n## Rationale\\n\\n这份 `anti-hallucination 清单` 主要基于两类已读依据：\\n\\n1. `D_proposal_revision_matrix.md`\\n   - 明确显示同"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [],
+  "temporary_expectations": null,
+  "provisional_turn_score": 100.0,
+  "final_turn_score": 97.67
+}

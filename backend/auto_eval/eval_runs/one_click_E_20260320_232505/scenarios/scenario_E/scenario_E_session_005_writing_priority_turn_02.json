@@ -1,0 +1,67 @@
+{
+  "scenario_id": "scenario_E",
+  "session_id": "scenario_E_session_005_writing_priority",
+  "turn_id": 2,
+  "workspace_id": "eval-scenario_e-260320_2325",
+  "backend_session_id": "037864447e5a",
+  "assistant_text": "**Context Trace（公开版）**\n\n- 本轮未新调用工具。  \n- 以下回答基于：\n  1. 系统预加载上下文  \n  2. 上一轮我已实际读取/抽取并在对话中引用过的材料结果，主要包括：  \n     - `assets/uploads/45307a7c_test_cases_writing.md`\n     - `assets/uploads/99550dc7_【毕业论文】工作文档0305.md`\n     - `assets/uploads/5c66efd3_【20260305大组会】工作文档.md`\n     - 3 个 PPT 的文本抽取结果\n\n---\n\n**Rationale（公开版）**\n\n你这次要的不是“再比较一次 case”，而是补出两个 benchmark 核心件：\n\n1. **pack 质量标准**  \n   用来区分“这是可交付、可复用、可接力的 pack”，还是“只是把材料压缩了一遍的摘要”。\n\n2. **最容易造假的点**  \n   尤其针对你现有素材链条里最危险的混淆：  \n   **工作文档（计划态）→ PPT（展示态）→ 最终稿/论文章节（成稿态）**  \n   三者如果不分层，模型很容易把“应该怎么讲”写成“已经被证明”。\n\n从你这批材料看，这个风险非常真实：\n- 工作文档里有大量“该怎么组织/哪些要补/哪些不能拔高”\n- PPT 里又有大量标题、目录、占位、简写页\n- 最终交付稿则天然带有“完成感”\n\n所以最关键的质量标准，不是“写得顺不顺”，而是：\n**有没有把不同完成度的内容分层，并给出证据锚点。**\n\n---\n\n**Deliverable**\n\n## 一、`pack 质量标准`：什么叫真正的 pack，什么只是普通摘要\n\n### 先给一句定义\n\n**真正的 pack = 面向某个明确交付场景，把分散材料组织成“可继续使用、可继续产出、可继续判断”的对象。**\n\n**普通摘要 = 只是把材料内容浓缩了一遍。**\n\n---\n\n## 二、真正的 pack 必须具备的 6 个标准\n\n我建议你把 pack-quality 定成 6 维标准。\n\n| 维度 | 真正的 pack | 普通摘要 |\n|---|---|---|\n| 1. 交付对象清晰 | 明确“这是给谁、为了解决什么、最后要产出什么” | 只说“这份材料讲了什么” |\n| 2. 组织结构清晰 | 有页级/节级功能分配，知道先讲什么、后讲什么 | 只有信息堆叠，没有功能分层 |\n| 3. claim 有层级 | 区分主 claim / 子 claim / 只能弱说的观察 | 所有信息平铺，重要性一样 |\n| 4. 证据可回溯 | 关键判断能回指到 PPT / 工作文档 / 原文位置 | 结论流畅，但找不到出处 |\n| 5. 状态分层明确 | 区分“已完成 / 已展示 / 待补 / 猜想” | 把计划、展示、结论混成一层 |\n| 6. 可接力复用 | 另一个人接手后，能继续做汇报/写作/补图 | 另一个人看完只知道“你总结过了” |\n\n---\n\n## 三、最短判据：一份内容什么时候算 pack，什么时候不算\n\n### 算真正的 pack，如果它能回答这 6 个问题\n\n1. **这份东西服务什么交付？**  \n   组会？论文？章节？答辩？文献复盘？\n\n2. **读者看完后应该能做什么？**  \n   继续改 PPT、继续写 chapter、继续补图、继续答导师问题。\n\n3. **主线是什么？**  \n   不是“材料很多”，而是“要证明哪条线”。\n\n4. **哪些内容能直接用？**  \n   哪几页、哪几段、哪几个标题/图可直接进入下一版。\n\n5. **哪些内容还不能说满？**  \n   哪些只是待分析、占位、弱证据、工作假说。\n\n6. **下一步最小动作是什么？**  \n   补哪张图、改哪页、删哪句、加哪个对照。\n\n### 只算普通摘要，如果它只能回答这些\n\n- 这份文件大概讲了什么  \n- 涉及哪些主题  \n- 有哪些主要内容  \n- 总体思路是什么\n\n这类回答对“理解材料”有用，  \n但对“继续生产一个交付物”帮助不够。\n\n---\n\n## 四、我建议你用的 `pack-quality rubric`\n\n每项 0–2 分，总分 12 分。\n\n### 1) 交付锚点（0–2）\n- **0**：没说明这份 pack 是给谁/干什么\n- **1**：说了大概用途，但不具体\n- **2**：明确交付场景、对象、用途、输出形式\n\n### 2) 结构编排（0–2）\n- **0**：只是按材料顺序复述\n- **1**：有粗略分段\n- **2**：有明确的页级/节级功能与顺序逻辑\n\n### 3) claim 组织（0–2）\n- **0**：没有主次\n- **1**：有中心句，但证据与边界不清\n- **2**：主 claim、子 claim、弱 claim 分层清楚\n\n### 4) 证据锚定（0–2）\n- **0**：结论找不到出处\n- **1**：能模糊指出来源\n- **2**：关键判断能明确锚到具体文件/页/段\n\n### 5) 状态标记（0–2）\n- **0**：完成态、计划态、猜想态混在一起\n- **1**：偶尔有“待补/待核对”\n- **2**：系统地区分已完成/待补/不可拔高\n\n### 6) 可接力性（0–2）\n- **0**：别人接手还是得重读所有源材料\n- **1**：能省一点时间\n- **2**：别人能直接接着改、接着写、接着汇报\n\n### 推荐阈值\n- **10–12 分：真正的 pack**\n- **7–9 分：半成品 pack / 强摘要**\n- **0–6 分：普通摘要**\n\n---\n\n## 五、一个更本质的区分：pack 不是“总结”，而是“组织后的交付中间层”\n\n### 普通摘要在做什么\n- 压缩信息\n- 降低阅读成本\n\n### 真正的 pack 在做什么\n- 组织交付逻辑\n- 规定主线与边界\n- 帮下一步动作减负\n- 把“能说什么 / 不能说什么”写清楚\n\n所以一句最硬的判断是：\n\n> **摘要解决“看懂”。Pack 解决“继续做”。**\n\n---\n\n## 六、`最容易造假的点`：不是数据本身，而是“状态层级混淆”\n\n如果只让我给一个最容易造假的点，我会定成：\n\n# **把工作文档、PPT、最终稿里的不同完成度内容，压平成一个“已经成立的中心句”**\n\n这就是最危险、也最常见的假 closure。\n\n---\n\n## 七、为什么这是最容易造假的点\n\n因为这类句子最“像真的”，而且最难一眼抓到。\n\n模型很容易做这样的事：\n\n### 从工作文档里拿到\n- 计划怎么讲\n- 哪些图准备放\n- 哪些机制可能成立\n- 哪些章节应该怎么反推\n\n### 从 PPT 里拿到\n- 很像结论的标题\n- 目录结构\n- 图注关键词\n- “Reactive species”“XPS/XANES”“Co(IV)=O”这类强信号词\n\n### 从最终稿里拿到\n- 更完整、更像成稿的语言\n- 更强的叙述闭环感\n\n然后自动拼成一句：\n\n> “Ce 掺杂调控 Co3O4 电子结构，定向促进 Co(IV)=O 生成，从而实现苯酚选择性氧化/聚合。”\n\n这句话**可能方向上不离谱**，  \n但如果没有逐层核对，就很可能超出证据上限。\n\n---\n\n## 八、三类载体最容易混的地方\n\n### 1. 工作文档最容易被误当成“已有结论”\n工作文档里经常是：\n- 应该怎么组织\n- 哪些图要补\n- 哪句话要收敛\n- 哪个解释还不能拔高\n\n但模型容易把它理解成：\n- 这些都已经完成了\n- 这些机制都已经被确认了\n\n### 2. PPT 最容易被误当成“图已经证明”\n特别是 PPT 里有这些东西时最危险：\n- 页标题像结论\n- 图上有几个关键词\n- 占位框里写了方法名\n- 页面里出现 “待分析” 但模型忽略\n\n模型常见错误是：\n- 只根据页标题，就替图说话\n- 只根据方法名，就替数据下结论\n\n### 3. 最终稿最容易被误当成“底层证据已经完备”\n最终稿语言天然更完整，容易让模型默认：\n- 只要写进稿子里，就说明证据够了\n- 只要章节通顺，就说明底层图谱/对照都齐了\n\n但现实常常不是这样：\n- 有时 final text 只是“先占住论证位置”\n- 底层仍可能缺直接证据或关键对照\n\n---\n\n## 九、我建议把这个风险点命名为：\n\n# **完成态幻觉**\n或更技术一点：\n# **状态压平错误**\n\n定义：\n\n> 把“计划态 / 展示态 / 成稿态”三种不同层级的内容，当成同一层证据来写。\n\n这是 writing_closure 里最该抓的错。\n\n---\n\n## 十、你可以怎么判它有没有发生\n\n### 出现以下任一情况，就高度可疑\n\n1. **把工作文档里的“待补/待分析”写成“已证明”**\n2. **把 PPT 页标题写成实验结论**\n3. **把最终稿中的论证语气，当成底层数据完整性的证据**\n4. **把不同文件里的相关词强行拼成一条闭环机制**\n5. **没有一句“目前只能说到哪一步”**\n6. **没有任何缺口审计，全文像全都做完了**\n\n---\n\n## 十一、给 benchmark 的一个“反造假硬标准”\n\n我建议你在评测里强制要求每个回答都带这 4 种标签：\n\n- **[F] Finalized**：已在最终稿/最终交付中稳定出现\n- **[P] Presented**：在 PPT 中出现，但不等于被充分证明\n- **[W] Working**：工作文档中的计划、拟写、待补\n- **[H] Hypothesis**：模型或作者当前的解释性推断\n\n只要一个模型不愿意标这四层，  \n它就特别容易造假。\n\n---\n\n## 十二、我建议你直接采用的“pack 合格线”\n\n### 一个真正合格的 pack，至少应满足：\n\n- 有明确交付对象\n- 有结构编排\n- 有主次 claim\n- 有证据锚点\n- 有状态标签\n- 有下一步动作\n\n### 一个看起来很好看、但其实只是摘要的常见表现：\n\n- 语言非常顺\n- 主题归纳很全\n- 但没有页级功能\n- 没有来源锚点\n- 没有缺口\n- 没有“不能说什么”\n- 看完仍无法继续改稿/补图/做下一版\n\n---\n\n## 十三、我给你的最终版本\n\n### 什么叫真正的 pack\n> **可交付、可接力、可回溯、可分层的组织对象。**\n\n### 什么只是普通摘要\n> **仅压缩信息、不能直接支撑后续交付的内容概述。**\n\n### 最容易造假的点\n> **把工作文档、PPT、最终稿中的不同完成度内容，压平成一个“已经成立的中心句”。**\n\n这点最该进 benchmark。\n\n---\n\n## 十四、如果你要把它写成评测题的标准句，我建议直接用这版\n\n### `pack-quality` 定义句\n> Pack 不是“总结材料讲了什么”，而是“把材料组织成一个可继续完成交付的中间对象”，要求明确交付目标、结构编排、claim 层级、证据锚点、状态分层与下一步动作。\n\n### `最易造假点` 定义句\n> Writing_closure 中最常见的假 closure 不是数据捏造，而是状态层级混淆：把工作文档中的计划态、PPT 中的展示态、最终稿中的成稿态压平为同一层已证实结论。\n\n---\n\n**Memory Patch**\n\n本轮未实际写入文件。  \n如果你要我下一步把这两部分落成 benchmark 文档，我建议新增或更新：\n\n- `memory/packs/PACK_writing_closure_benchmark_rubric.md`\n  - 建议字段：\n    - `pack_quality_definition`\n    - `true_pack_vs_summary`\n    - `rubric_6_dimensions`\n    - `status_flattening_failure_mode`\n    - `ppt_workdoc_final_confusion_points`\n    - `anti_hallucination_labels: [F, P, W, H]`\n\n如果你愿意，我下一步可以直接继续给你两样东西之一：\n1. **一版可直接打分的 rubric 表格**\n2. **一版 evaluator prompt / judge prompt**  \n用于自动判“这是 pack 还是只是摘要”。",
+  "attachments_used": [],
+  "trace_events": [],
+  "created_paths": [],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/037864447e5a",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "E-S005-T02-C1",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": [
+      "关键术语命中 4 个，达到阈值。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "E-S005-T02-C2",
+    "score": 85.0,
+    "verdict": "pass",
+    "reasons": [
+      "该 turn 依赖 prior workspace memory，但 trace 中缺少明显 memory 读取痕迹。"
+    ]
+  },
+  "artifact_result": null,
+  "judge_result": {
+    "criterion_id": "E-S005-T02-C3",
+    "score": 93.0,
+    "verdict": "pass",
+    "strengths": [
+      "命中了 4 个关键术语"
+    ],
+    "risks": [
+      "缺失关键术语: ['PPT / 工作文档 / 最终稿之间最容易混的地方']"
+    ],
+    "missing": [
+      "PPT / 工作文档 / 最终稿之间最容易混的地方"
+    ],
+    "raw_text": "你是一名长期设计 benchmark、evaluator、数据集包架构与科研智能体协议的系统评审专家。请只依据【用户问题】【上传文件列表】【assistant 回复】【trace 摘要】【预期 focus】评分，不要替模型补系统设计。你要重点检查：回答是否真正站在 bridge/eval 视角而不是研究内容视角；是否清楚区分 package architecture、closure mapping、ecosystem map、test cases 与 downstream representative assets 的角色；是否把 loader / runner / scorer / llm-judge / report 等对象说清楚；是否明确哪些是 runtime 必须字段、哪些只是 analyst 注释；是否避免泛泛而谈的“平台化建议”。请输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_E_session_005_writing_priority\",\n  \"turn_id\": 2,\n  \"user_input\": \"我还想让你给出一个`pack 质量标准`：什么叫真正的 pack，什么只是普通摘要。再补一个`最容易造假的点`，尤其是 PPT / 工作文档 / 最终稿之间最容易混的地方。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace（公开版）**\\n\\n- 本轮未新调用工具。  \\n- 以下回答基于：\\n  1. 系统预加载上下文  \\n  2. 上一轮我已实际读取/抽取并在对话中引用过的材料结果，主要包括：  \\n     - `assets/uploads/45307a7c_test_cases_writing.md`\\n     - `assets/uploads/99550dc7_【毕业论文】工作文档0305.md`\\n     - `assets/uploads/5c66efd3_【20260305大组会】工作文档.md`\\n     - 3 个 PPT "
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [
+      "已经证明"
+    ],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [],
+  "temporary_expectations": null,
+  "provisional_turn_score": 90.0,
+  "final_turn_score": 92.67
+}

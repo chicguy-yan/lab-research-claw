@@ -1,0 +1,83 @@
+{
+  "run_id": "one_click_B_20260322_171434",
+  "completed_turns": [
+    "scenario_B/scenario_B_session_001_bootstrap/turn_1",
+    "scenario_B/scenario_B_session_001_bootstrap/turn_2",
+    "scenario_B/scenario_B_session_001_bootstrap/turn_3",
+    "scenario_B/scenario_B_session_001_bootstrap/turn_4",
+    "scenario_B/scenario_B_session_002_baseline_compare/turn_1",
+    "scenario_B/scenario_B_session_002_baseline_compare/turn_2",
+    "scenario_B/scenario_B_session_002_baseline_compare/turn_3",
+    "scenario_B/scenario_B_session_003_dband_bridge/turn_1",
+    "scenario_B/scenario_B_session_003_dband_bridge/turn_2",
+    "scenario_B/scenario_B_session_003_dband_bridge/turn_3",
+    "scenario_B/scenario_B_session_004_ce_transferability/turn_1",
+    "scenario_B/scenario_B_session_004_ce_transferability/turn_2",
+    "scenario_B/scenario_B_session_004_ce_transferability/turn_3",
+    "scenario_B/scenario_B_session_005_proof_methods/turn_1",
+    "scenario_B/scenario_B_session_005_proof_methods/turn_2",
+    "scenario_B/scenario_B_session_005_proof_methods/turn_3",
+    "scenario_B/scenario_B_session_006_ce_sentence_safety/turn_1",
+    "scenario_B/scenario_B_session_006_ce_sentence_safety/turn_2",
+    "scenario_B/scenario_B_session_006_ce_sentence_safety/turn_3",
+    "scenario_B/scenario_B_session_007_reading_queue/turn_1",
+    "scenario_B/scenario_B_session_007_reading_queue/turn_2",
+    "scenario_B/scenario_B_session_007_reading_queue/turn_3",
+    "scenario_B/scenario_B_session_008_false_analogy_redflags/turn_1",
+    "scenario_B/scenario_B_session_008_false_analogy_redflags/turn_2",
+    "scenario_B/scenario_B_session_008_false_analogy_redflags/turn_3",
+    "scenario_B/scenario_B_session_009_master_outline/turn_1",
+    "scenario_B/scenario_B_session_009_master_outline/turn_2",
+    "scenario_B/scenario_B_session_009_master_outline/turn_3",
+    "scenario_B/scenario_B_session_010_handoff/turn_1",
+    "scenario_B/scenario_B_session_010_handoff/turn_2",
+    "scenario_B/scenario_B_session_010_handoff/turn_3"
+  ],
+  "scenario_states": {
+    "scenario_B": {
+      "workspace_id": "eval-scenario_b-260322_1714",
+      "session_backend_ids": {
+        "scenario_B_session_001_bootstrap": {
+          "backend_session_id": "__bootstrap__",
+          "trace_count": 29
+        },
+        "scenario_B_session_002_baseline_compare": {
+          "backend_session_id": "1511892ac0ad",
+          "trace_count": 30
+        },
+        "scenario_B_session_003_dband_bridge": {
+          "backend_session_id": "a4f84705ebac",
+          "trace_count": 42
+        },
+        "scenario_B_session_004_ce_transferability": {
+          "backend_session_id": "5a0acc6976ac",
+          "trace_count": 33
+        },
+        "scenario_B_session_005_proof_methods": {
+          "backend_session_id": "581e888d6db6",
+          "trace_count": 34
+        },
+        "scenario_B_session_006_ce_sentence_safety": {
+          "backend_session_id": "c50eca5f3c6a",
+          "trace_count": 33
+        },
+        "scenario_B_session_007_reading_queue": {
+          "backend_session_id": "6ca9e01a11b6",
+          "trace_count": 16
+        },
+        "scenario_B_session_008_false_analogy_redflags": {
+          "backend_session_id": "af5f020966ad",
+          "trace_count": 22
+        },
+        "scenario_B_session_009_master_outline": {
+          "backend_session_id": "647d0c3a0245",
+          "trace_count": 30
+        },
+        "scenario_B_session_010_handoff": {
+          "backend_session_id": "07767d504ecd",
+          "trace_count": 36
+        }
+      }
+    }
+  }
+}

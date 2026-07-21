@@ -1,0 +1,422 @@
+# 最终提示词
+我是一个非技术背景的开发者，我需要借助 mermaid 架构图来帮我梳理清楚我的项目架构
+我自己对于 ai-native 产品和实验性学科的科研场景理解较为深入，能够根据场景模糊地定义出大体的项目架构、用户流线、数据流线
+但由于开发经验的匮乏，我需要借助一个随着与 claude code 和 codex 交互开发不断迭代的 mermaid 架构图来帮我梳理清楚我的项目架构+开发时可以确定开发进度（issue）+demo 测试时可以定位问题所做 的修改（日志）
+我需要你完全基于我上传的 prd 和tad，满足我的上述迭代需求，画以下三个 mermaid 的图：
+1.PRD 中一个完整的 workspace 的生命周期（Create → Run → Evolve → Archive → Clone）以及每个阶段的输入输出和触发条件；2.PRD同时需要定义清楚用户单次对话的上下文拼接逻辑+最小对话闭环（Ingest → Plan → Close → Pack → Skill Mining）。
+2.TAD 中需要插入画出前后端+记忆系统架构+workspace 架构
+
+
+
+
+# 我的背景
+我是一个非技术背景的开发者，我需要借助 mermaid 架构图来帮我梳理清楚我的项目架构
+我自己对于 ai-native 产品和实验性学科的科研场景理解较为深入，能够根据场景模糊地定义出大体的项目架构、用户流线、数据流线
+但由于开发经验的匮乏，我需要借助一个随着与 claude code 和 codex 交互开发不断迭代的 mermaid 架构图来帮我梳理清楚我的项目架构+开发时可以确定开发进度（issue）+demo 测试时可以定位问题所做
+基于我的能力，我能做的有：
+1.PRD 中需要定义清楚一个完整的 workspace 的生命周期（Create → Run → Evolve → Archive → Clone）以及每个阶段的输入输出和触发条件；同时需要定义清楚用户单次对话的上下文拼接逻辑+最小对话闭环（Ingest → Plan → Close → Pack → Skill Mining）。
+2.TAD 中需要插入画出前后端+记忆系统架构+workspace 架构
+
+# 你在写作 PRD 时候需要遵循的守则
+1. 字段定义原则：从“皮囊”到“数据”
+禁止仅描述页面展示。在定义任何 UI 元素时，必须强制包含以下数据属性：
+
+类型与限制：明确字段类型（String, Int, Boolean 等）、长度限制、特殊字符过滤规则。
+
+数据溯源：说明数据是读库（持久化）、实时接口调用、还是缓存读取。
+
+异常兜底：必须定义空数据、接口超时或获取失败时的前端展示策略（隐藏、占位符或报错提示）。
+
+2. 流程建模原则：从“线性叙事”到“状态机”
+禁止只写“Happy Path”（理想路径）。在处理业务流程时，必须采用状态机思维：
+
+状态穷举：列出所有可能的中间态（如：Pending, Timeout, Partial Refund）。
+
+流转触发：明确定义每一个状态跳转的“触发动作”与“前置条件”（例如：非“待支付”状态不可触发“取消订单”）。
+
+分支覆盖：强制要求包含失败分支、超时分支与用户取消分支的处理逻辑。
+
+3. 逻辑表达原则：从“修辞”到“伪代码”
+禁止使用“智能”、“优雅”、“根据情况”等模糊形容词。所有业务逻辑必须转化为可执行算法：
+
+逻辑结构化：使用 IF-THEN-ELSE 或 SWITCH-CASE 结构描述判断逻辑。
+
+排序与权重：明确排序的第一维度、第二维度及权重计算公式。
+
+展示逻辑：明确文本截断、换行、高亮等边界展示规则。
+
+4. 边界与异常原则：拒绝“想当然”
+在输出任何功能模块前，必须进行“压力测试”式的逻辑自查：
+
+极限值测试：定义输入上限（如字符数、商品数）、列表翻页上限及内存敏感操作。
+
+环境异常：定义弱网、断网、无权限等非理想环境下的交互反馈。
+
+# 我给你的任务与参考文件
+1.给你原本的 PRD 和 TAD 文档，保留原 PRD 的章节标题与叙事顺序；只允许新增章节/小节与表格；对原文仅做补充与纠错，不重写风格。，但要确保它们符合上述守则，按照我的要求插入对应的可迭代的 mermaid 架构图，并重新输出prd和 tad。
+2.给你基于用户场景的完整的一个 workspace 的数据集，考虑最后一小节的可选任务（ai 负责多少？数据接口和流向定义），并写在 prd 的最后。
+3.目前我在 mermaid 架构图中感觉到可以优化但由于想跑最小 mvp 可以优化的点(面试中很有可能被问最难的就是记忆系统)：
+单次对话 agent 的上下文的拼接逻辑目前是准备全部塞满，还是说如果超预算了就先做一个摘要（例如：把 layer2/layer3 做一个摘要）？如果是后者的话，摘要的逻辑是什么？是简单的截断，还是说要做一个智能的摘要（例如：把 layer2/layer3 的内容做一个重要性排序，然后优先保留重要的内容）？这个逻辑需要在 prd 中定义清楚，并且在 mermaid 架构图中体现出来。
+记忆系统中精选记忆memory.md是按照什么样的逻辑来组织的？是按照时间线来组织，还是按照概念来组织，还是说有一个混合的组织方式？这个逻辑需要在 prd 中定义清楚，并且在 mermaid 架构图中体现出来。
+单词对话 agent 记忆系统上下文拼接提取逻辑和 workspace的五个阶段的记忆系统写入逻辑如何定义？
+## 要求：
+1。每个图都要包含一句话概括清楚mermaid 每个大功能模块分别代表什么一眼知道是干嘛的，举例：前端工作台三栏 + 后端 Orchestrator + Prompt Assembler + Tools/Skills + File-first 数据库 + Trace 审计
+2。必须要确保这每个 mermaid 图单点清晰，且整体架构层次分明，能够让一个非技术背景的开发者通过图示理解整个项目的架构和数据流向；如果在demo 测试中遇到问题，可以快速借助 mermaid 定位问题所在的模块和数据流向，以及它现在的状态（例如：数据缺失、接口超时、逻辑分支错误等）。
+3。本项目 DB=本地文件系统（memory/、assets/、workspace/），禁止画 MySQL/向量库作为主记忆源。
+## mermaid1（tad）： 项目核心架构：
+mermaid 画出前后端+记忆系统架构+workspace 架构（粒度到基础的判断逻辑，每一个框代表一个项目架构中的文件夹，涉及关键功能需要细粒度到函数调用级别）；
+## mermaid2（prd）：mermaid2（PRD）：workspace 生命周期状态机（Create→Run→Evolve→Archive→Clone）
+【记忆系统】
+    这里layer1 和 layer2 都是遵照常规 openclaw 的 ai-native 架构设计，layer3 是我基于对于实验场景的深度用户调查得到的
+一个 workspace 一般通常指的是一个硕博论文中的一个完整的实验章节的文献调研-实验/表征设计与结果分析-阶段性汇报与论文草稿写作的全部流程
+在 layer3 中，这一个章节是一个大课题，内部会包含很多与你这个课题相关的很多小的 concept节点（是你针对这个课题小的 concept 节点的学习笔记，可能包含反应原理、实验/仪器/表征原理和使用等等显性通识），task 则是个人在这个concept字段下被归类的小的实验闭环（包含 claim+protocol+result），而 pack 则是在阶段性汇报/论文草稿时某一小节 or 某一小段所需要的 task 证据链条
+    【workspace 生命周期】
+   1) Create（创建）
+输入：workspace-templates/ + 你给的 workspace_id（例如 chlorite_180d_v1）
+
+动作：
+拷贝模板到：.openclaw/workspaces/chlorite_180d_v1/
+初始化最小文件：
+memory/identity/{user,project,lab_context}.md
+memory/timeline/180d_index.md + 当前 phase.md
+memory/concepts/CONCEPT_001.md（可空）
+skills_snapshot/registry.json（可选）
+初始化 trace 目录：.openclaw/context_trace/
+2) Run（运行，每回合）
+Context Orchestrator 做三件事：
+选文件：按默认顺序拼接
+Layer1 -> Layer2 -> Layer3 -> skills_selected -> uploads -> user_msg
+预算控制：超预算就对 L2/L3 做摘要而不是全塞
+缺口检测：缺字段就写入 missing[] 并要求用户补
+同时落盘一份：
+.openclaw/context_trace/Txxxx.json（读/写/缺/技能/工具）
+3) Evolve（演化）
+当出现两类事件就“生长结构”：
+重复产物（同类 Task/Pack ≥ N 次）
+→ 蒸馏成 skills/<task_type>/skill.md
+主线迁移（phase 变化、导师意见改变）
+→ 更新 Layer2 phase + 相关 Pack 的叙事主线（topline_story）
+4) Archive（归档）
+一个 180 天周期结束，你做两件事：
+冻结：PACK_stage_report_final.md + assets/paper_submission_pack/
+写一个 workspace_manifest.json：
+本周期关键 Concept 列表
+Pack 列表（阶段汇报/机理闭环/图集/写作段落）
+最重要的 Task（可复用 SOP/关键数据）
+5) Clone（克隆/并行新周期）
+从旧 workspace 复制出新 workspace，但只继承你想继承的层：
+建议默认继承：Layer1（风格/实验室规则/主线术语表）
+可选继承：某些 Layer3 的 Protocol（可复用 SOP）
+不继承或弱继承：Layer2（时间轴应重新开始）
+你可以支持三种 clone 模式：
+clone_identity_only
+clone_identity_plus_protocols
+clone_full_for_audit（用于复盘，不用于新周期）
+
+##mermaid3（prd） 用户单次对话的上下文拼接逻辑+最小对话闭环
+
+PRD 里把一次对话的最小闭环写成：Ingest → Plan → Close → Pack → Skill Mining。 
+Ingest（意图识别 +根据任务自行判断任务字段缺口，并提醒用户上传）
+Context Plan（选文件）：按默认排序注入：
+Execute（Agent + Tools + Skill）
+Close（写回记忆）
+layer3
+写 Task 的 Run（raw_data_paths、quick_results、verdict）
+写 Pack（阶段汇报包/机理证据包/写作段落包），pack是把一个个 task 转换成
+Trace（审计落盘）
+写 Task 的 Run（raw_data_paths、quick_results、verdict）
+
+
+
+# 现在我还比较模糊的接口+需要对用户场景可能的提问进行深入的思考和定义（可选）
+1. workspace 生命周期中每个阶段的输入输出和触发条件
+2. 用户单次对话的上下文拼接逻辑+最小对话闭环（Ingest → Plan → Close → Pack → Skill Mining）中每个阶段的具体操作和数据流向
+3. 前后端+记忆系统架构+workspace 架构中每个模块的具体功能和数据交互方式
+
+# 补充硬约束 / 验收标准
+1) 需要输出 3 张 mermaid：①核心架构总览（FE/BE/FS-Vault/Tools/Skills/Trace）②workspace 生命周期状态机（Create→Run→Evolve→Archive→Clone，含失败分支）③单次对话闭环与上下文拼接（Ingest→Plan→Execute→Close→Pack→SkillMining，含budget裁剪与missing分支）。
+2) 图的粒度分层：总览图中每个框=模块/文件夹；关键链路图中每个框=handler/函数。禁止把两种粒度混在一张图里。
+3) DB 定义：本项目“数据库”=本地文件系统 Vault（workspace/、memory/、assets/、.openclaw/trace）。禁止把 MySQL/向量库作为主记忆源（RAG只能作为可选外挂检索）。
+4) prompt 信任边界必须明确（任选一种并在全文保持一致）：
+   A) workspace+memory 注入 system；uploads 只注入 user（路径+hash+短摘要）
+   或 B) workspace 注入 system；memory+uploads 作为 user blocks 注入。
+5) 输出 DoD：3 张图可渲染；每图一句话概括；每模块给输入/输出/错误分支；Trace schema 与接口字段一致；生命周期每阶段有触发条件+写入文件清单。
+6) 必须从给定数据集抽取 5 个典型场景，映射到闭环，并给出 1 个 trace 示例（context_read/write/missing）。
+
+
+
+# 我的背景
+我是一个非技术背景的开发者，我需要借助 mermaid 架构图来帮我梳理清楚我的项目架构
+我自己对于 ai-native 产品和实验性学科的科研场景理解较为深入，能够根据场景模糊地定义出大体的项目架构、用户流线、数据流线
+但由于开发经验的匮乏，我需要借助一个随着与 claude code 和 codex 交互开发不断迭代的 mermaid 架构图来帮我梳理清楚我的项目架构+开发时可以确定开发进度（issue）+demo 测试时可以定位问题所做
+基于我的能力，我需要你基于我上传的 prd 和tad：
+1.PRD 中需要定义清楚一个完整的 workspace 的生命周期（Create → Run → Evolve → Archive → Clone）以及每个阶段的输入输出和触发条件；同时需要定义清楚用户单次对话的上下文拼接逻辑+最小对话闭环（Ingest → Plan → Close → Pack → Skill Mining）。
+2.TAD 中需要插入画出前后端+记忆系统架构+workspace 架构
+
+# 你在写作 PRD 时候需要遵循的守则
+1. 字段定义原则：从“皮囊”到“数据”
+禁止仅描述页面展示。在定义任何 UI 元素时，必须强制包含以下数据属性：
+
+类型与限制：明确字段类型（String, Int, Boolean 等）、长度限制、特殊字符过滤规则。
+
+数据溯源：说明数据是读库（持久化）、实时接口调用、还是缓存读取。
+
+异常兜底：必须定义空数据、接口超时或获取失败时的前端展示策略（隐藏、占位符或报错提示）。
+
+2. 流程建模原则：从“线性叙事”到“状态机”
+禁止只写“Happy Path”（理想路径）。在处理业务流程时，必须采用状态机思维：
+
+状态穷举：列出所有可能的中间态（如：Pending, Timeout, Partial Refund）。
+
+流转触发：明确定义每一个状态跳转的“触发动作”与“前置条件”（例如：非“待支付”状态不可触发“取消订单”）。
+
+分支覆盖：强制要求包含失败分支、超时分支与用户取消分支的处理逻辑。
+
+3. 逻辑表达原则：从“修辞”到“伪代码”
+禁止使用“智能”、“优雅”、“根据情况”等模糊形容词。所有业务逻辑必须转化为可执行算法：
+
+逻辑结构化：使用 IF-THEN-ELSE 或 SWITCH-CASE 结构描述判断逻辑。
+
+排序与权重：明确排序的第一维度、第二维度及权重计算公式。
+
+展示逻辑：明确文本截断、换行、高亮等边界展示规则。
+
+4. 边界与异常原则：拒绝“想当然”
+在输出任何功能模块前，必须进行“压力测试”式的逻辑自查：
+
+极限值测试：定义输入上限（如字符数、商品数）、列表翻页上限及内存敏感操作。
+
+环境异常：定义弱网、断网、无权限等非理想环境下的交互反馈。
+
+# 我给你的任务与参考文件
+1.给你原本的 PRD 和 TAD 文档，保留原 PRD 的章节标题与叙事顺序；只允许按照我的要求插入对应的可迭代的 mermaid 架构图，并重新输出prd和 tad。
+2.给你基于用户场景的完
+整的一个 workspace 的数据集，考虑最后一小节的可选任务（ai 负责多少？数据接口和流向定义），并写在 prd 的最后。
+3.目前我在 mermaid 架构图中感觉到可以优化但由于想跑最小 mvp 可以优化的点(面试中很有可能被问最难的就是记忆系统)：
+单次对话 agent 的上下文的拼接逻辑目前是准备全部塞满，还是说如果超预算了就先做一个摘要（例如：把 layer2/layer3 做一个摘要）？如果是后者的话，摘要的逻辑是什么？是简单的截断，还是说要做一个智能的摘要（例如：把 layer2/layer3 的内容做一个重要性排序，然后优先保留重要的内容）？这个逻辑需要在 prd 中定义清楚，并且在 mermaid 架构图中体现出来。
+记忆系统中精选记忆memory.md是按照什么样的逻辑来组织的？是按照时间线来组织，还是按照概念来组织，还是说有一个混合的组织方式？这个逻辑需要在 prd 中定义清楚，并且在 mermaid 架构图中体现出来。
+单词对话 agent 记忆系统上下文拼接提取逻辑和 workspace的五个阶段的记忆系统写入逻辑如何定义？
+## 要求：
+1。每个图都要包含一句话概括清楚mermaid 每个大功能模块分别代表什么一眼知道是干嘛的，举例：前端工作台三栏 + 后端 Orchestrator + Prompt Assembler + Tools/Skills + File-first 数据库 + Trace 审计
+2。必须要确保这每个 mermaid 图单点清晰，且整体架构层次分明，能够让一个非技术背景的开发者通过图示理解整个项目的架构和数据流向；如果在demo 测试中遇到问题，可以快速借助 mermaid 定位问题所在的模块和数据流向，以及它现在的状态（例如：数据缺失、接口超时、逻辑分支错误等）。
+3。本项目 DB=本地文件系统（memory/、assets/、workspace/），禁止画 MySQL/向量库作为主记忆源。
+## mermaid1（tad）： 项目核心架构：
+项目结构（实验版）
+
+```text
+Experimental-Research-OpenClaw/
+├── backend/
+│   ├── app.py                         # FastAPI 入口
+│   ├── config.py                      # 全局配置（config.json 持久化）
+│   ├── requirements.txt
+│   ├── .env.example
+│   │
+│   ├── api/                           # API 路由层
+│   │   ├── chat.py                    # POST /api/chat — SSE 流式对话（不变）
+│   │   ├── sessions.py                # 会话 CRUD + 标题生成
+│   │   ├── files.py                   # 文件读写 + tree + preview + skills list
+│   │   ├── assets.py                  # (新增) 上传到 assets/
+│   │   ├── traces.py                  # (新增) trace 列表与读取
+│   │   ├── tokens.py                  # Token 统计
+│   │   ├── compress.py                # 对话压缩
+│   │   └── config_api.py              # RAG 模式开关
+│   │
+│   ├── graph/                         # Agent 核心逻辑（LangChain create_agent）
+│   │   ├── agent.py                   # AgentManager — 构建 & 流式调用
+│   │   ├── session_manager.py         # SessionManager — JSON 会话持久化
+│   │   ├── context_orchestrator.py    # (新增) 选文件/做预算/生成 trace
+│   │   ├── prompt_builder.py          # (改造) OpenClaw 风格 system+user 拼接
+│   │   ├── trace_writer.py            # (新增) trace 落盘 + patch 应用记录
+│   │   └── knowledge_indexer.py       # (可选) knowledge/ 索引（RAG 外挂）
+│   │
+│   ├── tools/                         # 6 个核心工具（terminal/python/fetch/read_file/search_knowledge/web_search）
+│   ├── workspace-templates/                     # System Prompt 组件（可编辑）
+│   │   ├── SOUL.md
+│   │   ├── IDENTITY.md
+│   │   ├── USER.md
+│   │   ├── AGENTS.md
+│   │   ├── BOOTSTRAP.md
+│   │   ├── MEMORY.md
+│   │   ├── TOOLS.md
+│   │   ├── README.md
+│   │   ├── assets/
+│   │   │   ├── data/README.md
+│   │   │   ├── figures/README.md
+│   │   │   └── ppt_pack/README.md
+│   │   ├── context_trace/
+│   │   │   ├── README.md
+│   │   │   └── TRACE_TEMPLATE.json
+│   │   └── memory/
+│   │       ├── identity/
+│   │       │   ├── context_budget.md
+│   │       │   ├── lab_context.md
+│   │       │   ├── project.md
+│   │       │   └── user.md
+│   │       ├── concepts/
+│   │       │   └── CONCEPT_TEMPLATE.md
+│   │       ├── packs/
+│   │       │   └── PACK_TEMPLATE.md
+│   │       ├── tasks/
+│   │       │   └── TASK_TEMPLATE.md
+│   │       └── timeline/
+│   │           ├── 180d_index.md
+│   │           ├── days/_DAY_TEMPLATE.md
+│   │           ├── weeks/_WEEK_TEMPLATE.md
+│   │           ├── stage_reports/_STAGE_REPORT_TEMPLATE.md
+│   │           └── phases/
+│   │               ├── P01_bootstrap.md
+│   │               ├── P02_material_screening.md
+│   │               ├── P03_parameter_optimization.md
+│   │               ├── P04_mechanism_closure.md
+│   │               └── P05_writing_submission.md
+│   ├── skills/                        # Skills（每个技能一个目录），所有技能均在此管理，所有agent共用
+│   │   └── stage_report_ppt/SKILL.md
+│   └── .openclaw/
+│       ├── workspace/                 # 默认的工作区，从workspace-templates初始化
+│       └── workspace-{agent_id}/      # 定义了名字的agent的工作区，但是也是从workspace-templates初始化
+│
+└── frontend/
+    └── src/
+        ├── app/page.tsx               # 三栏：Layer1/2 | Chat | Layer3
+        ├── components/
+        │   ├── panels/
+        │   │   ├── MemoryPanel.tsx
+        │   │   ├── ChatPanel.tsx
+        │   │   └── AtomPanel.tsx
+        │   ├── chat/
+        │   │   ├── ThoughtChain.tsx
+        │   │   └── RetrievalCard.tsx
+        │   └── editor/MonacoDock.tsx
+        └── lib/api.ts
+```
+## mermaid2（prd）：mermaid2（PRD）：workspace 生命周期状态机（Create→Run→Evolve→Archive→Clone）
+【记忆系统】
+    这里layer1 和 layer2 都是遵照常规 openclaw 的 ai-native 架构设计，layer3 是我基于对于实验场景的深度用户调查得到的
+一个 workspace 一般通常指的是一个硕博论文中的一个完整的实验章节的文献调研-实验/表征设计与结果分析-阶段性汇报与论文草稿写作的全部流程
+在 layer3 中，这一个章节是一个大课题，内部会包含很多与你这个课题相关的很多小的 concept节点（是你针对这个课题小的 concept 节点的学习笔记，可能包含反应原理、实验/仪器/表征原理和使用等等显性通识），task 则是个人在这个concept字段下被归类的小的实验闭环（包含 claim+protocol+result），而 pack 则是在阶段性汇报/论文草稿时某一小节 or 某一小段所需要的 task 证据链条
+    【workspace 生命周期】
+   1) Create（创建）
+输入：workspace-templates/ + 你给的 workspace_id（例如 chlorite_180d_v1）
+
+动作：
+拷贝模板到：.openclaw/workspaces/chlorite_180d_v1/
+初始化最小文件：
+memory/identity/{user,project,lab_context}.md
+memory/timeline/180d_index.md + 当前 phase.md
+memory/concepts/CONCEPT_001.md（可空）
+skills_snapshot/registry.json（可选）
+初始化 trace 目录：.openclaw/context_trace/
+2) Run（运行，每回合）
+Context Orchestrator 做三件事：
+选文件：按默认顺序拼接
+Layer1 -> Layer2 -> Layer3 -> skills_selected -> uploads -> user_msg
+预算控制：超预算就对 L2/L3 做摘要而不是全塞
+缺口检测：缺字段就写入 missing[] 并要求用户补
+同时落盘一份：
+.openclaw/context_trace/Txxxx.json（读/写/缺/技能/工具）
+3) Evolve（演化）
+当出现两类事件就“生长结构”：
+重复产物（同类 Task/Pack ≥ N 次）
+→ 蒸馏成 skills/<task_type>/skill.md
+主线迁移（phase 变化、导师意见改变）
+→ 更新 Layer2 phase + 相关 Pack 的叙事主线（topline_story）
+4) Archive（归档）
+一个 180 天周期结束，你做两件事：
+冻结：PACK_stage_report_final.md + assets/paper_submission_pack/
+写一个 workspace_manifest.json：
+本周期关键 Concept 列表
+Pack 列表（阶段汇报/机理闭环/图集/写作段落）
+最重要的 Task（可复用 SOP/关键数据）
+5) Clone（克隆/并行新周期）
+从旧 workspace 复制出新 workspace，但只继承你想继承的层：
+建议默认继承：Layer1（风格/实验室规则/主线术语表）
+可选继承：某些 Layer3 的 Protocol（可复用 SOP）
+不继承或弱继承：Layer2（时间轴应重新开始）
+你可以支持三种 clone 模式：
+clone_identity_only
+clone_identity_plus_protocols
+clone_full_for_audit（用于复盘，不用于新周期）、
+
+注：这里对应 prd 的这一部分
+4.4 Prompt 拼接与上下文注入（OpenClaw 风格，两条消息）
+
+#### 4.4.1 两条消息模型
+
+- **system**：框定运行环境 + 注入 Project Context（工作区文件全文）
+- **user**：拼接“非可信上下文块（untrusted）”+“用户正文”
+
+#### 4.4.2 system prompt 的固定块顺序（块与块之间空一行）
+
+1) 身份行（固定）  
+`You are a personal assistant running inside OpenClaw.`
+
+2) `## Tooling`：列出可用工具摘要（terminal/python_repl/fetch_url/read_file/search_knowledge_base/web_search）
+
+3) `## Workspace`：声明工作目录与规则  
+- 例如：`Your working directory is: /workspace`  
+- 强制声明：**Project Context 文件是本轮事实来源**；信息不足必须列 Missing checklist，禁止脑补。
+
+4) `## Subagent Context` / `## Group Chat Context`（可选）  
+- `## Inbound Context (trusted metadata)` + JSON（平台/时区/语言/会话类型/当前日期等）
+
+5) `# Project Context`：按顺序注入本轮选中的文件全文  
+- 格式：  
+  - `## <absolute_or_workspace_path>`  
+  - 空行  
+  - `<file_content>`
+
+#### 4.4.3 Project Context 注入文件的默认排序（稳定→变化→本轮相关）
+
+默认按“稳定 → 变化 → 本轮输入相关”拼接（推荐）：
+
+1. `workspace/AGENTS.md`（技能协议 + 记忆协议）
+2. `workspace/SOUL.md` / `workspace/IDENTITY.md` / `workspace/USER.md`
+3. `SKILLS_SNAPSHOT.md`（可用技能清单）
+4. **Layer1**：`memory/identity/user.md`、`memory/identity/project.md`、`memory/identity/lab_context.md`
+5. **Layer2**：`memory/timeline/180d_index.md` + 当前 `phase.md`  
+   - 若是“最近/今天”问题：追加 `days/YYYY-MM-DD.md`
+   - 若是“阶段汇报”：追加 time_range 内相关 `weeks/` 与 `stage_reports/上一期`
+6. **Layer3**：与本轮最相关的 `CONCEPT/TASK/PACK`（优先 active/最近更新）
+7. 本轮 `uploads`（若是文本类可直接注入；大文件仅注入路径 + 摘要/采样）
+
+> 关键：**上下文选择是显式的**，并写入 trace 的 `context_read[]`。
+
+#### 4.4.4 裁剪与预算（必须实现）
+
+- 单文件字符上限：20,000（与 mini-openclaw 保持一致）；超出追加 `...[truncated]`
+- 总上下文预算：以 `context_budget.md` 为准（推荐按层分配：L1 固定、L2 近邻、L3 相关 Top-K）
+- 任何被截断/跳过必须记录到 trace（why + policy）
+
+##mermaid3（prd） 用户单次对话的上下文拼接逻辑+最小对话闭环
+
+PRD 里把一次对话的最小闭环写成：Ingest → Plan → Close → Pack → Skill Mining。 
+Ingest（意图识别 +根据任务自行判断任务字段缺口，并提醒用户上传）
+Context Plan（选文件）：按默认排序注入：
+Execute（Agent + Tools + Skill）
+Close（写回记忆）
+layer3
+写 Task 的 Run（raw_data_paths、quick_results、verdict）
+写 Pack（阶段汇报包/机理证据包/写作段落包），pack是把一个个 task 转换成
+Trace（审计落盘）
+写 Task 的 Run（raw_data_paths、quick_results、verdict）
+
+
+
+# 现在我还比较模糊的接口+需要对用户场景可能的提问进行深入的思考和定义（可选）
+1. workspace 生命周期中每个阶段的输入输出和触发条件
+2. 用户单次对话的上下文拼接逻辑+最小对话闭环（Ingest → Plan → Close → Pack → Skill Mining）中每个阶段的具体操作和数据流向
+3. 前后端+记忆系统架构+workspace 架构中每个模块的具体功能和数据交互方式
+
+# 补充硬约束 / 验收标准
+1) 需要输出 3 张 mermaid：①核心架构总览（FE/BE/FS-Vault/Tools/Skills/Trace）②workspace 生命周期状态机（Create→Run→Evolve→Archive→Clone，含失败分支）③单次对话闭环与上下文拼接（Ingest→Plan→Execute→Close→Pack→SkillMining，含budget裁剪与missing分支）。
+2) 图的粒度分层：总览图中每个框=模块/文件夹；关键链路图中每个框=handler/函数。禁止把两种粒度混在一张图里。
+3) DB 定义：本项目“数据库”=本地文件系统 Vault（workspace/、memory/、assets/、.openclaw/trace）。禁止把 MySQL/向量库作为主记忆源（RAG只能作为可选外挂检索）。
+4) prompt 信任边界必须明确（任选一种并在全文保持一致）：
+   A) workspace+memory 注入 system；uploads 只注入 user（路径+hash+短摘要）
+   或 B) workspace 注入 system；memory+uploads 作为 user blocks 注入。
+5) 输出 DoD：3 张图可渲染；每图一句话概括；每模块给输入/输出/错误分支；Trace schema 与接口字段一致；生命周期每阶段有触发条件+写入文件清单。
+6) 必须从给定数据集抽取 5 个典型场景，映射到闭环，并给出 1 个 trace 示例（context_read/write/missing）。
+
+
+
+

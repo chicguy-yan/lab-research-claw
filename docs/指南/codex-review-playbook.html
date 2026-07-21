@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codex 审查与协作学习页</title>
+<style>
+  :root {
+    --bg: #f4efe6;
+    --bg-strong: #eadfce;
+    --paper: rgba(255, 252, 246, 0.94);
+    --paper-strong: #fffaf2;
+    --ink: #1f2933;
+    --ink-soft: #566472;
+    --line: rgba(31, 41, 51, 0.12);
+    --teal: #1d6f74;
+    --teal-soft: rgba(29, 111, 116, 0.10);
+    --orange: #c96f2d;
+    --orange-soft: rgba(201, 111, 45, 0.10);
+    --olive: #5f6e31;
+    --olive-soft: rgba(95, 110, 49, 0.10);
+    --wine: #8a3b35;
+    --wine-soft: rgba(138, 59, 53, 0.10);
+    --shadow: 0 18px 50px rgba(72, 56, 35, 0.10);
+    --radius: 24px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at top left, rgba(201, 111, 45, 0.12), transparent 28%),
+      radial-gradient(circle at top right, rgba(29, 111, 116, 0.14), transparent 24%),
+      linear-gradient(180deg, #fbf7ef 0%, var(--bg) 42%, #efe5d4 100%);
+  }
+
+  a { color: inherit; }
+
+  .page {
+    width: min(1180px, calc(100vw - 32px));
+    margin: 0 auto;
+    padding: 28px 0 56px;
+  }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(255, 250, 242, 0.95), rgba(244, 236, 222, 0.88));
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    border-radius: 32px;
+    box-shadow: var(--shadow);
+    padding: 38px;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    right: -70px;
+    top: -70px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(29, 111, 116, 0.18), rgba(29, 111, 116, 0));
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(31, 41, 51, 0.06);
+    color: var(--ink-soft);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+
+  h1 {
+    margin: 16px 0 12px;
+    font-size: clamp(34px, 5vw, 58px);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    max-width: 10ch;
+  }
+
+  .hero p {
+    max-width: 760px;
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--ink-soft);
+    margin: 0 0 24px;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 22px;
+    align-items: start;
+  }
+
+  .hero-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .mini-card {
+    background: rgba(255, 255, 255, 0.68);
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    border-radius: 18px;
+    padding: 18px;
+    backdrop-filter: blur(10px);
+  }
+
+  .mini-card strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  .mini-card span {
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 11px;
+    border-radius: 999px;
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(31, 41, 51, 0.08);
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .nav {
+    position: sticky;
+    top: 12px;
+    z-index: 3;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0 24px;
+    padding: 12px;
+    background: rgba(255, 250, 242, 0.82);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(72, 56, 35, 0.08);
+  }
+
+  .nav a {
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(31, 41, 51, 0.05);
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  section {
+    margin-top: 34px;
+    background: var(--paper);
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+  }
+
+  .section-title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(25px, 3vw, 36px);
+    letter-spacing: -0.03em;
+  }
+
+  h3 {
+    margin: 22px 0 12px;
+    font-size: 20px;
+  }
+
+  .section-title p,
+  .muted,
+  .section-note {
+    margin: 0;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  .grid-4,
+  .grid-3,
+  .grid-2 {
+    display: grid;
+    gap: 16px;
+  }
+
+  .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .card {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.66);
+  }
+
+  .card strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+
+  .card p,
+  .card li {
+    color: var(--ink-soft);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+
+  .tone-teal { background: var(--teal-soft); }
+  .tone-orange { background: var(--orange-soft); }
+  .tone-olive { background: var(--olive-soft); }
+  .tone-wine { background: var(--wine-soft); }
+
+  .timeline {
+    display: grid;
+    gap: 14px;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 16px;
+    align-items: start;
+    padding: 16px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.66);
+  }
+
+  .step-index {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(135deg, var(--teal), var(--orange));
+  }
+
+  .step h3 {
+    margin: 0 0 6px;
+    font-size: 18px;
+  }
+
+  .step p {
+    margin: 0;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+
+  .checklist {
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .check-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.68);
+    border: 1px solid var(--line);
+  }
+
+  .check-item span {
+    color: var(--ink-soft);
+    line-height: 1.65;
+    font-size: 14px;
+  }
+
+  .mark {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .good { background: var(--olive); }
+  .risk { background: var(--wine); }
+  .note { background: var(--orange); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.66);
+  }
+
+  th, td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+
+  th {
+    background: rgba(31, 41, 51, 0.05);
+    font-size: 14px;
+  }
+
+  td {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.65;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  code,
+  pre {
+    font-family: "SFMono-Regular", "Menlo", "Consolas", monospace;
+  }
+
+  code {
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: rgba(31, 41, 51, 0.06);
+    color: var(--ink);
+  }
+
+  pre {
+    margin: 14px 0 0;
+    padding: 18px;
+    border-radius: 18px;
+    background: #1f2933;
+    color: #f8fafc;
+    overflow-x: auto;
+    line-height: 1.6;
+    font-size: 13px;
+  }
+
+  .banner {
+    border-radius: 20px;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    background: linear-gradient(135deg, rgba(29, 111, 116, 0.12), rgba(201, 111, 45, 0.10));
+    margin-top: 16px;
+  }
+
+  .banner strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+
+  .banner p {
+    margin: 0;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .score {
+    padding: 16px;
+    border-radius: 16px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.68);
+    border: 1px solid var(--line);
+  }
+
+  .score strong {
+    display: block;
+    font-size: 26px;
+    margin-bottom: 6px;
+  }
+
+  .score span {
+    color: var(--ink-soft);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 960px) {
+    .hero-grid,
+    .grid-4,
+    .grid-3,
+    .grid-2,
+    .score-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="eyebrow">
+        <span class="dot" style="background: var(--teal);"></span>
+        审查方法 + 计划写法 + 协作协议
+      </div>
+      <div class="hero-grid">
+        <div>
+          <h1>Codex 审查与协作学习页</h1>
+          <p>这不是“提示词合集”，而是一份可执行的方法论。你可以把它理解为：我在背后如何检查代码和文档、如何识别计划与实现的偏差、以及你怎样写开发计划，才能让我更快、更准地帮你推进。</p>
+          <div class="legend">
+            <div class="chip"><span class="dot" style="background: var(--teal);"></span>代码审查</div>
+            <div class="chip"><span class="dot" style="background: var(--orange);"></span>文档对账</div>
+            <div class="chip"><span class="dot" style="background: var(--olive);"></span>计划写法</div>
+            <div class="chip"><span class="dot" style="background: var(--wine);"></span>风险识别</div>
+          </div>
+        </div>
+        <div class="hero-summary">
+          <div class="mini-card">
+            <strong>先看承诺，再看代码</strong>
+            <span>我会先找“计划承诺/日志结论”，再对照实现和运行路径，看有没有名义成立、实际上没落地。</span>
+          </div>
+          <div class="mini-card">
+            <strong>优先查边界</strong>
+            <span>安全边界、路径边界、审计边界、数据来源边界，是最容易写成“看起来可用”但实际失效的地方。</span>
+          </div>
+          <div class="mini-card">
+            <strong>验收要看反例</strong>
+            <span>只测 happy path 不算验收。真正有效的计划，一定写明负向测试和失败标准。</span>
+          </div>
+          <div class="mini-card">
+            <strong>文档状态要分层</strong>
+            <span><code>已实现</code>、<code>建议方案</code>、<code>长期目标</code> 不能混写，否则协作会失真。</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="nav">
+      <a href="#workflow">审查流程</a>
+      <a href="#code-review">代码审查</a>
+      <a href="#doc-review">文档检查</a>
+      <a href="#plan-writing">计划写法</a>
+      <a href="#collab">协作方式</a>
+      <a href="#template">请求模板</a>
+      <a href="#scorecard">自检表</a>
+    </nav>
+
+    <section id="workflow">
+      <div class="section-title">
+        <h2>1. 我背后的审查流程</h2>
+        <p>顺序很重要。顺序错了，容易只看见代码，不看见承诺。</p>
+      </div>
+      <div class="timeline">
+        <div class="step">
+          <div class="step-index">01</div>
+          <div>
+            <h3>定位目标承诺</h3>
+            <p>我先找 PRD、TAD、phase plan、dev log、验收表。核心问题是：这个 phase 到底宣称自己“完成了什么”。如果没有承诺清单，后续审查会变成主观判断。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-index">02</div>
+          <div>
+            <h3>锁定实际入口</h3>
+            <p>我不会只读单个实现文件，而是看调用链。典型顺序是：API 入口 → manager / graph → tool / storage → trace / config。因为很多问题不是“工具本身写错”，而是“接入方式把能力搞偏了”。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-index">03</div>
+          <div>
+            <h3>对账设计与实现</h3>
+            <p>我会逐条对照：文档写了什么，代码真的做了什么，是否只是靠 prompt 约束、注释约束或人工自觉维持。凡是“文档说已实现，代码只是提醒”都属于高价值问题。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-index">04</div>
+          <div>
+            <h3>查边界与反例</h3>
+            <p>我优先查路径绕过、shell/exec、trace 完整性、模板文件污染、状态覆盖、输出截断、错误分支、旧格式兼容。因为这些地方最容易让系统在 demo 能跑，但一上真实场景就失真。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-index">05</div>
+          <div>
+            <h3>验证“验收”是否真的成立</h3>
+            <p>如果日志写“已验证”，我会问：测的是 happy path 还是关键风险点？例如“terminal 能执行 ls”只能证明可用，不能证明安全；“trace 文件写出来了”只能证明落盘，不能证明审计完整。</p>
+          </div>
+        </div>
+      </div>
+      <div class="banner">
+        <strong>核心原则</strong>
+        <p>我不是先判断“这段代码好不好”，而是先判断“它有没有兑现文档里的承诺”。这也是为什么你给我的计划写得越清楚，我越容易帮你发现真正的问题。</p>
+      </div>
+    </section>
+
+    <section id="code-review">
+      <div class="section-title">
+        <h2>2. 我怎么做代码审查</h2>
+        <p>重点不是风格，而是风险、回归、失真和伪完成。</p>
+      </div>
+      <div class="grid-4">
+        <div class="card tone-teal">
+          <strong>边界是否真实存在</strong>
+          <p>典型问题：文档说“受限环境”，代码其实是 <code>shell=True</code>；文档说“隔离环境”，代码其实是原进程 <code>exec</code>。</p>
+        </div>
+        <div class="card tone-orange">
+          <strong>约束是程序强制还是提示词强制</strong>
+          <p>如果系统关键规则只写在 Prompt 里，而工具/API 不做校验，我会把它判定为“规范存在，机制未实现”。</p>
+        </div>
+        <div class="card tone-olive">
+          <strong>审计是否足够还原事实</strong>
+          <p>我会看 trace 是否包含完整参数、结果、状态、关联 ID，能否支撑复盘，而不是只留一个“调用过”的痕迹。</p>
+        </div>
+        <div class="card tone-wine">
+          <strong>实际路径是否与宣称一致</strong>
+          <p>很多 bug 不在函数里，在接入层。比如工具本身安全，但 manager 注册错；或者 trace writer 正确，但 chat 层只传了半截数据。</p>
+        </div>
+      </div>
+
+      <h3>我最常查的 7 类问题</h3>
+      <div class="checklist">
+        <div class="check-item">
+          <div class="mark risk">1</div>
+          <span><strong>名义安全 vs 实际高权限</strong>：黑名单过弱、白名单缺失、同进程执行、路径限制可绕过。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark risk">2</div>
+          <span><strong>验收口径过宽</strong>：只验证“能跑”，没有验证“不会错、不会绕、不会丢”。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark risk">3</div>
+          <span><strong>trace 不可信</strong>：参数丢失、输出截断、多个 tool call 错配、异常分支不记账。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark risk">4</div>
+          <span><strong>模板文件污染生产逻辑</strong>：把 <code>_TEMPLATE</code>、样例文件、README 当成最新记录或真实资产。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark risk">5</div>
+          <span><strong>计划里说“自动化”，代码里其实是人工约定</strong>：靠提示词、注释、口头规范维持，而不是系统保证。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark risk">6</div>
+          <span><strong>兼容逻辑会静默丢数据</strong>：旧格式迁移时重置、覆盖、吞异常，没有保留原始内容。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark risk">7</div>
+          <span><strong>phase 间承诺冲突</strong>：前一份 plan 说 Phase 3 不做，后一份日志又写已实现，但代码根本没跟上。</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="doc-review">
+      <div class="section-title">
+        <h2>3. 我怎么检查文档</h2>
+        <p>好的文档不是“内容多”，而是状态清、边界清、验收清。</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>文档元素</th>
+            <th>我会检查什么</th>
+            <th>常见问题</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Phase 目标</td>
+            <td>是否可验证、是否有非目标、是否和前一 phase 对齐</td>
+            <td>目标过大、边界模糊、把长期目标写成短期承诺</td>
+          </tr>
+          <tr>
+            <td>设计方案</td>
+            <td>是否落到文件、模块、调用链、数据结构</td>
+            <td>停留在理念层，没有落到代码载体</td>
+          </tr>
+          <tr>
+            <td>开发日志</td>
+            <td>是否区分“已实现”“已建议”“已验证”</td>
+            <td>把方案讨论写成已完成；把 happy path 写成已验收</td>
+          </tr>
+          <tr>
+            <td>验收标准</td>
+            <td>是否包含负向测试、异常路径、边界条件</td>
+            <td>只有正向示例，没有反例</td>
+          </tr>
+          <tr>
+            <td>风险说明</td>
+            <td>是否明确单用户/本地/生产的适用边界</td>
+            <td>默认假设环境可信，但文档不写</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>文档状态必须分 4 层</h3>
+      <div class="grid-2">
+        <div class="card tone-olive">
+          <strong>可以写成“已实现”</strong>
+          <p>代码已存在，调用链已接通，至少做过一个正向验证和一个关键反向验证。</p>
+        </div>
+        <div class="card tone-orange">
+          <strong>只能写成“已设计/已建议”</strong>
+          <p>报告提出了方案，或者已经写清路线图，但代码还没改、配置还没落、验收还没跑。</p>
+        </div>
+        <div class="card tone-teal">
+          <strong>可以写成“已验证”</strong>
+          <p>必须说明验证对象、输入、预期、实际结果。仅有一句“测试通过”是不够的。</p>
+        </div>
+        <div class="card tone-wine">
+          <strong>必须单列“已知风险”</strong>
+          <p>当你决定暂时不修时，要明确写：风险是什么、当前为什么接受、适用范围是什么、未来何时切换方案。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="plan-writing">
+      <div class="section-title">
+        <h2>4. 怎么写更高质量的开发计划</h2>
+        <p>目标不是把文档写长，而是让计划能直接被执行、被验证、被复盘。</p>
+      </div>
+
+      <h3>推荐结构</h3>
+      <pre>1. 背景与目标
+2. 明确本 phase 负责什么，不负责什么
+3. 关键约束
+4. 设计与调用链
+5. 文件级改动清单
+6. 数据结构 / Prompt / API 变化
+7. 验收标准
+8. 风险与降级方案
+9. 开发日志更新规则</pre>
+
+      <h3>计划里最值得补的 6 个字段</h3>
+      <div class="checklist">
+        <div class="check-item">
+          <div class="mark good">A</div>
+          <span><strong>非目标</strong>：例如“Phase 3 不处理 skills 动态注入，只预留接口”。这能大幅减少后续争议。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark good">B</div>
+          <span><strong>状态标签</strong>：每条结论标明 <code>planned</code>、<code>implemented</code>、<code>verified</code>、<code>risk accepted</code>。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark good">C</div>
+          <span><strong>反向验收</strong>：例如“非法路径应失败”“模板文件不应进入推荐”“多 tool call trace 不应错配”。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark good">D</div>
+          <span><strong>适用边界</strong>：本地单用户可接受，不等于生产可接受。把部署边界写清楚。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark good">E</div>
+          <span><strong>证据落点</strong>：每个核心承诺尽量对应到文件和入口函数，而不是抽象描述。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark good">F</div>
+          <span><strong>日志回写规则</strong>：实施后哪些条目可升级成“已实现”，哪些只能保持“建议方案”。</span>
+        </div>
+      </div>
+
+      <h3>一个更稳的验收写法</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>项</th>
+            <th>不要这样写</th>
+            <th>更好的写法</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>工具安全</td>
+            <td>terminal 能执行命令</td>
+            <td>terminal 仅允许白名单命令；重定向/管道/子命令必须失败</td>
+          </tr>
+          <tr>
+            <td>trace</td>
+            <td>trace 文件能生成</td>
+            <td>trace 必须包含完整 tool、args、result、timestamp、status；双工具调用不串位</td>
+          </tr>
+          <tr>
+            <td>Memory Map</td>
+            <td>能扫描目录</td>
+            <td>模板文件和 README 不进入推荐；最近文件排序可解释</td>
+          </tr>
+          <tr>
+            <td>溯源</td>
+            <td>Prompt 里要求写 assets 路径</td>
+            <td>写入 memory 时校验必须包含 source assets 字段或标准段落</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="collab">
+      <div class="section-title">
+        <h2>5. 你怎么和我协作会更高效</h2>
+        <p>给我更多“可对账信息”，而不是更多背景故事。</p>
+      </div>
+      <div class="grid-3">
+        <div class="card tone-teal">
+          <strong>在开始开发前</strong>
+          <p>给我 phase plan、核心约束、非目标、目标文件夹。如果你已经有 dev log，也一并给。我会优先做对账，而不是重复设计。</p>
+        </div>
+        <div class="card tone-orange">
+          <strong>在开发过程中</strong>
+          <p>把“设计变更”写回文档。不要只改代码不改 plan，也不要只改 plan 不改日志。否则我下一轮审查一定会先花时间校准事实。</p>
+        </div>
+        <div class="card tone-olive">
+          <strong>在请求 review 时</strong>
+          <p>告诉我你要的是：查安全、查实现偏差、查文档一致性、查回归风险，还是做纯功能验收。目的不同，审查路径会不同。</p>
+        </div>
+      </div>
+
+      <h3>最有效的协作输入包</h3>
+      <div class="checklist">
+        <div class="check-item">
+          <div class="mark note">1</div>
+          <span>目标 phase 的计划文档和日志文档。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark note">2</div>
+          <span>本次改动涉及的代码目录，而不是整个仓库模糊描述。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark note">3</div>
+          <span>你最担心的 2-3 个问题，例如“trace 对不对”“上传闭环有没有真正落地”。</span>
+        </div>
+        <div class="check-item">
+          <div class="mark note">4</div>
+          <span>若有“分析报告”，请说明它是建议方案还是已经采纳的决策。</span>
+        </div>
+      </div>
+
+      <div class="banner">
+        <strong>协作心法</strong>
+        <p>你越能把“决策、实现、验证、风险接受”这四件事分开写，我越能快速给你高质量结论。反过来，如果一份文档同时混着方案讨论、实现状态、验收结论，审查成本会明显上升。</p>
+      </div>
+    </section>
+
+    <section id="template">
+      <div class="section-title">
+        <h2>6. 直接可用的请求模板</h2>
+        <p>你可以直接复制给我，通常比自由描述更高效。</p>
+      </div>
+
+      <h3>模板 A：查 phase 实现偏差</h3>
+      <pre>检查 phaseX 的开发有什么问题。
+范围：docs/xxx-plan.md, docs/xxx-dev-log.md, backend/xxx
+重点：
+1. 文档承诺和代码实现是否一致
+2. 验收是否真的成立
+3. 有没有高风险边界问题
+4. 按严重程度给 findings</pre>
+
+      <h3>模板 B：让我先做文档对账再开发</h3>
+      <pre>先不要改代码。
+请先核对以下文档是否自洽：
+- docs/phaseX-plan.md
+- docs/phaseX-dev-log.md
+- docs/related-analysis.md
+
+输出：
+1. 冲突点
+2. 缺失项
+3. 哪些能写成已实现，哪些只能写成建议方案
+4. 后续实现顺序</pre>
+
+      <h3>模板 C：让我帮你把计划写得更能执行</h3>
+      <pre>请把这份 phase 计划改成可执行版本，但先不要写代码。
+要求：
+1. 加非目标
+2. 加调用链
+3. 加负向验收
+4. 区分 implemented / verified / risk accepted
+5. 保留我现有的目标不变</pre>
+    </section>
+
+    <section id="scorecard">
+      <div class="section-title">
+        <h2>7. 你的计划自检表</h2>
+        <p>写完 phase plan 或 dev log 后，可以先按这 5 项给自己打分。</p>
+      </div>
+      <div class="score-grid">
+        <div class="score">
+          <strong>1</strong>
+          <span>目标是否可验证，而不是概念化口号</span>
+        </div>
+        <div class="score">
+          <strong>2</strong>
+          <span>每个承诺是否都能落到代码文件和入口</span>
+        </div>
+        <div class="score">
+          <strong>3</strong>
+          <span>是否明确写了非目标和已知风险</span>
+        </div>
+        <div class="score">
+          <strong>4</strong>
+          <span>验收是否包含反向测试与边界场景</span>
+        </div>
+        <div class="score">
+          <strong>5</strong>
+          <span>日志是否区分已实现、已验证、仅建议</span>
+        </div>
+      </div>
+
+      <div class="banner">
+        <strong>达标标准</strong>
+        <p>如果这 5 项里有 4 项以上是明确、可回答的，你的文档就已经足够适合和我高效协作了。如果少于 3 项，通常我会先花时间补结构，而不是直接推进实现。</p>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

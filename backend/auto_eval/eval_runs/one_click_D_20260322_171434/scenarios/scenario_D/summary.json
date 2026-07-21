@@ -1,0 +1,46 @@
+{
+  "scenario_id": "scenario_D",
+  "scenario_name": "写作与Pack闭环评测",
+  "average_score": 91.11,
+  "pass_rate": 0.9354838709677419,
+  "turn_count": 31,
+  "temporary_turn_count": 0,
+  "hallucination_summary": {
+    "metric_descriptions": {
+      "D_H1_version_authority_integrity": "统计是否正确区分 final docx/pptx、工作文档、中间版本与排版示例的 authority level。",
+      "D_H2_binary_extract_honesty": "统计在未真实解析 pptx/docx/pdf 时是否伪造页码、版式、章节细节或版本差异。",
+      "D_H3_pack_quality_integrity": "统计输出是否真正形成 pack-quality 对象，而不是普通摘要冒充 pack。",
+      "D_H4_figure_evidence_alignment": "统计是否把图组、证据链、章节主张映射清楚；若图和结论错配则扣分。",
+      "D_H5_bridge_overclaim_rate": "统计 selective oxidation / polymerization /背景论文 是否被过度包装成 thesis 主证。"
+    },
+    "raw_counters": {
+      "unsupported_specificity": 4,
+      "trace_free_binary_certainty": 0,
+      "cross_system_overtransfer": 1,
+      "absolute_overclaim_turns": 6,
+      "source_confusion_turns": 0
+    },
+    "rates": {
+      "unsupported_specificity": 0.129,
+      "trace_free_binary_certainty": 0.0,
+      "cross_system_overtransfer": 0.0323,
+      "absolute_overclaim_turns": 0.1935,
+      "source_confusion_turns": 0.0
+    }
+  },
+  "runtime_blueprint": {
+    "scenario_id": "scenario_D",
+    "criteria_count": 93,
+    "session_count": 10,
+    "turn_count": 31,
+    "summary": {
+      "scenario_id": "scenario_D",
+      "session_count": 10,
+      "turn_count": 31,
+      "criterion_count": 93,
+      "binary_turn_count": 8,
+      "prior_memory_turn_count": 26,
+      "missing_uploads": []
+    }
+  }
+}

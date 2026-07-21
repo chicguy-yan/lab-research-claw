@@ -1,0 +1,65 @@
+{
+  "scenario_id": "scenario_D",
+  "session_id": "scenario_D_session_001_bootstrap",
+  "turn_id": 3,
+  "workspace_id": "eval-scenario_d-260322_1714",
+  "backend_session_id": "__bootstrap__",
+  "assistant_text": "**Context Trace（公开版）**\n\n- 本轮未调用工具。  \n- 以下起步策略基于：上一轮已实际读取的 3 份材料内容，以及你本轮新增的限制条件。  \n- 涉及的文件路径：  \n  - `assets/uploads/04bbe294_【PACK】高价钴氧物种生成机理链.md`  \n  - `assets/uploads/99550dc7_【毕业论文】工作文档0305.md`  \n  - `assets/uploads/b99056f9_20251230【进度规划】.md`\n\n---\n\n**Rationale（判断依据摘要）**\n\n这次限制很关键：你要的不是“先写什么”，而是先建立一个**判定系统**，能持续回答三件事：\n\n1. **哪个 Pack 最值得先做**\n2. **哪个文件是某类交付件的权威来源**\n3. **哪个文件只能当参考素材，不能主导结构**\n\n基于这 3 份材料，我的核心判断是：\n\n- **不要把“权威来源”理解成全局唯一文件**，而要按交付对象分配  \n  也就是：thesis 的权威来源、机制 pack 的权威来源、进度执行的参考来源，可以不是同一个文件。\n\n- **最先搭的不是正文 Pack，而是“权威来源 + 复用价值”的判定层**  \n  否则你很快又会滑回“开始写内容、开始补图、开始补实验”的旧路径。\n\n- 在这 3 份材料里，**最有跨交付件复用价值的内容方向仍然是“章节主线”**  \n  因为它能同时服务：\n  - thesis\n  - proposal\n  - group meeting\n  - figure/layout  \n  而高价钴 pack 更像“高价值子包”，进度规划更像“执行参考”。\n\n---\n\n**Deliverable（直接可执行的起步策略）**\n\n## 一、先用 3 个标签管理所有文件\n\n以后这个容器里的文件，先不要急着写内容，先打标签：\n\n### A 类：权威来源（Source of Truth）\n满足任一条就可能进 A：\n- 能定义某类交付件的主线或结构\n- 能决定 claim 顺序、章节顺序、图组顺序\n- 发生冲突时，优先以它为准\n\n### B 类：Pack 种子（Pack Seed）\n- 内容质量高、结构清楚、可复用\n- 但只适用于某一部分，不足以统领全局\n- 适合被封装成机制包、图组包、写作包\n\n### C 类：参考素材（Reference Only）\n- 提供灵感、待办、局部提示\n- 不能直接主导章节结构或结论边界\n- 适合挂载到 timeline/task，不适合当主线依据\n\n---\n\n## 二、先给当前 3 份材料定级\n\n| 文件 | 建议标签 | 用途定位 | 现在不要拿它做什么 |\n|---|---|---|---|\n| `99550dc7_【毕业论文】工作文档0305.md` | **A / B** | 当前最接近“章节主线权威来源”的文件；可作为 thesis 主线与图组编排的临时主来源 | 不要直接当成论文正文定稿 |\n| `04bbe294_【PACK】高价钴氧物种生成机理链.md` | **B（局部可视为A）** | 高价值机制 Pack 种子；在“高价钴证据链”这个局部范围内可做权威来源 | 不要把它扩张成整篇 thesis 的总主线 |\n| `b99056f9_20251230【进度规划】.md` | **C** | 执行参考、待办提醒、时间推进依据 | 不要用它定义写作结构或章节优先级 |\n\n### 这一步的结论\n- **全局起点**：`99550...`  \n- **高价值子包起点**：`04bbe...`  \n- **执行层参考**：`b990...`\n\n---\n\n## 三、这个容器的正确起手顺序\n\n### 第 0 步：先建“判定层”，不要先写正文\n先产出一个元 Pack：\n\n**`PACK_权威来源与复用优先级地图_v0`**\n\n它只做 3 件事：\n1. 列出四类交付件：thesis / proposal / group meeting / figure-layout\n2. 为每类交付件指定权威来源\n3. 给候选 Pack 做复用价值排序\n\n这是容器的“调度台”，不是正文。\n\n---\n\n### 第 1 步：第一个内容 Pack 做“章节主线”\n然后再做：\n\n**`PACK_章节主线_v0`**\n\n原因很直接：\n- 它的复用面最大\n- 能向下派生出图组缺口\n- 能向下压缩成组会结构\n- 能给 proposal 提供故事主轴\n\n### 这个 Pack 只回答四个问题\n1. 第一章/第二章/第三章各自要证明什么\n2. 每章的 3–5 个核心 claim 是什么\n3. 每个 claim 由哪类图支撑\n4. 哪些地方只能保守说、不能拔高\n\n---\n\n### 第 2 步：再做“图组缺口矩阵”\n在章节主线定住后，再做：\n\n**`PACK_图组缺口矩阵_v0`**\n\n它不是简单列缺图，而是：\n\n`章节 -> claim -> 已有支撑图 -> 缺口类型 -> 证据等级 -> 是否必须补`\n\n这样你补的是“主线缺口”，不是“看到什么都想补”。\n\n---\n\n### 第 3 步：组会交付件最后派生\n最后再从上面两个 Pack 派生：\n\n**`PACK_组会压缩骨架_v0`**\n\n因为组会不是源头，而是：\n- 从章节主线抽主 claim\n- 从图组缺口抽近期进展\n- 从进度规划抽接下来动作\n\n也就是说，**组会件是派生层，不是起步层**。\n\n---\n\n## 四、我给你的明确优先级\n\n### 最值得先整理成 Pack 的对象\n**第一名：章节主线 Pack**  \n原因：跨 thesis / proposal / group meeting / figure-layout 的复用价值最高。\n\n**第二名：高价钴机制证据 Pack**  \n原因：局部复用价值高，且证据链较集中，适合作为“章节内机制子包”。\n\n**第三名：图组缺口矩阵 Pack**  \n原因：依赖章节主线，适合第二步做。\n\n**第四名：组会交付 Pack**  \n原因：应从前面 2–3 个 Pack 压缩派生，不宜先做。\n\n---\n\n## 五、起步时的一个硬规则\n\n以后每来一个文件，都先过这 3 个问题：\n\n1. **它能不能决定某类交付件结构？**  \n   能：候选 A\n\n2. **它能不能被反复复用成模板/机制包/图组包？**  \n   能：候选 B\n\n3. **它只是提醒我做什么、但不能决定我怎么写吗？**  \n   是：归 C\n\n这条规则会直接防止 workspace 退化成“普通摘要仓库”。\n\n---\n\n## 六、如果你要我现在继续，我建议下一步只做一件事\n\n我建议下一步先产一个最小版本的：\n\n**《Pack 复用优先级 + 权威来源地图》**\n\n内容只需要一页表：\n\n| 交付件 | 当前权威来源 | 候选 Pack | 复用价值 | 当前状态 |\n|---|---|---|---|---|\n| thesis | 99550... | 章节主线 Pack | 高 | 先做 |\n| proposal | 99550... + 04bbe... | 章节主线 Pack / 机制子包 | 高 | 跟随 thesis 主线 |\n| group meeting | 章节主线 Pack 派生 | 组会压缩骨架 | 中 | 暂后 |\n| figure/layout | 99550... + 04bbe... | 图组缺口矩阵 | 高 | 第二步 |\n\n---\n\n**Memory Patch（建议写入，未实际落盘）**\n\n本轮未调用 `write_file`，以下只是建议写入：\n\n1. `memory/packs/PACK_权威来源与复用优先级地图_v0.md`  \n   建议字段：\n   - 交付件类型\n   - 权威来源文件\n   - Pack 候选\n   - 复用价值等级\n   - 禁止误用说明\n\n2. `memory/packs/PACK_章节主线_v0.md`  \n   建议字段：\n   - 章节主线树\n   - 每章核心 claim\n   - 对应图组\n   - 证据边界\n   - 可派生交付件\n\n如果你愿意，我下一步可以直接把这两份里的**第一份骨架**先给你搭出来。",
+  "attachments_used": [],
+  "trace_events": [],
+  "created_paths": [],
+  "temporary_dir_snapshot": {
+    "path": "temporary_dir/__bootstrap__",
+    "exists": true,
+    "file_count": 0,
+    "files": [],
+    "session_relative_files": [],
+    "tree": [],
+    "copied_text_files": [],
+    "preview_samples": {}
+  },
+  "temporary_result": null,
+  "content_result": {
+    "criterion_id": "D-S001-T03-C1",
+    "score": 70.0,
+    "verdict": "partial",
+    "reasons": [
+      "关键术语命中不足：需要至少 3 个，实际 1 个。"
+    ]
+  },
+  "trace_result": {
+    "criterion_id": "D-S001-T03-C2",
+    "score": 100.0,
+    "verdict": "pass",
+    "reasons": []
+  },
+  "artifact_result": null,
+  "judge_result": {
+    "criterion_id": "D-S001-T03-C3",
+    "score": 79.0,
+    "verdict": "partial",
+    "strengths": [
+      "命中了 1 个关键术语"
+    ],
+    "risks": [
+      "缺失关键术语: ['哪个 pack 最有复用价值', '哪个文件是权威来源', '哪个只能当参考素材']"
+    ],
+    "missing": [
+      "哪个 pack 最有复用价值",
+      "哪个文件是权威来源",
+      "哪个只能当参考素材"
+    ],
+    "raw_text": "你是一名长期指导博士论文、开题答辩、组会汇报与科研写作 pack 设计的导师型评审。请只依据【用户问题】【上传文件列表】【assistant 回复】【trace 摘要】【预期 focus】评分，不要替模型补写作结构。你要重点检查：回答是否真正围绕 pack-quality 交付件组织；是否区分最终稿、工作文档、中间版本、排版示例、背景论文等不同 authority level；是否能够把 thesis / proposal / group meeting / storyboard / layout rule 转成可复用的交付对象；是否在二进制 PPTX/DOCX/PDF 信息不足时保持诚实；是否避免把版本草稿说成稳定结论。请输出 JSON：{\"score\":0-100,\"verdict\":\"pass|partial|fail\",\"strengths\":[...],\"risks\":[...],\"missing\":[...]}。\n\n【评测输入】\n{\n  \"session_id\": \"scenario_D_session_001_bootstrap\",\n  \"turn_id\": 3,\n  \"user_input\": \"再加一个限制：这个容器不是用来重写论文全文的，而是要先判断`哪个 pack 最有复用价值`、`哪个文件是权威来源`、`哪个只能当参考素材`。请你直接给我一个起步策略。\",\n  \"user_upload\": [],\n  \"assistant_text\": \"**Context Trace（公开版）**\\n\\n- 本轮未调用工具。  \\n- 以下起步策略基于：上一轮已实际读取的 3 份材料内容，以及你本轮新增的限制条件。  \\n- 涉及的文件路径：  \\n  - `assets/uploads/04bbe294_【PACK】高价钴氧物种生成机理链.md`  \\n  - `assets/uploads/99550dc7_【毕业论文】工作文档0305.md`  \\n  - `assets/uploads/b99056f9_20251230【进度规划】.md`\\n\\n---\\n\\n**Rationale（判断依据摘要）**\\n\\n这次限制很关键：你要的不是“先写什么”，而是先建立一个**判定系统**，能持续回答三件事：\\n\\n1. **哪个 Pack 最值得先做**\\"
+  },
+  "hallucination_flags": {
+    "unsupported_specificity": false,
+    "absolute_overclaim_hits": [],
+    "source_confusion_hits": [],
+    "trace_free_binary_certainty": false,
+    "cross_system_overtransfer": false
+  },
+  "expected_artifacts": [],
+  "temporary_expectations": null,
+  "provisional_turn_score": 90.0,
+  "final_turn_score": 83.0
+}

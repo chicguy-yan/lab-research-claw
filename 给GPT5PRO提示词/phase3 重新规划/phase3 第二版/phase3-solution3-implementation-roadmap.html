@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 3 方案 3 实施路线图 — LLM 结构化输出</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --orange: #f0883e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  h1 { color: #fff; font-size: 2rem; margin-bottom: 0.5rem; }
+  h2 { color: var(--accent); font-size: 1.4rem; margin: 2.5rem 0 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+  h3 { color: var(--purple); font-size: 1.1rem; margin: 1.5rem 0 0.8rem; }
+  h4 { color: var(--orange); font-size: 0.95rem; margin: 1rem 0 0.5rem; }
+  .subtitle { color: var(--text-dim); font-size: 1rem; margin-bottom: 2.5rem; }
+
+  .hero-box {
+    background: linear-gradient(135deg, #1f6feb22 0%, #bc8cff22 100%);
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+  }
+
+  .hero-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .callout {
+    background: var(--surface);
+    border-left: 4px solid;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 6px;
+  }
+  .callout-info { border-color: var(--accent); }
+  .callout-success { border-color: var(--green); }
+  .callout-warning { border-color: var(--yellow); }
+  .callout-danger { border-color: var(--red); }
+
+  .callout-title {
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    font-size: 1rem;
+  }
+  .callout-info .callout-title { color: var(--accent); }
+  .callout-success .callout-title { color: var(--green); }
+  .callout-warning .callout-title { color: var(--yellow); }
+  .callout-danger .callout-title { color: var(--red); }
+
+  .timeline {
+    position: relative;
+    padding-left: 3rem;
+    margin: 2rem 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2.5rem;
+    top: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--bg);
+    z-index: 1;
+  }
+
+  .timeline-item.completed::before {
+    background: var(--green);
+  }
+
+  .stage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .stage-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .badge-stage { background: var(--accent); color: #fff; }
+  .badge-critical { background: var(--red); color: #fff; }
+  .badge-optional { background: var(--border); color: var(--text-dim); }
+
+  .code-block {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.85rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+    line-height: 1.5;
+  }
+
+  .code-comment { color: var(--text-dim); }
+  .code-keyword { color: var(--purple); }
+  .code-string { color: var(--green); }
+  .code-function { color: var(--yellow); }
+
+  .file-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  .file-item {
+    padding: 0.5rem;
+    margin: 0.3rem 0;
+    font-family: monospace;
+    font-size: 0.9rem;
+  }
+
+  .file-new { color: var(--green); }
+  .file-modified { color: var(--yellow); }
+
+  .flow-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    font-family: monospace;
+    font-size: 0.85rem;
+  }
+
+  .flow-step {
+    margin: 0.5rem 0;
+    padding: 0.6rem 1rem;
+    background: #0d1117;
+    border-radius: 4px;
+  }
+
+  .flow-step.highlight {
+    background: #1f6feb22;
+    border: 1px solid var(--accent);
+  }
+
+  .flow-arrow {
+    color: var(--text-dim);
+    margin: 0.3rem 0;
+    text-align: center;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .comparison-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+  }
+
+  .comparison-title {
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+  }
+
+  ul {
+    margin-left: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  li {
+    margin: 0.4rem 0;
+  }
+
+  .risk-matrix {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .risk-card {
+    background: var(--surface);
+    border: 1px solid;
+    border-radius: 6px;
+    padding: 1rem;
+  }
+
+  .risk-high { border-color: var(--red); }
+  .risk-medium { border-color: var(--yellow); }
+  .risk-low { border-color: var(--green); }
+
+  .risk-title {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .risk-high .risk-title { color: var(--red); }
+  .risk-medium .risk-title { color: var(--yellow); }
+  .risk-low .risk-title { color: var(--green); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+  }
+
+  th, td {
+    border: 1px solid var(--border);
+    padding: 0.8rem;
+    text-align: left;
+  }
+
+  th {
+    background: var(--surface);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  tr:nth-child(even) {
+    background: var(--surface);
+  }
+
+  .check { color: var(--green); font-weight: 700; }
+  .cross { color: var(--red); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<h1>Phase 3 方案 3 实施路线图</h1>
+<p class="subtitle">LLM 结构化输出方案 — 让模型在回答时同步产出 memory 决策</p>
+
+<div class="hero-box">
+  <div class="hero-title">🎯 核心理念</div>
+  <p class="hero-desc">
+    方案 3 采用 <strong>LLM 结构化输出</strong>，让模型在生成回答的同时，输出结构化的 <code>memory_decision</code> 标签。
+    这种方式符合 <code>phase3-index.md</code> 的原始设计意图："Step 4. 生成回答与 memory 决策"，
+    让 LLM 基于<strong>实际生成的回答内容</strong>做出准确的 memory 写入决策，而非在调用前盲猜。
+  </p>
+  <p class="hero-desc" style="margin-top: 1rem;">
+    <strong>与原设计的对齐</strong>：phase3-index.md § 5 明确要求"模型生成回答，同时形成本轮的 memory 决策"，
+    方案 3 通过 prompt 工程实现了这一设计，是三种方案中唯一完全符合原始架构意图的方案。
+  </p>
+</div>
+
+<div class="callout callout-info">
+  <div class="callout-title">📋 实施概览</div>
+  <p>本路线图分为 5 个 Stage，从 Prompt 设计到降级策略，涵盖完整的实施流程：</p>
+  <ul>
+    <li><strong>Stage 1</strong>: Prompt 工程 — 设计 memory_decision 输出格式</li>
+    <li><strong>Stage 2</strong>: 解析器实现 — 实现 extract_memory_decision()</li>
+    <li><strong>Stage 3</strong>: 集成修改 — 修改 PromptBuilder 和 chat.py</li>
+    <li><strong>Stage 4</strong>: 验证测试 — 端到端测试</li>
+    <li><strong>Stage 5</strong>: 降级策略 — LLM 不遵守格式时的 fallback</li>
+  </ul>
+</div>
+
+<h2>实施路线图</h2>
+
+<div class="timeline">
+  <!-- Stage 1 -->
+  <div class="timeline-item">
+    <div class="stage-header">
+      <div class="stage-title">Stage 1: Prompt 工程</div>
+      <span class="badge badge-stage">关键阶段</span>
+    </div>
+
+    <h4>🎯 目标</h4>
+    <p>设计 system prompt 中的 memory_decision 输出指令，让 LLM 理解如何在回答后输出结构化决策。</p>
+
+    <h4>📁 涉及文件</h4>
+    <div class="file-list">
+      <div class="file-item file-modified">backend/graph/prompt_builder.py</div>
+    </div>
+
+    <h4>💻 Prompt 设计</h4>
+    <p>在 PromptBuilder 的 system prompt 中新增 Block 7（Memory Decision 指令）：</p>
+
+    <div class="code-block">
+<span class="code-comment"># Block 7: Memory Decision Protocol</span>
+
+在回答用户后，你<strong>必须</strong>在回答末尾输出 memory 决策标签：
+
+&lt;memory_decision&gt;
+{
+  <span class="code-string">"action"</span>: <span class="code-string">"write"</span> | <span class="code-string">"skip"</span>,
+  <span class="code-string">"target_layer"</span>: <span class="code-string">"Layer1"</span> | <span class="code-string">"Layer2"</span> | <span class="code-string">"Layer3"</span> | <span class="code-keyword">null</span>,
+  <span class="code-string">"target_type"</span>: <span class="code-string">"Task"</span> | <span class="code-string">"Pack"</span> | <span class="code-string">"Concept"</span> | <span class="code-string">"Timeline"</span> | <span class="code-keyword">null</span>,
+  <span class="code-string">"target_path"</span>: <span class="code-string">"memory/tasks/TASK_xxx.md"</span> | <span class="code-keyword">null</span>,
+  <span class="code-string">"reason"</span>: <span class="code-string">"简短说明为什么写入或跳过"</span>
+}
+&lt;/memory_decision&gt;
+
+<span class="code-comment">## 决策规则</span>
+
+<span class="code-comment">### 写入 Layer1 (identity/)</span>
+仅在出现<strong>稳定、长期影响后续判断</strong>的内容时：
+- 新的主线判据
+- 新的实验室硬约束
+- 新的用户长期偏好
+
+<span class="code-comment">### 写入 Layer2 (timeline/)</span>
+仅在涉及<strong>时间推进信息</strong>时：
+- 今天做了什么 → <span class="code-string">"memory/timeline/days/YYYY-MM-DD.md"</span>
+- 本周风险 → <span class="code-string">"memory/timeline/weeks/WEEK_XX.md"</span>
+- 阶段汇报索引更新 → <span class="code-string">"memory/timeline/stage_reports/..."</span>
+
+<span class="code-comment">### 写入 Layer3 (concepts/ + tasks/ + packs/)</span>
+- <strong>Task</strong>: 新的可验证工作单元（新 claim、新 protocol、新实验 run）
+- <strong>Pack</strong>: 交付组织（阶段汇报、机理证据链、写作目录树）
+- <strong>Concept</strong>: 明显出现新研究主线时（优先挂已有 Concept）
+
+<span class="code-comment">### Skip</span>
+- 通用咨询、信息查询、无需沉淀的对话
+- 信息不足，无法形成有效 memory 更新
+
+<span class="code-comment">## 示例</span>
+
+<span class="code-comment"># 示例 1: 实验闭环</span>
+用户："XRD 数据显示 Co(IV) 特征峰在 2θ=31.2°"
+你的回答：根据 XRD 数据...（正常回答）
+
+&lt;memory_decision&gt;
+{
+  <span class="code-string">"action"</span>: <span class="code-string">"write"</span>,
+  <span class="code-string">"target_layer"</span>: <span class="code-string">"Layer3"</span>,
+  <span class="code-string">"target_type"</span>: <span class="code-string">"Task"</span>,
+  <span class="code-string">"target_path"</span>: <span class="code-string">"memory/tasks/TASK_exp_005.md"</span>,
+  <span class="code-string">"reason"</span>: <span class="code-string">"XRD 表征完成，需要更新实验任务记录"</span>
+}
+&lt;/memory_decision&gt;
+
+<span class="code-comment"># 示例 2: 通用咨询</span>
+用户："什么是 Fenton 反应？"
+你的回答：Fenton 反应是...（正常回答）
+
+&lt;memory_decision&gt;
+{
+  <span class="code-string">"action"</span>: <span class="code-string">"skip"</span>,
+  <span class="code-string">"target_layer"</span>: <span class="code-keyword">null</span>,
+  <span class="code-string">"target_type"</span>: <span class="code-keyword">null</span>,
+  <span class="code-string">"target_path"</span>: <span class="code-keyword">null</span>,
+  <span class="code-string">"reason"</span>: <span class="code-string">"通用知识咨询，无需写入 memory"</span>
+}
+&lt;/memory_decision&gt;
+    </div>
+
+    <h4>✅ 验证方式</h4>
+    <ul>
+      <li>手动测试：用 LLM playground 测试 prompt，确认模型能正确输出标签</li>
+      <li>格式检查：确认 JSON 格式正确，字段完整</li>
+      <li>边界测试：测试 skip 场景、write 场景、信息不足场景</li>
+    </ul>
+
+    <div class="callout callout-warning">
+      <div class="callout-title">⚠️ 潜在风险</div>
+      <ul>
+        <li><strong>LLM 不遵守格式</strong>：可能输出不完整的 JSON 或忘记输出标签</li>
+        <li><strong>中文干扰</strong>：reason 字段使用中文可能影响 JSON 解析</li>
+        <li><strong>缓解措施</strong>：在 Stage 2 实现健壮的解析器 + Stage 5 降级策略</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Stage 2 -->
+  <div class="timeline-item">
+    <div class="stage-header">
+      <div class="stage-title">Stage 2: 解析器实现</div>
+      <span class="badge badge-stage">关键阶段</span>
+    </div>
+
+    <h4>🎯 目标</h4>
+    <p>实现 <code>extract_memory_decision()</code> 函数，从 LLM 输出中提取并解析 memory_decision 标签。</p>
+
+    <h4>📁 涉及文件</h4>
+    <div class="file-list">
+      <div class="file-item file-new">backend/graph/memory_decision_parser.py</div>
+    </div>
+
+    <h4>💻 解析器实现</h4>
+    <div class="code-block">
+<span class="code-keyword">import</span> re
+<span class="code-keyword">import</span> json
+<span class="code-keyword">from</span> typing <span class="code-keyword">import</span> Optional
+
+<span class="code-keyword">def</span> <span class="code-function">extract_memory_decision</span>(response_text: str) -> Optional[dict]:
+    <span class="code-string">"""
+    从 LLM 输出中提取 memory_decision 标签
+
+    返回:
+      - 成功: {"action": "write"|"skip", ...}
+      - 失败: None
+    """</span>
+    <span class="code-comment"># 正则提取 &lt;memory_decision&gt;...&lt;/memory_decision&gt;</span>
+    pattern = <span class="code-string">r'&lt;memory_decision&gt;\s*(\{.*?\})\s*&lt;/memory_decision&gt;'</span>
+    match = re.search(pattern, response_text, re.DOTALL)
+
+    <span class="code-keyword">if</span> <span class="code-keyword">not</span> match:
+        <span class="code-keyword">return</span> <span class="code-keyword">None</span>
+
+    json_str = match.group(1)
+
+    <span class="code-keyword">try</span>:
+        decision = json.loads(json_str)
+
+        <span class="code-comment"># 验证必需字段</span>
+        required_fields = [<span class="code-string">"action"</span>, <span class="code-string">"target_layer"</span>, <span class="code-string">"target_path"</span>, <span class="code-string">"reason"</span>]
+        <span class="code-keyword">if</span> <span class="code-keyword">not</span> all(field <span class="code-keyword">in</span> decision <span class="code-keyword">for</span> field <span class="code-keyword">in</span> required_fields):
+            <span class="code-keyword">return</span> <span class="code-keyword">None</span>
+
+        <span class="code-comment"># 验证 action 值</span>
+        <span class="code-keyword">if</span> decision[<span class="code-string">"action"</span>] <span class="code-keyword">not</span> <span class="code-keyword">in</span> [<span class="code-string">"write"</span>, <span class="code-string">"skip"</span>]:
+            <span class="code-keyword">return</span> <span class="code-keyword">None</span>
+
+        <span class="code-keyword">return</span> decision
+
+    <span class="code-keyword">except</span> json.JSONDecodeError:
+        <span class="code-keyword">return</span> <span class="code-keyword">None</span>
+
+
+<span class="code-keyword">def</span> <span class="code-function">remove_memory_decision_tag</span>(response_text: str) -> str:
+    <span class="code-string">"""
+    从 LLM 输出中移除 memory_decision 标签，返回干净的回答
+    """</span>
+    pattern = <span class="code-string">r'&lt;memory_decision&gt;.*?&lt;/memory_decision&gt;'</span>
+    cleaned = re.sub(pattern, <span class="code-string">''</span>, response_text, flags=re.DOTALL)
+    <span class="code-keyword">return</span> cleaned.strip()
+
+
+<span class="code-keyword">def</span> <span class="code-function">get_fallback_decision</span>() -> dict:
+    <span class="code-string">"""
+    降级决策：LLM 未输出或解析失败时的默认值
+    """</span>
+    <span class="code-keyword">return</span> {
+        <span class="code-string">"action"</span>: <span class="code-string">"skip"</span>,
+        <span class="code-string">"target_layer"</span>: <span class="code-keyword">None</span>,
+        <span class="code-string">"target_type"</span>: <span class="code-keyword">None</span>,
+        <span class="code-string">"target_path"</span>: <span class="code-keyword">None</span>,
+        <span class="code-string">"reason"</span>: <span class="code-string">"LLM 未输出 memory_decision，降级为 skip"</span>
+    }
+    </div>
+
+    <h4>✅ 验证方式</h4>
+    <ul>
+      <li>单元测试：测试正常 JSON、缺失字段、格式错误、无标签等场景</li>
+      <li>边界测试：测试中文 reason、嵌套 JSON、多个标签等</li>
+      <li>性能测试：确认正则匹配不会成为瓶颈</li>
+    </ul>
+
+    <div class="callout callout-success">
+      <div class="callout-title">✅ 设计亮点</div>
+      <ul>
+        <li><strong>健壮性</strong>：解析失败返回 None，不抛异常</li>
+        <li><strong>降级策略</strong>：提供 get_fallback_decision() 保证流程不中断</li>
+        <li><strong>清理函数</strong>：remove_memory_decision_tag() 确保用户看不到内部标签</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Stage 3 -->
+  <div class="timeline-item">
+    <div class="stage-header">
+      <div class="stage-title">Stage 3: 集成修改</div>
+      <span class="badge badge-critical">核心集成</span>
+    </div>
+
+    <h4>🎯 目标</h4>
+    <p>修改 PromptBuilder 和 api/chat.py，将解析器集成到对话流程中。</p>
+
+    <h4>📁 涉及文件</h4>
+    <div class="file-list">
+      <div class="file-item file-modified">backend/graph/prompt_builder.py</div>
+      <div class="file-item file-modified">backend/api/chat.py</div>
+    </div>
+
+    <h4>💻 PromptBuilder 修改</h4>
+    <div class="code-block">
+<span class="code-comment"># backend/graph/prompt_builder.py</span>
+
+<span class="code-keyword">class</span> <span class="code-function">PromptBuilder</span>:
+    <span class="code-keyword">def</span> <span class="code-function">build</span>(
+        self,
+        context_result: ContextResult,
+        user_message: str,
+        metadata: dict | <span class="code-keyword">None</span> = <span class="code-keyword">None</span>,
+    ) -> tuple[str, str]:
+        <span class="code-string">"""返回 (system_prompt, user_prompt)"""</span>
+
+        system_blocks = []
+
+        <span class="code-comment"># Block 1-6: 原有逻辑...</span>
+        system_blocks.append(self._build_identity_block())
+        system_blocks.append(self._build_tooling_block())
+        system_blocks.append(self._build_workspace_block())
+        system_blocks.append(self._build_inbound_context_block(metadata))
+        system_blocks.append(self._build_memory_map_block(context_result))
+        system_blocks.append(self._build_project_context_block(context_result))
+
+        <span class="code-comment"># Block 7: Memory Decision Protocol ← 新增</span>
+        system_blocks.append(self._build_memory_decision_block())
+
+        system_prompt = <span class="code-string">"\n\n"</span>.join(system_blocks)
+        user_prompt = user_message
+
+        <span class="code-keyword">return</span> system_prompt, user_prompt
+
+    <span class="code-keyword">def</span> <span class="code-function">_build_memory_decision_block</span>(self) -> str:
+        <span class="code-string">"""构建 Block 7: Memory Decision Protocol"""</span>
+        <span class="code-keyword">return</span> <span class="code-string">"""# Memory Decision Protocol
+
+在回答用户后，你必须在回答末尾输出 memory 决策标签：
+
+&lt;memory_decision&gt;
+{
+  "action": "write" | "skip",
+  "target_layer": "Layer1" | "Layer2" | "Layer3" | null,
+  "target_type": "Task" | "Pack" | "Concept" | "Timeline" | null,
+  "target_path": "memory/tasks/TASK_xxx.md" | null,
+  "reason": "简短说明为什么写入或跳过"
+}
+&lt;/memory_decision&gt;
+
+## 决策规则
+（省略详细规则，见 Stage 1）
+"""</span>
+    </div>
+
+    <h4>💻 api/chat.py 修改</h4>
+    <div class="code-block">
+<span class="code-comment"># backend/api/chat.py</span>
+
+<span class="code-keyword">from</span> graph.memory_decision_parser <span class="code-keyword">import</span> (
+    extract_memory_decision,
+    remove_memory_decision_tag,
+    get_fallback_decision
+)
+
+<span class="code-keyword">async</span> <span class="code-keyword">def</span> <span class="code-function">chat</span>(request: ChatRequest):
+    <span class="code-comment"># Step 1-3: 原有逻辑</span>
+    session = session_manager.load_session_for_agent(session_id)
+    context_result = context_orchestrator.select_context(message)
+    system_prompt, user_prompt = prompt_builder.build(context_result, message)
+
+    <span class="code-comment"># Step 4: LLM 调用（收集完整输出）</span>
+    full_response = <span class="code-string">""</span>
+    <span class="code-keyword">async</span> <span class="code-keyword">for</span> chunk <span class="code-keyword">in</span> agent_manager.astream(user_prompt, history, system_prompt):
+        <span class="code-keyword">if</span> chunk.get(<span class="code-string">"type"</span>) == <span class="code-string">"token"</span>:
+            token = chunk[<span class="code-string">"content"</span>]
+            full_response += token
+            <span class="code-keyword">yield</span> f<span class="code-string">"data: {json.dumps(chunk)}\n\n"</span>
+
+    <span class="code-comment"># Step 4.5: 解析 memory_decision ← 新增</span>
+    memory_decision = extract_memory_decision(full_response)
+    <span class="code-keyword">if</span> memory_decision <span class="code-keyword">is</span> <span class="code-keyword">None</span>:
+        memory_decision = get_fallback_decision()
+
+    <span class="code-comment"># Step 4.6: 清理回答（移除标签）← 新增</span>
+    clean_response = remove_memory_decision_tag(full_response)
+
+    <span class="code-comment"># Step 5: 保存消息（使用清理后的回答）</span>
+    session_manager.save_message(session_id, <span class="code-string">"user"</span>, message)
+    session_manager.save_message(session_id, <span class="code-string">"assistant"</span>, clean_response)
+
+    <span class="code-comment"># Step 6: 写入 trace（传入 memory_decision）</span>
+    trace = trace_writer.write_trace(
+        session_id=session_id,
+        context_result=context_result,
+        tool_calls=[],
+        memory_decision=memory_decision,  <span class="code-comment"># ← 使用解析结果</span>
+        output_refs=[]
+    )
+
+    <span class="code-comment"># Step 7: 发送 done 事件</span>
+    <span class="code-keyword">yield</span> f<span class="code-string">"data: {json.dumps({'type': 'done', 'trace_id': trace['trace_id']})}\n\n"</span>
+    </div>
+
+    <h4>✅ 验证方式</h4>
+    <ul>
+      <li>启动服务：<code>python3 -m uvicorn app:app --port 8002</code></li>
+      <li>测试对话：发送包含实验关键词的消息，检查 trace 中 memory_decision</li>
+      <li>检查用户回答：确认用户看到的回答中没有 &lt;memory_decision&gt; 标签</li>
+    </ul>
+
+    <div class="callout callout-info">
+      <div class="callout-title">📊 流程变更对比</div>
+      <div class="comparison-grid">
+        <div class="comparison-card">
+          <div class="comparison-title">原流程（Phase 3 初版）</div>
+          <div class="flow-diagram">
+            <div class="flow-step">Step 4. LLM 调用</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">Step 5. 保存消息</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">Step 6. TraceWriter（❌ memory_decision 缺失）</div>
+          </div>
+        </div>
+        <div class="comparison-card">
+          <div class="comparison-title">方案 3 流程</div>
+          <div class="flow-diagram">
+            <div class="flow-step">Step 4. LLM 调用（收集完整输出）</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step highlight">Step 4.5. 解析 memory_decision</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step highlight">Step 4.6. 清理回答</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">Step 5. 保存消息（清理后）</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">Step 6. TraceWriter（✅ memory_decision 完整）</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 4 -->
+  <div class="timeline-item">
+    <div class="stage-header">
+      <div class="stage-title">Stage 4: 验证测试</div>
+      <span class="badge badge-stage">质量保证</span>
+    </div>
+
+    <h4>🎯 目标</h4>
+    <p>端到端测试方案 3 的完整流程，确认 memory_decision 正确产出并写入 trace。</p>
+
+    <h4>📋 测试清单</h4>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>测试项</th>
+          <th>命令</th>
+          <th>预期结果</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>实验闭环场景</td>
+          <td><code>curl -X POST .../chat -d '{"message":"XRD数据显示Co(IV)特征峰..."}'</code></td>
+          <td>trace 中 memory_decision.action = "write"</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>通用咨询场景</td>
+          <td><code>curl -X POST .../chat -d '{"message":"什么是Fenton反应？"}'</code></td>
+          <td>trace 中 memory_decision.action = "skip"</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>阶段汇报场景</td>
+          <td><code>curl -X POST .../chat -d '{"message":"准备第3次阶段汇报"}'</code></td>
+          <td>memory_decision.target_layer = "Layer2"</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>用户回答清洁</td>
+          <td>检查 envelope 中 messages 数组</td>
+          <td>assistant 消息中无 &lt;memory_decision&gt; 标签</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>降级策略触发</td>
+          <td>手动修改 prompt 让 LLM 不输出标签</td>
+          <td>memory_decision.reason 包含"降级"字样</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>Trace API 查询</td>
+          <td><code>curl "http://localhost:8002/api/traces?session_id=..."</code></td>
+          <td>返回的 trace 包含完整 memory_decision 字段</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>💻 测试脚本示例</h4>
+    <div class="code-block">
+<span class="code-comment"># test_solution3.sh</span>
+
+<span class="code-comment"># 测试 1: 实验闭环</span>
+curl -N -X POST http://localhost:8002/api/chat \
+  -H <span class="code-string">"Content-Type: application/json"</span> \
+  -d <span class="code-string">'{
+    "message": "XRD 数据显示 Co(IV) 特征峰在 2θ=31.2°，这证实了中间体的存在",
+    "session_id": "test_exp",
+    "stream": true
+  }'</span>
+
+<span class="code-comment"># 检查 trace</span>
+cat backend/.openclaw/workspace-default/context_trace/test_exp.json | \
+  python3 -m json.tool | \
+  grep -A 5 <span class="code-string">"memory_decision"</span>
+
+<span class="code-comment"># 预期输出：</span>
+<span class="code-comment"># "memory_decision": {</span>
+<span class="code-comment">#   "action": "write",</span>
+<span class="code-comment">#   "target_layer": "Layer3",</span>
+<span class="code-comment">#   "target_type": "Task",</span>
+<span class="code-comment">#   ...</span>
+<span class="code-comment"># }</span>
+    </div>
+
+    <h4>✅ 验收标准映射</h4>
+    <p>对应 phase3-dev-plan.md § 验收标准：</p>
+    <ul>
+      <li><span class="check">✓</span> 验收项 2：memory_decision 字段清楚记录写了什么或为什么 skip</li>
+      <li><span class="check">✓</span> 验收项 3：trace.memory_decision.action 为 write 或 skip，有 reason</li>
+      <li><span class="check">✓</span> 验收项 4：GET /api/traces 返回完整 trace，含 memory_decision</li>
+    </ul>
+  </div>
+
+  <!-- Stage 5 -->
+  <div class="timeline-item">
+    <div class="stage-header">
+      <div class="stage-title">Stage 5: 降级策略</div>
+      <span class="badge badge-optional">可靠性增强</span>
+    </div>
+
+    <h4>🎯 目标</h4>
+    <p>处理 LLM 不遵守格式的情况，确保系统在任何情况下都能正常运行。</p>
+
+    <h4>🔧 降级触发条件</h4>
+    <ul>
+      <li>LLM 未输出 &lt;memory_decision&gt; 标签</li>
+      <li>JSON 格式错误（缺失字段、语法错误）</li>
+      <li>action 字段值不合法（非 "write" 或 "skip"）</li>
+    </ul>
+
+    <h4>💻 降级策略实现</h4>
+    <p>已在 Stage 2 的 <code>get_fallback_decision()</code> 中实现：</p>
+    <div class="code-block">
+<span class="code-comment"># 降级决策：默认 skip</span>
+{
+  <span class="code-string">"action"</span>: <span class="code-string">"skip"</span>,
+  <span class="code-string">"target_layer"</span>: <span class="code-keyword">null</span>,
+  <span class="code-string">"target_type"</span>: <span class="code-keyword">null</span>,
+  <span class="code-string">"target_path"</span>: <span class="code-keyword">null</span>,
+  <span class="code-string">"reason"</span>: <span class="code-string">"LLM 未输出 memory_decision，降级为 skip"</span>
+}
+    </div>
+
+    <h4>📊 降级策略选择</h4>
+    <div class="comparison-grid">
+      <div class="comparison-card">
+        <div class="comparison-title">方案 A：降级为 skip（推荐）</div>
+        <ul>
+          <li><span class="check">✓</span> 安全：不会误写 memory</li>
+          <li><span class="check">✓</span> 简单：无需额外逻辑</li>
+          <li><span class="cross">✗</span> 可能丢失有价值的 memory 更新</li>
+        </ul>
+      </div>
+      <div class="comparison-card">
+        <div class="comparison-title">方案 B：降级为规则引擎</div>
+        <ul>
+          <li><span class="check">✓</span> 不丢失 memory 更新机会</li>
+          <li><span class="cross">✗</span> 复杂：需要维护规则引擎</li>
+          <li><span class="cross">✗</span> 准确性低：盲猜决策</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>📈 监控与优化</h4>
+    <p>建议在 trace 中记录降级事件，用于后续 prompt 优化：</p>
+    <div class="code-block">
+<span class="code-comment"># 在 trace 中新增字段</span>
+{
+  <span class="code-string">"memory_decision"</span>: {...},
+  <span class="code-string">"memory_decision_source"</span>: <span class="code-string">"llm"</span> | <span class="code-string">"fallback"</span>,  <span class="code-comment"># ← 新增</span>
+  <span class="code-string">"llm_raw_output"</span>: <span class="code-string">"..."</span>  <span class="code-comment"># ← 可选，用于调试</span>
+}
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-title">⚠️ 降级率监控</div>
+      <p>建议监控降级率（fallback 次数 / 总对话次数）：</p>
+      <ul>
+        <li><strong>&lt; 5%</strong>：正常，prompt 工作良好</li>
+        <li><strong>5-15%</strong>：需要优化 prompt</li>
+        <li><strong>&gt; 15%</strong>：考虑切换到方案 1（规则引擎）或混合方案</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2>风险与缓解措施</h2>
+
+<div class="risk-matrix">
+  <div class="risk-card risk-high">
+    <div class="risk-title">🔴 高风险：LLM 不遵守格式</div>
+    <p><strong>描述</strong>：LLM 可能忘记输出标签或输出格式错误的 JSON</p>
+    <p><strong>影响</strong>：memory_decision 缺失，降级为 skip</p>
+    <p><strong>缓解</strong>：</p>
+    <ul>
+      <li>Prompt 中使用<strong>强调词</strong>（"必须"、"MUST"）</li>
+      <li>提供多个示例</li>
+      <li>实现健壮的解析器 + 降级策略</li>
+      <li>监控降级率，及时优化 prompt</li>
+    </ul>
+  </div>
+
+  <div class="risk-card risk-medium">
+    <div class="risk-title">🟡 中风险：JSON 解析失败</div>
+    <p><strong>描述</strong>：reason 字段包含中文引号、换行符等导致 JSON 解析失败</p>
+    <p><strong>影响</strong>：解析失败，触发降级</p>
+    <p><strong>缓解</strong>：</p>
+    <ul>
+      <li>使用 <code>re.DOTALL</code> 处理多行 JSON</li>
+      <li>在 prompt 中要求 reason 使用简短文本</li>
+      <li>考虑使用更宽松的 JSON 解析器（如 <code>json5</code>）</li>
+    </ul>
+  </div>
+
+  <div class="risk-card risk-medium">
+    <div class="risk-title">🟡 中风险：性能影响</div>
+    <p><strong>描述</strong>：需要收集完整 LLM 输出后才能解析，可能增加延迟</p>
+    <p><strong>影响</strong>：用户感知到的响应时间增加</p>
+    <p><strong>缓解</strong>：</p>
+    <ul>
+      <li>SSE 流式输出仍然实时发送给用户</li>
+      <li>解析和清理在后台异步进行</li>
+      <li>正则匹配性能足够（&lt;1ms）</li>
+    </ul>
+  </div>
+
+  <div class="risk-card risk-low">
+    <div class="risk-title">🟢 低风险：用户看到内部标签</div>
+    <p><strong>描述</strong>：清理函数失效，用户看到 &lt;memory_decision&gt; 标签</p>
+    <p><strong>影响</strong>：用户体验下降</p>
+    <p><strong>缓解</strong>：</p>
+    <ul>
+      <li><code>remove_memory_decision_tag()</code> 使用健壮的正则</li>
+      <li>单元测试覆盖边界情况</li>
+      <li>即使清理失败，标签内容也是 JSON，不影响理解</li>
+    </ul>
+  </div>
+
+  <div class="risk-card risk-low">
+    <div class="risk-title">🟢 低风险：决策不准确</div>
+    <p><strong>描述</strong>：LLM 做出错误的 memory 决策（该写的 skip，该 skip 的 write）</p>
+    <p><strong>影响</strong>：memory 更新不准确</p>
+    <p><strong>缓解</strong>：</p>
+    <ul>
+      <li>Prompt 中提供清晰的决策规则</li>
+      <li>Phase 4 引入工具后，LLM 可以先读取 memory 再决策</li>
+      <li>trace 记录完整决策过程，可人工审查</li>
+    </ul>
+  </div>
+
+  <div class="risk-card risk-low">
+    <div class="risk-title">🟢 低风险：模型切换兼容性</div>
+    <p><strong>描述</strong>：切换到不同的 LLM 模型后，遵守格式的能力不同</p>
+    <p><strong>影响</strong>：降级率上升</p>
+    <p><strong>缓解</strong>：</p>
+    <ul>
+      <li>降级策略保证系统可用性</li>
+      <li>针对不同模型调优 prompt</li>
+      <li>监控降级率，及时发现问题</li>
+    </ul>
+  </div>
+</div>
+
+<h2>与 Phase 4+ 的衔接</h2>
+
+<div class="callout callout-success">
+  <div class="callout-title">🚀 为未来打基础</div>
+  <p>方案 3 不仅解决了 Phase 3 的 memory_decision 问题，还为后续 Phase 的复杂功能打下了基础：</p>
+</div>
+
+<h3>Phase 4: 工具调用</h3>
+<p>方案 3 的结构化输出模式可以直接扩展到工具调用：</p>
+<div class="code-block">
+<span class="code-comment"># Phase 4 扩展：工具调用输出</span>
+&lt;tool_call&gt;
+{
+  <span class="code-string">"tool"</span>: <span class="code-string">"read_file"</span>,
+  <span class="code-string">"args"</span>: {<span class="code-string">"path"</span>: <span class="code-string">"memory/tasks/TASK_exp_003.md"</span>},
+  <span class="code-string">"reason"</span>: <span class="code-string">"需要读取实验任务详情"</span>
+}
+&lt;/tool_call&gt;
+
+<span class="code-comment"># 可以与 memory_decision 共存</span>
+&lt;memory_decision&gt;...&lt;/memory_decision&gt;
+</div>
+
+<h3>Phase 5: RAG 查询</h3>
+<p>LLM 可以主动请求 RAG 查询：</p>
+<div class="code-block">
+<span class="code-comment"># Phase 5 扩展：RAG 查询请求</span>
+&lt;rag_query&gt;
+{
+  <span class="code-string">"query"</span>: <span class="code-string">"Co(IV) 中间体的 XRD 特征峰"</span>,
+  <span class="code-string">"scope"</span>: <span class="code-string">"memory/tasks/"</span>,
+  <span class="code-string">"top_k"</span>: 3
+}
+&lt;/rag_query&gt;
+</div>
+
+<h3>Phase 6: 复杂决策链</h3>
+<p>LLM 可以输出多步决策：</p>
+<div class="code-block">
+<span class="code-comment"># Phase 6 扩展：多步决策</span>
+&lt;decision_chain&gt;
+[
+  {<span class="code-string">"step"</span>: 1, <span class="code-string">"action"</span>: <span class="code-string">"read_memory"</span>, <span class="code-string">"target"</span>: <span class="code-string">"..."</span>},
+  {<span class="code-string">"step"</span>: 2, <span class="code-string">"action"</span>: <span class="code-string">"analyze"</span>, <span class="code-string">"method"</span>: <span class="code-string">"..."</span>},
+  {<span class="code-string">"step"</span>: 3, <span class="code-string">"action"</span>: <span class="code-string">"write_memory"</span>, <span class="code-string">"target"</span>: <span class="code-string">"..."</span>}
+]
+&lt;/decision_chain&gt;
+</div>
+
+<h2>实施时间线</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Stage</th>
+      <th>预计工时</th>
+      <th>关键里程碑</th>
+      <th>交付物</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Stage 1: Prompt 工程</td>
+      <td>2-3 小时</td>
+      <td>Prompt 设计完成，手动测试通过</td>
+      <td>PromptBuilder._build_memory_decision_block()</td>
+    </tr>
+    <tr>
+      <td>Stage 2: 解析器实现</td>
+      <td>3-4 小时</td>
+      <td>解析器单元测试全部通过</td>
+      <td>memory_decision_parser.py + 单元测试</td>
+    </tr>
+    <tr>
+      <td>Stage 3: 集成修改</td>
+      <td>2-3 小时</td>
+      <td>集成完成，服务启动无报错</td>
+      <td>修改后的 PromptBuilder + chat.py</td>
+    </tr>
+    <tr>
+      <td>Stage 4: 验证测试</td>
+      <td>3-4 小时</td>
+      <td>所有验收标准通过</td>
+      <td>测试脚本 + 测试报告</td>
+    </tr>
+    <tr>
+      <td>Stage 5: 降级策略</td>
+      <td>1-2 小时</td>
+      <td>降级逻辑测试通过</td>
+      <td>监控指标 + 降级文档</td>
+    </tr>
+    <tr>
+      <td><strong>总计</strong></td>
+      <td><strong>11-16 小时</strong></td>
+      <td><strong>Phase 3 验收通过</strong></td>
+      <td><strong>完整的方案 3 实现</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>总结</h2>
+
+<div class="hero-box" style="background: linear-gradient(135deg, #3fb95022 0%, #58a6ff22 100%); border-color: var(--green);">
+  <div class="hero-title" style="color: var(--green);">✅ 方案 3 的核心优势</div>
+  <ul style="margin-top: 1rem; line-height: 2;">
+    <li><strong>准确性最高</strong>：LLM 基于实际生成的回答内容做决策，而非盲猜</li>
+    <li><strong>符合原设计</strong>：完全对齐 phase3-index.md 的"生成回答与 memory 决策"设计意图</li>
+    <li><strong>扩展性强</strong>：为 Phase 4+ 的工具调用、RAG 查询、复杂决策链打下基础</li>
+    <li><strong>可维护性好</strong>：Prompt 工程比规则引擎更易维护，降级策略保证可靠性</li>
+    <li><strong>符合理念</strong>：体现"LLM 软约束下自进化"的设计哲学</li>
+  </ul>
+</div>
+
+<div class="callout callout-info">
+  <div class="callout-title">📚 参考文档</div>
+  <ul>
+    <li><code>docs/phase3-index.md</code> — Phase 3 规范，§ 5 定义了运行闭环</li>
+    <li><code>docs/phase3-dev-plan.md</code> — Phase 3 开发计划，§ 验收标准</li>
+    <li><code>docs/phase3-memory-decision-solutions.html</code> — 三种方案对比</li>
+    <li><code>docs/phase1-architecture.html</code> — Phase 1 架构参考</li>
+  </ul>
+</div>
+
+<p style="margin-top: 3rem; color: var(--text-dim); font-size: 0.85rem; text-align: center;">
+  生成时间：2026-03-09 | Phase 3 方案 3 实施路线图 | Experimental-Research-OpenClaw
+</p>
+
+</body>
+</html>
+

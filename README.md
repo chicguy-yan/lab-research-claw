@@ -1,14 +1,3 @@
-> **注意：这是 baseline snapshot，仓库已冻结不再更新。**
->
-> 源头：[zly7/ResearchAgentPrivateWorkspace](https://github.com/zly7/ResearchAgentPrivateWorkspace) @ commit `e31bb9c`（2026-04-10）
-> 导入时间：2026-07-21
-> Tag：`v0-baseline`
->
-> **Harness 优化实验请去姊妹仓库**：[chicguy-yan/lab-research-claw-harness](https://github.com/chicguy-yan/lab-research-claw-harness)
->
-> 保留本仓库的目的：给 harness 版本提供一个永久的"改造前"参照。以下是原作者 README 原文，未改动。
-
----
 
 <div align="center">
 

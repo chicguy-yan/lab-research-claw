@@ -75,3 +75,21 @@ v0-researchloop/
 *repomix*.md
 *repomix*.xml
 backend/auto_eval/tests/
+
+# 私密 / 与展示无关的材料（本地保留，不进仓库）
+# 个人工作记录与求职材料
+yyq工作文档.md
+yyq重点调研的课程包括找工作汇总.md
+zly工作文档.md
+docs/总结/step4-简历文案.md
+docs/总结/step5-面试题库.md
+docs/总结/research_agent_os_interview_map.md
+docs/总结/research_agent_os_interview_map.html
+# 飞书内部文档
+飞书产品说明文档.md
+从飞书拉取的mini-openclaw-设计.md
+项目最终实现效果.md
+# 内部过程材料：提示词全过程与交接文档
+给GPT5PRO提示词/
+docs/zly交接/
+ResearchAgentPrivateWorkspace/

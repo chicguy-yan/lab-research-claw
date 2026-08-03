@@ -1,6 +1,6 @@
 <div align="center">
 
-# Experimental-Research-OpenClaw
+# Lab-Research-OpenClaw
 
 **把 180 天实验周期跑成可追溯、可验证、可回放的 AI 工作台**
 
